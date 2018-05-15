@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/screen_bg"
+    android:id="@+id/mainlayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.authontication.login.LoginActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/view_for_mobile">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/_20sdp"
+            android:paddingBottom="@dimen/_50sdp">
+
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/_180sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_15sdp"
+               android:layout_marginTop="@dimen/_20sdp"
+                android:layout_margin="@dimen/_40sdp"
+                app:srcCompat="@drawable/ic_logo_yellow"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:elevation="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            app:srcCompat="@drawable/ic_mail"/>
+
+                        <EditText
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/email_address"
+                            android:imeOptions="actionNext"
+                            android:singleLine="true"
+                            android:inputType="textEmailAddress"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:textColorHint="@color/lightgray"
+                            android:textColor="@color/darkgray"
+                            android:textSize="@dimen/_12sdp"
+                            android:background="@null" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@color/lightgray"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:gravity="center|left">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            app:srcCompat="@drawable/ic_locked"/>
+
+                        <EditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/password"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:singleLine="true"
+                            android:inputType="textPassword"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:textColorHint="@color/lightgray"
+                            android:textColor="@color/darkgray"
+                            android:imeOptions="actionDone"
+                            android:textSize="@dimen/_12sdp"
+                            android:background="@null" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+<android.support.v7.widget.AppCompatImageView
+    android:layout_width="@dimen/_12sdp"
+    android:layout_height="@dimen/_12sdp"
+    app:srcCompat="@drawable/ic_triangle"
+    android:layout_marginTop="@dimen/_15sdp"
+    android:layout_marginRight="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_minus2sdp"
+    android:layout_gravity="right"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_gravity="center_vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_for_remember"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_uncheck"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        app:srcCompat="@drawable/ic_uncheck" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remember_me"
+                        android:textSize="@dimen/_10sdp"
+                        android:padding="@dimen/_3sdp"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textColor="@color/darkgray"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_for_forgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:background="@color/yellow"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/forgot_password"/>
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_for_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12sdp"
+                android:text="@string/login"
+                android:layout_marginTop="@dimen/_40sdp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:fontFamily="@font/montserrat_medium"
+                android:background="@drawable/button_bg"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_for_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/_10sdp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/don_t_have_an_account"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/darkgray"
+                android:fontFamily="@font/montserrat_regular"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_2sdp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up"
+                android:textSize="@dimen/_12sdp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/yellow" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="@color/yellow"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <View
+        android:id="@+id/view_for_mobile"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@color/seagreen"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/iv_for_back"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp"
+        android:padding="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:srcCompat="@drawable/ic_left_arrow"/>
+
+</RelativeLayout>

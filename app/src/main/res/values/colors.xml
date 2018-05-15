@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FAD299</color>
+    <color name="colorPrimaryDark">#FCAC35</color>
+    <color name="colorAccent">#333333</color>
+
+    <color name="yellow">#FCAC35</color>
+    <color name="lightyellow">#FAD299</color>
+    <color name="darkgray">#828282</color>
+    <color name="lightgray">#999999</color>
+    <color name="white">#ffffff</color>
+    <color name="Black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="darkTransparent">#80000000</color>
+
+    <color name="calender">#265258</color>
+    <color name="chat">#ECECEC</color>
+    <color name="seagreen">#FCAC35</color>
+    <color name="checkbox_color">#FCAC35</color>
+
+    <color name="black80p">#CC000000</color>
+    <color name="black70p">#B3000000</color>
+    <color name="black50p">#80000000</color>
+    <color name="white80p">#CCFFFFFF</color>
+    <color name="white65p">#A6FFFFFF</color>
+    <color name="white50p">#80FFFFFF</color>
+    <color name="black30p">#4D000000</color>
+    <color name="black20p">#33000000</color>
+    <color name="black03p">#03000000</color>
+</resources>

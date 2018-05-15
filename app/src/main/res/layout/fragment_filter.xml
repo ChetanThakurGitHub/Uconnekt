@@ -1,0 +1,216 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_5sdp"
+    tools:context=".ui.fragment.FilterFragment">
+
+    <!--<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Job Title"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/darkgray"
+        android:layout_margin="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_10sdp"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardBackgroundColor="@color/white">
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Job Title"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/darkgray"
+        android:layout_margin="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_10sdp"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardBackgroundColor="@color/white">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_25sdp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Job Title"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/darkgray"
+        android:layout_margin="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_10sdp"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardBackgroundColor="@color/white">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_25sdp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Title"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/darkgray"
+                android:layout_margin="@dimen/_5sdp"
+                android:textSize="@dimen/_12sdp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_10sdp"
+                android:layout_margin="@dimen/_5sdp"
+                app:cardBackgroundColor="@color/white">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"/>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Job Title"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/darkgray"
+                android:layout_margin="@dimen/_5sdp"
+                android:textSize="@dimen/_12sdp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_10sdp"
+                android:layout_margin="@dimen/_5sdp"
+                app:cardBackgroundColor="@color/white">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"/>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Job Title"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/darkgray"
+            android:layout_margin="@dimen/_5sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_10sdp"
+            android:layout_margin="@dimen/_5sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="Indore"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_toLeftOf="@+id/location"
+                    android:textColor="@color/lightgray"
+                    android:fontFamily="@font/montserrat_regular"/>
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/location"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_alignParentRight="true"
+                    app:srcCompat="@drawable/ic_map_place" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_for_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12sdp"
+        android:text="@string/login"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:textAllCaps="false"
+        android:fontFamily="@font/montserrat_medium"
+        android:background="@drawable/button_bg"/>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/under_development_mode"
+        android:textColor="@color/yellow"
+        android:textSize="@dimen/_14sdp"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_250sdp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/montserrat_regular" />
+
+</LinearLayout>

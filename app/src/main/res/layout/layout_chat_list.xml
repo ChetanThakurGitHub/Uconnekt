@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_85sdp"
+    android:layout_margin="@dimen/_5sdp"
+    android:background="@drawable/search_list_bg"
+    android:orientation="horizontal">
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_85sdp"
+        app:dragEdge="right"
+        app:mode="same_level">
+
+        <FrameLayout
+            android:id="@+id/delete_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_85sdp"
+            android:background="@color/yellow">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/view_for_deleteSwipe"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:padding="@dimen/_10sdp"
+                    app:srcCompat="@drawable/ic_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textSize="@dimen/_12sdp"
+                    android:text="Delete"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/front_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_85sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_for_profile"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/user"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toRightOf="@+id/iv_for_profile"
+                    android:layout_toLeftOf="@+id/view_for_line"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/_5sdp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Chetan Thakur"
+                            android:singleLine="true"
+                            android:textColor="@color/yellow"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:ellipsize="end"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_toLeftOf="@+id/tv_for_date"
+                            android:scrollHorizontally="true"
+                            android:textSize="@dimen/_14sdp"/>
+
+                        <TextView
+                            android:id="@+id/tv_for_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="08/04/2018"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/_2sdp"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_12sdp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColor="@color/darkgray"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:scrollHorizontally="true"
+                        android:text="Business Development Manager"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textColor="@color/lightgray"
+                        android:fontFamily="@font/montserrat_light"
+                        android:ellipsize="end"
+                        android:scrollHorizontally="true"
+                        android:textSize="@dimen/_12sdp"
+                        android:text="72/2 skdjfklds lkjkljkl lkjkj kjkjk jkjkj kjk"/>
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view_for_line"
+                    android:layout_width="@dimen/_3sdp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/yellow"/>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+
+</LinearLayout>

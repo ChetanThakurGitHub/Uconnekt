@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1094228696449",
+    "firebase_url": "https://uconnekt-bce51.firebaseio.com",
+    "project_id": "uconnekt-bce51",
+    "storage_bucket": "uconnekt-bce51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094228696449:android:f9e56f36e9651f05",
+        "android_client_info": {
+          "package_name": "com.uconnekt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094228696449-uap96562b5eo3iffotkti4ok988jt00l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uconnekt",
+            "certificate_hash": "7fd9061001ba87771764d100a2b80450c2e83219"
+          }
+        },
+        {
+          "client_id": "1094228696449-hob5c8hu8frlqe37kpo1r0fvm06prk3l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA05BPwMGCOaJa0vBvyn-Dlz2xKoVoyC6s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094228696449-hob5c8hu8frlqe37kpo1r0fvm06prk3l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

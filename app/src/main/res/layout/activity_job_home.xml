@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainlayout"
+    tools:context="com.uconnekt.ui.individual.home.JobHomeActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/actionbar_layout"/>
+
+    <FrameLayout
+        android:id="@+id/framlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/card"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_20sdp"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            app:tabIndicatorColor="@color/yellow"
+            app:tabIndicatorHeight="@dimen/_3sdp"
+            android:background="@color/white"
+            app:tabBackground="@color/white"
+            app:tabGravity="fill"
+            app:tabMode="fixed">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/ti_news"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:icon="@drawable/ic_search"
+                android:layout="@layout/custom_tab"
+                android:text="@string/search"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/ti_actvity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:icon="@drawable/ic_map_placeholder"
+                android:layout="@layout/custom_tab"
+                android:text="@string/map"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/ti_chat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:icon="@drawable/ic_chat"
+                android:layout="@layout/custom_tab"
+                android:text="@string/chat"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/ti_ads"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:icon="@drawable/ic_user"
+                android:layout="@layout/custom_tab"
+                android:text="@string/user"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/ic_settings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:icon="@drawable/ic_settings"
+                android:layout="@layout/custom_tab"
+                android:text="@string/setting"/>
+
+        </android.support.design.widget.TabLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

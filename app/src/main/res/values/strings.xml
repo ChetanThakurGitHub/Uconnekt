@@ -1,0 +1,142 @@
+<resources>
+    <string name="app_name">Uconnekt</string>
+
+    <!--Resume Custom View-->
+    <string name="permission_filepicker_rationale">Storage permission is needed to access files.</string>
+    <string name="no_files_found">No Files Found</string>
+    <string name="attachments_title_text" formatted="false">(%d/%d)</string>
+    <string name="attachments_num" formatted="false">%d</string>
+    <string name="select_photo_text">Select a media</string>
+    <string name="select_doc_text">Select a document</string>
+    <string name="no_camera_exists">No Application exists for camera!</string>
+    <string name="pdf_title">PDF</string>
+    <string name="ppt_title">PPT</string>
+    <string name="word_title">DOC</string>
+    <string name="excel_title">XLS</string>
+    <string name="txt_title">TXT</string>
+    <string name="videos">Videos</string>
+    <string name="images">Images</string>
+    <string name="all_photos">All Photos</string>
+    <string name="all_videos">All Videos</string>
+    <string name="all_files">All Files</string>
+
+    <!--Validation String-->
+    <string name="email_v">Please enter your email address</string>
+    <string name="emailf_v">Please enter your registered email address</string>
+    <string name="password_v">Please enter your password</string>
+    <string name="fullname_v">Please enter your name</string>
+    <string name="business_v">Please enter your business name</string>
+    <string name="fullname_required">Name must contain 3 characters</string>
+    <string name="business_required">Business Name must contain 3 characters</string>
+    <string name="valid_email">Please enter valid email address</string>
+    <string name="password_required">Password must contain 6 characters</string>
+    <string name="user_v">Please select user type</string>
+    <string name="for_exit">Please click BACK again to exit.</string>
+
+    <!--Same text-->
+    <string name="your_session_is_expired_please_login_again">Your session is expired please login again</string>
+    <string name="session_expired">Session expired</string>
+    <string name="something_wrong">Something is worng</string>
+    <string name="alert">Alert</string>
+    <string name="check_net_connection">Please check your internet connection.!</string>
+
+    <!--Authontication-->
+    <string name="select_user_type">Select User Type</string>
+    <string name="or">OR</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="remember_me">Remember me</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="business_name">Business Name</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_address">Email address</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="forgot_your_password">Forgot Your Password ?</string>
+    <string name="forgot_pass_dis">Please enter your registered email \n address below to reset your \n password.</string>
+    <string name="send">Send</string>
+    <string name="wrong">Something is wrong</string>
+    <string name="map_key">AIzaSyBGwmo3AEKe9X9co2prixr4XFNgG16GjBg</string>
+    <string name="user_dis">Manage your future at your fingertips. Uconnekt with employers to discover \n the right business for you.</string>
+
+    <!--Profile-->
+    <string name="save">Save</string>
+    <string name="area_of_specialty">Area Of Specialty</string>
+    <string name="address">Address</string>
+    <string name="add_company_logo">Add Company Logo</string>
+    <string name="bio">About me</string>
+    <string name="type_here">Type here ……</string>
+    <string name="max_200_character">characters</string>
+    <string name="next">Next</string>
+    <string name="profile">Profile</string>
+    <string name="jobtitle_v">Please select job title</string>
+    <string name="specialty_v">Please select area of specialty</string>
+    <string name="strength_v">Please select strength</string>
+    <string name="value_v">Please select values</string>
+    <string name="address_v">Please add address</string>
+    <string name="logo_v">Please add company logo</string>
+    <string name="bio_v">Bio can not be empty</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="experience">Experience</string>
+    <string name="resume">Resume</string>
+    <string name="search">Search</string>
+
+    <!--Profile Both side-->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="under_development_mode">Under development mode....</string>
+    <string name="values">Values</string>
+    <string name="strengths">Strengths</string>
+    <string name="parmission">Deny Location Permission</string>
+    <string name="current_role">Current Role</string>
+    <string name="next_role">Next Role</string>
+    <string name="previous_role">Previous Role</string>
+    <string name="company_name">Company Name</string>
+    <string name="description">Description</string>
+    <string name="start_date">Start Date</string>
+    <string name="finish_date">Finish Date</string>
+    <string name="_200">500</string>
+    <string name="job_title">Job title</string>
+    <string name="strength_1">Strength 1</string>
+    <string name="strength_2">Strength 2</string>
+    <string name="strength_3">Strength 3</string>
+    <string name="value_1">Value 1</string>
+    <string name="value_2">Value 2</string>
+    <string name="value_3">Value 3</string>
+    <string name="still_there">Still There ?</string>
+    <string name="availability_weeks">Availability</string>
+    <string name="employer">Employer</string>
+    <string name="job_seeker">Job Seeker</string>
+    <string name="conti">Continue</string>
+    <string name="area_of_interest">Area Of Interest</string>
+    <string name="map">Map</string>
+    <string name="chat">Chat</string>
+    <string name="user">User</string>
+    <string name="setting">Setting</string>
+    <string name="select_image_source">Select image source</string>
+    <string name="select_from_gallery">Select from gallery</string>
+    <string name="image">Image</string>
+    <string name="take_new_photo">Take new photo</string>
+    <string name="select_form_gallery">Select form gallery</string>
+    <string name="upload_resume">Upload Resume</string>
+    <string name="attachment">Attachment</string>
+    <string name="notifications">Notifications</string>
+    <string name="change_password">Change Password</string>
+    <string name="term_and_conditions">Term and Conditions</string>
+    <string name="share">Share</string>
+    <string name="about_us">About us</string>
+    <string name="help_and_support">Help and Support</string>
+    <string name="logout">Logout</string>
+    <string name="messages">Messages</string>
+    <string name="upload_cv">Upload Cv</string>
+    <string name="logo_attached">Logo attached</string>
+    <string name="no_result_found">No Result Found</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="no_internet_des">No internet connection found.\nPlease check your internet connection\nand try again.</string>
+    <string name="try_again">Try again</string>
+    <string name="server_not_working">Server Not Working</string>
+    <string name="server_des">No server connection found.\nPlease check your sever connection\nand try again.</string>
+
+
+</resources>

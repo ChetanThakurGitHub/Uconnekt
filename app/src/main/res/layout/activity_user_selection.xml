@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainlayout"
+    android:background="@drawable/screen_bg"
+    android:fitsSystemWindows="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.uconnekt.ui.authontication.user_selection.UserSelectionActivity">
+
+    <Button
+        android:id="@+id/btn_for_continue"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:text="@string/conti"
+        android:layout_below="@+id/layoutdata"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:textAllCaps="false"
+        android:textSize="@dimen/_14sdp" />
+
+    <LinearLayout
+        android:id="@+id/layoutdata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginRight="@dimen/_20sdp"
+        android:layout_marginLeft="@dimen/_20sdp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/_180sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:srcCompat="@drawable/ic_logo_yellow"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_margin="@dimen/_15sdp"
+            app:srcCompat="@drawable/ic_user_type_ico"
+            android:orientation="vertical"
+            android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_14sdp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/Black"
+                android:text="@string/select_user_type"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12sdp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/montserrat_regular"
+                android:gravity="center"
+                android:textColor="@color/lightgray"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/user_dis"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="150sp"
+                android:elevation="@dimen/_10sdp"
+                android:layout_margin="@dimen/_20sdp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <RelativeLayout
+                    android:id="@+id/rlMainSelected"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <LinearLayout
+                        android:id="@+id/layout_for_employer"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_appartment" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:textColor="@color/darkgray"
+                            android:text="@string/employer"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_for_jobSeeker"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_toRightOf="@+id/layout_for_employer"
+                        android:gravity="center">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_50sdp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_job_seekar_ico" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="@dimen/_12sdp"
+                            android:textColor="@color/darkgray"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:text="@string/job_seeker"/>
+
+                    </LinearLayout>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:elevation="@dimen/_5sdp"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/white"
+                        android:layout_gravity="center_horizontal"
+                        app:cardCornerRadius="@dimen/_15sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/or"
+                            android:layout_gravity="center"
+                            android:textColor="@color/Black"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:textSize="@dimen/_12sdp"/>
+
+                    </android.support.v7.widget.CardView>
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

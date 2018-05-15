@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/_12sdp"
+    android:gravity="left"
+    android:ellipsize="end"
+    android:singleLine="true"
+    android:scrollHorizontally="true"
+    android:fontFamily="@font/montserrat_regular"
+    android:textColor="@color/yellow"
+    android:textColorHint="@color/colorPrimary"
+    android:hint="@string/area_of_specialty"
+    android:padding="@dimen/_5sdp" />

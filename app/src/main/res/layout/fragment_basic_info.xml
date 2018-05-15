@@ -1,0 +1,457 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/_10sdp"
+    android:background="@color/white"
+    android:id="@+id/mainlayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.individual.individual_profile.profile_fragrment.Basic_info.BasicInfoFragment"
+    android:animateLayoutChanges="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_minus5sdp"
+        android:layout_marginBottom="@dimen/_5sdp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:padding="@dimen/_3sdp"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/ic_down_arrow"
+            android:layout_alignParentRight="true" />
+
+        <Spinner
+            android:id="@+id/sp_for_specialty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:dropDownVerticalOffset="@dimen/_30sdp"
+            android:dropDownWidth="@dimen/_245sdp"
+            android:gravity="center"
+            android:spinnerMode="dropdown"/>
+
+    </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/lightgray"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_for_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/values"
+            android:singleLine="true"
+            android:layout_toLeftOf="@+id/iv_for_up"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:scrollHorizontally="true"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/lightgray"
+            android:fontFamily="@font/montserrat_regular" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_for_up"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:padding="@dimen/_3sdp"
+            app:srcCompat="@drawable/ic_down_arrow"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_for_values"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_value1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_value2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_value3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/lightgray"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_for_strength"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/strengths"
+            android:singleLine="true"
+            android:layout_toLeftOf="@+id/iv_for_upDown"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:scrollHorizontally="true"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/lightgray"
+            android:fontFamily="@font/montserrat_regular" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_for_upDown"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:padding="@dimen/_3sdp"
+            app:srcCompat="@drawable/ic_down_arrow"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_for_strengths"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_strength1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_strength2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_strength3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/lightgray"/>
+
+    <RelativeLayout
+            android:id="@+id/layout_for_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/tv_for_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:singleLine="true"
+                android:layout_toLeftOf="@+id/place"
+                android:ellipsize="end"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:scrollHorizontally="true"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/darkgray"
+                android:fontFamily="@font/montserrat_regular" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/place"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_2sdp"
+                app:srcCompat="@drawable/ic_placeholder_outline"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/lightgray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bio"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/darkgray"
+            android:fontFamily="@font/montserrat_regular" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/layout_bg">
+
+            <EditText
+                android:id="@+id/et_for_bio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:textSize="@dimen/_11sdp"
+                android:textColor="@color/darkgray"
+                android:hint="@string/type_here"
+                android:gravity="top|left"
+                android:layout_above="@+id/text"
+                android:maxLength="500"
+                android:imeOptions="actionDone"
+                android:padding="@dimen/_5sdp"
+
+                android:textColorHint="@color/lightgray"
+                android:fontFamily="@font/montserrat_regular"/>
+
+            <LinearLayout
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true">
+
+                <TextView
+                    android:id="@+id/tv_for_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/lightgray"
+                    android:textSize="@dimen/_10sdp"
+                    android:text="@string/_200"
+                    android:padding="@dimen/_3sdp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/lightgray"
+                    android:textSize="@dimen/_10sdp"
+                    android:text="@string/max_200_character"
+                    android:padding="@dimen/_3sdp"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+</LinearLayout>
