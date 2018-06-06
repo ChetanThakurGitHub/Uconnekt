@@ -3,7 +3,6 @@ package com.uconnekt.volleymultipart;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -19,7 +18,6 @@ import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.session.Session;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.DatabaseActivity;
-import com.uconnekt.util.Progress;
 import com.uconnekt.util.Utils;
 
 import org.json.JSONException;
@@ -39,13 +37,17 @@ public abstract class VolleyGetPost {
     private Boolean loader;
 
 
+    private void dismissLoader(){
+        if (cusDialogProg != null)cusDialogProg.dismiss();
+    }
+
     public VolleyGetPost(Activity activity, String url,Boolean isMethodPost,String TAG,Boolean loader){
         this.activity=activity;
         this.url=url;
         this.isMethodPost=isMethodPost;
         this.TAG=TAG;
         this.loader = loader;
-        cusDialogProg = new CusDialogProg(activity);
+        if (loader) cusDialogProg = new CusDialogProg(activity);
     }
 
     public void executeVolley(){
@@ -59,14 +61,14 @@ public abstract class VolleyGetPost {
                         @Override
                         public void onResponse(String response) {
                             Log.e(TAG, "onResponse: " + response);
-                            cusDialogProg.dismiss();
+                            dismissLoader();
                             onVolleyResponse(response);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            cusDialogProg.dismiss();
+                            dismissLoader();
                             volleyErrorHandle(error);
                         }
                     }) {

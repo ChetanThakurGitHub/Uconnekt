@@ -47,6 +47,7 @@ public class CustomSpAdapter extends BaseAdapter {
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            assert inflater != null;
             row = inflater.inflate(view, parent, false);
 
             holder = new ViewHolder();

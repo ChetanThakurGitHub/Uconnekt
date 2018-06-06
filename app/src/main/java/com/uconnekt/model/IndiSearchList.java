@@ -1,19 +1,20 @@
 package com.uconnekt.model;
 
-/**
- * Created by mindiii on 11/5/18.
- */
+import com.google.android.gms.maps.model.Marker;
 
-public class IndiSearchList {
+import java.io.Serializable;
+
+public class IndiSearchList implements Serializable{
+    public String userId = "";
     public String fullName = "";
     public String businessName = "";
     public String specializationName = "";
+    public String jobTitleName = "";
     public String address = "";
     public String latitude = "";
     public String longitude = "";
     public String rating = "";
     public String profileImage = "";
     public String company_logo = "";
-
-
+    public Marker marker ;
 }

@@ -98,8 +98,28 @@
             android:name=".resume_picker.view.activity.MediaDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.common_activity.NetworkActivity" />
-        <activity android:name=".ui.common_activity.DatabaseActivity"></activity>
+        <activity
+            android:name=".ui.common_activity.NetworkActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.common_activity.DatabaseActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cropper.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CropImage" />
+        <activity
+            android:name=".ui.individual.activity.RatingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.individual.activity.ReviewActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".ui.individual.activity.RecommendedActivity" />
+        <activity android:name=".ui.individual.activity.FavouriteActivity"></activity>
     </application>
 
 </manifest>

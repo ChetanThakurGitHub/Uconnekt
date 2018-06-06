@@ -1,33 +1,31 @@
-package com.uconnekt.ui.fragment;
+package com.uconnekt.ui.employer.fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.adapter.listing.EmpSearchAdapter;
-import com.uconnekt.adapter.listing.IndiSearchAdapter;
+import com.uconnekt.adapter.listing.SpecialityListAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.BusiSearchList;
-import com.uconnekt.model.IndiSearchList;
-import com.uconnekt.model.JobTitle;
+import com.uconnekt.model.SpecialityList;
 import com.uconnekt.pagination.EndlessRecyclerViewScrollListener;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
-import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.util.Constant;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -39,27 +37,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements View.OnClickListener{
 
     private HomeActivity activity;
-    private ArrayList<BusiSearchList> searchLists = new ArrayList<>();
-    private ArrayList<JobTitle> arrayList = new ArrayList<>();
+    public ArrayList<BusiSearchList> searchLists = new ArrayList<>();
+    private ArrayList<SpecialityList> arrayList = new ArrayList<>();
     private EmpSearchAdapter empSearchAdapter;
-    private RecyclerView recycler_view;
-    private CustomSpAdapter customSpAdapter;
-    private Spinner sp_for_specialty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private int offset = 0;
-    private String specilityId = "";
+    private RecyclerView recycler_view,recycler_list;
+    private SpecialityListAdapter listAdapter;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
+    public int offset = 0;
     private LinearLayout layout_for_noData;
+    public RelativeLayout layout_for_list;
+    public TextView tv_for_speName;
+    public Boolean goneVisi = false;
+    public ImageView iv_for_arrow;
+    public String specialityID = "",jobTitleId = "",availabilityId = "",location = "",strengthId = "" ,valueId = "",city = "";
 
-    public SearchFragment() {
-        // Required empty public constructor
-    }
-
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,13 +61,12 @@ public class SearchFragment extends Fragment {
 
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         initView(view);
         empSearchAdapter = new EmpSearchAdapter(searchLists,activity);
-        customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp3);
-        sp_for_specialty.setAdapter(customSpAdapter);
+        listAdapter = new SpecialityListAdapter(arrayList,this);
         getDropDownlist();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -87,34 +80,19 @@ public class SearchFragment extends Fragment {
                 searchLists.clear();
                 mSwipeRefreshLayout.setRefreshing(true);
                 offset = 0;
-                getList(specilityId);
+                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city);
             }
         });
 
         recycler_view.setAdapter(empSearchAdapter);
+        recycler_list.setAdapter(listAdapter);
 
-        sp_for_specialty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                JobTitle jobTitle = arrayList.get(position);
-                specilityId = jobTitle.jobTitleId;
-                searchLists.clear();
-                mSwipeRefreshLayout.setRefreshing(true);
-                offset = 0;
-                getList(specilityId);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        getList(specialityID, "", "", "", "", "", city);
 
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getList(specilityId);
+                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city);
             }
         };
         recycler_view.addOnScrollListener(scrollListener);
@@ -124,9 +102,13 @@ public class SearchFragment extends Fragment {
 
     private void initView(View view){
         recycler_view = view.findViewById(R.id.recycler_view);
-        sp_for_specialty = view.findViewById(R.id.sp_for_specialty);
+        recycler_list = view.findViewById(R.id.recycler_list);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
+        layout_for_list = view.findViewById(R.id.layout_for_list);
+        tv_for_speName = view.findViewById(R.id.tv_for_speName);
+        iv_for_arrow = view.findViewById(R.id.iv_for_arrow);
+        view.findViewById(R.id.card_for_spName).setOnClickListener(this);
     }
 
     @Override
@@ -135,10 +117,15 @@ public class SearchFragment extends Fragment {
         activity = (HomeActivity) context;
     }
 
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, String citys){
+        specialityID = specialityIDs;city = citys;
+        jobTitleId = jobTitleIds;
+        availabilityId = availabilityIds;
+        location = address;
+        strengthId = strengthIds;
+        valueId = valueIds;
 
-    private void getList(final String specilityId){
-
-        new VolleyGetPost(activity, AllAPIs.BUSI_SEARCH_LIST,true,"List",false ) {
+        new VolleyGetPost(activity, AllAPIs.BUSI_SEARCH_LIST,true,"List",true ) {
             @Override
             public void onVolleyResponse(String response) {
                 try {
@@ -154,7 +141,6 @@ public class SearchFragment extends Fragment {
                                 BusiSearchList busiSearchList = new Gson().fromJson(jsonObject.toString(),BusiSearchList.class);
                                 searchLists.add(busiSearchList);
                             }
-
                             if (searchLists.size() == 0){
                                 layout_for_noData.setVisibility(View.VISIBLE);
                             }else {
@@ -182,12 +168,12 @@ public class SearchFragment extends Fragment {
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("speciality_id",specilityId);
-                params.put("job_title","");
-                params.put("availability","");
-                params.put("location","");
-                params.put("strength","");
-                params.put("value","");
+                params.put("speciality_id",specialityID);
+                params.put("job_title",jobTitleId);
+                params.put("availability",availabilityId);
+                params.put("location",location);
+                params.put("city",city);
+                params.put("value",valueId);
                 params.put("limit","10");
                 params.put("offset",offset+"");
                 return params;
@@ -214,19 +200,19 @@ public class SearchFragment extends Fragment {
                     if (status.equalsIgnoreCase("success")) {
                         arrayList.clear();
                         JSONObject result = jsonObject.getJSONObject("result");
-                        JSONArray results = result.getJSONArray("speciality_list");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        arrayList.add(jobTitle);
+                        JSONArray results = result.getJSONArray("opposite_job_title");
+                        SpecialityList specialityList1 = new SpecialityList();
+                        specialityList1.specializationId = "";
+                        specialityList1.specializationName = "All";
+                        arrayList.add(specialityList1);
                         for (int i = 0; i < results.length(); i++) {
-                            JobTitle jobTitles = new JobTitle();
+                            SpecialityList specialityList = new SpecialityList();
                             JSONObject object = results.getJSONObject(i);
-                            jobTitles.jobTitleId = object.getString("specializationId");
-                            jobTitles.jobTitleName = object.getString("specializationName");
-                            arrayList.add(jobTitles);
+                            specialityList.specializationId = object.getString("jobTitleId");
+                            specialityList.specializationName = object.getString("jobTitleName");
+                            arrayList.add(specialityList);
                         }
-                        customSpAdapter.notifyDataSetChanged();
+                        listAdapter.notifyDataSetChanged();
                     }
 
                 } catch (JSONException e) {
@@ -257,8 +243,25 @@ public class SearchFragment extends Fragment {
         super.onResume();
         if (Constant.NETWORK_CHECK == 1){
             getDropDownlist();
-            getList(specilityId);
+            getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city);
         }
         Constant.NETWORK_CHECK =0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.card_for_spName:
+                if (!goneVisi) {
+                    layout_for_list.setVisibility(View.VISIBLE);
+                    iv_for_arrow.setImageResource(R.drawable.ic_up_arrow);
+                    goneVisi = true;
+                }else {
+                    layout_for_list.setVisibility(View.GONE);
+                    iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                    goneVisi = false;
+                }
+                break;
+        }
     }
 }

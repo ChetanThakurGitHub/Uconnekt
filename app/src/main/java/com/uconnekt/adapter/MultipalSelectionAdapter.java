@@ -1,5 +1,6 @@
 package com.uconnekt.adapter;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ public class MultipalSelectionAdapter extends RecyclerView.Adapter<MultipalSelec
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final Speciality speciality = list.get(position);
 
         holder.tv_for_SpecialyName.setText(speciality.name);

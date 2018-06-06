@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,10 +27,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.uconnekt.BuildConfig;
 import com.uconnekt.R;
 import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
+import com.uconnekt.cropper.CropImage;
+import com.uconnekt.cropper.CropImageView;
 import com.uconnekt.custom_view.CusDialogProg;
+import com.uconnekt.helper.ImageRotator;
 import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.helper.SendImageOnFirebase;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
@@ -40,6 +48,7 @@ import com.uconnekt.web_services.AllAPIs;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +65,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     private RegistrationPresenter registrationPresenter;
     private String userType = "";
     private CusDialogProg cusDialogProg;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,12 +122,50 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                 onBackPressed();
                 break;
             case R.id.layout_for_camera:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, Constant.CAMERA);
-                if (dialog!=null)dialog.dismiss();
+                if (dialog!=null)dialog.dismiss();*/
+              /* try {
+                    Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    takePhotoIntent.putExtra("return-data", true);
+                   imageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName()
+                            + ".fileprovider", SendImageOnFirebase.getTemporalFile(this));
+                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(takePhotoIntent, Constant.CAMERA);
+                    if (dialog!=null)dialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+
+
+                try {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File file= new File(Environment.getExternalStorageDirectory().toString()+ File.separator + "image.jpg");
+
+                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+                        imageUri= FileProvider.getUriForFile(RegistrationActivity.this, BuildConfig.APPLICATION_ID + ".fileprovider",file);
+                    }else {
+                        imageUri= Uri.fromFile(file);
+                    }
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                    //  intent.putExtra("android.intent.extras.CAMERA_FACING", 1); //for front camera
+                    startActivityForResult(intent, Constant.CAMERA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File file = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "image.jpg");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    mCurrentPhotoPath = FileProvider.getUriForFile(AddVehicleInfoActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+                } else {
+                    mCurrentPhotoPath = Uri.fromFile(file);
+                }
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoPath);//USE file code in_ this case
+                startActivityForResult(intent, Constant.REQUEST_CAMERA);*/
                 break;
             case R.id.layout_for_gallery:
-                intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, Constant.GALLERY);
                 if (dialog!=null)dialog.dismiss();
                 break;
@@ -143,25 +191,57 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
         if (requestCode == Constant.GALLERY && resultCode == RESULT_OK && null != data) {
             Uri imageUri = data.getData();
-            try {
-                profileImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+               /* profileImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                 if (profileImageBitmap != null) {
                     iv_profile_image.setPadding(0, 0, 0, 0);
+                    iv_profile_image.setImageBitmap(profileImageBitmap);
+                }*/
+                dialog.dismiss();
+                if (imageUri != null) {
+                    CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.OVAL).setMinCropResultSize(160, 160).setMaxCropResultSize(4000, 4000).setAspectRatio(400, 400).start(RegistrationActivity.this);
+                } else {
+                    MyCustomMessage.getInstance(this).customToast(getString(R.string.something_wrong));
+                }}else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result= CropImage.getActivityResult(data);
+            try {
+                if (result != null) {
+                    profileImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), result.getUri());
                     iv_profile_image.setImageBitmap(profileImageBitmap);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
         } else {
             if (requestCode == Constant.CAMERA && resultCode == RESULT_OK) {
-                profileImageBitmap = (Bitmap) data.getExtras().get("data");
+                /*profileImageBitmap = (Bitmap) data.getExtras().get("data");
                 if (profileImageBitmap != null) {
                     iv_profile_image.setPadding(0, 0, 0, 0);
                     iv_profile_image.setImageBitmap(profileImageBitmap);
-                }
+                }*/
+
+                dialog.dismiss();
+                    if (imageUri!=null){
+
+                        CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160,160).setMaxCropResultSize(4000,4000).setAspectRatio(400, 400).start(RegistrationActivity.this);
+                    }else{
+                        MyCustomMessage.getInstance(this).customToast(getString(R.string.something_wrong));
+                    }
+                }else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    CropImage.ActivityResult result= CropImage.getActivityResult(data);
+                    try {
+                        if (result != null) {
+                            profileImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), result.getUri());
+                            iv_profile_image.setImageBitmap(profileImageBitmap);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
         }
     }
+
 
     @Override
     public void setBusinessNameError() {

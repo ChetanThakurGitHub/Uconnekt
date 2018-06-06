@@ -26,7 +26,6 @@ public class UserSelectionActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
-
         initView();
         userSelectionPresenter = new UserSelectionPresenterImpl(this,new UserSelectionIntractorImpl());
     }

@@ -9,15 +9,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
-import com.uconnekt.application.Uconnekt;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
-import com.uconnekt.ui.fragment.ChatFragment;
-import com.uconnekt.ui.fragment.MapFragment;
-import com.uconnekt.ui.fragment.ProfileFragment;
-import com.uconnekt.ui.fragment.SearchFragment;
-import com.uconnekt.ui.fragment.SettingFragment;
-import com.uconnekt.util.Constant;
+import com.uconnekt.ui.employer.fragment.ChatFragment;
+import com.uconnekt.ui.employer.fragment.FilterFragment;
+import com.uconnekt.ui.employer.fragment.MapFragment;
+import com.uconnekt.ui.employer.fragment.MyProfileFragment;
+import com.uconnekt.ui.employer.fragment.SearchFragment;
+import com.uconnekt.ui.employer.fragment.SettingFragment;
+import com.uconnekt.ui.individual.fragment.IndiMapFragment;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
@@ -42,8 +42,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             tabs.getTabAt(i).getCustomView().findViewById(R.id.mainlayout_tab).setScaleY(-1);
         }
 
-        addFragment(SearchFragment.newInstance(), false, R.id.framlayout);
+        replaceFragment(new SearchFragment());
         iv_for_filter.setOnClickListener(this);
+        iv_for_backIco.setOnClickListener(this);
     }
 
     private void initView(){
@@ -57,9 +58,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         iv_for_menu = findViewById(R.id.iv_for_menu);
     }
 
-
     private void setTab(TabLayout.Tab tab, int imageResource , boolean isSelected){
-        ( (ImageView)tab.getCustomView().findViewById(android.R.id.icon)).setImageResource(imageResource);
+        ((ImageView)tab.getCustomView().findViewById(android.R.id.icon)).setImageResource(imageResource);
         ((TextView) tab.getCustomView().findViewById(android.R.id.text1)).setTextColor(getResources().getColor(isSelected?R.color.yellow:R.color.darkgray));
     }
 
@@ -73,15 +73,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 iv_for_circular_arrow.setVisibility(View.GONE);
                 iv_for_menu.setVisibility(View.GONE);
                 break;
+            case 1:
+                iv_for_backIco.setVisibility(View.VISIBLE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.VISIBLE);
+                iv_for_menu.setVisibility(View.GONE);
+                break;
         }
     }
 
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         if (Uconnekt.session.isLoggedIn()) {
             if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 getSupportFragmentManager().popBackStack();
+                setToolbarIcon(0);
+                //if (getCurrentFragment() instanceof SearchFragment) ((SearchFragment)getCurrentFragment()).getList();
+                tv_for_tittle.setText(R.string.search);
+
             } else {
                 if (!doubleBackToExitPressedOnce) {
                     this.doubleBackToExitPressedOnce = true;
@@ -105,15 +115,53 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
     }
+*/
+
+    @Override
+    public void onBackPressed() {
+        hideKeyboard();
+        Handler handler = new Handler();
+        Runnable runnable;
+
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            super.onBackPressed();
+            setToolbarIcon(0);
+            android.support.v4.app.Fragment fragment=getCurrentFragment();
+            if (fragment!=null &&fragment instanceof IndiMapFragment)tv_for_tittle.setText(R.string.map);
+            else tv_for_tittle.setText(R.string.search);
+        } else {
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 1000);
+            if (doubleBackToExitPressedOnce) {
+                handler.removeCallbacks(runnable);
+                finish();
+            } else {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout, getResources().getString(R.string.for_exit));
+                doubleBackToExitPressedOnce = true;
+            }
+        }
+
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_for_filter:
-                MyCustomMessage.getInstance(this).customToast(getString(R.string.under_development_mode));
+                tv_for_tittle.setText(R.string.filter);
+                setToolbarIcon(1);
+                FilterFragment fragment=new FilterFragment();
+                if (getCurrentFragment() instanceof  SearchFragment)fragment.setFragment((SearchFragment) getCurrentFragment());
+                if (getCurrentFragment() instanceof  MapFragment)fragment.setOtherFragment((MapFragment) getCurrentFragment());
+                addFragment(fragment);
+                break;
+            case R.id.iv_for_backIco:
+                onBackPressed();
                 break;
         }
-
     }
 
     @Override
@@ -122,32 +170,33 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             switch (tabs.getSelectedTabPosition()) {
                 case 0:
                     click = 0;
-                    replaceFragment(SearchFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new SearchFragment());
                     setTab(tab, R.drawable.ic_search_yellow, true);
                     tv_for_tittle.setText(R.string.search);
                     setToolbarIcon(0);
                     break;
                 case 1:
                     click = 1;
-                    replaceFragment(MapFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new MapFragment());
                     setTab(tab, R.drawable.ic_map_yellow, true);
+                    setToolbarIcon(0);
                     tv_for_tittle.setText(R.string.map);
                     break;
                 case 2:
                     click = 2;
-                    replaceFragment(ChatFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new ChatFragment());
                     setTab(tab, R.drawable.ic_chat_yellow, true);
                     tv_for_tittle.setText(R.string.messages);
                     break;
                 case 3:
                     click = 3;
-                    replaceFragment(ProfileFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new MyProfileFragment());
                     setTab(tab, R.drawable.ic_user_yellow, true);
                     tv_for_tittle.setText(R.string.profile);
                     break;
                 case 4:
                     click = 4;
-                    replaceFragment(SettingFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new SettingFragment());
                     setTab(tab, R.drawable.ic_settings_yellow, true);
                     tv_for_tittle.setText(R.string.setting);
                     break;
@@ -193,4 +242,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+
 }

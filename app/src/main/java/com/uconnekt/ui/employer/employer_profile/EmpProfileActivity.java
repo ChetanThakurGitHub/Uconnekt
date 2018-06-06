@@ -8,13 +8,16 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -37,16 +40,23 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
+import com.uconnekt.BuildConfig;
 import com.uconnekt.R;
 import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.cropper.CropImage;
+import com.uconnekt.cropper.CropImageView;
 import com.uconnekt.custom_view.CusDialogProg;
+import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.helper.SendImageOnFirebase;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.authontication.registration.RegistrationActivity;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
@@ -61,6 +71,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +80,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
+import static com.uconnekt.util.Constant.RESULT_OK;
 
 public class EmpProfileActivity extends BaseActivity implements View.OnClickListener,EmpProfileView, AdapterView.OnItemSelectedListener {
 
@@ -76,20 +88,22 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     private CustomSpAdapter customSpAdapter,customSpAdapterSpecialty;
     private ArrayList<JobTitle> arrayList,specialityArrayList;
     private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo;
-    private FusedLocationProviderClient mFusedLocationClient;
+   // private FusedLocationProviderClient mFusedLocationClient;
     public TextView tvTags;
     private Double latitude, longitude;
-    private PermissionAll permissionAll;
+   // private PermissionAll permissionAll;
     private BottomSheetDialog dialog;
     private ImageView iv_for_profile;
     private Bitmap profileImageBitmap;
     private CusDialogProg cusDialogProg;
     private RelativeLayout mainlayout;
-    private String jobTitleId,specialtyID;
+    private String jobTitleId,specialtyID,city = "";
     public String area_of_specialization = "";
     private EditText et_for_bio;
     private Boolean doubleBackToExitPressedOnce = false;
     private EmpProfilePresenter empProfilePresenter;
+    private Uri imageUri;
+    private RelativeLayout layout_for_address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +119,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         tv_for_fullName.setText(Uconnekt.session.getUserInfo().fullName);
         tv_for_businessName.setText(Uconnekt.session.getUserInfo().businessName);
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        permissionAll = new PermissionAll();
-        location();
+      //  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+      //  permissionAll = new PermissionAll();
+       // location();
 
         arrayList = new ArrayList<>();
         customSpAdapter = new CustomSpAdapter(this, arrayList,R.layout.custom_sp);
@@ -144,7 +158,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
     }
 
-    private void location() {
+    /*private void location() {
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissionAll.checkLocationPermission(this);
@@ -169,7 +183,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                         });
             }
 
-    }
+    }*/
 
     private void initView(){
         sp_for_jobTitle = findViewById(R.id.sp_for_jobTitle);
@@ -182,6 +196,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         tv_for_txt = findViewById(R.id.tv_for_txt);
         et_for_bio = findViewById(R.id.et_for_bio);
         tv_for_businessName = findViewById(R.id.tv_for_businessName);
+        layout_for_address = findViewById(R.id.layout_for_address);
 
         findViewById(R.id.layout_for_address).setOnClickListener(this);
         findViewById(R.id.layout_for_addLogo).setOnClickListener(this);
@@ -195,19 +210,31 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
             switch (v.getId()){
                 case R.id.layout_for_address:
                     addressClick();
-                    tv_for_address.setEnabled(false);
+                    layout_for_address.setEnabled(false);
                     break;
                 case R.id.layout_for_addLogo:
                     PermissionAll permissionAll = new PermissionAll();
                     if (permissionAll.chackCameraPermission(EmpProfileActivity.this))showBottomSheetDialog();
                     break;
                 case R.id.layout_for_camera:
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, Constant.CAMERA);
                     if (dialog!=null)dialog.dismiss();
+                    try {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File file= new File(Environment.getExternalStorageDirectory().toString()+ File.separator + "image.jpg");
+
+                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+                            imageUri= FileProvider.getUriForFile(EmpProfileActivity.this, BuildConfig.APPLICATION_ID + ".fileprovider",file);
+                        }else {
+                            imageUri= Uri.fromFile(file);
+                        }
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                        startActivityForResult(intent, Constant.CAMERA);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case R.id.layout_for_gallery:
-                    intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, Constant.GALLERY);
                     if (dialog!=null)dialog.dismiss();
                     break;
@@ -281,25 +308,11 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         dialog.show();
     }
 */
-    private void latlong(Double latitude, Double longitude) throws IOException {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
-        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-        String address = addresses.get(0).getAddressLine(0);
-       /* String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName();*/
-
-        tv_for_address.setText(address);
-
-    } // latlog to address find
 
     private void addressClick() {
         try {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                     .build(EmpProfileActivity.this);
             startActivityForResult(intent, Constant.PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
@@ -314,37 +327,78 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constant.PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            tv_for_address.setEnabled(true);
+            layout_for_address.setEnabled(true);
             hideKeyboard();
             if (resultCode == RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(this, data);
+                Place place = PlaceAutocomplete.getPlace(EmpProfileActivity.this, data);
 
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
 
+                try {
+                    latlong(latitude,longitude);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 String placename = String.valueOf(place.getAddress());
                 tv_for_address.setText(placename);
-
             }
+
         }
 
         if (requestCode == Constant.GALLERY && resultCode == RESULT_OK && null != data) {
             Uri imageUri = data.getData();
+            if (imageUri != null) {
+                CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160, 160).setMaxCropResultSize(4000, 4000).setAspectRatio(400, 400).start(this);
+            } else {
+                MyCustomMessage.getInstance(this).customToast(getString(R.string.something_wrong));
+            }}else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result= CropImage.getActivityResult(data);
             try {
-                profileImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                tv_for_logo.setText(R.string.logo_attached);
-
+                if (result != null) {
+                    profileImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), result.getUri());
+                    tv_for_logo.setText(R.string.logo_attached);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             if (requestCode == Constant.CAMERA && resultCode == RESULT_OK) {
-                profileImageBitmap = (Bitmap) data.getExtras().get("data");
-                tv_for_logo.setText(R.string.logo_attached);
+                if (imageUri!=null){
+                    CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160,160).setMaxCropResultSize(4000,4000).setAspectRatio(400, 400).start(this);
+                }else{
+                    MyCustomMessage.getInstance(this).customToast(getString(R.string.something_wrong));
+                }
+            }else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result= CropImage.getActivityResult(data);
+                try {
+                    if (result != null) {
+                        profileImageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), result.getUri());
+                        tv_for_logo.setText(R.string.logo_attached);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
     } // onActivityResult
+
+    private void latlong(Double latitude, Double longitude) throws IOException {
+
+        LatLng latLng = new LatLng(latitude,longitude);
+
+        new GioAddressTask(this, latLng, new GioAddressTask.LocationListner() {
+            @Override
+            public void onSuccess(com.uconnekt.model.Address address) {
+                      city = address.getCity();
+            }
+        }).execute();
+
+    } // latlog to address find
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -355,7 +409,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        location();
+                        //location();
                     }
                 } else {
                     MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.parmission));
@@ -485,6 +539,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                         params.put("area_of_specialization", specialtyID);
                         params.put("address", address);
                         params.put("bio", bio);
+                        params.put("city", city);
                         params.put("latitude", latitude+"");
                         params.put("longitude", longitude+"");
                         params.put("job_title", jobTitleId);
@@ -537,8 +592,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         super.onResume();
         if (Constant.NETWORK_CHECK == 1){
             getlist();
-        }
-        Constant.NETWORK_CHECK = 0;
+            Constant.NETWORK_CHECK = 0;
+        }else  Constant.NETWORK_CHECK = 0;
+
     }
 
     @Override

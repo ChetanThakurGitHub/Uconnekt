@@ -11,17 +11,17 @@ public class BasicInfoIntractorImpl implements BasicInfoIntractor {
             return;
         }
 
-        if (value.equalsIgnoreCase("")){
+        else if (value.equalsIgnoreCase("")){
             listener.onValueError();
             return;
         }
 
-        if (strength.equalsIgnoreCase("")){
+        else if (strength.equalsIgnoreCase("")){
             listener.onStrengthError();
             return;
         }
 
-        if (address.equalsIgnoreCase("")){
+        else if (address.equalsIgnoreCase("")){
             listener.onAddressError();
             return;
         }

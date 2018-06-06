@@ -2,17 +2,14 @@ package com.uconnekt.ui.individual.individual_profile.profile_fragrment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -33,11 +30,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -45,6 +39,7 @@ import com.uconnekt.R;
 import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.adapter.WeekSpAdapter;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.PreviousRole;
@@ -60,13 +55,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -76,18 +69,18 @@ import static com.uconnekt.util.Constant.RESULT_OK;
 public class ExperienceFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener,DatePickerDialog.OnDateSetListener {
 
     private JobProfileActivity activity;
-    private CustomSpAdapter customSpAdapter,specialitySpAdapter;
+    private CustomSpAdapter customSpAdapter,specialitySpAdapter,customSpAdapter2;
     private WeekSpAdapter weekSpAdapter;
-    private ArrayList<JobTitle> arrayList,arrayList2;
+    private ArrayList<JobTitle> arrayList,arrayList2,arrayList3;
     private ArrayList<PreviousRole> roleArrayList;
     private ArrayList<Weeks> weekList;
-    private Spinner sp_for_jobTitle,sp_for_weeklist,sp_for_interest;
+    private Spinner sp_for_jobTitle,sp_for_weeklist,sp_for_interest,sp_for_jobTitle2;
     private LinearLayout mainlayout,layout_for_cRole,layout_for_nextR,layout_for_pRole,layout_for_preRole;
     private TabLayout tablayout;
-    private String jobTitleId = "",interestId = "",availability = "";
+    private String jobTitleId = "",interestId = "",availability = "",jobTitleId2 = "";
     private int setValue = -1,index = -1,checkMange = -1;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private EditText et_for_companyName,et_for_cdescription,et_for_pdescription,et_for_compyName,et_for_compyTitle;
+    // private FusedLocationProviderClient mFusedLocationClient;
+    private EditText et_for_companyName,et_for_cdescription,et_for_pdescription,et_for_compyName;
     private TextView tv_for_startD,tv_for_finishD,tv_for_txt,tv_for_address,tv_for_startDP,tv_for_finishDP,
             tv_for_txt2,tv_for_role1,tv_for_role2,tv_for_role3;
     private ImageView iv_for_checkBox,iv_for_currentRole,iv_for_nextRole,iv_for_previousRole;
@@ -95,6 +88,8 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
     private PermissionAll permissionAll;
     private RelativeLayout layout_for_address;
     private CardView card_for_pRole1,card_for_pRole2,card_for_pRole3;
+    private CusDialogProg cusDialogProg;
+    private String cCompanyName = "",startDate = "",finshdate = "",address = "";
 
     public ExperienceFragment() {
         // Required empty public constructor
@@ -107,7 +102,6 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -115,26 +109,35 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_experience, container, false);
         initView(view);
+        /*TabLayout.Tab tab = tablayout.getTabAt(1);
+        activity.setTab(tab, true);
+        if (tab != null) tab.select();*/
+
+
 
         roleArrayList = new ArrayList<>();
 
         permissionAll = new PermissionAll();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
-        if (permissionAll.checkLocationPermission(activity))location();
+        //mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
+        if (permissionAll.checkLocationPermission(activity));//location();
 
         arrayList = new ArrayList<>();
         arrayList2 = new ArrayList<>();
+        arrayList3 = new ArrayList<>();
         weekList = new ArrayList<>();
         customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp);
+        customSpAdapter2 = new CustomSpAdapter(activity, arrayList3,R.layout.custom_sp);
         specialitySpAdapter = new CustomSpAdapter(activity, arrayList2,R.layout.custom_sp_speciality);
-        weekSpAdapter = new WeekSpAdapter(activity, weekList);
+        weekSpAdapter = new WeekSpAdapter(activity, weekList,R.layout.custom_sp_week);
         sp_for_jobTitle.setAdapter(customSpAdapter);
+        sp_for_jobTitle2.setAdapter(customSpAdapter2);
         sp_for_interest.setAdapter(specialitySpAdapter);
         sp_for_weeklist.setAdapter(weekSpAdapter);
 
         getlist();
 
         sp_for_jobTitle.setOnItemSelectedListener(this);
+        sp_for_jobTitle2.setOnItemSelectedListener(this);
         sp_for_interest.setOnItemSelectedListener(this);
         sp_for_weeklist.setOnItemSelectedListener(this);
 
@@ -178,6 +181,123 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         return view;
     }
 
+    private void showPrefilledData(){
+        new VolleyGetPost(activity, AllAPIs.SHOW_PREFILLED_DATA, false, "showPrefilledData", true) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    cusDialogProg.dismiss();
+                    if (status.equalsIgnoreCase("success")) {
+                        JSONObject object = jsonObject.getJSONObject("experience");
+                        JSONObject object1 = object.getJSONObject("current_role");
+                        jobTitleId = object1.getString("current_job_title");
+                        String current_company = object1.getString("current_company");
+                        String current_start_date = object1.getString("current_start_date");
+                        String current_finish_date = object1.getString("current_finish_date");
+                        String current_description = object1.getString("current_description");
+
+                        if (!jobTitleId.isEmpty()) {
+                            for (int i = 0; arrayList.size() > i; i++) {
+                                if (arrayList.get(i).jobTitleId.equals(jobTitleId)) {
+                                    sp_for_jobTitle.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        et_for_companyName.setText(current_company);
+                        tv_for_startD.setText(current_start_date);
+                        tv_for_finishD.setText(current_finish_date);
+                        et_for_cdescription.setText(current_description);
+
+                        if (!current_start_date.isEmpty()){
+                            if (current_finish_date.isEmpty()){
+                                iv_for_checkBox.setImageResource(R.drawable.ic_checked_gray);
+                                checkBox = true;
+                            }
+                        }
+
+                        JSONObject object2 = object.getJSONObject("previous_role");
+                        JSONArray array = object2.getJSONArray("previous_experience");
+                        for (int i = 0; i < array.length();i++){
+                            PreviousRole previousRole = new PreviousRole();
+                            JSONObject jsonObject1 = array.getJSONObject(i);
+                            previousRole.previous_company_name = jsonObject1.getString("previous_company_name");
+                            previousRole.previous_description = jsonObject1.getString("previous_description");
+                            previousRole.previous_finish_date = jsonObject1.getString("previous_finish_date");
+                            previousRole.previous_job_title = jsonObject1.getString("previous_job_title");
+                            previousRole.previous_start_date = jsonObject1.getString("previous_start_date");
+                            roleArrayList.add(previousRole);
+                            switch (i){
+                                case 0:
+                                    card_for_pRole1.setVisibility(View.VISIBLE);
+                                    tv_for_role1.setText(jsonObject1.getString("previous_company_name"));
+                                    break;
+                                case 1:
+                                    card_for_pRole2.setVisibility(View.VISIBLE);
+                                    tv_for_role2.setText(jsonObject1.getString("previous_company_name"));
+                                    break;
+                                case 2:
+                                    card_for_pRole3.setVisibility(View.VISIBLE);
+                                    tv_for_role3.setText(jsonObject1.getString("previous_company_name"));
+                                    layout_for_preRole.setVisibility(View.GONE);
+                                    break;
+                            }
+                        }
+
+                        JSONObject object3 = object.getJSONObject("next_role");
+                        String next_availability = object3.getString("next_availability");
+                        String next_speciality = object3.getString("next_speciality");
+                        String next_location = object3.getString("next_location");
+
+                        if (!next_availability.isEmpty()) {
+                            availability = next_availability;
+                            for (int i = 0; weekList.size() > i; i++) {
+                                if (weekList.get(i).week.equals(next_availability)) {
+                                    sp_for_weeklist.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!next_speciality.isEmpty()) {
+                            interestId = next_speciality;
+                            for (int i = 0; arrayList2.size() > i; i++) {
+                                if (arrayList2.get(i).jobTitleId.equals(next_speciality)) {
+                                    sp_for_interest.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        tv_for_address.setText(next_location);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    cusDialogProg.dismiss();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+                cusDialogProg.dismiss();
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
 
     private void initView(View view) {
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
@@ -199,7 +319,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         tv_for_role1 = view.findViewById(R.id.tv_for_role1);
         card_for_pRole1 = view.findViewById(R.id.card_for_pRole1);
         layout_for_preRole = view.findViewById(R.id.layout_for_preRole);
-        et_for_compyTitle = view.findViewById(R.id.et_for_compyTitle);
+        sp_for_jobTitle2 = view.findViewById(R.id.sp_for_jobTitle2);
         et_for_compyName = view.findViewById(R.id.et_for_compyName);
         tv_for_txt2 = view.findViewById(R.id.tv_for_txt2);
         et_for_pdescription = view.findViewById(R.id.et_for_pdescription);
@@ -259,6 +379,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.layout_for_address:
                 addressClick();
+                layout_for_address.setEnabled(false);
                 break;
             case R.id.btn_for_next:
                 validation();
@@ -320,44 +441,74 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 layout_for_preRole.setVisibility(View.VISIBLE);
                 roleUpdate(0);
                 index = 0;
+                setVisibilty();
                 break;
             case R.id.card_for_pRole2:
                 layout_for_preRole.setVisibility(View.VISIBLE);
                 roleUpdate(1);
                 index = 1;
+                setVisibilty();
                 break;
             case R.id.card_for_pRole3:
                 layout_for_preRole.setVisibility(View.VISIBLE);
                 roleUpdate(2);
                 index = 2;
+                setVisibilty();
+                break;
+        }
+    }
+
+    private void setVisibilty(){
+        switch (index){
+            case 0:
+                if (roleArrayList.size() == 3){
+                    card_for_pRole2.setVisibility(View.VISIBLE);
+                    card_for_pRole3.setVisibility(View.VISIBLE);
+                }else if (roleArrayList.size() == 2){
+                    card_for_pRole2.setVisibility(View.VISIBLE);
+                }
+                break;
+            case 1:
+                if (roleArrayList.size() == 2){
+                    card_for_pRole1.setVisibility(View.VISIBLE);
+                }else if (roleArrayList.size() == 3){
+                    card_for_pRole1.setVisibility(View.VISIBLE);
+                    card_for_pRole3.setVisibility(View.VISIBLE);
+                }
+                break;
+            case 2:
+                if (roleArrayList.size() == 3){
+                    card_for_pRole1.setVisibility(View.VISIBLE);
+                    card_for_pRole2.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
 
     private void addPreviousRole(int data){
         String companyName = et_for_compyName.getText().toString().trim();
-        String companyTitle = et_for_compyTitle.getText().toString().trim();
+        String companyTitle = jobTitleId2.trim();
         String startDateP = tv_for_startDP.getText().toString().trim();
         String finishDateP = tv_for_finishDP.getText().toString().trim();
         String pdescription = et_for_pdescription.getText().toString().trim();
 
-       if (data != 2) {
-           if (companyTitle.equalsIgnoreCase("")) {
-               MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company title");
-           } else if (companyName.equalsIgnoreCase("")) {
-               MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company name");
-           } else if (startDateP.equalsIgnoreCase("")) {
-               MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role start date");
-           } else if (finishDateP.equalsIgnoreCase("")) {
-               MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role finish date");
-           } else if (startDateP.equalsIgnoreCase(finishDateP)) {
-               MyCustomMessage.getInstance(activity).snackbar(mainlayout, "start date and finish date con't be same");
-           }else {
-               setData(companyName,companyTitle,startDateP,finishDateP,pdescription);
-           }
-       }else {
-           setData(companyName,companyTitle,startDateP,finishDateP,pdescription);
-       }
+        if (data != 2) {
+            if (companyTitle.equalsIgnoreCase("")) {
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company title");
+            } else if (companyName.equalsIgnoreCase("")) {
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company name");
+            } else if (startDateP.equalsIgnoreCase("")) {
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role start date");
+            } else if (finishDateP.equalsIgnoreCase("")) {
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role finish date");
+            } else if (startDateP.equalsIgnoreCase(finishDateP)) {
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "start date and finish date can't be same");
+            }else {
+                setData(companyName,companyTitle,startDateP,finishDateP,pdescription);
+            }
+        }else {
+            setData(companyName,companyTitle,startDateP,finishDateP,pdescription);
+        }
 
     }
 
@@ -372,7 +523,9 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         previousRole.previous_description = pdescription;
 
         if (index == -1) {
-            roleArrayList.add(previousRole);
+            if (!et_for_compyName.getText().toString().isEmpty()) {
+                roleArrayList.add(previousRole);
+            }
             if (roleArrayList.size() == 1) {
                 card_for_pRole1.setVisibility(View.VISIBLE);
                 tv_for_role1.setText(companyName);
@@ -412,8 +565,10 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
             }
         }
 
+        sp_for_jobTitle2.setAdapter(customSpAdapter2);
+        customSpAdapter2.notifyDataSetChanged();
         et_for_compyName.setText("");
-        et_for_compyTitle.setText("");
+        jobTitleId2 = "";
         tv_for_startDP.setText("");
         tv_for_finishDP.setText("");
         et_for_pdescription.setText("");
@@ -456,12 +611,20 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 break;
         }
 
-
         et_for_compyName.setText(roleArrayList.get(index).previous_company_name);
-        et_for_compyTitle.setText(roleArrayList.get(index).previous_job_title);
+
+        // et_for_compyTitle.setText(roleArrayList.get(index).previous_job_title);
+
         tv_for_startDP.setText(roleArrayList.get(index).previous_start_date);
         tv_for_finishDP.setText(roleArrayList.get(index).previous_finish_date);
         et_for_pdescription.setText(roleArrayList.get(index).previous_description);
+
+        for (int i=0; arrayList3.size() > i ; i ++){
+            if (arrayList3.get(i).jobTitleId.equals(roleArrayList.get(index).previous_job_title)){
+                sp_for_jobTitle2.setSelection(i);
+                return;
+            }
+        }
 
        /* String companyName = et_for_compyName.getText().toString().trim();
         String companyTitle = et_for_compyTitle.getText().toString().trim();
@@ -527,9 +690,9 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
 
     private void validation(){
 
-        String cCompanyName = et_for_companyName.getText().toString().trim();
-        String startDate = tv_for_startD.getText().toString().trim();
-        String finshdate =  tv_for_finishD.getText().toString().trim();
+         cCompanyName = et_for_companyName.getText().toString().trim();
+         startDate = tv_for_startD.getText().toString().trim();
+         finshdate =  tv_for_finishD.getText().toString().trim();
 
         if (jobTitleId.equalsIgnoreCase("")){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select current job title");
@@ -541,10 +704,10 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
             if (finshdate.equalsIgnoreCase("")){
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select current role finish date");
             }else {
-                otherValidation(cCompanyName,startDate,finshdate);
+                otherValidation();
             }
         }else {
-            otherValidation(cCompanyName, startDate, finshdate);
+            otherValidation();
         }
     }
 
@@ -554,11 +717,10 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         activity = (JobProfileActivity) context;
     }
 
-    private void otherValidation(String cCompanyName, String startDate, String finshdate){
+    private void otherValidation(){
 
-        String address = tv_for_address.getText().toString().trim();
+        address = tv_for_address.getText().toString().trim();
         String companyName = et_for_compyName.getText().toString().trim();
-        String companyTitle = et_for_compyTitle.getText().toString().trim();
         String startDateP = tv_for_startDP.getText().toString().trim();
         String finishDateP = tv_for_finishDP.getText().toString().trim();
 
@@ -570,7 +732,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please add address");
         }else if (roleArrayList == null) {
 
-            if (companyTitle.equalsIgnoreCase("")) {
+            if (jobTitleId2.equalsIgnoreCase("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous job title");
             } else if (companyName.equalsIgnoreCase("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company name");
@@ -579,15 +741,14 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
             } else if (finishDateP.equalsIgnoreCase("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role finish date");
             } else if (startDateP.equalsIgnoreCase(finishDateP)) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "start date and finish date con't be same");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "start date and finish date can't be same");
             } else {
                 addPreviousRole(1);
-                updateExperience(cCompanyName, startDate, finshdate, address);
-
+                updateExperience(activity, false);
             }
         }else {
             addPreviousRole(2);
-            updateExperience(cCompanyName, startDate, finshdate, address);
+            updateExperience(activity, false);
         }
     }
 
@@ -598,8 +759,12 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 JobTitle jobTitles = arrayList.get(position);
                 jobTitleId = jobTitles.jobTitleId;
                 break;
+            case R.id.sp_for_jobTitle2:
+                jobTitles = arrayList3.get(position);
+                jobTitleId2 = jobTitles.jobTitleId;
+                break;
             case R.id.sp_for_interest:
-                JobTitle jobTitles1 = arrayList.get(position);
+                JobTitle jobTitles1 = arrayList2.get(position);
                 interestId = jobTitles1.jobTitleId;
                 break;
             case R.id.sp_for_weeklist:
@@ -626,20 +791,23 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         }
         DatePickerDialog datepickerdialog = new DatePickerDialog(activity, R.style.DefaultNumberPickerTheme, this, year, month, day);
 
+
+
         if (checkMange == 2 | checkMange == 4) {
             String givenDateString;
             if (checkMange == 2) {
                 givenDateString = tv_for_startD.getText().toString().trim().replace("-", " ");
                 checkMange = -1;
-            }else {
+            } else {
                 givenDateString = tv_for_startDP.getText().toString().trim().replace("-", " ");
                 checkMange = -1;
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy",Locale.US);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.US);
             try {
                 Date mDate = sdf.parse(givenDateString);
                 long timeInMilliseconds = mDate.getTime();
                 datepickerdialog.getDatePicker().setMinDate(timeInMilliseconds);
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -648,11 +816,29 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         datepickerdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         datepickerdialog.getWindow().setBackgroundDrawableResource(R.color.white);
         datepickerdialog.show();
+
+        if (!tv_for_finishDP.getText().toString().trim().equals("")) {
+
+            String givenDateString = tv_for_finishDP.getText().toString().trim().replace("-", " ");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.US);
+            try {
+                Date mDate = sdf.parse(givenDateString);
+                long timeInMilliseconds = mDate.getTime();
+                datepickerdialog.getDatePicker().setMaxDate(timeInMilliseconds);
+                datepickerdialog.getWindow().setBackgroundDrawableResource(R.color.white);
+                datepickerdialog.show();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private void getlist() {
+        cusDialogProg = new CusDialogProg(activity);
+        cusDialogProg.show();
 
-        new VolleyGetPost(activity, AllAPIs.EMPLOYER_PROFILE, false, "list",true) {
+        new VolleyGetPost(activity, AllAPIs.EMPLOYER_PROFILE, false, "list",false) {
 
             @Override
             public void onVolleyResponse(String response) {
@@ -670,14 +856,17 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                         jobTitle.jobTitleName = "";
                         arrayList.add(jobTitle);
                         arrayList2.add(jobTitle);
+                        arrayList3.add(jobTitle);
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results.getJSONObject(i);
                             jobTitles.jobTitleId = object.getString("jobTitleId");
                             jobTitles.jobTitleName = object.getString("jobTitleName");
                             arrayList.add(jobTitles);
+                            arrayList3.add(jobTitles);
                         }
                         customSpAdapter.notifyDataSetChanged();
+                        customSpAdapter2.notifyDataSetChanged();
 
                         JSONArray speciality = result.getJSONArray("speciality_list");
                         for (int i = 0; i < speciality.length(); i++) {
@@ -707,6 +896,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
 
+                        showPrefilledData();
                     }
 
                 } catch (JSONException e) {
@@ -732,8 +922,8 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         }.executeVolley();
     }
 
-    private void updateExperience(final String cCompanyName, final String startDate, final String finshdate, final String address) {
-
+    public void updateExperience(final Activity activity, final Boolean isBasicInfo) {
+        tablayout = activity.findViewById(R.id.tablayout);
         Gson gson = new GsonBuilder().create();
         final JsonArray array = gson.toJsonTree(roleArrayList).getAsJsonArray();
 
@@ -746,7 +936,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                     String message = jsonObject.getString("message");
                     if (status.equalsIgnoreCase("success")) {
 
-                        if (tablayout.getSelectedTabPosition() < 2) {
+                        if (!isBasicInfo && tablayout.getSelectedTabPosition() < 2) {
                             tablayout.getTabAt(tablayout.getSelectedTabPosition() + 1).select();
                         }
 
@@ -769,9 +959,11 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 params.put("current_company", cCompanyName);
                 params.put("current_start_date", startDate);
                 params.put("current_finish_date",  finshdate);
-                params.put("current_description",  et_for_cdescription.getText().toString());
-                params.put("previous_description",  et_for_pdescription.getText().toString());
-                params.put("previous_role",  array.toString());
+                String one=(et_for_cdescription!=null)?et_for_cdescription.getText().toString():"";
+                params.put("current_description", one);
+                String two=(et_for_pdescription!=null)?et_for_pdescription.getText().toString():"";
+                params.put("previous_description",  two);
+                if (array != null) params.put("previous_role",  array.toString());
                 params.put("next_availability", availability);
                 params.put("next_speciality", interestId);
                 params.put("next_location", address);
@@ -792,7 +984,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         if (Constant.NETWORK_CHECK == 1) {
             getlist();
         }
-            Constant.NETWORK_CHECK = 0;
+        Constant.NETWORK_CHECK = 0;
 
     }
 
@@ -802,40 +994,40 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         int mmonth = month + 1;
         switch (setValue){
             case 1:
-                tv_for_startD.setText(dayOfMonth + "-" + mmonth + "-" + year);
+                tv_for_startD.setText((dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth )+ "-" + (mmonth < 10 ? "0" + mmonth : "" + mmonth) + "-" + year);
                 break;
             case 2:
-                tv_for_finishD.setText(dayOfMonth + "-" + mmonth + "-" + year);
+                tv_for_finishD.setText((dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth )+ "-" + (mmonth < 10 ? "0" + mmonth : "" + mmonth) + "-" + year);
                 break;
             case 3:
-                tv_for_startDP.setText(dayOfMonth + "-" + mmonth + "-" + year);
+                tv_for_startDP.setText((dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth )+ "-" + (mmonth < 10 ? "0" + mmonth : "" + mmonth) + "-" + year);
                 break;
             case 4:
-                tv_for_finishDP.setText(dayOfMonth + "-" + mmonth + "-" + year);
+                tv_for_finishDP.setText((dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth )+ "-" + (mmonth < 10 ? "0" + mmonth : "" + mmonth) + "-" + year);
                 break;
         }
     }
 
-    /*location zoom start*/
+   /* *//*location zoom start*//*
     private void latlong(Double latitude, Double longitude) throws IOException {
         Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
 
         List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
 
         String address = addresses.get(0).getAddressLine(0);
-       /* String city = addresses.get(0).getLocality();
+       *//* String city = addresses.get(0).getLocality();
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName();*/
+        String knownName = addresses.get(0).getFeatureName();*//*
 
         tv_for_address.setText(address);
 
-    } // latlog to address find
+    } // latlog to address find*/
 
     private void addressClick() {
         try {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                     .build(activity);
             startActivityForResult(intent, Constant.PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
@@ -845,7 +1037,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
         }
     } // method for address button click
 
-    private void location() {
+   /* private void location() {
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionAll.checkLocationPermission(activity);
@@ -870,7 +1062,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                     });
         }
 
-    }
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -891,7 +1083,6 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 Double latitude = place.getLatLng().latitude;
                 Double longitude = place.getLatLng().longitude;
 
-
                 String placename = String.valueOf(place.getAddress());
                 tv_for_address.setText(placename);
             }
@@ -905,7 +1096,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        location();
+                        //location();
                     }
                 } else {
                     MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.parmission));

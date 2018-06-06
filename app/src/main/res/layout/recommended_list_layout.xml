@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_60sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/white"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardElevation="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_for_profile"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/user"/>
+
+    <TextView
+        android:id="@+id/tv_for_rName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:maxWidth="@dimen/_150sdp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/lightgray"
+        android:textSize="@dimen/_12sdp"
+        android:layout_toRightOf="@+id/iv_for_profile"
+        android:text="Chetan thakur recommende you"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/iv_for_like"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_toRightOf="@+id/tv_for_rName"
+        android:layout_toLeftOf="@+id/tv_for_date"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_like"/>
+
+    <TextView
+        android:id="@+id/tv_for_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/lightgray"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_alignParentRight="true"
+        android:text="02/03/2015"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

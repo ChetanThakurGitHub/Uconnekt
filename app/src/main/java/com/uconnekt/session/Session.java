@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.UserInfo;
-import com.uconnekt.ui.authontication.login.LoginActivity;
 import com.uconnekt.ui.authontication.user_selection.UserSelectionActivity;
 
 public class Session {
@@ -18,23 +17,23 @@ public class Session {
 
     private final String IS_LOGGEDIN = "isLoggedIn";
 
-    public final String USER_ID = "userId";
-    public final String FULLNAME = "fullName";
-    public final String BUSINESS_NAME = "businessName";
-    public final String EMAIL = "email";
-    public final String USER_TYPE = "userType";
-    public final String AUTHTOKEN = "authToken";
-    public final String STATUS = "status";
-    public final String CRD = "crd";
-    public final String DEVICE_TOKEN = "deviceToken";
-    public final String DEVICETYPE = "deviceType";
-    public final String IS_PROFILE = "isProfile";
-    public final String PROFILE_IMAGE = "profileImage";
-    public final String PASSWORD = "password";
+    private final String USER_ID = "userId";
+    private final String FULLNAME = "fullName";
+    private final String BUSINESS_NAME = "businessName";
+    private final String EMAIL = "email";
+    private final String USER_TYPE = "userType";
+    private final String AUTHTOKEN = "authToken";
+    private final String STATUS = "status";
+    private final String CRD = "crd";
+    private final String DEVICE_TOKEN = "deviceToken";
+    private final String DEVICETYPE = "deviceType";
+    private final String IS_PROFILE = "isProfile";
+    private final String PROFILE_IMAGE = "profileImage";
+    private final String PASSWORD = "password";
 
-    public final String EMAIL_R = "email_r";
-    public final String PASSWORD_R = "password_r";
-    public final String USER_TYPE_R = "userType_r";
+    private final String EMAIL_R = "email_r";
+    private final String PASSWORD_R = "password_r";
+    private final String USER_TYPE_R = "userType_r";
 
     private SharedPreferences mypref;
     private SharedPreferences remember_pref;

@@ -1,7 +1,5 @@
-package com.uconnekt.ui.fragment;
+package com.uconnekt.ui.employer.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +9,13 @@ import android.view.ViewGroup;
 import com.uconnekt.R;
 
 
-public class MapFragment extends Fragment {
-    public MapFragment() {
+public class MyProfileFragment extends Fragment {
+    public MyProfileFragment() {
         // Required empty public constructor
     }
 
-    public static MapFragment newInstance() {
-        return new MapFragment();
+    public static MyProfileFragment newInstance() {
+        return new MyProfileFragment();
     }
 
     @Override
@@ -30,7 +28,8 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
+
 
 }

@@ -20,10 +20,6 @@ import com.uconnekt.resume_picker.view.SmoothCheckBox;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * Created by droidNinja on 29/07/16.
- */
 public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewHolder, Document>
     implements Filterable {
 

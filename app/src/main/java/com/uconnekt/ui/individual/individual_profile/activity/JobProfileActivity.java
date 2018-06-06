@@ -21,15 +21,22 @@ public class JobProfileActivity extends BaseActivity implements TabLayout.OnTabS
 
     public TabLayout tablayout;
     private Boolean doubleBackToExitPressedOnce = false;
+    public Boolean isBasicInfo=false;
     private RelativeLayout mainlayout;
+    private BasicInfoFragment infoFragment;
+    public ExperienceFragment experienceFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_profile);
         initView();
+        infoFragment=BasicInfoFragment.newInstance();
+        experienceFragment=ExperienceFragment.newInstance();
 
-        addFragment(BasicInfoFragment.newInstance(), false, R.id.framlayout);
+        addFragment(experienceFragment, false, R.id.framlayout);
+        addFragment(infoFragment, false, R.id.framlayout);
         setTab(tablayout.getTabAt(0),true);
     }
 
@@ -46,7 +53,7 @@ public class JobProfileActivity extends BaseActivity implements TabLayout.OnTabS
         tv_for_fullName.setText(Uconnekt.session.getUserInfo().fullName);
     }
 
-    private void setTab(TabLayout.Tab tab, boolean isSelected){
+    public void setTab(TabLayout.Tab tab, boolean isSelected){
         ((TextView) tab.getCustomView().findViewById(android.R.id.text1)).setTextColor(getResources().getColor(isSelected?R.color.yellow:R.color.darkgray));
     }
 
@@ -87,18 +94,41 @@ public class JobProfileActivity extends BaseActivity implements TabLayout.OnTabS
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+
         switch (tablayout.getSelectedTabPosition()){
             case 0:
-                replaceFragment(BasicInfoFragment.newInstance(), false, R.id.framlayout);
+                isBasicInfo=true;
+                infoFragment=BasicInfoFragment.newInstance();
+                try {
+                    if (experienceFragment != null){
+                        experienceFragment.updateExperience(JobProfileActivity.this, true);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                replaceFragment(infoFragment, false, R.id.framlayout);
                 setTab(tab,true);
                 break;
             case 1:
-                replaceFragment(ExperienceFragment.newInstance(), false, R.id.framlayout);
-                setTab(tab,true);
+                isBasicInfo=false;
+                experienceFragment=ExperienceFragment.newInstance();
+                validation(tab);
                 break;
             case 2:
-                replaceFragment(ResumeFragment.newInstance(), false, R.id.framlayout);
-                setTab(tab,true);
+                if (Uconnekt.session.getUserInfo().isProfile.equals("1")){
+                    replaceFragment(ResumeFragment.newInstance(), false, R.id.framlayout);
+                    setTab(tab,true);
+                    if (isBasicInfo){
+                        validation(tab);
+                    }else if (experienceFragment != null){
+                        experienceFragment.updateExperience(JobProfileActivity.this, false);
+                    }
+                }else {
+                    tab = tablayout.getTabAt(0);
+                    if (tab != null) {tab.select();}
+                    MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.first));
+                }
                 break;
         }
     }
@@ -122,4 +152,116 @@ public class JobProfileActivity extends BaseActivity implements TabLayout.OnTabS
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+
+    private void validation(TabLayout.Tab tab){
+        if (infoFragment!=null) {
+            if (infoFragment.specialtyId.isEmpty()) {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.first));
+                tab = tablayout.getTabAt(0);
+                if (tab != null) {tab.select();}
+            }else if(infoFragment.value.isEmpty()) {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.first));
+                tab = tablayout.getTabAt(0);
+                if (tab != null) {tab.select();}
+            }else if(infoFragment.strengthID.isEmpty()) {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.first));
+                tab = tablayout.getTabAt(0);
+                if (tab != null) {tab.select();}
+            }else if(infoFragment.tv_for_address.getText().toString().trim().isEmpty()) {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.first));
+                tab = tablayout.getTabAt(0);
+                if (tab != null) {tab.select();}
+            }else{
+                infoFragment.spinnerHide();
+                infoFragment.checkSpinnCheck();
+                infoFragment.basicInfoPresenter.validationCondition(infoFragment.specialtyId, infoFragment.value, infoFragment.strengthID, infoFragment.tv_for_address.getText().toString().trim());
+            }
+        }
+    }
+
+
+    /*private void getlist() {
+
+        new VolleyGetPost(this, AllAPIs.EMPLOYER_PROFILE, false, "list",false) {
+
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String status = jsonObject.getString("status");
+
+                    if (status.equalsIgnoreCase("success")) {
+                        JSONObject result = jsonObject.getJSONObject("result");
+                        JSONArray results = result.getJSONArray("job_title");
+                        JobTitle jobTitle = new JobTitle();
+                        jobTitle.jobTitleId = "";
+                        jobTitle.jobTitleName = "";
+                        arrayList.add(jobTitle);
+                        arrayList2.add(jobTitle);
+                        arrayList3.add(jobTitle);
+                        for (int i = 0; i < results.length(); i++) {
+                            JobTitle jobTitles = new JobTitle();
+                            JSONObject object = results.getJSONObject(i);
+                            jobTitles.jobTitleId = object.getString("jobTitleId");
+                            jobTitles.jobTitleName = object.getString("jobTitleName");
+                            arrayList.add(jobTitles);
+                            arrayList3.add(jobTitles);
+                        }
+                        customSpAdapter.notifyDataSetChanged();
+                        customSpAdapter2.notifyDataSetChanged();
+
+                        JSONArray speciality = result.getJSONArray("speciality_list");
+                        for (int i = 0; i < speciality.length(); i++) {
+                            JobTitle jobTitles = new JobTitle();
+                            JSONObject object = speciality.getJSONObject(i);
+                            jobTitles.jobTitleId = object.getString("specializationId");
+                            jobTitles.jobTitleName = object.getString("specializationName");
+                            arrayList2.add(jobTitles);
+                        }
+                        specialitySpAdapter.notifyDataSetChanged();
+
+                        Weeks week0 = new Weeks();
+                        week0.week = "";
+                        weekList.add(week0);
+                        JSONObject week = result.getJSONObject("availability_list");
+                        Weeks week1 = new Weeks();
+                        week1.week = week.getString("1-4");
+                        weekList.add(week1);
+                        Weeks week2 = new Weeks();
+                        week2.week = week.getString("5-8");
+                        weekList.add(week2);
+                        Weeks week3 = new Weeks();
+                        week3.week = week.getString("9-12");
+                        weekList.add(week3);
+                        Weeks week4 = new Weeks();
+                        week4.week = week.getString("12+");
+                        weekList.add(week4);
+                        weekSpAdapter.notifyDataSetChanged();
+
+                        showPrefilledData();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }*/
 }

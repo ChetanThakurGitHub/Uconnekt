@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -29,11 +27,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.uconnekt.R;
 import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.adapter.strengths.Strength1SpAdapter;
@@ -43,6 +39,8 @@ import com.uconnekt.adapter.values.Value1SpAdapter;
 import com.uconnekt.adapter.values.Value2SpAdapter;
 import com.uconnekt.adapter.values.Value3SpAdapter;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.custom_view.CusDialogProg;
+import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
@@ -83,14 +81,18 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
     private ImageView iv_for_up,iv_for_upDown;
     private EditText et_for_bio;
     private RelativeLayout layout_for_address;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private TextView tv_for_address,tv_for_txt;
+    //private FusedLocationProviderClient mFusedLocationClient;
+    public TextView tv_for_address;
+    private TextView tv_for_txt;
     private PermissionAll permissionAll;
-    private Double latitude, longitude;
-    private String specialtyId = "", strengthID ="", value1 = "", value2 = "", value3 = "", value = "",strength1 ="",strength2 = "",strength3 = "";
+    private Double latitude;
+    private Double longitude;
+    public String specialtyId = "",value = "",strengthID ="";
+    private String value1 = "", value2 = "", value3 = "",strength1 ="",strength2 = "",strength3 = "",city = "";
     public int spValue1 = -1,spValue2 = -1,spValue3 = -1,spStrength1 = -1,spStrength2 = -1,spStrength3 = -1;
     private TabLayout tablayout;
-    private BasicInfoPresenter basicInfoPresenter;
+    public BasicInfoPresenter basicInfoPresenter;
+    private CusDialogProg cusDialogProg;
 
     public BasicInfoFragment() {
         // Required empty public constructor
@@ -113,9 +115,8 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
 
         basicInfoPresenter = new BasicInfoPresenterImpl(this,new BasicInfoIntractorImpl());
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         permissionAll = new PermissionAll();
-        if (permissionAll.checkLocationPermission(activity))location();
+        if (permissionAll.checkLocationPermission(activity));//location();
 
         arrayList = new ArrayList<>();
         strengthsList = new ArrayList<>();
@@ -169,7 +170,7 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    private void spinnerHide(){
+    public void spinnerHide(){
         layout_for_values.setVisibility(View.GONE);
         layout_for_strengths.setVisibility(View.GONE);
         iv_for_upDown.setImageResource(R.drawable.ic_down_arrow);
@@ -180,6 +181,7 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
     public void onAttach(Context context) {
         super.onAttach(context);
         activity = (JobProfileActivity) context;
+        activity.isBasicInfo=true;
     }
 
     @Override
@@ -256,6 +258,7 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
+        reSetTab();
         switch (v.getId()) {
             case R.id.layout_for_value:
                 iv_for_upDown.setImageResource(R.drawable.ic_down_arrow);
@@ -289,14 +292,16 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                 layout_for_address.setEnabled(false);
                 break;
             case R.id.btn_for_next:
+                //activity.onTabSelected(tablayout.getTabAt(1));
                 spinnerHide();
                 checkSpinnCheck();
+                activity.isBasicInfo=false;
                 basicInfoPresenter.validationCondition(specialtyId,value,strengthID,tv_for_address.getText().toString().trim());
                 break;
         }
     }
 
-    private void checkSpinnCheck() {
+    public void checkSpinnCheck() {
         value = "";
 
         if (!value1.equals("")){
@@ -326,8 +331,10 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
     }
 
     private void getlist() {
+        cusDialogProg = new CusDialogProg(activity);
+        cusDialogProg.show();
 
-        new VolleyGetPost(activity, AllAPIs.EMPLOYER_PROFILE, false, "list",true) {
+        new VolleyGetPost(activity, AllAPIs.EMPLOYER_PROFILE, false, "list",false) {
 
             @Override
             public void onVolleyResponse(String response) {
@@ -338,6 +345,10 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
 
                     if (status.equalsIgnoreCase("success")) {
                         arrayList.clear();
+
+                        TabLayout.Tab tab = tablayout.getTabAt(0);
+                        if (tab != null) {tab.select();}
+
                         JSONObject result = jsonObject.getJSONObject("result");
                         JSONArray results = result.getJSONArray("speciality_list");
                         JobTitle jobTitle = new JobTitle();
@@ -394,6 +405,9 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                         value1SpAdapter.notifyDataSetChanged();
                         value2SpAdapter.notifyDataSetChanged();
                         value3SpAdapter.notifyDataSetChanged();
+
+
+                        showPrefilledData();
                     }
 
                 } catch (JSONException e) {
@@ -419,7 +433,7 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
-    private void updateBasicInfoOnServer() {
+    public void updateBasicInfoOnServer() {
 
         new VolleyGetPost(activity, AllAPIs.BASIC_INFO, true, "Basic Info",true) {
             @Override
@@ -429,12 +443,16 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                     String status = jsonObject.getString("status");
                     String message = jsonObject.getString("message");
                     if (status.equalsIgnoreCase("success")) {
-
-                        if (tablayout.getSelectedTabPosition() < 2) {
+                        if (activity.isBasicInfo){
+                            activity.isBasicInfo=false;
                             UserInfo userInfo = Uconnekt.session.getUserInfo();
                             userInfo.isProfile = "1";
                             Uconnekt.session.createSession(userInfo);
-                            tablayout.getTabAt(tablayout.getSelectedTabPosition() + 1).select();
+                        }  else if(tablayout.getSelectedTabPosition() < 2) {
+                            UserInfo userInfo = Uconnekt.session.getUserInfo();
+                            userInfo.isProfile = "1";
+                            Uconnekt.session.createSession(userInfo);
+                            activity.replaceFragment(activity.experienceFragment, false, R.id.framlayout);
                         }
                     } else {
                         MyCustomMessage.getInstance(activity).snackbar(mainlayout,message);
@@ -456,6 +474,7 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                 params.put("bio", et_for_bio.getText().toString().trim());
                 params.put("latitude", latitude + "");
                 params.put("longitude", longitude + "");
+                params.put("city",city);
                 params.put("value", value);
                 params.put("strength", strengthID);
                 return params;
@@ -469,6 +488,168 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
+    private void showPrefilledData(){
+        new VolleyGetPost(activity, AllAPIs.SHOW_PREFILLED_DATA, false, "showPrefilledData", true) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    cusDialogProg.dismiss();
+
+                    if (status.equalsIgnoreCase("success")) {
+                        JSONObject object = jsonObject.getJSONObject("basic_info");
+                        String address = object.getString("address");
+                        String bio = object.getString("bio");
+                        city = object.getString("city");
+                        String specializationId = object.getString("specializationId");
+                        String values = object.getString("value");
+                        String strength = object.getString("strength");
+                        String lat = object.getString("latitude");
+                        String lng = object.getString("longitude");
+
+                       if (lat!= null && !lat.isEmpty() && !lat.equals("null")) {
+                           latitude = Double.parseDouble(lat);
+                       }
+
+
+                        if (lng != null && !lng.isEmpty() && !lng.equals("null"))longitude = Double.parseDouble(lng);
+
+                        setdata(values,strength);
+
+                        if (!address.equals("null"))tv_for_address.setText(address);
+                        if (!bio.equals("null"))et_for_bio.setText(bio);
+
+                        if (!specializationId.isEmpty()) {
+                            specialtyId = specializationId;
+                            for (int i = 0; arrayList.size() > i; i++) {
+                                if (arrayList.get(i).jobTitleId.equals(specializationId)) {
+                                    sp_for_specialty.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                } catch (JSONException e) {
+                    cusDialogProg.dismiss();
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+                cusDialogProg.dismiss();
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
+
+    private void setdata(String valu, String strength){
+        String value11 = "",value22 = "",value33 = "";
+        if (!valu.isEmpty()){
+            if (valu.contains(",")){
+                String[] values = valu.split(",");
+                if (values.length == 3){
+                    value33 = values[2];
+                }
+                value11 = values[0];
+                value22 = values[1];
+            }else {
+                value11 = valu;
+            }
+        }
+
+        if (!value11.isEmpty()){
+            value1 = value11;
+            value = value1;
+            for (int i = 0; valuesList.size() > i; i++) {
+                if (valuesList.get(i).jobTitleId.equals(value11)) {
+                    sp_for_value1.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        if (!value22.isEmpty()){
+            value2 = value22;
+            for (int i = 0; valuesList2.size() > i; i++) {
+                if (valuesList2.get(i).jobTitleId.equals(value22)) {
+                    sp_for_value2.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        if (!value33.isEmpty()){
+            value3 =value33;
+            for (int i = 0; valuesList3.size() > i; i++) {
+                if (valuesList3.get(i).jobTitleId.equals(value33)) {
+                    sp_for_value3.setSelection(i);
+                   break;
+                }
+            }
+        }
+
+        String strength11 = "",strength22 = "",strength33 = "";
+        if (!strength.isEmpty()){
+            if (strength.contains(",")){
+                String[] strengths = strength.split(",");
+                if (strengths.length == 3){
+                    strength33 = strengths[2];
+                    strength3 = strengths[2];
+                }
+                strength11 = strengths[0];
+                strength1 = strengths[0];
+                strength22 = strengths[1];
+                strength3 = strengths[1];
+            }else {
+                strength11 = strength;
+                strength1 = strength;
+            }
+        }
+
+        if (!strength11.isEmpty()){
+            strengthID = strength11;
+            for (int i = 0; strengthsList.size() > i; i++) {
+                if (strengthsList.get(i).jobTitleId.equals(strength11)) {
+                    sp_for_strength1.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        if (!strength22.isEmpty()){
+            for (int i = 0; strengthsList2.size() > i; i++) {
+                if (strengthsList2.get(i).jobTitleId.equals(strength22)) {
+                    sp_for_strength2.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+        if (!strength33.isEmpty()){
+            for (int i = 0; strengthsList3.size() > i; i++) {
+                if (strengthsList3.get(i).jobTitleId.equals(strength33)) {
+                    sp_for_strength3.setSelection(i);
+                    break;
+                }
+            }
+        }
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -478,26 +659,9 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
         Constant.NETWORK_CHECK = 0;
     }
 
-    /*location zoom start*/
-    private void latlong(Double latitude, Double longitude) throws IOException {
-        Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
-
-        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-        String address = addresses.get(0).getAddressLine(0);
-       /* String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName();*/
-
-        tv_for_address.setText(address);
-
-    } // latlog to address find
-
     private void addressClick() {
         try {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
                     .build(activity);
             startActivityForResult(intent, Constant.PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
@@ -506,33 +670,6 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
     } // method for address button click
-
-    private void location() {
-
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionAll.checkLocationPermission(activity);
-        } else {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-                                // Logic to handle location object
-                                latitude = Double.valueOf(String.valueOf(location.getLatitude()));
-                                longitude = Double.valueOf(String.valueOf(location.getLongitude()));
-
-                                try {
-                                    latlong(latitude, longitude);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    });
-        }
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -553,6 +690,11 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
 
+                try {
+                    latlong(latitude,longitude);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 String placename = String.valueOf(place.getAddress());
                 tv_for_address.setText(placename);
@@ -561,13 +703,26 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
 
     } // onActivityResult
 
+    private void latlong(Double latitude, Double longitude) throws IOException {
+
+        LatLng latLng = new LatLng(latitude,longitude);
+
+        new GioAddressTask(activity, latLng, new GioAddressTask.LocationListner() {
+            @Override
+            public void onSuccess(com.uconnekt.model.Address address) {
+                city = address.getCity();
+            }
+        }).execute();
+
+    } // latlog to address find
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        location();
+                        //location();
                     }
                 } else {
                     MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.parmission));
@@ -598,8 +753,28 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
         MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.address_v));
     }
 
+    private void reSetTab(){
+        TabLayout.Tab tab = tablayout.getTabAt(0);
+        if (tab != null) {
+            tab.select();
+        }
+    }
+
     @Override
     public void navigateToExperience() {
+        if (activity.isBasicInfo) {
+            TabLayout.Tab tab = tablayout.getTabAt(2);
+            activity.setTab(tab, true);
+            if (tab != null) {
+                tab.select();
+            }
+        }else{
+            TabLayout.Tab tab = tablayout.getTabAt(1);
+            activity.setTab(tab, true);
+            if (tab != null) {
+                tab.select();
+            }
+        }
         updateBasicInfoOnServer();
     }
 }

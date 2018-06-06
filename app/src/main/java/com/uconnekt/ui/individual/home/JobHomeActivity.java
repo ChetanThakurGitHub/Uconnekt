@@ -9,16 +9,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
-import com.uconnekt.application.Uconnekt;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
-import com.uconnekt.ui.fragment.ChatFragment;
-import com.uconnekt.ui.fragment.MapFragment;
-import com.uconnekt.ui.fragment.ProfileFragment;
-import com.uconnekt.ui.fragment.SearchFragment;
-import com.uconnekt.ui.fragment.SettingFragment;
+import com.uconnekt.ui.employer.fragment.ChatFragment;
+import com.uconnekt.ui.employer.fragment.MyProfileFragment;
+import com.uconnekt.ui.employer.fragment.SettingFragment;
+import com.uconnekt.ui.individual.fragment.IndiFilterFragment;
+import com.uconnekt.ui.individual.fragment.IndiMapFragment;
 import com.uconnekt.ui.individual.fragment.IndiSearchFragment;
-import com.uconnekt.util.Constant;
 
 public class JobHomeActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
@@ -37,12 +35,18 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
 
         setTab(tabs.getTabAt(0),R.drawable.ic_search_yellow,true);
         tabs.getChildAt(0).setScaleY(-1);
+
+
         tv_for_tittle.setText(R.string.search);
+        setToolbarIcon(0);
         for(int i = 0 ;i<tabs.getTabCount();i++){
             tabs.getTabAt(i).getCustomView().findViewById(R.id.mainlayout_tab).setScaleY(-1);
         }
 
-        addFragment(IndiSearchFragment.newInstance(), false, R.id.framlayout);
+        replaceFragment(new IndiSearchFragment());
+
+        iv_for_filter.setOnClickListener(this);
+        iv_for_backIco.setOnClickListener(this);
     }
 
 
@@ -66,38 +70,50 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-    @Override
-    public void onBackPressed() {
-        if (Uconnekt.session.isLoggedIn()) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                if (!doubleBackToExitPressedOnce) {
-                    this.doubleBackToExitPressedOnce = true;
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, getResources().getString(R.string.for_exit));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, Constant.BackPressed_Exit);
-                } else {
-                    super.onBackPressed();
-                }
-            }
-
-        } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                finish();
-            }
+    public void setToolbarIcon(int visi){
+        switch (visi) {
+            case 0:
+                iv_for_backIco.setVisibility(View.GONE);
+                iv_for_filter.setVisibility(View.VISIBLE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                break;
+            case 1:
+                iv_for_backIco.setVisibility(View.VISIBLE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.VISIBLE);
+                iv_for_menu.setVisibility(View.GONE);
+                break;
+            case 2:
+                tv_for_tittle.setText(R.string.profile);
+                iv_for_backIco.setVisibility(View.VISIBLE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                break;
         }
     }
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_for_filter:
+                tv_for_tittle.setText(R.string.filter);
+                setToolbarIcon(1);
+                IndiFilterFragment fragment = new IndiFilterFragment();
+                if (getCurrentFragment() instanceof IndiSearchFragment) fragment.setFragment((IndiSearchFragment) getCurrentFragment());
+                if (getCurrentFragment() instanceof IndiMapFragment) fragment.setOtherFragment((IndiMapFragment) getCurrentFragment());
+                addFragment(fragment);
+                break;
+            case R.id.iv_for_backIco:
+                onBackPressed();
+                break;
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -106,31 +122,33 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
             switch (tabs.getSelectedTabPosition()) {
                 case 0:
                     click = 0;
-                    replaceFragment(IndiSearchFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new IndiSearchFragment());
                     setTab(tab, R.drawable.ic_search_yellow, true);
+                    setToolbarIcon(0);
                     tv_for_tittle.setText(R.string.search);
                     break;
                 case 1:
                     click = 1;
-                    replaceFragment(MapFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new IndiMapFragment());
                     setTab(tab, R.drawable.ic_map_yellow, true);
+                    setToolbarIcon(0);
                     tv_for_tittle.setText(R.string.map);
                     break;
                 case 2:
                     click = 2;
-                    replaceFragment(ChatFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new ChatFragment());
                     setTab(tab, R.drawable.ic_chat_yellow, true);
                     tv_for_tittle.setText(R.string.messages);
                     break;
                 case 3:
                     click = 3;
-                    replaceFragment(ProfileFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new MyProfileFragment());
                     setTab(tab, R.drawable.ic_user_yellow, true);
                     tv_for_tittle.setText(R.string.profile);
                     break;
                 case 4:
                     click = 4;
-                    replaceFragment(SettingFragment.newInstance(), false, R.id.framlayout);
+                    replaceFragment(new SettingFragment());
                     setTab(tab, R.drawable.ic_settings_yellow, true);
                     tv_for_tittle.setText(R.string.setting);
                     break;
@@ -176,4 +194,68 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
+
+    @Override
+    public void onBackPressed() {
+        hideKeyboard();
+        Handler handler = new Handler();
+        Runnable runnable;
+
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            super.onBackPressed();
+            setToolbarIcon(0);
+            android.support.v4.app.Fragment fragment=getCurrentFragment();
+            if (fragment!=null &&fragment instanceof IndiMapFragment)tv_for_tittle.setText(R.string.map);
+            else tv_for_tittle.setText(R.string.search);
+        } else {
+            handler.postDelayed(runnable = new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 1000);
+            if (doubleBackToExitPressedOnce) {
+                handler.removeCallbacks(runnable);
+                finish();
+            } else {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout, getResources().getString(R.string.for_exit));
+                doubleBackToExitPressedOnce = true;
+            }
+        }
+
+    }
+
+
+
+    /*@Override
+    public void onBackPressed() {
+        if (Uconnekt.session.isLoggedIn()) {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+                setToolbarIcon(0);
+                tv_for_tittle.setText(R.string.search);
+            } else {
+                if (!doubleBackToExitPressedOnce) {
+                    this.doubleBackToExitPressedOnce = true;
+                    MyCustomMessage.getInstance(this).snackbar(mainlayout, getResources().getString(R.string.for_exit));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce = false;
+                        }
+                    }, Constant.BackPressed_Exit);
+                } else {
+                    super.onBackPressed();
+                }
+            }
+
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                finish();
+            }
+        }
+    }*/
+
 }

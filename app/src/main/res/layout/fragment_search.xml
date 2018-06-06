@@ -4,23 +4,45 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.fragment.SearchFragment">
+    tools:context=".ui.employer.fragment.SearchFragment">
 
-    <android.support.v7.widget.CardView
+    <!-- <android.support.v7.widget.CardView
+            android:id="@+id/card_for_spName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_25sdp"
+            app:cardBackgroundColor="@color/white">-->
+
+    <LinearLayout
+        android:id="@+id/card_for_spName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="@dimen/_3sdp"
-        android:layout_margin="@dimen/_5sdp"
-        app:cardCornerRadius="@dimen/_50sdp"
-        app:cardBackgroundColor="@color/white">
+        android:layout_height="@dimen/_30sdp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/circle_search_bg">
+
+        <!-- <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/_30sdp"
+             android:layout_marginLeft="@dimen/_12sdp"
+             android:layout_marginRight="@dimen/_13sdp">-->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
-            android:layout_marginLeft="@dimen/_12sdp"
-            android:layout_marginRight="@dimen/_12sdp">
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp">
 
             <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_for_arrow"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_3sdp"
@@ -28,20 +50,26 @@
                 app:srcCompat="@drawable/ic_down_arrow"
                 android:layout_alignParentRight="true" />
 
-            <Spinner
-                android:id="@+id/sp_for_specialty"
+            <TextView
+                android:id="@+id/tv_for_speName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/transparent"
-                android:dropDownVerticalOffset="@dimen/_30sdp"
-                android:dropDownWidth="@dimen/_260sdp"
-                android:gravity="center"
-                android:spinnerMode="dropdown"/>
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:scrollHorizontally="true"
+                android:layout_toLeftOf="@+id/iv_for_arrow"
+                android:textColor="@color/yellow"
+                android:textColorHint="@color/yellow"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:fontFamily="@font/montserrat_regular"
+                android:hint="@string/area_of_specialty"/>
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <!--  </android.support.v7.widget.CardView>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -81,11 +109,49 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_above="@+id/progressbar"
                 android:scrollbars="vertical" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_for_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/trangle"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_13sdp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20sdp"
+                app:srcCompat="@drawable/shape_img"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/_3sdp"
+                android:layout_below="@+id/trangle"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                app:cardBackgroundColor="@color/white">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_200sdp"
+                    android:layout_marginBottom="@dimen/_minus2sdp"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                    android:scrollbars="vertical" />
+
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

@@ -47,7 +47,9 @@ public class AppHelper {
         try {
             InputStream inputStream = new FileInputStream(f);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            byte[] b = new byte[1024*8];
+            int file_size = Integer.parseInt(String.valueOf(f.length()));
+
+            byte[] b = new byte[ file_size+100];
             int bytesRead =0;
 
             while ((bytesRead = inputStream.read(b)) != -1)

@@ -114,6 +114,7 @@
                         android:layout_marginBottom="@dimen/_5sdp">
 
                         <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
                             android:padding="@dimen/_3sdp"
@@ -126,6 +127,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_toLeftOf="@+id/image"
                             android:background="@color/transparent"
                             android:dropDownVerticalOffset="@dimen/_30sdp"
                             android:dropDownWidth="@dimen/_265sdp"
@@ -147,6 +149,7 @@
                         android:layout_marginBottom="@dimen/_5sdp">
 
                         <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/image2"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
                             android:padding="@dimen/_3sdp"
@@ -159,6 +162,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_toLeftOf="@+id/image2"
                             android:background="@color/transparent"
                             android:dropDownVerticalOffset="@dimen/_30sdp"
                             android:dropDownWidth="@dimen/_265sdp"
@@ -173,44 +177,6 @@
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:background="@color/lightgray"/>
 
-                    <!--<Spinner
-                        android:id="@+id/sp_for_jobTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:dropDownVerticalOffset="@dimen/_30sdp"
-                        android:dropDownWidth="@dimen/_250sdp"
-                        android:gravity="center"
-                        android:spinnerMode="dropdown"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:background="@color/lightgray"/>-->
-
-                    <!--<TextView
-                        android:id="@+id/tvTags"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:textSize="@dimen/_12sdp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:text="@string/area_of_specialty"
-                        android:scrollHorizontally="true"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:textColor="@color/darkgray"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:background="@color/lightgray"/>-->
-
                     <RelativeLayout
                         android:id="@+id/layout_for_address"
                         android:layout_width="match_parent"
@@ -222,7 +188,7 @@
                             android:id="@+id/tv_for_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/address"
+                            android:hint="@string/location"
                             android:singleLine="true"
                             android:layout_toLeftOf="@+id/place"
                             android:ellipsize="end"

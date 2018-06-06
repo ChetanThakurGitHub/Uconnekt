@@ -10,7 +10,7 @@
     android:singleLine="true"
     android:scrollHorizontally="true"
     android:fontFamily="@font/montserrat_regular"
-    android:textColor="@color/yellow"
-    android:textColorHint="@color/colorPrimary"
-    android:hint="@string/area_of_specialty"
+    android:textColor="@color/darkgray"
+    android:textColorHint="@color/lightgray"
+    android:hint="@string/company"
     android:padding="@dimen/_5sdp" />

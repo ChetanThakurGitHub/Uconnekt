@@ -17,12 +17,19 @@ public class AllAPIs {
 
     /*Comman APIs*/
     public static final String EMPLOYER_PROFILE = URL_WITH_LOGIN +"getDropdownList";
-
+    public static final String SHOW_PREFILLED_DATA = URL_WITH_LOGIN +"getUserProfile";
+    public static final String PROFILE = URL_WITH_LOGIN +"getPublicProfile?";
 
     /*Individual Side*/
     public static final String BASIC_INFO = URL_WITH_LOGIN +"updateBasicInfo";
     public static final String EXPERIENCE = URL_WITH_LOGIN +"updateExperience";
     public static final String RESUME_CV = URL_WITH_LOGIN +"updateResume";
     public static final String INDI_SEARCH_LIST = URL_WITH_LOGIN +"getBusinessSearchList";
+    public static final String RECOMMEND = URL_WITH_LOGIN +"addRecommends";
+    public static final String FACOURITES = URL_WITH_LOGIN +"addFavourites";
+    public static final String REVIEW = URL_WITH_LOGIN +"addReview";
+    public static final String REVIEWS_LIST = URL_WITH_LOGIN +"getUserReviews?user_id=";
+    public static final String RECOMMENDS_LIST = URL_WITH_LOGIN +"getUserRecommends?user_id=";
+    public static final String FAVOURITES_LIST = URL_WITH_LOGIN +"getUserFavourites?user_id=";
 
 }

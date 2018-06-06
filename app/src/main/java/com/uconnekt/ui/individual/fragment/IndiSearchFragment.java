@@ -11,17 +11,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.adapter.listing.IndiSearchAdapter;
+import com.uconnekt.adapter.listing.SpecialityListAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.IndiSearchList;
-import com.uconnekt.model.JobTitle;
+import com.uconnekt.model.SpecialityList;
 import com.uconnekt.pagination.EndlessRecyclerViewScrollListener;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
@@ -36,27 +37,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class IndiSearchFragment extends Fragment {
+public class IndiSearchFragment extends Fragment implements View.OnClickListener {
 
     private JobHomeActivity activity;
-    private ArrayList<IndiSearchList> searchLists = new ArrayList<>();
-    private ArrayList<JobTitle> arrayList = new ArrayList<>();
+    public ArrayList<IndiSearchList> searchLists = new ArrayList<>();
+    private ArrayList<SpecialityList> arrayList = new ArrayList<>();
     private IndiSearchAdapter indiSearchAdapter;
-    private RecyclerView recycler_view;
-    private CustomSpAdapter customSpAdapter;
-    private Spinner sp_for_specialty;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private int offset = 0;
-    private String specilityId = "";
+    private RecyclerView recycler_view,recycler_list;
+    private SpecialityListAdapter listAdapter;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
+    public int offset = 0;
     private LinearLayout layout_for_noData;
-
-    public IndiSearchFragment() {
-        // Required empty public constructor
-    }
-
-    public static IndiSearchFragment newInstance() {
-        return new IndiSearchFragment();
-    }
+    public RelativeLayout layout_for_list;
+    public TextView tv_for_speName;
+    public Boolean goneVisi = false;
+    public ImageView iv_for_arrow;
+    public String specialtyId = "",ratingNo = "",company = "",address = "" ,city = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,8 +64,7 @@ public class IndiSearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_indi_search, container, false);
         initView(view);
         indiSearchAdapter = new IndiSearchAdapter(searchLists,activity);
-        customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp3);
-        sp_for_specialty.setAdapter(customSpAdapter);
+        listAdapter = new SpecialityListAdapter(arrayList,this);
         getDropDownlist();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -83,34 +78,18 @@ public class IndiSearchFragment extends Fragment {
                 searchLists.clear();
                 mSwipeRefreshLayout.setRefreshing(true);
                 offset = 0;
-                getList(specilityId);
+                getList(specialtyId, ratingNo, company, address, city);
             }
         });
 
         recycler_view.setAdapter(indiSearchAdapter);
-
-        sp_for_specialty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                JobTitle jobTitle = arrayList.get(position);
-                specilityId = jobTitle.jobTitleId;
-                searchLists.clear();
-                mSwipeRefreshLayout.setRefreshing(true);
-                offset = 0;
-                getList(specilityId);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        recycler_list.setAdapter(listAdapter);
+        getList(specialtyId, ratingNo, company, address, city);
 
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getList(specilityId);
+                getList(specialtyId, ratingNo, company, address, city);
             }
         };
         recycler_view.addOnScrollListener(scrollListener);
@@ -120,9 +99,14 @@ public class IndiSearchFragment extends Fragment {
 
     private void initView(View view){
         recycler_view = view.findViewById(R.id.recycler_view);
-        sp_for_specialty = view.findViewById(R.id.sp_for_specialty);
+        recycler_list = view.findViewById(R.id.recycler_list);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
+        layout_for_list = view.findViewById(R.id.layout_for_list);
+        tv_for_speName = view.findViewById(R.id.tv_for_speName);
+        iv_for_arrow = view.findViewById(R.id.iv_for_arrow);
+        view.findViewById(R.id.card_for_spName).setOnClickListener(this);
+        view.findViewById(R.id.mainlayout).setOnClickListener(this);
     }
 
     @Override
@@ -136,14 +120,16 @@ public class IndiSearchFragment extends Fragment {
         super.onResume();
         if (Constant.NETWORK_CHECK == 1){
             getDropDownlist();
-            getList(specilityId);
+            getList(specialtyId, ratingNo, company, address, city);
         }
         Constant.NETWORK_CHECK =0;
     }
 
-    private void getList(final String specilityId){
+    public void getList(String specialtyIds, String ratingNos, String companys, String location, String citys){
 
-        new VolleyGetPost(activity, AllAPIs.INDI_SEARCH_LIST,true,"List",false ) {
+        specialtyId = specialtyIds; ratingNo = ratingNos; company = companys; address = location ;city = citys;
+
+        new VolleyGetPost(activity, AllAPIs.INDI_SEARCH_LIST,true,"List",true ) {
             @Override
             public void onVolleyResponse(String response) {
                 try {
@@ -185,10 +171,11 @@ public class IndiSearchFragment extends Fragment {
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("speciality_id",specilityId);
-                params.put("rating","");
-                params.put("company","");
-                params.put("location","");
+                params.put("speciality_id",specialtyId);
+                params.put("rating",ratingNo);
+                params.put("company",company);
+                params.put("location",address);
+                params.put("city",city);
                 params.put("limit","10");
                 params.put("offset",offset+"");
                 return params;
@@ -214,21 +201,20 @@ public class IndiSearchFragment extends Fragment {
                     if (status.equalsIgnoreCase("success")) {
                         arrayList.clear();
                         JSONObject result = jsonObject.getJSONObject("result");
-                        JSONArray results = result.getJSONArray("speciality_list");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        arrayList.add(jobTitle);
+                        JSONArray results = result.getJSONArray("opposite_speciality_list");
+                        SpecialityList specialityList1 = new SpecialityList();
+                        specialityList1.specializationId = "";
+                        specialityList1.specializationName = "All";
+                        arrayList.add(specialityList1);
                         for (int i = 0; i < results.length(); i++) {
-                            JobTitle jobTitles = new JobTitle();
+                            SpecialityList specialityList = new SpecialityList();
                             JSONObject object = results.getJSONObject(i);
-                            jobTitles.jobTitleId = object.getString("specializationId");
-                            jobTitles.jobTitleName = object.getString("specializationName");
-                            arrayList.add(jobTitles);
+                            specialityList.specializationId = object.getString("specializationId");
+                            specialityList.specializationName = object.getString("specializationName");
+                            arrayList.add(specialityList);
                         }
-                        customSpAdapter.notifyDataSetChanged();
+                        listAdapter.notifyDataSetChanged();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -250,5 +236,22 @@ public class IndiSearchFragment extends Fragment {
                 return params;
             }
         }.executeVolley();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.card_for_spName:
+                if (!goneVisi) {
+                    layout_for_list.setVisibility(View.VISIBLE);
+                    iv_for_arrow.setImageResource(R.drawable.ic_up_arrow);
+                    goneVisi = true;
+                }else {
+                    layout_for_list.setVisibility(View.GONE);
+                    iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                    goneVisi = false;
+                }
+                break;
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.uconnekt.ui.base;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -34,14 +36,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-
-
-    public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
+   public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
         String backStackName = fragment.getClass().getName();
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-
         int i = fm.getBackStackEntryCount();
-
         while (i > 0) {
             fm.popBackStackImmediate();
             i--;
@@ -70,5 +68,57 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+
+    public void replaceFragment(Fragment fragmentHolder) {
+        try{
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            String fragmentName = fragmentHolder.getClass().getName();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            //fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);  //animation
+            fragmentTransaction.replace(R.id.framlayout, fragmentHolder,fragmentName).addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+            hideKeyboard();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public Fragment addFragment(Fragment fragmentHolder) {
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            String fragmentName = fragmentHolder.getClass().getName();
+
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            //fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setEnterTransition(null);
+            }
+            fragmentTransaction.add(R.id.framlayout, fragmentHolder, fragmentName).addToBackStack(fragmentName);
+            fragmentTransaction.commit();
+
+            hideKeyboard();
+            return fragmentHolder;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+    public Fragment getCurrentFragment() {
+        try {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
+            return fragmentManager.findFragmentByTag(fragmentTag);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

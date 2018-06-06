@@ -12,6 +12,8 @@
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/_minus2sdp"
+        android:layout_marginRight="@dimen/_minus2sdp"
         android:layout_gravity="center_horizontal"
         android:fontFamily="@font/montserrat_medium"
         android:gravity="center"

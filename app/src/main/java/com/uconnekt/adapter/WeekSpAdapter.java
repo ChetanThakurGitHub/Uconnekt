@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.uconnekt.R;
-import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.Weeks;
 
 import java.util.ArrayList;
@@ -17,10 +16,12 @@ public class WeekSpAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Weeks> arrayList;
+    private int view;
 
-    public WeekSpAdapter(Context context, ArrayList<Weeks> arrayList) {
+    public WeekSpAdapter(Context context, ArrayList<Weeks> arrayList,int view) {
         this.context = context;
         this.arrayList = arrayList;
+        this.view = view;
     }
 
     @Override
@@ -46,7 +47,8 @@ public class WeekSpAdapter extends BaseAdapter {
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.custom_sp_week, parent, false);
+            assert inflater != null;
+            row = inflater.inflate(view, parent, false);
 
             holder = new ViewHolder();
             holder.tv_VFname = row.findViewById(R.id.text1);

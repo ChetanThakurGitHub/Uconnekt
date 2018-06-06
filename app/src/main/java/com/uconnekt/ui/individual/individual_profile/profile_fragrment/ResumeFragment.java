@@ -35,10 +35,12 @@ import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.ui.individual.individual_profile.activity.JobProfileActivity;
 import com.uconnekt.util.Constant;
 import com.uconnekt.volleymultipart.AppHelper;
+import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.volleymultipart.VolleyMultipartRequest;
 import com.uconnekt.volleymultipart.VolleySingleton;
 import com.uconnekt.web_services.AllAPIs;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -81,7 +83,7 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
         cusDialogProg = new CusDialogProg(activity);
         permissionAll = new PermissionAll();
         permissionAll.checkWriteStoragePermission(activity);
-        //MyCustomMessage.getInstance(getActivity()).customToast(getString(R.string.under_development_mode));
+        showPrefilledData();
         return view;
     }
 
@@ -103,6 +105,46 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
         tv_for_cv = view.findViewById(R.id.tv_for_cv);
     }
 
+    private void showPrefilledData(){
+        new VolleyGetPost(activity, AllAPIs.SHOW_PREFILLED_DATA, false, "showPrefilledData", false) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+
+                    if (status.equalsIgnoreCase("success")) {
+                        JSONObject object = jsonObject.getJSONObject("resume");
+                        String user_resume = object.getString("user_resume");
+                        String user_cv = object.getString("user_cv");
+
+                        tv_for_resume.setText(user_resume);
+                        tv_for_cv.setText(user_cv);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -121,7 +163,7 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                     activity.finish();
                 }
                 }else {
-                    MyCustomMessage.getInstance(getActivity()).customToast("First add basic information");
+                    MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.first));
                 }
                 break;
             case R.id.card_for_resume:
@@ -151,7 +193,7 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                     .setActivityTheme(R.style.FilePickerTheme)
                     .setActivityTitle("Please select doc")
                     .addFileSupport("PDF", pdfs, R.drawable.icon_file_pdf)
-                    .addFileSupport("Doc", zips)
+                    .addFileSupport("Docx", zips)
                     .enableDocSupport(false)
                     .enableSelectAll(true)
                     .sortDocumentsBy(SortingTypes.name)
@@ -181,7 +223,7 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                             docPaths.clear();
                         } else if (setName == 2) {
                             myFile2 = new File(mainString);
-                            tv_for_cv.setText(myFile.getName());
+                            tv_for_cv.setText(myFile2.getName());
                             setName = -1;
                             docPaths.clear();
                         }
@@ -220,8 +262,9 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                             cusDialogProg.dismiss();
                         }
 
-                    } catch (Throwable t) {
+                    } catch (Exception t) {
                         t.printStackTrace();
+                        cusDialogProg.dismiss();
                     }
 
                 }
@@ -239,10 +282,10 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                 protected Map<String, DataPart> getByteData() {
                     Map<String, DataPart> params = new HashMap<>();
                     if (myFile != null) {
-                            params.put("resume", new DataPart("cv.pdf", AppHelper.convertFileToByteArray(myFile), "pdf/docx"));
+                            params.put("resume", new DataPart(myFile.getName(), AppHelper.convertFileToByteArray(myFile), "pdf/docx"));
                     }
                     if (myFile2 != null){
-                        params.put("cv", new DataPart("cv.pdf", AppHelper.convertFileToByteArray(myFile2), "pdf/docx"));
+                        params.put("cv", new DataPart(myFile2.getName(), AppHelper.convertFileToByteArray(myFile2), "pdf/docx"));
                     }
                     return params;
                 }
@@ -253,7 +296,7 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                     return headers;
                 }
             };
-            multipartRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            multipartRequest.setRetryPolicy(new DefaultRetryPolicy(50000, 0,0f));
             VolleySingleton.getInstance(activity).addToRequestQueue(multipartRequest);
         } else {
             startActivity(new Intent(activity, NetworkActivity.class));

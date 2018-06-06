@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.uconnekt.R;
 import com.uconnekt.snackBarPackage.TSnackbar;
 
-
 public class MyCustomMessage {
 
     private Context context;
@@ -41,7 +40,7 @@ public class MyCustomMessage {
 
     public void showCustomAlert(String title, String message) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_alert_layout, null);
+        @SuppressLint("InflateParams") View layout = inflater.inflate(R.layout.custom_alert_layout, null);
         TextView tv_title = layout.findViewById(R.id.tv_title);
         TextView msgTv = layout.findViewById(R.id.tv_msg);
         tv_title.setText(title);
@@ -55,7 +54,7 @@ public class MyCustomMessage {
 
     public void showLogoutAlert(String title, String message) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_alert_layout, null);
+        @SuppressLint("InflateParams") View layout = inflater.inflate(R.layout.custom_alert_layout, null);
         TextView tv_title = layout.findViewById(R.id.tv_title);
         TextView msgTv = layout.findViewById(R.id.tv_msg);
         tv_title.setText(title);
@@ -69,7 +68,7 @@ public class MyCustomMessage {
 
     public void customToast(final String msg) {
         LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast_layout, null);
+        @SuppressLint("InflateParams") View layout = inflater.inflate(R.layout.custom_toast_layout, null);
         TextView tv_msg = layout.findViewById(R.id.tv_msg);
         tv_msg.setText(msg);
         Toast toast = new Toast(context);

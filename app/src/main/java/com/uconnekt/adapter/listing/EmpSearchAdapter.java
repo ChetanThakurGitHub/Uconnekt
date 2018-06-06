@@ -44,7 +44,7 @@ public class EmpSearchAdapter extends RecyclerView.Adapter<EmpSearchAdapter.View
         }
 
         holder.tv_for_fullName.setText(busiSearchList.fullName.isEmpty()?"NA":busiSearchList.fullName);
-        holder.tv_for_specializName.setText(busiSearchList.specializationName.isEmpty()?"NA":busiSearchList.specializationName);
+        holder.tv_for_jobTitle.setText(busiSearchList.jobTitleName.isEmpty()?"NA":busiSearchList.jobTitleName);
         holder.tv_for_address.setText(busiSearchList.address.isEmpty()?"NA":busiSearchList.address);
 
     }
@@ -56,12 +56,12 @@ public class EmpSearchAdapter extends RecyclerView.Adapter<EmpSearchAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView iv_profile_image;
-        private TextView tv_for_fullName,tv_for_specializName,tv_for_address;
+        private TextView tv_for_fullName,tv_for_jobTitle,tv_for_address;
         public ViewHolder(View itemView) {
             super(itemView);
             iv_profile_image = itemView.findViewById(R.id.iv_profile_image);
             tv_for_fullName = itemView.findViewById(R.id.tv_for_fullName);
-            tv_for_specializName = itemView.findViewById(R.id.tv_for_specializName);
+            tv_for_jobTitle = itemView.findViewById(R.id.tv_for_jobTitle);
             tv_for_address = itemView.findViewById(R.id.tv_for_address);
         }
     }

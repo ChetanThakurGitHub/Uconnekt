@@ -61,9 +61,24 @@
     <string name="map_key">AIzaSyBGwmo3AEKe9X9co2prixr4XFNgG16GjBg</string>
     <string name="user_dis">Manage your future at your fingertips. Uconnekt with employers to discover \n the right business for you.</string>
 
+    <!--Image Cropper-->
+    <string name="pick_image_intent_text">Choose an image</string>
+    <string name="crop_image_activity_title">Crop Image</string>
+    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
+    <string name="crop_image_menu_rotate_right">Rotate</string>
+    <string name="crop_image_menu_crop">Crop</string>
+    <string name="pick_image_intent_chooser_title">Select source</string>
+    <string name="result_image_desc">crop result</string>
+
+    <string name="menu1"> Camera </string>
+    <string name="menu2"> Gallery </string>
+    <string name="drop_arrow"> \u0020 &#9698; \u0020\u0020</string>
+
     <!--Profile-->
     <string name="save">Save</string>
-    <string name="area_of_specialty">Area Of Specialty</string>
+    <string name="area_of_specialty">Job title</string>
+    <string name="area_of_specialtys">Area of speciality</string>
+    <string name="area_of_specialty_s">Select area of speciality</string>
     <string name="address">Address</string>
     <string name="add_company_logo">Add Company Logo</string>
     <string name="bio">About me</string>
@@ -72,7 +87,7 @@
     <string name="next">Next</string>
     <string name="profile">Profile</string>
     <string name="jobtitle_v">Please select job title</string>
-    <string name="specialty_v">Please select area of specialty</string>
+    <string name="specialty_v">Please select area of speciality</string>
     <string name="strength_v">Please select strength</string>
     <string name="value_v">Please select values</string>
     <string name="address_v">Please add address</string>
@@ -98,13 +113,14 @@
     <string name="finish_date">Finish Date</string>
     <string name="_200">500</string>
     <string name="job_title">Job title</string>
+    <string name="job_title_s">Select job title</string>
     <string name="strength_1">Strength 1</string>
     <string name="strength_2">Strength 2</string>
     <string name="strength_3">Strength 3</string>
     <string name="value_1">Value 1</string>
     <string name="value_2">Value 2</string>
     <string name="value_3">Value 3</string>
-    <string name="still_there">Still There ?</string>
+    <string name="still_there">Still here ?</string>
     <string name="availability_weeks">Availability</string>
     <string name="employer">Employer</string>
     <string name="job_seeker">Job Seeker</string>
@@ -137,6 +153,34 @@
     <string name="try_again">Try again</string>
     <string name="server_not_working">Server Not Working</string>
     <string name="server_des">No server connection found.\nPlease check your sever connection\nand try again.</string>
+    <string name="area">Preferred area</string>
+
+    <!--Filter Screen-->
+    <string name="rating">Rating</string>
+    <string name="company">Company</string>
+    <string name="location">Location</string>
+    <string name="filter">Filter</string>
+    <string name="strength">Strength</string>
+    <string name="value">Value</string>
+    <string name="select">Select</string>
+    <string name="select_availability">Select availability</string>
+    <string name="_0_rating">(0.0 Rating)</string>
+    <string name="first">First add basic information</string>
+    <string name="view_profile">View Profile</string>
+
+    <!--profile Screen-->
+    <string name="rate">Rate</string>
+    <string name="add_ratting">Please add rating</string>
+    <string name="_200_characters">200 characters</string>
+    <string name="submit">Submit</string>
+    <string name="add_comment">Please add comment</string>
+    <string name="reviews">Reviews</string>
+    <string name="about_me">About me</string>
+    <string name="no_reviews_found">No reviews found</string>
+    <string name="remain_anonymous">Remain anonymous</string>
+    <string name="comment">Comments</string>
+    <string name="recommend">Recommended</string>
+    <string name="favorites">Favorites</string>
 
 
 </resources>

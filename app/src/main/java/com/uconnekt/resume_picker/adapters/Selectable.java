@@ -1,8 +1,5 @@
 package com.uconnekt.resume_picker.adapters;
 
-/**
- * Created by donglua on 15/6/30.
- */
 public interface Selectable<T> {
 
 

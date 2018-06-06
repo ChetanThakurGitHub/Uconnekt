@@ -7,6 +7,8 @@ import com.uconnekt.session.Session;
 
 public class Uconnekt extends Application {
     public static Uconnekt instance = null;
+    public static double latitude=0.0;
+    public static double longitude=0.0;
     @SuppressLint("StaticFieldLeak")
     public static Session session;
 

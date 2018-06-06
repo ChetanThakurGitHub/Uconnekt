@@ -1,4 +1,4 @@
-package com.uconnekt.ui.fragment;
+package com.uconnekt.ui.employer.fragment;
 
 import android.content.Context;
 import android.os.Bundle;

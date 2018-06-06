@@ -104,16 +104,15 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             public void run() {
                 Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
                 if (Uconnekt.session.getUserInfo().userType.equals("business")){
+                    //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
                     if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
-                        Intent intent = new Intent(SplashActivity.this, EmpProfileActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
                     }else {
-                        Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(SplashActivity.this,HomeActivity.class));
                     }
                 }else {
-                   // startActivity(new Intent(SplashActivity.this, JobProfileActivity.class));
-                    if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
+                  // startActivity(new Intent(SplashActivity.this, JobProfileActivity.class));
+                 if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
                         startActivity(new Intent(SplashActivity.this, JobProfileActivity.class));
                     }else {
                         startActivity(new Intent(SplashActivity.this, JobHomeActivity.class));
