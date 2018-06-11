@@ -62,7 +62,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/_10sdp"
                             android:layout_alignParentRight="true"
-                            android:fontFamily="@font/montserrat_regular"
+                            android:fontFamily="@font/montserrat_light"
                             android:text="02/03/2015"
                             android:textColor="@color/lightgray"/>
 

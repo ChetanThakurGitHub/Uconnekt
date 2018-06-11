@@ -52,7 +52,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public TextView tv_for_speName;
     public Boolean goneVisi = false;
     public ImageView iv_for_arrow;
-    public String specialityID = "",jobTitleId = "",availabilityId = "",location = "",strengthId = "" ,valueId = "",city = "";
+    public String specialityID = "",jobTitleId = "",availabilityId = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="";
 
 
     @Override
@@ -80,19 +80,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 searchLists.clear();
                 mSwipeRefreshLayout.setRefreshing(true);
                 offset = 0;
-                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city);
+                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country);
             }
         });
 
         recycler_view.setAdapter(empSearchAdapter);
         recycler_list.setAdapter(listAdapter);
 
-        getList(specialityID, "", "", "", "", "", city);
+        getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country);
 
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city);
+                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country);
             }
         };
         recycler_view.addOnScrollListener(scrollListener);
@@ -117,8 +117,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         activity = (HomeActivity) context;
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, String citys){
-        specialityID = specialityIDs;city = citys;
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, String citys, String states, String countrys){
+        specialityID = specialityIDs;city = citys; country = countrys; state = states;
         jobTitleId = jobTitleIds;
         availabilityId = availabilityIds;
         location = address;
@@ -172,7 +172,10 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 params.put("job_title",jobTitleId);
                 params.put("availability",availabilityId);
                 params.put("location",location);
-                params.put("city",city);
+                params.put("strength",strengthId);
+                params.put("city",city==null?"":city);
+                params.put("state",state==null?"":state);
+                params.put("country",country==null?"":country);
                 params.put("value",valueId);
                 params.put("limit","10");
                 params.put("offset",offset+"");
@@ -243,7 +246,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         super.onResume();
         if (Constant.NETWORK_CHECK == 1){
             getDropDownlist();
-            getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city);
+            getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country);
         }
         Constant.NETWORK_CHECK =0;
     }

@@ -35,6 +35,7 @@
 
     <!--Same text-->
     <string name="your_session_is_expired_please_login_again">Your session is expired please login again</string>
+    <string name="inactive">You are currently inactive from admin</string>
     <string name="session_expired">Session expired</string>
     <string name="something_wrong">Something is worng</string>
     <string name="alert">Alert</string>
@@ -180,7 +181,12 @@
     <string name="remain_anonymous">Remain anonymous</string>
     <string name="comment">Comments</string>
     <string name="recommend">Recommended</string>
-    <string name="favorites">Favorites</string>
+    <string name="favorites">Favourites</string>
+    <string name="favourite">Favourite</string>
+    <string name="views">Views</string>
+    <string name="recom">Recommend</string>
+    <string name="na">NA</string>
+    <string name="title_activity_experince">ExperinceActivity</string>
 
 
 </resources>

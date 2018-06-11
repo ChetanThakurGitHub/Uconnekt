@@ -2,7 +2,10 @@ package com.uconnekt.model;
 
 import com.google.android.gms.maps.model.Marker;
 
-public class BusiSearchList {
+import java.io.Serializable;
+
+public class BusiSearchList implements Serializable {
+    public String userId = "";
     public String fullName = "";
     public String specializationName = "";
     public String company = "";

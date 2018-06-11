@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -188,7 +189,7 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
-                    cusDialogProg.dismiss();
+                    //cusDialogProg.dismiss();
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject object = jsonObject.getJSONObject("experience");
                         JSONObject object1 = object.getJSONObject("current_role");
@@ -273,6 +274,15 @@ public class ExperienceFragment extends Fragment implements View.OnClickListener
                         }
 
                         tv_for_address.setText(next_location);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                cusDialogProg.dismiss();
+                            }
+                        },2000);
+                    }else {
+                        cusDialogProg.dismiss();
                     }
 
                 } catch (JSONException e) {

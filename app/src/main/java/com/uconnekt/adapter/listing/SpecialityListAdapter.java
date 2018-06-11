@@ -66,7 +66,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((IndiSearchFragment)activity).goneVisi = false;
                         ((IndiSearchFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((IndiSearchFragment)activity).searchLists.clear();
-                        ((IndiSearchFragment)activity).getList(specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "");
+                        ((IndiSearchFragment)activity).getList(specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "");
                         ((IndiSearchFragment)activity).offset = 0;
                         ((IndiSearchFragment)activity).mSwipeRefreshLayout.setRefreshing(true);
                     }else if (activity instanceof SearchFragment){
@@ -76,7 +76,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((SearchFragment)activity).goneVisi = false;
                         ((SearchFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((SearchFragment)activity).searchLists.clear();
-                        ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "");
+                        ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "", "");
                         ((SearchFragment)activity).offset = 0;
                         ((SearchFragment)activity).mSwipeRefreshLayout.setRefreshing(true);
                     }else if (activity instanceof IndiMapFragment){
@@ -86,7 +86,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((IndiMapFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((IndiMapFragment)activity).searchLists.clear();
                         ((IndiMapFragment)activity).map.clear();
-                        ((IndiMapFragment)activity).getList(specialityLists.get(getAdapterPosition()).specializationId, "", "", "", 0.0, 0.0, "");
+                        ((IndiMapFragment)activity).getList(specialityLists.get(getAdapterPosition()).specializationId, "", "", "", 0.0, 0.0, "", "", "");
                        /* ((IndiMapFragment)activity).offset = 0;
                         ((IndiMapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/
                     }else if (activity instanceof MapFragment){
@@ -97,7 +97,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((MapFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((MapFragment)activity).searchLists.clear();
                         ((MapFragment)activity).map.clear();
-                        ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "");
+                        ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "", "", "");
                         /*((MapFragment)activity).offset = 0;
                         ((MapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/
                     }

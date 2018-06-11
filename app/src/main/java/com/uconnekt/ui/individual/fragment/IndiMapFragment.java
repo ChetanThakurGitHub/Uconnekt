@@ -72,8 +72,8 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
     private PermissionAll permissionAll;
     private FusedLocationProviderClient mFusedLocationClient;
     public ArrayList<IndiSearchList> searchLists = new ArrayList<>();
-    public String specialtyId = "",ratingNo = "",company = "",address = "",city = "";
-    private Double latitude,longitude;
+    public String specialtyId = "",ratingNo = "",company = "",address = "",city = "",state = "" ,country = "";
+    private Double latitude,longitude,clatitude,clongitude;
     public RelativeLayout layout_for_list;
     public Boolean goneVisi = false;
     public ImageView iv_for_arrow;
@@ -105,7 +105,6 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
 
         recycler_list.setAdapter(listAdapter);
         getDropDownlist();
-
 
         return view;
     }
@@ -153,7 +152,7 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
                 }
                 break;
             case R.id.btn_for_profile:
-                ((JobHomeActivity)activity).addFragment(IndiProfileFragment.newInstance(searchLists.get(position)));
+                if (position!=-1){((JobHomeActivity)activity).addFragment(IndiProfileFragment.newInstance(searchLists.get(position)));}
                 break;
         }
     }
@@ -200,6 +199,8 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
                     tv_for_specializationName.setText(indiSearchList.specializationName.isEmpty()?"NA":indiSearchList.specializationName);
                     tv_for_address.setText(indiSearchList.address.isEmpty()?"NA":indiSearchList.address);
                     ratingBar.setRating(indiSearchList.rating.isEmpty()?0:Float.parseFloat(indiSearchList.rating));
+                }else {
+                    card_for_viewPro.setVisibility(View.GONE);
                 }
 
                 return false;
@@ -211,7 +212,6 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
         map.getUiSettings().setMyLocationButtonEnabled(true);
         MapsInitializer.initialize(activity);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -244,15 +244,19 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
                                 Uconnekt.longitude=longitude;
                                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
                                 map.animateCamera(cameraUpdate);
-                                createMarkerCurrent(latitude,longitude);
-                                getList(specialtyId, ratingNo, company, address, 0.0, 0.0, city);
+                                clatitude = Uconnekt.latitude;
+                                clongitude = Uconnekt.longitude;
+                                createMarkerCurrent(clatitude,clongitude);
+                                getList(specialtyId, ratingNo, company, address, 0.0, 0.0, city, state, country);
                             }else if (Uconnekt.latitude!=0.0){
                                 latitude=Uconnekt.latitude;
                                 longitude=Uconnekt.longitude;
                                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
                                 map.animateCamera(cameraUpdate);
-                                createMarkerCurrent(latitude,longitude);
-                                getList(specialtyId, ratingNo, company, address, 0.0, 0.0, city);
+                                clatitude = Uconnekt.latitude;
+                                clongitude = Uconnekt.longitude;
+                                createMarkerCurrent(clatitude,clongitude);
+                                getList(specialtyId, ratingNo, company, address, 0.0, 0.0, city, state, country);
                             }
                         }
                     });
@@ -309,9 +313,10 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
         }.executeVolley();
     }
 
-    public void getList(String specialtyIds, String ratingNos, String companys, String location, Double latitude, Double longitude, String citys){
+    public void getList(String specialtyIds, String ratingNos, String companys, String location, Double latitude, Double longitude, String citys, String states, String countrys){
         card_for_viewPro.setVisibility(View.GONE);
-        specialtyId = specialtyIds; ratingNo = ratingNos; company = companys; address = location ;city = citys;
+        createMarkerCurrent(clatitude,clongitude);
+        specialtyId = specialtyIds; ratingNo = ratingNos; company = companys; address = location ;city = citys;state = states;country =countrys;
 
         if (latitude != 0.0 && longitude != 0.0){
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
@@ -354,6 +359,8 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
                 params.put("company",company);
                 params.put("location",address);
                 params.put("city",city);
+                params.put("state",state);
+                params.put("state",country);
                 params.put("limit","20");
                 params.put("offset","0");
                 return params;
@@ -427,7 +434,5 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,On
         Marker marker = map.addMarker(markerOptions);
         marker.setTag(-1);
     }
-
-
 
 }

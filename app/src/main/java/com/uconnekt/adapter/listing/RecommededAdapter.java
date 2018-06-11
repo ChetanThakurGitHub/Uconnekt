@@ -1,5 +1,6 @@
 package com.uconnekt.adapter.listing;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.RecommendedList;
 import com.uconnekt.util.Utils;
 
@@ -33,11 +35,16 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
         return new RecommededAdapter.ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecommendedList recommendedList = recommendedLists.get(position);
         Picasso.with(context).load(recommendedList.profileImage).into(holder.iv_for_profile);
-        holder.tv_for_rName.setText(recommendedList.fullName.isEmpty()?"NA":recommendedList.fullName+" Recommeded you");
+        if (Uconnekt.session.getUserInfo().fullName.equals(recommendedList.fullName)){
+            holder.tv_for_rName.setText("Recommeded by you");
+        }else {
+            holder.tv_for_rName.setText(recommendedList.fullName.isEmpty()?"NA":"Recommeded by "+recommendedList.fullName);
+        }
         holder.tv_for_date.setText(recommendedList.created_on.isEmpty()?"NA": Utils.parseDateToddMMyyyy(recommendedList.created_on).substring(0,10));
     }
 

@@ -51,7 +51,7 @@
             android:id="@+id/tv_for_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_regular"
+            android:fontFamily="@font/montserrat_light"
             android:text="chetan thakur"
             android:textColor="@color/lightgray"
             android:textSize="@dimen/_12sdp"

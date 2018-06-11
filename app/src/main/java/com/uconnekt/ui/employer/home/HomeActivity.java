@@ -79,6 +79,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 iv_for_circular_arrow.setVisibility(View.VISIBLE);
                 iv_for_menu.setVisibility(View.GONE);
                 break;
+            case 2:
+                tv_for_tittle.setText(R.string.profile);
+                iv_for_backIco.setVisibility(View.VISIBLE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                break;
         }
     }
 

@@ -49,6 +49,7 @@ import com.uconnekt.model.BusiSearchList;
 import com.uconnekt.model.SpecialityList;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
+import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
@@ -69,8 +70,8 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
     private PermissionAll permissionAll;
     private FusedLocationProviderClient mFusedLocationClient;
     public ArrayList<BusiSearchList> searchLists = new ArrayList<>();
-    public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",strengthId = "" ,valueId = "",city = "";
-    private Double latitude,longitude;
+    public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",strengthId = "" ,valueId = "",city = "",state ="",country = "";
+    private Double latitude,longitude,clatitude,clongitude;
     public RelativeLayout layout_for_list;
     public Boolean goneVisi = false;
     public ImageView iv_for_arrow;
@@ -81,6 +82,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
     private CardView card_for_viewPro;
     private TextView tv_for_fullName,tv_for_address,tv_for_jobTitle;
     private ImageView iv_profile_image;
+    private int position = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -120,6 +122,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
         tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);
         view.findViewById(R.id.layout_for_spName).setOnClickListener(this);
         view.findViewById(R.id.card_for_viewPro).setOnClickListener(this);
+        view.findViewById(R.id.tv_for_profile).setOnClickListener(this);
     }
 
 
@@ -143,6 +146,9 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
                     iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                     goneVisi = false;
                 }
+                break;
+            case R.id.tv_for_profile:
+                if (position!=-1){((HomeActivity)activity).addFragment(ProfileFragment.newInstance(searchLists.get(position)));}
                 break;
         }
     }
@@ -175,7 +181,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                int position = (int) marker.getTag();
+                position = (int) marker.getTag();
                 if (position != -1) {
                     BusiSearchList busiSearchList = searchLists.get(position);
                     card_for_viewPro.setVisibility(View.VISIBLE);
@@ -184,6 +190,8 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
                     tv_for_fullName.setText(busiSearchList.fullName.isEmpty() ? "NA" : busiSearchList.fullName);
                     tv_for_jobTitle.setText(busiSearchList.jobTitleName.isEmpty() ? "NA" : busiSearchList.jobTitleName);
                     tv_for_address.setText(busiSearchList.address.isEmpty() ? "NA" : busiSearchList.address);
+                }else {
+                    card_for_viewPro.setVisibility(View.GONE);
                 }
                 return false;
             }
@@ -255,15 +263,19 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
                                 Uconnekt.longitude=longitude;
                                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
                                 map.animateCamera(cameraUpdate);
-                                createMarkerCurrent(latitude,longitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, "");
+                                clatitude = Uconnekt.latitude;
+                                clongitude = Uconnekt.longitude;
+                                createMarkerCurrent(clatitude,clongitude);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country);
                             }else if (Uconnekt.latitude!=0.0){
                                 latitude=Uconnekt.latitude;
                                 longitude=Uconnekt.longitude;
                                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
                                 map.animateCamera(cameraUpdate);
-                                createMarkerCurrent(latitude,longitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, "");
+                                clatitude = Uconnekt.latitude;
+                                clongitude = Uconnekt.longitude;
+                                createMarkerCurrent(clatitude,clongitude);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country);
                             }
                         }
                     });
@@ -320,14 +332,14 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
         }.executeVolley();
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, Double latitude, Double longitude, String citys){
-        specialityID = specialityIDs;city = citys;
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, Double latitude, Double longitude, String citys, String states, String countrys){
+        specialityID = specialityIDs;city = citys;state = states;country=countrys;
         jobTitleId = jobTitleIds;
         availabilityId = availabilityIds;
         locations = address;
         strengthId = strengthIds;
         valueId = valueIds;
-
+        createMarkerCurrent(clatitude,clongitude);
         card_for_viewPro.setVisibility(View.GONE);
 
         if (latitude != 0.0 && longitude != 0.0){
@@ -370,7 +382,10 @@ public class MapFragment extends Fragment implements View.OnClickListener,OnMapR
                 params.put("job_title",jobTitleId);
                 params.put("availability",availabilityId);
                 params.put("location",locations);
+                params.put("strength",strengthId);
                 params.put("city",city);
+                params.put("state",state);
+                params.put("country",country);
                 params.put("value",valueId);
                 params.put("limit","20");
                 params.put("offset","0");

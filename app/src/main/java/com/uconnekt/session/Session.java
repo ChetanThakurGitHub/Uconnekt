@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.UserInfo;
-import com.uconnekt.ui.authontication.user_selection.UserSelectionActivity;
+import com.uconnekt.ui.authentication.user_selection.UserSelectionActivity;
 
 public class Session {
 

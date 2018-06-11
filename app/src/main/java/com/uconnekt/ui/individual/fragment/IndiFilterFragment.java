@@ -66,7 +66,7 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
     private RatingBar ratingBar;
     private IndiSearchFragment searchFragment;
     private IndiMapFragment indiMapFragment;
-    private String specialtyId = "",company = "",ratingNo = "",city = "";
+    private String specialtyId = "",company = "",ratingNo = "",city = "",state = "",country = "";
     private Double latitude = 0.0,longitude = 0.0;
 
     @Override
@@ -129,7 +129,6 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
             public void onVolleyResponse(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-
                     String status = jsonObject.getString("status");
 
                     if (status.equalsIgnoreCase("success")) {
@@ -234,6 +233,8 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
             @Override
             public void onSuccess(com.uconnekt.model.Address address) {
                 city = address.getCity();
+                state = address.getState();
+                country = address.getCountry();
             }
         }).execute();
 
@@ -294,13 +295,13 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
         if (searchFragment != null)searchFragment.layout_for_list.setVisibility(View.GONE);
         if (searchFragment != null)searchFragment.searchLists.clear();
         if (searchFragment != null)searchFragment.mSwipeRefreshLayout.setRefreshing(true);
-        if (searchFragment != null)searchFragment.getList(specialtyId,ratingNo,company,address,city);
+        if (searchFragment != null)searchFragment.getList(specialtyId,ratingNo,company,address,city,state,country);
 
        // indiMapFragment.offset = 0;
        // indiMapFragment.mSwipeRefreshLayout.setRefreshing(true);
         if (indiMapFragment != null)indiMapFragment.searchLists.clear();
         if (indiMapFragment != null)indiMapFragment.map.clear();
-        if (indiMapFragment != null)indiMapFragment.getList(specialtyId,ratingNo,company,address,latitude,longitude,city);
+        if (indiMapFragment != null)indiMapFragment.getList(specialtyId,ratingNo,company,address,latitude,longitude,city,state,country);
 
         activity.onBackPressed();
     }

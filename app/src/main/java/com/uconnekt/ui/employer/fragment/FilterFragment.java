@@ -69,7 +69,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private TextView tv_for_address;
     private LinearLayout mainlayout;
     private RelativeLayout layout_for_address;
-    private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",city = "";
+    private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",city = "",state = "" ,country;
     private SearchFragment searchFragment;
     private MapFragment mapFragment;
     private Double latitude = 0.0,longitude = 0.0;
@@ -183,13 +183,13 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         if (searchFragment != null)searchFragment.offset = 0;
         if (searchFragment != null)searchFragment.searchLists.clear();
         if (searchFragment != null)searchFragment.mSwipeRefreshLayout.setRefreshing(true);
-        if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city);
+        if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city,state,country);
 
         if (mapFragment != null)mapFragment.layout_for_list.setVisibility(View.GONE);
       //  if (mapFragment != null)mapFragment.offset = 0;
         if (mapFragment != null)mapFragment.searchLists.clear();
         if (mapFragment != null)mapFragment.map.clear();
-        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city);
+        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country);
 
         activity.onBackPressed();
     }
@@ -249,6 +249,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             @Override
             public void onSuccess(com.uconnekt.model.Address address) {
                 city = address.getCity();
+                state = address.getState();
+                country = address.getCountry();
             }
         }).execute();
 

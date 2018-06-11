@@ -52,7 +52,7 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
     public TextView tv_for_speName;
     public Boolean goneVisi = false;
     public ImageView iv_for_arrow;
-    public String specialtyId = "",ratingNo = "",company = "",address = "" ,city = "";
+    public String specialtyId = "",ratingNo = "",company = "",address = "" ,city = "",state= "",country = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,18 +78,18 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
                 searchLists.clear();
                 mSwipeRefreshLayout.setRefreshing(true);
                 offset = 0;
-                getList(specialtyId, ratingNo, company, address, city);
+                getList(specialtyId, ratingNo, company, address, city, state, country);
             }
         });
 
         recycler_view.setAdapter(indiSearchAdapter);
         recycler_list.setAdapter(listAdapter);
-        getList(specialtyId, ratingNo, company, address, city);
+        getList(specialtyId, ratingNo, company, address, city, state, country);
 
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getList(specialtyId, ratingNo, company, address, city);
+                getList(specialtyId, ratingNo, company, address, city, state, country);
             }
         };
         recycler_view.addOnScrollListener(scrollListener);
@@ -120,14 +120,14 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
         super.onResume();
         if (Constant.NETWORK_CHECK == 1){
             getDropDownlist();
-            getList(specialtyId, ratingNo, company, address, city);
+            getList(specialtyId, ratingNo, company, address, city, state, country);
         }
         Constant.NETWORK_CHECK =0;
     }
 
-    public void getList(String specialtyIds, String ratingNos, String companys, String location, String citys){
+    public void getList(String specialtyIds, String ratingNos, String companys, String location, String citys, String states, String countrys){
 
-        specialtyId = specialtyIds; ratingNo = ratingNos; company = companys; address = location ;city = citys;
+        specialtyId = specialtyIds; ratingNo = ratingNos; company = companys; address = location ;city = citys;state = states; country = countrys;
 
         new VolleyGetPost(activity, AllAPIs.INDI_SEARCH_LIST,true,"List",true ) {
             @Override
@@ -175,7 +175,9 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
                 params.put("rating",ratingNo);
                 params.put("company",company);
                 params.put("location",address);
-                params.put("city",city);
+                params.put("city",city==null?"":city);
+                params.put("state",state==null?"":state);
+                params.put("country",country==null?"":country);
                 params.put("limit","10");
                 params.put("offset",offset+"");
                 return params;

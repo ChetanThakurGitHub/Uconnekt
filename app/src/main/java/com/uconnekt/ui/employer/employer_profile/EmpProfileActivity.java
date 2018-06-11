@@ -4,9 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +12,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
@@ -36,12 +32,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.BuildConfig;
 import com.uconnekt.R;
@@ -52,11 +45,9 @@ import com.uconnekt.cropper.CropImageView;
 import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
-import com.uconnekt.helper.SendImageOnFirebase;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
-import com.uconnekt.ui.authontication.registration.RegistrationActivity;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
@@ -75,12 +66,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
-import static com.uconnekt.util.Constant.RESULT_OK;
 
 public class EmpProfileActivity extends BaseActivity implements View.OnClickListener,EmpProfileView, AdapterView.OnItemSelectedListener {
 
@@ -393,6 +381,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onSuccess(com.uconnekt.model.Address address) {
                       city = address.getCity();
+                city = (city == null)?(address.getState()== null)?address.getCountry():address.getState():address.getCountry();
             }
         }).execute();
 

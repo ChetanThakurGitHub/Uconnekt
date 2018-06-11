@@ -156,12 +156,12 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.btn_for_next:
                 if (Uconnekt.session.getUserInfo().isProfile.equals("1")) {
-                if (myFile != null | myFile2 != null) {
+                /*if (myFile != null | myFile2 != null) {
                     sendFile();
-                }else {
+                }else {*/
                     startActivity(new Intent(getActivity(), JobHomeActivity.class));
                     activity.finish();
-                }
+                //}
                 }else {
                     MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.first));
                 }
@@ -220,12 +220,14 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
                             myFile = new File(mainString);
                             tv_for_resume.setText(myFile.getName());
                             setName = -1;
-                            docPaths.clear();
+                            if (myFile != null)docPaths.clear();
+                            sendFile();
                         } else if (setName == 2) {
                             myFile2 = new File(mainString);
                             tv_for_cv.setText(myFile2.getName());
                             setName = -1;
                             docPaths.clear();
+                            if (myFile2 != null)sendFile();
                         }
                     }
                 }
@@ -255,8 +257,9 @@ public class ResumeFragment extends Fragment implements View.OnClickListener{
 
                         if (status.equalsIgnoreCase("success")) {
                             cusDialogProg.dismiss();
-                            startActivity(new Intent(getActivity(), JobHomeActivity.class));
-                            activity.finish();
+                            MyCustomMessage.getInstance(activity).snackbar(mainlayout,message);
+                           /* startActivity(new Intent(getActivity(), JobHomeActivity.class));
+                            activity.finish();*/
                         } else {
                             MyCustomMessage.getInstance(activity).snackbar(mainlayout,message);
                             cusDialogProg.dismiss();

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -495,7 +496,7 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
-                    cusDialogProg.dismiss();
+                    //cusDialogProg.dismiss();
 
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject object = jsonObject.getJSONObject("basic_info");
@@ -530,17 +531,17 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                             }
                         }
 
-                    }
+                    }else dismissProg();
 
                 } catch (JSONException e) {
-                    cusDialogProg.dismiss();
+                   dismissProg();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onNetError() {
-                cusDialogProg.dismiss();
+               dismissProg();
             }
 
             @Override
@@ -554,6 +555,10 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
                 return params;
             }
         }.executeVolley();
+    }
+
+    private void dismissProg(){
+        if (cusDialogProg!=null)cusDialogProg.dismiss();
     }
 
     private void setdata(String valu, String strength){
@@ -648,6 +653,12 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
             }
         }
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dismissProg();
+            }
+        },2000);
     }
 
     @Override
@@ -677,6 +688,9 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
 
         if (requestCode == Constant.PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             layout_for_address.setEnabled(true);
+            TabLayout.Tab tab = tablayout.getTabAt(0);
+            activity.setTab(tab, true);
+            if (tab != null) tab.select();
 
             if (mainlayout != null) {
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -711,6 +725,8 @@ public class BasicInfoFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onSuccess(com.uconnekt.model.Address address) {
                 city = address.getCity();
+                city = (city == null)?(address.getState()== null)?address.getCountry():address.getState():address.getCountry();
+
             }
         }).execute();
 

@@ -7,7 +7,7 @@
     android:background="@drawable/screen_bg"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.uconnekt.ui.authontication.user_selection.UserSelectionActivity">
+    tools:context="com.uconnekt.ui.authentication.user_selection.UserSelectionActivity">
 
     <Button
         android:id="@+id/btn_for_continue"

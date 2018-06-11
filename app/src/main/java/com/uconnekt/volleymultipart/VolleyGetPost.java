@@ -116,8 +116,12 @@ public abstract class VolleyGetPost {
                 Log.e("Error Message", message);
 
                 if (status.equals("300")) {
-
-                    MyCustomMessage.getInstance(activity).showLogoutAlert(activity.getResources().getString(R.string.session_expired),activity.getResources().getString(R.string.your_session_is_expired_please_login_again));
+                    String isActive= response.getString("isActive");
+                    if (isActive.equals("0")){  //inactive
+                        MyCustomMessage.getInstance(activity).showLogoutAlert(activity.getResources().getString(R.string.session_expired), activity.getResources().getString(R.string.inactive));
+                    }else {
+                        MyCustomMessage.getInstance(activity).showLogoutAlert(activity.getResources().getString(R.string.session_expired), activity.getResources().getString(R.string.your_session_is_expired_please_login_again));
+                    }
                     Session.getInstance().logout(activity);
                     return;
                 } else if (networkResponse.statusCode == 404) {
@@ -128,10 +132,10 @@ public abstract class VolleyGetPost {
                     errorMessage = ServerResponseCode.getmeesageCode(networkResponse.statusCode);
                 }
                 activity.startActivity(new Intent(activity, DatabaseActivity.class));
-               // MyCustomMessage.getInstance(activity).showCustomAlert("Alert",errorMessage);
+                // MyCustomMessage.getInstance(activity).showCustomAlert("Alert",errorMessage);
             } catch (JSONException e) {
                 activity.startActivity(new Intent(activity, DatabaseActivity.class));
-               // MyCustomMessage.getInstance(activity).showCustomAlert("Alert",activity.getResources().getString(R.string.something_wrong));
+                // MyCustomMessage.getInstance(activity).showCustomAlert("Alert",activity.getResources().getString(R.string.something_wrong));
                 e.printStackTrace();
             }
         }

@@ -5,6 +5,7 @@
     android:layout_marginTop="@dimen/_5sdp"
     android:layout_marginRight="@dimen/_10sdp"
     android:layout_marginBottom="@dimen/_5sdp"
+    android:id="@+id/mainlayout"
     android:layout_marginLeft="@dimen/_10sdp"
     android:background="@drawable/search_list_bg"
     android:orientation="horizontal">

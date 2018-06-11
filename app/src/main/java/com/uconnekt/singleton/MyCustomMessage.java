@@ -28,7 +28,7 @@ public class MyCustomMessage {
     }
 
     /**
-     * @param context as parent context
+     * @param context as parent contex
      * @return instance
      */
     public synchronized static MyCustomMessage getInstance(Context context) {
@@ -91,7 +91,6 @@ public class MyCustomMessage {
         snackbar.setActionTextColor(Color.parseColor("#FFFFFF"));
         sbView.setBackgroundColor(Color.parseColor("#FCAC35"));
         snackbar.show();
-
     }
 
     public void snackbarTop(View coordinatorLayout, String message) {

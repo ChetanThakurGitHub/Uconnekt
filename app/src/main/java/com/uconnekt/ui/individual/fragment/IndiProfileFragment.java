@@ -117,7 +117,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         Picasso.with(activity).load(indiSearchLists.company_logo).into(iv_company_logo);
         iv_for_fullName.setText(indiSearchLists.fullName.isEmpty()?"NA":indiSearchLists.fullName);
         tv_for_businessName.setText(indiSearchLists.businessName.isEmpty()?"NA":indiSearchLists.businessName);
-        tv_for_specializationName.setText(indiSearchLists.specializationName.isEmpty()?"NA":indiSearchLists.specializationName);
+        tv_for_specializationName.setText(indiSearchLists.jobTitleName.isEmpty()?"NA":indiSearchLists.jobTitleName);
         tv_for_aofs.setText(indiSearchLists.specializationName.isEmpty()?"NA":indiSearchLists.specializationName);
         tv_for_address.setText(indiSearchLists.address.isEmpty()?"NA":indiSearchLists.address);
     }
@@ -246,7 +246,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void favourite(){
-        new VolleyGetPost(activity, AllAPIs.FACOURITES, true, "Favourite", true) {
+        new VolleyGetPost(activity, AllAPIs.FACOURITES, true, "Favourites", true) {
             @SuppressLint("SetTextI18n")
             @Override
             public void onVolleyResponse(String response) {

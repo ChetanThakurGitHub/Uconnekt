@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/mainlayout"
     android:background="@drawable/screen_bg"
-    tools:context=".ui.authontication.registration.RegistrationActivity">
+    tools:context=".ui.authentication.registration.RegistrationActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
