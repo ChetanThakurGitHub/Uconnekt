@@ -20,8 +20,8 @@ import com.uconnekt.application.Uconnekt;
 import com.uconnekt.ui.authentication.user_selection.UserSelectionActivity;
 import com.uconnekt.ui.employer.employer_profile.EmpProfileActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
+import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
-import com.uconnekt.ui.individual.individual_profile.activity.JobProfileActivity;
 import com.uconnekt.util.Constant;
 
 public class SplashActivity extends AppCompatActivity implements SplashView {
@@ -81,7 +81,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     }
 
 
-
     @Override
     public void openLoginActivity() {
 
@@ -103,7 +102,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             @Override
             public void run() {
                 Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
-                if (Uconnekt.session.getUserInfo().userType.equals("business")){
+
+               if (Uconnekt.session.getUserInfo().userType.equals("business")){
                     //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
                     if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
                         startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
@@ -111,14 +111,15 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
                         startActivity(new Intent(SplashActivity.this,HomeActivity.class));
                     }
                 }else {
-                   //startActivity(new Intent(SplashActivity.this, JobProfileActivity.class));
-                 if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
-                        startActivity(new Intent(SplashActivity.this, JobProfileActivity.class));
+                  //startActivity(new Intent(SplashActivity.this, IndiEditProfileActivity.class));
+                    if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
+                        Intent intent = new Intent(SplashActivity.this,IndiEditProfileActivity.class);
+                        intent.putExtra("FROM", "First");
+                        startActivity(intent);
                     }else {
                         startActivity(new Intent(SplashActivity.this, JobHomeActivity.class));
                     }
-                }
-                SplashActivity.this.finish();
+                }SplashActivity.this.finish();
                 overridePendingTransition(R.anim.anim_left_to_right, R.anim.anim_right_to_left);
             }
         }, Constant.SPLESH_TIME);

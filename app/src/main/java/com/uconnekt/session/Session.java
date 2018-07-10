@@ -30,6 +30,7 @@ public class Session {
     private final String IS_PROFILE = "isProfile";
     private final String PROFILE_IMAGE = "profileImage";
     private final String PASSWORD = "password";
+    private final String IS_NOTIFY = "isNotify";
 
     private final String EMAIL_R = "email_r";
     private final String PASSWORD_R = "password_r";
@@ -77,6 +78,7 @@ public class Session {
         editor.putString(IS_PROFILE, userInfo.isProfile);
         editor.putString(PROFILE_IMAGE, userInfo.profileImage);
         editor.putString(PASSWORD, userInfo.password);
+        editor.putString(IS_NOTIFY, userInfo.isNotify);
 
         editor.putBoolean(IS_LOGGEDIN, true);
         editor.commit();
@@ -102,6 +104,7 @@ public class Session {
         userInfo.isProfile=(mypref.getString(IS_PROFILE, ""));
         userInfo.profileImage=(mypref.getString(PROFILE_IMAGE, ""));
         userInfo.password=(mypref.getString(PASSWORD, ""));
+        userInfo.isNotify=(mypref.getString(IS_NOTIFY, ""));
 
         return userInfo;
     }

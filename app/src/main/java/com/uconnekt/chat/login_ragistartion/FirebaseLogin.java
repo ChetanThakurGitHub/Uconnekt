@@ -17,8 +17,8 @@ import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.ui.employer.employer_profile.EmpProfileActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
+import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
-import com.uconnekt.ui.individual.individual_profile.activity.JobProfileActivity;
 
 public class FirebaseLogin {
 
@@ -30,7 +30,7 @@ public class FirebaseLogin {
         myRef.setValue(firebaseData);
     }
 
-    public void firebaseLogin(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg) {
+    public void firebaseLogin(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg , final Boolean pUpdate,final boolean isFinish) {
 
         auth = FirebaseAuth.getInstance();
 
@@ -53,7 +53,7 @@ public class FirebaseLogin {
 
                         if (!task.isSuccessful()) {
                             // there was an error
-                            firebaseRagistration(userDetails,loginActivity,isChecked,cusDialogProg);
+                            firebaseRagistration(userDetails,loginActivity,isChecked,cusDialogProg,pUpdate,isFinish);
 
                         } else {
 
@@ -66,33 +66,39 @@ public class FirebaseLogin {
                             if (!isChecked) {
                                 Uconnekt.session.logoutMyPre();
                             }
-                            if (userDetails.userType.equals("business")) {
-                                if (userDetails.isProfile.equals("1")) {
-                                    Intent intent = new Intent(loginActivity, HomeActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
-                                }else {
-                                    Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
+
+                            if (pUpdate) {
+                                if (userDetails.userType.equals("business")) {
+                                    if (userDetails.isProfile.equals("1")) {
+                                        Intent intent = new Intent(loginActivity, HomeActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    }
+                                } else {
+                                    if (userDetails.isProfile.equals("1")) {
+                                        Intent intent = new Intent(loginActivity, JobHomeActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(loginActivity,IndiEditProfileActivity.class);
+                                        intent.putExtra("FROM", "First");
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    }
                                 }
-                            } else {
-                                if (userDetails.isProfile.equals("1")){
-                                    Intent intent = new Intent(loginActivity, JobHomeActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
-                                }else {
-                                    Intent intent = new Intent(loginActivity, JobProfileActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
-                                }
+                            }else {
+                                if (isFinish)loginActivity.finish();
                             }
                         }
                     }
                 });
     }
 
-    public void firebaseRagistration(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg) {
+    public void firebaseRagistration(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg, final Boolean pUpdate,final Boolean isFinish) {
         auth = FirebaseAuth.getInstance();
 
         String id = userDetails.userId;
@@ -112,7 +118,7 @@ public class FirebaseLogin {
 
                         if (!task.isSuccessful()) {
 
-                            firebaseLogin(userDetails, loginActivity, isChecked, cusDialogProg);
+                            firebaseLogin(userDetails, loginActivity, isChecked, cusDialogProg,pUpdate,isFinish);
 
                         } else {
 
@@ -124,26 +130,31 @@ public class FirebaseLogin {
                             if (!isChecked) {
                                 Uconnekt.session.logoutMyPre();
                             }
-                            if (userDetails.userType.equals("business")) {
-                                if (userDetails.isProfile.equals("1")) {
-                                    Intent intent = new Intent(loginActivity, HomeActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
-                                }else {
-                                    Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
+                            if (pUpdate) {
+                                if (userDetails.userType.equals("business")) {
+                                    if (userDetails.isProfile.equals("1")) {
+                                        Intent intent = new Intent(loginActivity, HomeActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    }
+                                } else {
+                                    if (userDetails.isProfile.equals("1")) {
+                                        Intent intent = new Intent(loginActivity, JobHomeActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(loginActivity,IndiEditProfileActivity.class);
+                                        intent.putExtra("FROM", "First");
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        loginActivity.startActivity(intent);
+                                    }
                                 }
-                            } else {
-                                if (userDetails.isProfile.equals("1")){
-                                    Intent intent = new Intent(loginActivity, JobHomeActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
-                                }else {
-                                    Intent intent = new Intent(loginActivity, JobProfileActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    loginActivity.startActivity(intent);
-                                }
+                            }else {
+                                if (isFinish)loginActivity.finish();
                             }
                         }
                     }

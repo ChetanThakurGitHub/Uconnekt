@@ -216,14 +216,14 @@
                 <Button
                     android:id="@+id/btn_for_signup"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_35sdp"
                     android:layout_marginTop="@dimen/_40sdp"
                     android:background="@drawable/button_bg"
                     android:fontFamily="@font/montserrat_medium"
                     android:text="@string/sign_up"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_14sdp" />
 
             </LinearLayout>
 

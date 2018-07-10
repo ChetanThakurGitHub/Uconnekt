@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parentView"
+    android:background="@color/white">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:background="@color/yellow"
+        android:theme="@style/ThemeOverlay.AppCompat.Light">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:expandedTitleTextAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/actionbar_layout"/>
+
+            <LinearLayout
+                android:id="@+id/profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?actionBarSize"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/yellow">
+
+                    <View
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:background="@drawable/circle_for_profile_bg"/>
+
+                    <View
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_90sdp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/circle_for_profile_bg2"/>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_for_profile"
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp"
+                        android:src="@drawable/user"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:civ_border_color="@color/white"
+                        android:layout_centerHorizontal="true"
+                        app:civ_border_width="@dimen/_5sdp"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_for_fullName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:singleLine="true"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
+                    android:layout_marginBottom="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/montserrat_regular" />
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+   <!-- <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvFeed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:cacheColorHint="@android:color/transparent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_minus20sdp"
+        android:fillViewport="true"
+        android:padding="@dimen/_5sdp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <RelativeLayout
+            android:layout_below="@+id/profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="@dimen/_2sdp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="@dimen/_5sdp"
+            app:cardBackgroundColor="@color/white"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"  >
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+                    app:tabMode="fixed"
+                    app:tabIndicatorColor="@color/yellow"
+                    app:tabSelectedTextColor="@color/yellow"
+                    app:tabBackground="@color/white"
+                    app:tabTextColor="@color/darkgray"
+                    app:tabGravity="fill"/>
+
+                <com.uconnekt.ui.individual.edit_profile.CustomViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   />
+
+
+
+
+            </LinearLayout>
+
+
+
+        </android.support.v7.widget.CardView>
+            <Button
+                android:id="@+id/btn_for_next"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_bg"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/next"
+                android:layout_centerHorizontal="true"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_minus40sdp"
+                />
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+  <!--  <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:nestedScrollingEnabled="false">-->
+
+
+   <!-- </ScrollView>-->
+

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_30sdp"
+    android:layout_height="@dimen/_23sdp"
     android:id="@+id/layout_for_click"
     android:orientation="vertical">
 
@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12sdp"
         android:textColor="@color/darkgray"
-        android:padding="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:layout_marginLeft="@dimen/_5sdp"
         android:fontFamily="@font/montserrat_regular"
         android:singleLine="true"
         android:ellipsize="end"

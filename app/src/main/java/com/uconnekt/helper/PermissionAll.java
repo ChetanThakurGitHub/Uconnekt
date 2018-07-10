@@ -100,4 +100,26 @@ public class PermissionAll {
             return true;
         }
     }
+
+
+    public boolean RequestMultiplePermission1(Activity context) {
+        int FirstPermissionResult = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        int ThirdPermissionResult = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+
+        if (FirstPermissionResult != PackageManager.PERMISSION_GRANTED &&
+                ThirdPermissionResult != PackageManager.PERMISSION_GRANTED) {
+            // No explanation needed, we can request the permission.
+            // Creating String Array with Permissions.
+            ActivityCompat.requestPermissions((Activity) context, new String[]
+                    {
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+
+                    }, Constant.REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -13,8 +13,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.Favourite;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.employer.fragment.ProfileFragment;
+import com.uconnekt.ui.employer.home.HomeActivity;
+import com.uconnekt.ui.individual.activity.FavouriteActivity;
+import com.uconnekt.ui.individual.fragment.IndiProfileFragment;
+import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.util.Utils;
 
 import java.util.ArrayList;
@@ -24,10 +30,12 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     private Context context;
     private ArrayList<Favourite> favourites;
+    private String userId = "";
 
-    public FavoriteAdapter(Context context,ArrayList<Favourite> favourites){
+    public FavoriteAdapter(Context context, ArrayList<Favourite> favourites, String userId){
         this.context = context;
         this.favourites = favourites;
+        this.userId = userId;
     }
 
     @NonNull
@@ -42,8 +50,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Favourite favourite = favourites.get(position);
         Picasso.with(context).load(favourite.profileImage).into(holder.iv_for_profile);
         holder.tv_for_fullName.setText(favourite.fullName.isEmpty()?"NA":favourite.fullName);
-        holder.tv_for_aofs.setText(favourite.specializationName.isEmpty()?"NA":favourite.specializationName);
+        holder.tv_for_aofs.setText(favourite.jobTitleName);
         holder.tv_for_date.setText(favourite.created_on.isEmpty()?"NA": Utils.parseDateToddMMyyyy(favourite.created_on).substring(0,10));
+        holder.card_for_chat.setVisibility((userId.equals(Uconnekt.session.getUserInfo().userId))?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -66,7 +75,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             tv_for_date = itemView.findViewById(R.id.tv_for_date);
             card_for_chat = itemView.findViewById(R.id.card_for_chat);
             card_for_chat.setOnClickListener(this);
+            //itemView.findViewById(R.id.cardview).setOnClickListener(this);
         }
+
 
         @Override
         public void onClick(View v) {
@@ -74,6 +85,18 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 case R.id.card_for_chat:
                     MyCustomMessage.getInstance(context).customToast("Under development mode....");
                     break;
+              /*  case R.id.cardview:
+
+                    if (context instanceof FavouriteActivity){
+
+                    }else {
+                        if (context instanceof HomeActivity) {
+                            ((HomeActivity) context).addFragment(ProfileFragment.newInstance(favourites.get(getAdapterPosition()).favourite_by));
+                        } else {
+                            ((JobHomeActivity) context).addFragment(IndiProfileFragment.newInstance(favourites.get(getAdapterPosition()).favourite_by));
+                        }
+                    }
+                    break;*/
             }
         }
     }

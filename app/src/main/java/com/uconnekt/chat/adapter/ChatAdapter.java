@@ -1,8 +1,10 @@
 package com.uconnekt.chat.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +34,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         this.mContext = mContext;
     }
 
+    @NonNull
     @Override
-    public ChatAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         chatting = chattings.get(viewType);
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_layout, parent, false);
@@ -42,13 +45,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ChatAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ChatAdapter.ViewHolder holder, final int position) {
         chatting = chattings.get(position);
         String time = null;
 
         try {
             long timeStamp = (long) chatting.timeStamp;
 
+            @SuppressLint("SimpleDateFormat")
             DateFormat f = new SimpleDateFormat("MM-dd-yyyy'T'HH:mm:ss.mmm'Z'");
             System.out.println(f.format(timeStamp));
 

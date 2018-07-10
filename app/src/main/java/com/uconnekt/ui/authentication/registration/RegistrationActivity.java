@@ -117,7 +117,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.layout_for_userImg:
                 PermissionAll permissionAll = new PermissionAll();
-                if (permissionAll.RequestMultiplePermission(RegistrationActivity.this))showBottomSheetDialog();
+                if (permissionAll.RequestMultiplePermission1(RegistrationActivity.this))showBottomSheetDialog();
                 break;
             case R.id.iv_for_back:
                 onBackPressed();
@@ -350,7 +350,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                             userFullDetail.password = password;
 
                             FirebaseLogin firebaseLogin = new FirebaseLogin();
-                            firebaseLogin.firebaseLogin(userFullDetail,RegistrationActivity.this,false,cusDialogProg);
+                            firebaseLogin.firebaseLogin(userFullDetail,RegistrationActivity.this,false,cusDialogProg,true,false);
 
                         } else {
                             MyCustomMessage.getInstance(RegistrationActivity.this).snackbar(mainlayout,message);

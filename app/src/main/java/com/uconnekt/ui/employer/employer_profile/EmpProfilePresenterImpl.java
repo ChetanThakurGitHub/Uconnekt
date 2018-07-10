@@ -11,7 +11,7 @@ public class EmpProfilePresenterImpl implements EmpProfilePresenter ,EmpProfileI
     private EmpProfileView empProfileView;
     private EmpProfileIntractor empProfileIntractor;
 
-    EmpProfilePresenterImpl(EmpProfileView empProfileView,EmpProfileIntractor empProfileIntractor){
+    public EmpProfilePresenterImpl(EmpProfileView empProfileView, EmpProfileIntractor empProfileIntractor){
         this.empProfileView = empProfileView;
         this.empProfileIntractor= empProfileIntractor;
     }

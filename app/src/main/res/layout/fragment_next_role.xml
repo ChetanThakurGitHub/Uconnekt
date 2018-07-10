@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_10sdp"
+    tools:context="com.uconnekt.ui.employer.activity.experience.fragment.NextRoleFragment">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/availability_weeks"
+        android:fontFamily="@font/montserrat_medium"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/yellow" />
+
+    <TextView
+        android:id="@+id/tv_for_availability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkgray"
+        android:singleLine="true"
+        android:textSize="@dimen/_12sdp"
+        android:hint="@string/na"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_light"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/lightgray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/area_of_specialtys"
+        android:fontFamily="@font/montserrat_medium"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/yellow" />
+
+    <TextView
+        android:id="@+id/tv_for_aofs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkgray"
+        android:singleLine="true"
+        android:hint="@string/na"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_light"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@color/lightgray" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/area"
+        android:fontFamily="@font/montserrat_medium"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/yellow" />
+
+    <TextView
+        android:id="@+id/tv_for_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkgray"
+       android:maxLines="2"
+        android:textSize="@dimen/_12sdp"
+        android:hint="@string/na"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_light"/>
+
+
+</LinearLayout>

@@ -13,19 +13,16 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.uconnekt.R;
 
-
 public class BaseActivity extends AppCompatActivity {
 
     public long mLastClickTime = 0;
 
     public boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext()
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         assert connectivityManager != null;
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null;
     }
-
 
     public void hideKeyboard() {
         View view = BaseActivity.this.getCurrentFocus();
@@ -36,7 +33,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-   public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
+  /* public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
         String backStackName = fragment.getClass().getName();
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         int i = fm.getBackStackEntryCount();
@@ -65,9 +62,7 @@ public class BaseActivity extends AppCompatActivity {
                 transaction.addToBackStack(backStackName);
             transaction.commit();
         }
-    }
-
-
+    }*/
 
     public void replaceFragment(Fragment fragmentHolder) {
         try{
@@ -89,16 +84,13 @@ public class BaseActivity extends AppCompatActivity {
         try {
             FragmentManager fragmentManager = getSupportFragmentManager();
             String fragmentName = fragmentHolder.getClass().getName();
-
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
             //fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getWindow().setEnterTransition(null);
             }
             fragmentTransaction.add(R.id.framlayout, fragmentHolder, fragmentName).addToBackStack(fragmentName);
             fragmentTransaction.commit();
-
             hideKeyboard();
             return fragmentHolder;
         }
@@ -107,8 +99,6 @@ public class BaseActivity extends AppCompatActivity {
             return null;
         }
     }
-
-
 
     public Fragment getCurrentFragment() {
         try {

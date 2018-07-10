@@ -51,13 +51,15 @@
                 app:srcCompat="@drawable/ic_down_arrow"
                 android:layout_alignParentRight="true" />
 
-            <TextView
+            <EditText
                 android:id="@+id/tv_for_speName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:singleLine="true"
                 android:ellipsize="end"
+                android:background="@null"
+                android:textSize="@dimen/_12sdp"
                 android:scrollHorizontally="true"
                 android:layout_toLeftOf="@+id/iv_for_arrow"
                 android:textColor="@color/yellow"
@@ -142,13 +144,30 @@
                 android:layout_marginBottom="@dimen/_10sdp"
                 app:cardBackgroundColor="@color/white">
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_for_nodata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/lightgray"
+                    android:textSize="@dimen/_15sdp"
+                    android:text="@string/no_matches_found"/>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_list"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_200sdp"
+                    android:layout_height="@dimen/_298sdp"
                     android:layout_marginBottom="@dimen/_minus2sdp"
                     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                     android:scrollbars="vertical" />
+
+                </FrameLayout>
 
             </android.support.v7.widget.CardView>
 

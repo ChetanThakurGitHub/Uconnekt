@@ -11,5 +11,7 @@ public class Favourite {
     public String businessName = "";
     public String today_datetime = "";
     public String specializationName = "";
+    public String jobTitleName = "";
     public String profileImage = "";
+
 }

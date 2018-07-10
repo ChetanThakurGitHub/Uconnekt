@@ -88,7 +88,7 @@ public class IndiSearchAdapter extends RecyclerView.Adapter<IndiSearchAdapter.Vi
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.card_for_list:
-                    ((JobHomeActivity)context).addFragment(IndiProfileFragment.newInstance(indiSearchList.get(getAdapterPosition())));
+                    ((JobHomeActivity)context).addFragment(IndiProfileFragment.newInstance(indiSearchList.get(getAdapterPosition()).userId));
                     break;
             }
         }

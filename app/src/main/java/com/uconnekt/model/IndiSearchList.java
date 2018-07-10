@@ -17,4 +17,11 @@ public class IndiSearchList implements Serializable{
     public String profileImage = "";
     public String company_logo = "";
     public Marker marker ;
+
+   /* @Override
+    public int hashCode() {
+
+        float value = Float.parseFloat(latitude)+Float.parseFloat(longitude);
+        return (int) value;
+    }*/
 }

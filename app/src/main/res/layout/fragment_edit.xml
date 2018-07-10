@@ -1,0 +1,116 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusableInTouchMode="true"
+    android:paddingTop="@dimen/_10sdp"
+    android:descendantFocusability="beforeDescendants"
+    android:paddingBottom="@dimen/_10sdp"
+    android:background="@color/white"
+    android:id="@+id/mainlayout"
+    android:orientation="vertical"
+    tools:context="com.uconnekt.ui.individual.edit_profile.fragment.EditResumeFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_resume"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/darkgray"
+        android:padding="@dimen/_5sdp"
+        android:fontFamily="@font/montserrat_regular"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_for_resume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_5sdp"
+        android:layout_margin="@dimen/_3sdp"
+        app:cardBackgroundColor="@color/white">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/tv_for_resume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/attachment"
+                android:textSize="@dimen/_12sdp"
+                android:layout_toLeftOf="@+id/file"
+                android:singleLine="true"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:ellipsize="end"
+                android:scrollHorizontally="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/lightgray"/>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/file"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:srcCompat="@drawable/ic_attach"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_cv"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/darkgray"
+        android:padding="@dimen/_5sdp"
+        android:fontFamily="@font/montserrat_regular"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_for_cv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/_5sdp"
+        android:layout_margin="@dimen/_3sdp"
+        app:cardBackgroundColor="@color/white">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/tv_for_cv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/attachment"
+                android:textSize="@dimen/_12sdp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:layout_toLeftOf="@+id/file2"
+                android:scrollHorizontally="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/lightgray"/>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/file2"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:srcCompat="@drawable/ic_attach"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"/>
+
+</LinearLayout>

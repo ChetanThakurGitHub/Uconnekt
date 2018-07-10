@@ -67,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:icon="@drawable/ic_user"
                 android:layout="@layout/custom_tab"
-                android:text="@string/user"/>
+                android:text="@string/profile"/>
 
             <android.support.design.widget.TabItem
                 android:id="@+id/ic_settings"

@@ -11,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
+import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.authentication.login.LoginActivity;
+import com.uconnekt.ui.authentication.registration.RegistrationActivity;
 import com.uconnekt.util.Constant;
 
 public class UserSelectionActivity extends AppCompatActivity implements View.OnClickListener,UserSelectionView{
@@ -27,6 +29,7 @@ public class UserSelectionActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
         initView();
+        new PermissionAll().RequestMultiplePermission(UserSelectionActivity.this);
         userSelectionPresenter = new UserSelectionPresenterImpl(this,new UserSelectionIntractorImpl());
     }
 
@@ -54,9 +57,7 @@ public class UserSelectionActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.layout_for_jobSeeker).setOnClickListener(this);
         findViewById(R.id.btn_for_continue).setOnClickListener(this);
         mainlayout = findViewById(R.id.mainlayout);
-
     }
-
 
     private void setResours(LinearLayout v, boolean isActive) {
         if(isActive){

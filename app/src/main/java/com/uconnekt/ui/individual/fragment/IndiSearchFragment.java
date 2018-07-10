@@ -8,9 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +45,7 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
     private JobHomeActivity activity;
     public ArrayList<IndiSearchList> searchLists = new ArrayList<>();
     private ArrayList<SpecialityList> arrayList = new ArrayList<>();
+    private ArrayList<SpecialityList> arrayListBackup = new ArrayList<>();
     private IndiSearchAdapter indiSearchAdapter;
     private RecyclerView recycler_view,recycler_list;
     private SpecialityListAdapter listAdapter;
@@ -49,8 +53,9 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
     public int offset = 0;
     private LinearLayout layout_for_noData;
     public RelativeLayout layout_for_list;
-    public TextView tv_for_speName;
+    public EditText tv_for_speName;
     public Boolean goneVisi = false;
+    private TextView tv_for_nodata;
     public ImageView iv_for_arrow;
     public String specialtyId = "",ratingNo = "",company = "",address = "" ,city = "",state= "",country = "";
 
@@ -94,18 +99,53 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
         };
         recycler_view.addOnScrollListener(scrollListener);
 
+        tv_for_speName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+               if (goneVisi)filter(s.toString());
+            }
+        });
+
+        tv_for_speName.setFocusableInTouchMode(false);
+
         return view;
+    }
+
+    private void filter(String text){
+        if (text.isEmpty()){
+            arrayList.clear();
+            arrayList.addAll(arrayListBackup);
+            listAdapter.notifyDataSetChanged();
+            return;
+        }
+        ArrayList<SpecialityList> temp = new ArrayList<>();
+        for(SpecialityList d: arrayListBackup){
+            if(d.specializationName.toLowerCase().contains(text.toLowerCase())){
+                temp.add(d);
+            }
+        }
+        arrayList.clear();
+        arrayList.addAll(temp);
+        tv_for_nodata.setVisibility(arrayList.isEmpty()?View.VISIBLE:View.GONE);
+        listAdapter.notifyDataSetChanged();
     }
 
     private void initView(View view){
         recycler_view = view.findViewById(R.id.recycler_view);
+        tv_for_nodata = view.findViewById(R.id.tv_for_nodata);
         recycler_list = view.findViewById(R.id.recycler_list);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
         layout_for_list = view.findViewById(R.id.layout_for_list);
         tv_for_speName = view.findViewById(R.id.tv_for_speName);
         iv_for_arrow = view.findViewById(R.id.iv_for_arrow);
-        view.findViewById(R.id.card_for_spName).setOnClickListener(this);
+        view.findViewById(R.id.tv_for_speName).setOnClickListener(this);
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
     }
 
@@ -123,6 +163,7 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
             getList(specialtyId, ratingNo, company, address, city, state, country);
         }
         Constant.NETWORK_CHECK =0;
+        layout_for_list.setVisibility(View.GONE);
     }
 
     public void getList(String specialtyIds, String ratingNos, String companys, String location, String citys, String states, String countrys){
@@ -201,6 +242,7 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (status.equalsIgnoreCase("success")) {
+                        arrayListBackup.clear();
                         arrayList.clear();
                         JSONObject result = jsonObject.getJSONObject("result");
                         JSONArray results = result.getJSONArray("opposite_speciality_list");
@@ -215,6 +257,7 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
                             specialityList.specializationName = object.getString("specializationName");
                             arrayList.add(specialityList);
                         }
+                        arrayListBackup.addAll(arrayList);
                         listAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
@@ -243,15 +286,17 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.card_for_spName:
+            case R.id.tv_for_speName:
                 if (!goneVisi) {
                     layout_for_list.setVisibility(View.VISIBLE);
                     iv_for_arrow.setImageResource(R.drawable.ic_up_arrow);
                     goneVisi = true;
+                    tv_for_speName.setFocusableInTouchMode(true);
                 }else {
                     layout_for_list.setVisibility(View.GONE);
                     iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                     goneVisi = false;
+                    activity.hideKeyboard();
                 }
                 break;
         }

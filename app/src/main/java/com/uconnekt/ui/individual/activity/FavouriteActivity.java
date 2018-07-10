@@ -22,6 +22,7 @@ import com.uconnekt.model.Favourite;
 import com.uconnekt.model.RecommendedList;
 import com.uconnekt.pagination.EndlessRecyclerViewScrollListener;
 import com.uconnekt.ui.common_activity.NetworkActivity;
+import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
@@ -46,12 +47,12 @@ public class FavouriteActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
-        initView();
         Bundle extras = getIntent().getExtras();
         if(extras != null) userId = extras.getString("USERID");
+        initView();
         getReviewsList();
 
-        fullListAdapter = new FavoriteAdapter(this,favourites);
+        fullListAdapter = new FavoriteAdapter(this,favourites,userId.equals("-1")?Uconnekt.session.getUserInfo().userId:userId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);
@@ -80,7 +81,8 @@ public class FavouriteActivity extends AppCompatActivity implements View.OnClick
     private void initView() {
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
-        TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.favorites);
+        TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
+        tv_for_tittle.setText(userId.equals("-1")?R.string.my_favorite:R.string.favorites);
         recycler_view = findViewById(R.id.recycler_view);
         layout_for_noData = findViewById(R.id.layout_for_noData);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -102,7 +104,7 @@ public class FavouriteActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void getReviewsList(){
-        new VolleyGetPost(this, AllAPIs.FAVOURITES_LIST+userId+"&limit="+10+"&offset="+offset, false, "ReviewsList", false) {
+        new VolleyGetPost(this, userId.equals("-1")?AllAPIs.FAVOURITES_LIST_BY_ME+"&limit="+10+"&offset="+offset:AllAPIs.FAVOURITES_LIST+userId+"&limit="+10+"&offset="+offset, false, "ReviewsList", true) {
             @Override
             public void onVolleyResponse(String response) {
 

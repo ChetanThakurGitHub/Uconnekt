@@ -85,7 +85,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     private Bitmap profileImageBitmap;
     private CusDialogProg cusDialogProg;
     private RelativeLayout mainlayout;
-    private String jobTitleId,specialtyID,city = "";
+    private String jobTitleId,specialtyID,city = "",state= "",country = "";
     public String area_of_specialization = "";
     private EditText et_for_bio;
     private Boolean doubleBackToExitPressedOnce = false;
@@ -380,8 +380,10 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         new GioAddressTask(this, latLng, new GioAddressTask.LocationListner() {
             @Override
             public void onSuccess(com.uconnekt.model.Address address) {
-                      city = address.getCity();
-                city = (city == null)?(address.getState()== null)?address.getCountry():address.getState():address.getCountry();
+                city = address.getCity();
+                state = address.getState();
+                country = address.getCountry();
+               // city = (city == null)?(address.getState()== null)?address.getCountry():address.getState():address.getCountry();
             }
         }).execute();
 
@@ -528,7 +530,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                         params.put("area_of_specialization", specialtyID);
                         params.put("address", address);
                         params.put("bio", bio);
-                        params.put("city", city);
+                        params.put("city", city==null?"":city);
+                        params.put("state", state==null?"":state);
+                        params.put("country", country==null?"":country);
                         params.put("latitude", latitude+"");
                         params.put("longitude", longitude+"");
                         params.put("job_title", jobTitleId);
@@ -610,7 +614,10 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     public void navigateToHome() {
         String bio = et_for_bio.getText().toString().trim();
         String address = tv_for_address.getText().toString().trim();
-        doProfileUpdate(address,bio);
+
+        if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty()) doProfileUpdate(address,bio);
+        else MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.select_location_again));
+
     }
 
 }

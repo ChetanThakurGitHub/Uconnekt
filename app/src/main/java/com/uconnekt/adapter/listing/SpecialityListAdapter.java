@@ -60,29 +60,29 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                 case R.id.layout_for_click:
 
                     if (activity instanceof IndiSearchFragment){
+                        ((IndiSearchFragment)activity).goneVisi = false;
                         ((IndiSearchFragment)activity).specialtyId= specialityLists.get(getAdapterPosition()).specializationId;
                         ((IndiSearchFragment)activity).tv_for_speName.setText(specialityLists.get(getAdapterPosition()).specializationName);
                         ((IndiSearchFragment)activity).layout_for_list.setVisibility(View.GONE);
-                        ((IndiSearchFragment)activity).goneVisi = false;
                         ((IndiSearchFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((IndiSearchFragment)activity).searchLists.clear();
                         ((IndiSearchFragment)activity).getList(specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "");
                         ((IndiSearchFragment)activity).offset = 0;
                         ((IndiSearchFragment)activity).mSwipeRefreshLayout.setRefreshing(true);
                     }else if (activity instanceof SearchFragment){
+                        ((SearchFragment)activity).goneVisi = false;
                         ((SearchFragment)activity).jobTitleId= specialityLists.get(getAdapterPosition()).specializationId;
                         ((SearchFragment)activity).tv_for_speName.setText(specialityLists.get(getAdapterPosition()).specializationName);
                         ((SearchFragment)activity).layout_for_list.setVisibility(View.GONE);
-                        ((SearchFragment)activity).goneVisi = false;
                         ((SearchFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((SearchFragment)activity).searchLists.clear();
                         ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "", "");
                         ((SearchFragment)activity).offset = 0;
                         ((SearchFragment)activity).mSwipeRefreshLayout.setRefreshing(true);
                     }else if (activity instanceof IndiMapFragment){
+                        ((IndiMapFragment)activity).goneVisi = false;
                         ((IndiMapFragment)activity).tv_for_speName.setText(specialityLists.get(getAdapterPosition()).specializationName);
                         ((IndiMapFragment)activity).layout_for_list.setVisibility(View.GONE);
-                        ((IndiMapFragment)activity).goneVisi = false;
                         ((IndiMapFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((IndiMapFragment)activity).searchLists.clear();
                         ((IndiMapFragment)activity).map.clear();
@@ -90,10 +90,10 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                        /* ((IndiMapFragment)activity).offset = 0;
                         ((IndiMapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/
                     }else if (activity instanceof MapFragment){
+                        ((MapFragment)activity).goneVisi = false;
                         ((MapFragment)activity).jobTitleId= specialityLists.get(getAdapterPosition()).specializationId;
                         ((MapFragment)activity).tv_for_speName.setText(specialityLists.get(getAdapterPosition()).specializationName);
                         ((MapFragment)activity).layout_for_list.setVisibility(View.GONE);
-                        ((MapFragment)activity).goneVisi = false;
                         ((MapFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((MapFragment)activity).searchLists.clear();
                         ((MapFragment)activity).map.clear();

@@ -13,7 +13,7 @@ public class LoginIntractorImpl implements LoginIntractor {
                     return;
                 }
 
-                if (!username.matches(Constant.emailPattern)){
+                if (!username.toLowerCase().matches(Constant.emailPattern)){
                     listener.onEmailVError();
                     return;
                 }

@@ -29,7 +29,7 @@ import java.util.Map;
 public class RatingActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText et_for_comment;
-    private TextView tv_for_txt;
+    private TextView tv_for_txt,tv_for_submit;
     private RatingBar ratingBar;
     private String ratingNo = "",userId = "";
     private ImageView iv_for_checkBox;
@@ -79,6 +79,7 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
         findViewById(R.id.layout_for_checkBox).setOnClickListener(this);
+        tv_for_submit = findViewById(R.id.tv_for_submit);
         findViewById(R.id.tv_for_submit).setOnClickListener(this);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.rate);
         et_for_comment = findViewById(R.id.et_for_comment);
@@ -115,7 +116,9 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
         }else if (et_for_comment.getText().toString().trim().equals("")){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.add_comment));
         }else {
+            tv_for_submit.setEnabled(false);
             addRating();
+
         }
     }
 

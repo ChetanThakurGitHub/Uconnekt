@@ -46,12 +46,13 @@ public class RecommendedActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended);
 
-        initView();
         Bundle extras = getIntent().getExtras();
         if(extras != null) userId = extras.getString("USERID");
+
+        initView();
         getReviewsList();
 
-        fullListAdapter = new RecommededAdapter(this,reviewLists);
+        fullListAdapter = new RecommededAdapter(this,reviewLists,userId.equals("-1")?Uconnekt.session.getUserInfo().userId:userId,0);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);
@@ -80,7 +81,8 @@ public class RecommendedActivity extends AppCompatActivity implements View.OnCli
     private void initView() {
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
-        TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.recommend);
+        TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
+        tv_for_tittle.setText(userId.equals("-1")?R.string.my_recommend:R.string.recommend);
         recycler_view = findViewById(R.id.recycler_view);
         layout_for_noData = findViewById(R.id.layout_for_noData);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
@@ -102,7 +104,7 @@ public class RecommendedActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getReviewsList(){
-        new VolleyGetPost(this, AllAPIs.RECOMMENDS_LIST+userId+"&limit="+10+"&offset="+offset, false, "ReviewsList", false) {
+        new VolleyGetPost(this, userId.equals("-1")?AllAPIs.RECOMMENDS_LIST_BY_ME+"&limit="+10+"&offset="+offset:AllAPIs.RECOMMENDS_LIST+userId+"&limit="+10+"&offset="+offset, false, "ReviewsList", true) {
             @Override
             public void onVolleyResponse(String response) {
 
@@ -111,7 +113,7 @@ public class RecommendedActivity extends AppCompatActivity implements View.OnCli
                     String status = jsonObject.getString("status");
                     if (status.equals("success")){
                         mSwipeRefreshLayout.setRefreshing(false);
-                        JSONArray array = jsonObject.getJSONArray("recommendList");
+                        JSONArray array = jsonObject.getJSONArray(userId.equals("-1")?"RecommandsList":"recommendList");
                         for (int i = 0; i < array.length(); i ++){
                             JSONObject object =  array.getJSONObject(i);
                             RecommendedList recommendedList = new Gson().fromJson(object.toString(),RecommendedList.class);

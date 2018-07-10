@@ -1,7 +1,9 @@
 package com.uconnekt.ui.employer.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,15 +11,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
+import com.uconnekt.ui.employer.activity.EditProfileActivity;
 import com.uconnekt.ui.employer.fragment.ChatFragment;
 import com.uconnekt.ui.employer.fragment.FilterFragment;
 import com.uconnekt.ui.employer.fragment.MapFragment;
 import com.uconnekt.ui.employer.fragment.MyProfileFragment;
+import com.uconnekt.ui.employer.fragment.ProfileFragment;
 import com.uconnekt.ui.employer.fragment.SearchFragment;
 import com.uconnekt.ui.employer.fragment.SettingFragment;
+import com.uconnekt.ui.employer.fragment.ViewProifileFragment;
+import com.uconnekt.ui.individual.activity.ReviewActivity;
+import com.uconnekt.ui.individual.fragment.FavouriteFragment;
 import com.uconnekt.ui.individual.fragment.IndiMapFragment;
+import com.uconnekt.util.Constant;
+
+import java.text.ParseException;
+
+import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 
@@ -26,7 +39,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private TabLayout tabs;
     private TextView tv_for_tittle;
     private int click = 0;
-    private ImageView iv_for_backIco,iv_for_filter,iv_for_circular_arrow,iv_for_menu;
+    private ImageView iv_for_backIco,iv_for_filter,iv_for_circular_arrow,iv_for_menu,iv_for_share,iv_for_edit,iv_for_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +58,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         replaceFragment(new SearchFragment());
         iv_for_filter.setOnClickListener(this);
         iv_for_backIco.setOnClickListener(this);
+        iv_for_share.setOnClickListener(this);
+        iv_for_edit.setOnClickListener(this);
+        iv_for_view.setOnClickListener(this);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            String userType = extras.getString("type");
+            notificationManage(userType);
+        }
+    }
+
+    private void notificationManage( String userType){
+        tabs.getTabAt(3).select();
+        replaceFragment(MyProfileFragment.newInstance(userType));
     }
 
     private void initView(){
@@ -56,6 +83,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         iv_for_filter = findViewById(R.id.iv_for_filter);
         iv_for_circular_arrow = findViewById(R.id.iv_for_circular_arrow);
         iv_for_menu = findViewById(R.id.iv_for_menu);
+        iv_for_share = findViewById(R.id.iv_for_share);
+        iv_for_edit = findViewById(R.id.iv_for_edit);
+        iv_for_view = findViewById(R.id.iv_for_view);
     }
 
     private void setTab(TabLayout.Tab tab, int imageResource , boolean isSelected){
@@ -72,12 +102,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 iv_for_filter.setVisibility(View.VISIBLE);
                 iv_for_circular_arrow.setVisibility(View.GONE);
                 iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
                 break;
             case 1:
                 iv_for_backIco.setVisibility(View.VISIBLE);
                 iv_for_filter.setVisibility(View.GONE);
                 iv_for_circular_arrow.setVisibility(View.VISIBLE);
                 iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
                 break;
             case 2:
                 tv_for_tittle.setText(R.string.profile);
@@ -85,6 +121,59 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 iv_for_filter.setVisibility(View.GONE);
                 iv_for_circular_arrow.setVisibility(View.GONE);
                 iv_for_menu.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                tv_for_tittle.setText(R.string.my_profile);
+                iv_for_backIco.setVisibility(View.GONE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.VISIBLE);
+                iv_for_view.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                tv_for_tittle.setText(R.string.my_profile);
+                iv_for_backIco.setVisibility(View.VISIBLE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
+                break;
+            case 5:
+                tv_for_tittle.setText(R.string.setting);
+                iv_for_backIco.setVisibility(View.GONE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
+                break;
+            case 6:
+                tv_for_tittle.setText(R.string.chat);
+                iv_for_backIco.setVisibility(View.GONE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
+                break;
+            case 7:
+                tv_for_tittle.setText(R.string.favorites);
+                iv_for_backIco.setVisibility(View.VISIBLE);
+                iv_for_filter.setVisibility(View.GONE);
+                iv_for_circular_arrow.setVisibility(View.GONE);
+                iv_for_menu.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
+                iv_for_edit.setVisibility(View.GONE);
+                iv_for_view.setVisibility(View.GONE);
                 break;
         }
     }
@@ -135,7 +224,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             setToolbarIcon(0);
             android.support.v4.app.Fragment fragment=getCurrentFragment();
             if (fragment!=null &&fragment instanceof IndiMapFragment)tv_for_tittle.setText(R.string.map);
-            else tv_for_tittle.setText(R.string.search);
+            if (fragment!=null &&fragment instanceof SearchFragment) tv_for_tittle.setText(R.string.search);
+            if (fragment!=null &&fragment instanceof MyProfileFragment)setToolbarIcon(3);
+            if (fragment!=null &&fragment instanceof FavouriteFragment)setToolbarIcon(7);
+            if (fragment!=null &&fragment instanceof ProfileFragment)setToolbarIcon(2);
         } else {
             handler.postDelayed(runnable = new Runnable() {
                 @Override
@@ -168,6 +260,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.iv_for_backIco:
                 onBackPressed();
                 break;
+            case R.id.iv_for_edit:
+                startActivity(new Intent(HomeActivity.this, EditProfileActivity.class));
+                break;
+            case R.id.iv_for_view:
+                setToolbarIcon(4);
+                addFragment(new ViewProifileFragment());
+                break;
         }
     }
 
@@ -193,19 +292,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                     click = 2;
                     replaceFragment(new ChatFragment());
                     setTab(tab, R.drawable.ic_chat_yellow, true);
-                    tv_for_tittle.setText(R.string.messages);
+                    setToolbarIcon(6);
                     break;
                 case 3:
                     click = 3;
                     replaceFragment(new MyProfileFragment());
                     setTab(tab, R.drawable.ic_user_yellow, true);
-                    tv_for_tittle.setText(R.string.profile);
+                    setToolbarIcon(3);
                     break;
                 case 4:
                     click = 4;
                     replaceFragment(new SettingFragment());
                     setTab(tab, R.drawable.ic_settings_yellow, true);
-                    tv_for_tittle.setText(R.string.setting);
+                    setToolbarIcon(5);
                     break;
             }
         }
@@ -250,5 +349,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (getCurrentFragment() instanceof MapFragment)getCurrentFragment().onRequestPermissionsResult(requestCode,permissions,grantResults);
+            }
+            break;
+        }
+    }
 
 }

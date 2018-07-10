@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.uconnekt.R;
 import com.uconnekt.model.JobTitle;
-import com.uconnekt.ui.individual.individual_profile.profile_fragrment.Basic_info.BasicInfoFragment;
+import com.uconnekt.ui.individual.edit_profile.fragment.EditBasicInfoFragment;
 
 import java.util.ArrayList;
 
@@ -18,12 +18,12 @@ public class Value1SpAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<JobTitle> arrayList;
-    private BasicInfoFragment fragment;
+    private EditBasicInfoFragment frag;
 
-    public Value1SpAdapter(Context context, ArrayList<JobTitle> arrayList, BasicInfoFragment fragment) {
+    public Value1SpAdapter(Context context, ArrayList<JobTitle> arrayList, EditBasicInfoFragment fragment) {
         this.context = context;
         this.arrayList = arrayList;
-        this.fragment=fragment;
+        this.frag=fragment;
     }
 
     @Override
@@ -69,7 +69,12 @@ public class Value1SpAdapter extends BaseAdapter {
 
     @Override
     public View getDropDownView(int i, View view, @NonNull ViewGroup viewGroup) {
-        if (fragment.spValue2 != -1 &&fragment.spValue3 != -1 && fragment.spValue2 == i |fragment.spValue3 == i) {
+
+       /* if(fragment instanceof EditBasicInfoFragment){
+            EditBasicInfoFragment frag = (EditBasicInfoFragment) fragment;
+
+        }*/
+        if (frag.spValue2 != -1 &&frag.spValue3 != -1 && frag.spValue2 == i |frag.spValue3 == i) {
             view = new View(context);
             view.setTag("Extra");
             return view;

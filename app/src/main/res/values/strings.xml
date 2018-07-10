@@ -149,6 +149,10 @@
     <string name="upload_cv">Upload Cv</string>
     <string name="logo_attached">Logo attached</string>
     <string name="no_result_found">No Result Found</string>
+    <string name="no_matches_found">No Matches Found</string>
+    <string name="no_favourite_found">No Favourites Found</string>
+    <string name="no_rec_found">No Recommended Found</string>
+    <string name="no_review_found">No Review Found</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="no_internet_des">No internet connection found.\nPlease check your internet connection\nand try again.</string>
     <string name="try_again">Try again</string>
@@ -187,6 +191,27 @@
     <string name="recom">Recommend</string>
     <string name="na">NA</string>
     <string name="title_activity_experince">ExperinceActivity</string>
-
+    <string name="previous_role_not_added">Previous Role Not Added</string>
+    <string name="no_resume_added">No Resume Added</string>
+    <string name="_0">0</string>
+    <string name="recommends">Recommend</string>
+    <string name="my_profile">My Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="hints">0 Favourite</string>
+    <string name="_0_recommend">0 Recommend</string>
+    <string name="favourites">Favourites</string>
+    <string name="total_experience">Total Experience</string>
+    <string name="resume_v">Your resume file is too big, please upload a file that\'s smaller than 12MB.</string>
+    <string name="uploaded_resume">Uploaded Resume</string>
+    <string name="uploaded_cv">Uploaded Cv</string>
+    <string name="view">View</string>
+    <string name="inactive_user">Your account has been inactivated by admin, please contact to activate</string>
+    <string name="resume_validation">Please press next button for upload experience</string>
+    <string name="my_favorite">My Favourites</string>
+    <string name="my_recommend">My Recommended</string>
+    <string name="download_completed">File downloaded successfully</string>
+    <string name="select_location_again">Please select location again</string>
+    <string name="close">Close</string>
+    <string name="no_map_data">Oops, no results but here is the closest match</string>
 
 </resources>

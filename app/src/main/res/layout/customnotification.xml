@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_for_profile"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_margin="@dimen/_5sdp"
+        android:paddingTop="5dp"
+        android:src="@drawable/new_app_ico" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_for_profile"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow"
+            android:text="Chetan thakur"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="@dimen/_14sdp"
+            android:fontFamily="@font/montserrat_medium" />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sdfdsfdsf"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/lightgray"
+            android:textSize="@dimen/_12sdp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

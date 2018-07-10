@@ -55,7 +55,7 @@
     </style>
 
     <style name="AppThemeRatingBar" parent="Widget.AppCompat.RatingBar.Small">
-        <item name="colorAccent">#6200ea</item>
+        <item name="colorAccent">@color/transparent</item>
         <item name="android:colorControlNormal">@color/colorPrimaryDark</item>
     </style>
 
@@ -70,5 +70,30 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DialogAnimations" />
+    <style name="DialogAnimations.SmileWindow">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_top</item>
+    </style>
+
+
+    <style name="RatingBarGray" parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="android:progressDrawable">@drawable/ratingbar_gray_selector</item>
+        <item name="android:minHeight">22dip</item>
+        <item name="android:minWidth">22dip</item>
+        <item name="android:maxWidth">26dip</item>
+        <item name="android:maxHeight">26dip</item>
+    </style>
+
+   <!-- <style name="RatingBar" parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="android:progressDrawable">@drawable/ratingbar_gray_selector</item>
+        &lt;!&ndash; <item name="colorAccent">#f9a825</item>
+         <item name="android:colorControlNormal">#f9a825</item>&ndash;&gt;
+        <item name="android:minHeight">24dip</item>
+        <item name="android:minWidth">24dip</item>
+        <item name="android:maxWidth">28dip</item>
+        <item name="android:maxHeight">28dip</item>
+    </style>-->
 
 </resources>

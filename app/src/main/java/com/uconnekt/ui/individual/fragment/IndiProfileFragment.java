@@ -1,17 +1,29 @@
 package com.uconnekt.ui.individual.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -20,7 +32,6 @@ import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.adapter.listing.ReviewListAdapter;
 import com.uconnekt.application.Uconnekt;
-import com.uconnekt.model.IndiSearchList;
 import com.uconnekt.model.ReviewList;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
@@ -37,26 +48,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
-public class IndiProfileFragment extends Fragment implements View.OnClickListener {
+public class IndiProfileFragment extends Fragment implements View.OnClickListener{
 
     private JobHomeActivity activity;
-    private IndiSearchList indiSearchLists;
+    private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "";
     private static final String ARG_PARAM1 = "param1";
-    private TextView tv_for_bio,tv_for_favofite,tv_for_review,tv_for_recomend,tv_for_noReview;
+    private TextView tv_for_bio,tv_for_favofite,tv_for_review,tv_for_aofs,tv_for_address,tv_for_recomend,tv_for_noReview,tv_for_specializationName,iv_for_fullName,tv_for_businessName;
     private RatingBar ratingBar;
-    private ImageView iv_for_favourite,iv_for_recommend;
+    private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo;
     private int favourite_count = 0,recommend_count = 0;
     public ArrayList<ReviewList> list = new ArrayList<>();
     private ReviewListAdapter reviewListAdapter;
     private RecyclerView recycler_view;
 
-    public static IndiProfileFragment newInstance(IndiSearchList indiSearchList) {
+    public static IndiProfileFragment newInstance(String userId) {
         IndiProfileFragment fragment = new IndiProfileFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, indiSearchList);
+        args.putSerializable(ARG_PARAM1, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +80,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments()!=null){
-            indiSearchLists = (IndiSearchList) getArguments().getSerializable(ARG_PARAM1);
+            userId = getArguments().getString(ARG_PARAM1);
         }
     }
 
@@ -76,8 +91,10 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         activity.setToolbarIcon(2);
         initView(view);
         apiCalling();
-        reviewListAdapter = new ReviewListAdapter(activity,list);
+        reviewListAdapter = new ReviewListAdapter(activity,list,userId);
         recycler_view.setAdapter(reviewListAdapter);
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setNestedScrollingEnabled(false);
 
         iv_for_favourite.setOnClickListener(this);
         tv_for_favofite.setOnClickListener(this);
@@ -92,13 +109,13 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         view.findViewById(R.id.iv_for_chat).setOnClickListener(this);
         view.findViewById(R.id.iv_for_share).setOnClickListener(this);
         view.findViewById(R.id.layout_for_rate).setOnClickListener(this);
-        ImageView iv_profile_image = view.findViewById(R.id.iv_profile_image);
-        ImageView iv_company_logo = view.findViewById(R.id.iv_company_logo);
-        TextView iv_for_fullName = view.findViewById(R.id.iv_for_fullName);
-        TextView tv_for_businessName = view.findViewById(R.id.tv_for_businessName);
-        TextView tv_for_specializationName = view.findViewById(R.id.tv_for_specializationName);
-        TextView tv_for_address = view.findViewById(R.id.tv_for_address);
-        TextView tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
+         iv_profile_image = view.findViewById(R.id.iv_profile_image);
+         iv_company_logo = view.findViewById(R.id.iv_company_logo);
+         iv_for_fullName = view.findViewById(R.id.iv_for_fullName);
+         tv_for_businessName = view.findViewById(R.id.tv_for_businessName);
+         tv_for_specializationName = view.findViewById(R.id.tv_for_specializationName);
+         tv_for_address = view.findViewById(R.id.tv_for_address);
+         tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
         tv_for_bio = view.findViewById(R.id.tv_for_bio);
         tv_for_favofite = view.findViewById(R.id.tv_for_favofite);
         tv_for_review = view.findViewById(R.id.tv_for_review);
@@ -108,18 +125,16 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         iv_for_recommend = view.findViewById(R.id.iv_for_recommend);
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_for_noReview = view.findViewById(R.id.tv_for_noReview);
-
-        setData(iv_profile_image,iv_company_logo,iv_for_fullName,tv_for_businessName,tv_for_specializationName,tv_for_address,tv_for_aofs);
     }
 
-    private void setData(ImageView iv_profile_image, ImageView iv_company_logo, TextView iv_for_fullName, TextView tv_for_businessName, TextView tv_for_specializationName, TextView tv_for_address, TextView tv_for_aofs){
-        Picasso.with(activity).load(indiSearchLists.profileImage).into(iv_profile_image);
-        Picasso.with(activity).load(indiSearchLists.company_logo).into(iv_company_logo);
-        iv_for_fullName.setText(indiSearchLists.fullName.isEmpty()?"NA":indiSearchLists.fullName);
-        tv_for_businessName.setText(indiSearchLists.businessName.isEmpty()?"NA":indiSearchLists.businessName);
-        tv_for_specializationName.setText(indiSearchLists.jobTitleName.isEmpty()?"NA":indiSearchLists.jobTitleName);
-        tv_for_aofs.setText(indiSearchLists.specializationName.isEmpty()?"NA":indiSearchLists.specializationName);
-        tv_for_address.setText(indiSearchLists.address.isEmpty()?"NA":indiSearchLists.address);
+    private void setData(){
+        Picasso.with(activity).load(profileImage).into(iv_profile_image);
+        Picasso.with(activity).load(company_logo).into(iv_company_logo);
+        iv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
+        tv_for_businessName.setText(businessName.isEmpty()?"NA":businessName);
+        tv_for_specializationName.setText(jobTitleName.isEmpty()?"NA":jobTitleName);
+        tv_for_aofs.setText(specializationName.isEmpty()?"NA":specializationName);
+        tv_for_address.setText(address.isEmpty()?"NA":address);
     }
 
     @Override
@@ -130,7 +145,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void apiCalling(){
-        new VolleyGetPost(activity, AllAPIs.PROFILE+"user_id="+indiSearchLists.userId,false,"Profile",true) {
+        new VolleyGetPost(activity, AllAPIs.PROFILE+"user_id="+userId,false,"Profile",true) {
             @Override
             public void onVolleyResponse(String response) {
                 try {
@@ -139,8 +154,15 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                     if (status.equals("success")) {
                         JSONArray array = jsonObject.getJSONArray("profile");
                         JSONObject object = array.getJSONObject(0);
+                        company_logo = object.getString("company_logo");
+                        profileImage = object.getString("profileImage");
+                        fullName = object.getString("fullName");
+                        jobTitleName = object.getString("jobTitleName");
+                        businessName = object.getString("businessName");
+                        specializationName = object.getString("specializationName");
+                        address = object.getString("address");
                         String bio = object.getString("bio");
-                        String rating = object.getString("rating");
+                        rating = object.getString("rating");
                         String review_count = jsonObject.getString("review_count");
                         String favourite = jsonObject.getString("favourite_count");
                         if (!favourite.isEmpty())favourite_count = Integer.parseInt(favourite);
@@ -160,6 +182,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                         reviewListAdapter.notifyDataSetChanged();
                         tv_for_noReview.setVisibility(list.size()==0?View.VISIBLE:View.GONE);
 
+                        setData();
                         setApiData(bio, rating, review_count);
                     }
                 } catch (JSONException e) {
@@ -195,11 +218,11 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
                 break;
             case R.id.iv_for_share:
-                MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
+                deletelDailog();
                 break;
             case R.id.layout_for_rate:
                 Intent intent = new Intent(activity,RatingActivity.class);
-                intent.putExtra("USERID",indiSearchLists.userId);
+                intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;
             case R.id.iv_for_favourite:
@@ -207,12 +230,14 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.tv_for_favofite:
                 intent = new Intent(activity,FavouriteActivity.class);
-                intent.putExtra("USERID",indiSearchLists.userId);
+                intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
+                //activity.addFragment(FavouriteFragment.newInstance(userId));
+               // activity.setToolbarIcon(3);
                 break;
             case R.id.tv_for_recomend:
                 intent = new Intent(activity,RecommendedActivity.class);
-                intent.putExtra("USERID",indiSearchLists.userId);
+                intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;
             case R.id.iv_for_recommend:
@@ -220,7 +245,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.tv_for_review:
                 intent = new Intent(activity,ReviewActivity.class);
-                intent.putExtra("USERID",indiSearchLists.userId);
+                intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;
         }
@@ -280,7 +305,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("favourite_for",indiSearchLists.userId);
+                params.put("favourite_for",userId);
                 return params;
             }
 
@@ -324,7 +349,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("recommend_for",indiSearchLists.userId);
+                params.put("recommend_for",userId);
                 return params;
             }
 
@@ -335,4 +360,115 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
             }
         }.executeVolley();
     }
+
+
+    private void deletelDailog() {
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.share_emp_profile);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(dialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lWindowParams);
+
+        CardView card_for_close = dialog.findViewById(R.id.card_for_close);
+        final LinearLayout layout_for_share = dialog.findViewById(R.id.layout_for_share);
+        CardView card_for_share = dialog.findViewById(R.id.card_for_share);
+        dailogData(dialog);
+
+        card_for_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        card_for_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
+                screenShot(layout_for_share);
+            }
+        });
+        dialog.show();
+    }
+
+    private void dailogData(Dialog dialog){
+        ImageView iv_profile_image = dialog.findViewById(R.id.iv_profile_image);
+        TextView tv_for_fullName = dialog.findViewById(R.id.tv_for_fullName);
+        TextView tv_for_businessName = dialog.findViewById(R.id.tv_for_businessName);
+        TextView tv_for_aofs = dialog.findViewById(R.id.tv_for_aofs);
+        TextView tv_for_address = dialog.findViewById(R.id.tv_for_address);
+        TextView tv_for_rating = dialog.findViewById(R.id.tv_for_rating);
+        TextView tv_for_favourite = dialog.findViewById(R.id.tv_for_favourite_count);
+        TextView tv_for_recomended = dialog.findViewById(R.id.tv_for_recomend);
+        TextView tv_for_bios = dialog.findViewById(R.id.tv_for_bio);
+        TextView tv_for_reviews = dialog.findViewById(R.id.tv_for_review);
+        RatingBar ratingBar = dialog.findViewById(R.id.ratingBar);
+
+        Picasso.with(activity).load(profileImage).into(iv_profile_image);
+        tv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
+        tv_for_businessName.setText(businessName.isEmpty()?"NA":businessName);
+        tv_for_address.setText(address.isEmpty()?"NA":address);
+        tv_for_aofs.setText(specializationName.isEmpty()?"NA":specializationName);
+        ratingBar.setRating(rating.isEmpty()?0:Float.parseFloat(rating));
+        tv_for_rating.setText(rating.isEmpty()?"0":rating);
+        tv_for_favourite.setText(String.valueOf(favourite_count));
+        tv_for_reviews.setText(tv_for_review.getText().toString());
+        tv_for_recomended.setText(String.valueOf(recommend_count));
+        tv_for_bios.setText(tv_for_bio.getText().toString());
+
+    }
+
+    /*.................................screenShot()...................................*/
+    private void screenShot(LinearLayout scr_shot_view) {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".png";
+            scr_shot_view.setDrawingCacheEnabled(true);
+            scr_shot_view.buildDrawingCache(true);
+            File imageFile = new File(mPath);
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            Bitmap bitmap = Bitmap.createBitmap(scr_shot_view.getDrawingCache());
+            bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream);
+            scr_shot_view.destroyDrawingCache();
+            sharOnsocial(imageFile,"Testing");
+            //onShareClick(imageFile,text);
+            //doShareLink(text,otherProfileInfo.UserDetail.profileUrl);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void sharOnsocial(File imageFile, String text) {
+        Uri uri;
+        Intent sharIntent = new Intent(Intent.ACTION_SEND);
+        String ext = imageFile.getName().substring(imageFile.getName().lastIndexOf(".") + 1);
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String type = mime.getMimeTypeFromExtension(ext);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            sharIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider",imageFile);
+            sharIntent.setDataAndType(uri, type);
+        } else {
+            uri = Uri.fromFile(imageFile);
+            sharIntent.setDataAndType(uri, type);
+        }
+
+        sharIntent.setType("image/png");
+        //sharIntent.setType("text/plain");
+        sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+"https://play.google.com/store");
+        startActivity(Intent.createChooser(sharIntent, "Share:"));
+
+    }
+
 }

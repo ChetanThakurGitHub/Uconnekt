@@ -77,7 +77,7 @@ public class EmpSearchAdapter extends RecyclerView.Adapter<EmpSearchAdapter.View
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.mainlayout:
-                    ((HomeActivity)context).addFragment(ProfileFragment.newInstance(busiSearchLists.get(getAdapterPosition())));
+                    ((HomeActivity)context).addFragment(ProfileFragment.newInstance(busiSearchLists.get(getAdapterPosition()).userId));
                     break;
             }
         }

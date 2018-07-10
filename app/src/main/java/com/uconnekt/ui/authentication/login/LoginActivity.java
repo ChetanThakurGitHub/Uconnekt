@@ -52,9 +52,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         setContentView(R.layout.activity_login);
         initView();
 
-       /* PermissionAll permissionAll = new PermissionAll();
-        permissionAll.checkLocationPermission(this);*/
-
         cusDialogProg = new CusDialogProg(this);
        if(getIntent().getExtras()!= null){
            userType = getIntent().getStringExtra("userType");
@@ -184,7 +181,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             if (userFullDetail.status.equals("1")) {
 
                                 FirebaseLogin firebaseLogin = new FirebaseLogin();
-                                firebaseLogin.firebaseLogin(userFullDetail,LoginActivity.this,isChecked, cusDialogProg);
+                                firebaseLogin.firebaseLogin(userFullDetail,LoginActivity.this,isChecked, cusDialogProg,true,false);
 
                             } else {
                                 MyCustomMessage.getInstance(LoginActivity.this).snackbar(mainlayout, "Your account has been inactivated by admin, please contact to activate");

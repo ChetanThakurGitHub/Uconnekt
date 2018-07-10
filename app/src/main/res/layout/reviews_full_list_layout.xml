@@ -20,7 +20,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="@dimen/_60sdp"
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -76,13 +76,15 @@
                         android:text="chetan thakur"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:scrollHorizontally="true" />
 
                    <FrameLayout
                        android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="@dimen/_2sdp">
 
                        <RatingBar
                            android:id="@+id/ratingBar"

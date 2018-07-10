@@ -240,7 +240,6 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
 
     } // latlog to address find
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {

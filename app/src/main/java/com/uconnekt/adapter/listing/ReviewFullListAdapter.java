@@ -30,7 +30,8 @@ public class ReviewFullListAdapter extends RecyclerView.Adapter<ReviewFullListAd
     @NonNull
     @Override
     public ReviewFullListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reviews_full_list_layout,null);
+        @SuppressLint("InflateParams")
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reviews_full_list_layout,null);
         return new ReviewFullListAdapter.ViewHolder(view);
     }
 

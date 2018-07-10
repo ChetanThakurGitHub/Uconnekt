@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_result_found"
+                android:text="@string/no_rec_found"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/lightgray"
                 android:textSize="@dimen/_15sdp"

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.uconnekt.R;
 import com.uconnekt.model.JobTitle;
-import com.uconnekt.ui.individual.individual_profile.profile_fragrment.Basic_info.BasicInfoFragment;
+import com.uconnekt.ui.individual.edit_profile.fragment.EditBasicInfoFragment;
 
 import java.util.ArrayList;
 
@@ -18,9 +18,9 @@ public class Strength3SpAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<JobTitle> arrayList;
-    private BasicInfoFragment fragment;
+    private EditBasicInfoFragment fragment;
 
-    public Strength3SpAdapter(Context context, ArrayList<JobTitle> arrayList, BasicInfoFragment fragment) {
+    public Strength3SpAdapter(Context context, ArrayList<JobTitle> arrayList, EditBasicInfoFragment fragment) {
         this.context = context;
         this.arrayList = arrayList;
         this.fragment=fragment;
