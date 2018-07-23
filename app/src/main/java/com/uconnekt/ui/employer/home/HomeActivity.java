@@ -223,7 +223,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             super.onBackPressed();
             setToolbarIcon(0);
             android.support.v4.app.Fragment fragment=getCurrentFragment();
-            if (fragment!=null &&fragment instanceof IndiMapFragment)tv_for_tittle.setText(R.string.map);
+            if (fragment!=null &&fragment instanceof MapFragment)tv_for_tittle.setText(R.string.map);
             if (fragment!=null &&fragment instanceof SearchFragment) tv_for_tittle.setText(R.string.search);
             if (fragment!=null &&fragment instanceof MyProfileFragment)setToolbarIcon(3);
             if (fragment!=null &&fragment instanceof FavouriteFragment)setToolbarIcon(7);

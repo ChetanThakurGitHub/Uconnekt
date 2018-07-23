@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -100,7 +101,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
     private ImageView iv_profile_image;
     private int position = 0;
 
-    private ClusterManager<MyItem> mClusterManager;
+    public ClusterManager<MyItem> mClusterManager;
     private Random r = new Random();
 
     @Override
@@ -334,7 +335,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 longitude = Double.valueOf(String.valueOf(location.getLongitude()));
                                 Uconnekt.latitude=latitude;
                                 Uconnekt.longitude=longitude;
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
+                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
                                 map.animateCamera(cameraUpdate);
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
@@ -343,7 +344,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                             }else if (Uconnekt.latitude!=0.0){
                                 latitude=Uconnekt.latitude;
                                 longitude=Uconnekt.longitude;
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
+                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
                                 map.animateCamera(cameraUpdate);
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
@@ -407,20 +408,17 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, Double latitude, Double longitude, String citys, String states, String countrys){
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys){
         specialityID = specialityIDs;city = citys;state = states;country=countrys;
-        jobTitleId = jobTitleIds;
-        availabilityId = availabilityIds;
-        locations = address;
-        strengthId = strengthIds;
-        valueId = valueIds;
+        jobTitleId = jobTitleIds;availabilityId = availabilityIds;locations = address;strengthId = strengthIds;valueId = valueIds;
+
        if (clatitude!=null&&clongitude!=null)createMarkerCurrent(clatitude,clongitude);
         card_for_viewPro.setVisibility(View.GONE);
 
-        if (latitude != 0.0 && longitude != 0.0){
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
+     /*   if (latitude != 0.0 && longitude != 0.0){
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
             map.animateCamera(cameraUpdate);
-        }
+        } */
 
         new VolleyGetPost(activity, AllAPIs.BUSI_SEARCH_LIST,true,"List",false ) {
             @Override
@@ -428,7 +426,10 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 try {
                     JSONObject object = new JSONObject(response);
                     String status = object.getString("status");
-                    if (status.equalsIgnoreCase("success")){
+                    String recordFound = object.getString("recordFound");
+                    if (recordFound.equals("0")) MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.no_map_data));
+
+                    if (status.equalsIgnoreCase("success")) {
                         JSONArray array = object.getJSONArray("searchList");
                         if (array!= null){
                             for (int i=0; i< array.length(); i++){
@@ -439,11 +440,29 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                             }
                             //offset = offset + 10;
                             multipleMarkers();
-                        /*    if (searchLists.size() != 0 && !searchLists.get(0).latitude.isEmpty()) {
-                                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(searchLists.get(0).latitude), Double.parseDouble(searchLists.get(0).longitude)), 10);
+
+                            if (latitude != 0.0 && longitude != 0.0) {
+                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
                                 map.animateCamera(cameraUpdate);
-                            }*/
-                            if (searchLists.size() == 0)MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.no_map_data));
+                            }
+
+                            if (searchLists.size() != 0 && !searchLists.get(0).latitude.isEmpty()) {
+                                if (recordFound.equals("0")){
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(searchLists.get(0).latitude), Double.parseDouble(searchLists.get(0).longitude)), 10);
+                                            map.animateCamera(cameraUpdate);
+                                        }
+                                    },2000);
+
+                                }else {
+                                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(searchLists.get(0).latitude), Double.parseDouble(searchLists.get(0).longitude)), 10);
+                                    map.animateCamera(cameraUpdate);
+                                }
+                            }
+
+                            if (searchLists.size() == 0)MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.no_result_found));
                         }
                     }
                 } catch (JSONException e) {
@@ -562,7 +581,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
 
         // Animate camera to the bounds
         try {
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 17));
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 15));
         } catch (Exception e) {
             e.printStackTrace();
         }

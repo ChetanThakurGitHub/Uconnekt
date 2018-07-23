@@ -29,7 +29,7 @@
     <string name="fullname_required">Name must contain 3 characters</string>
     <string name="business_required">Business Name must contain 3 characters</string>
     <string name="valid_email">Please enter valid email address</string>
-    <string name="password_required">Password must contain 6 characters</string>
+    <string name="password_required">Password should be minimum 6 characters and maximum 16 characters long.</string>
     <string name="user_v">Please select user type</string>
     <string name="for_exit">Please click BACK again to exit.</string>
 
@@ -213,5 +213,29 @@
     <string name="select_location_again">Please select location again</string>
     <string name="close">Close</string>
     <string name="no_map_data">Oops, no results but here is the closest match</string>
+    <string name="change_password_">Change Password ?</string>
+    <string name="select_job_tittle">Select job tittle</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="old_pass">Please enter your old password</string>
+    <string name="passwrod_not_match">Old password not matched</string>
+    <string name="new_pass">Please enter your new password</string>
+    <string name="c_pass">Please enter your confirm password</string>
+    <string name="cant_same">Old and new password can\'t be same</string>
+    <string name="cant_same_pass">New and confirm password not matched</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="request_interview">Request Interview</string>
+    <string name="interviewer_type">Please select Interviewer type</string>
+    <string name="interviewer_name">Please select Interviewer name</string>
+    <string name="date_V">Please select date of interview</string>
+    <string name="time_v">Please select time of interview</string>
+    <string name="location_V">Please add location</string>
+    <string name="type_here_msg">Type here…</string>
+    <string name="no_chat_found">No Chat Found</string>
+
+    <string name="block_user">Do you want to block this user</string>
+    <string name="unblock_user">Do you want to unblock this user</string>
+    <string name="current_role_not_added">Current Role Not Added</string>
+    <string name="next_rol_not_added">Next Rol Not Added</string>
 
 </resources>

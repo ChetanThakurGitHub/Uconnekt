@@ -86,6 +86,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((IndiMapFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((IndiMapFragment)activity).searchLists.clear();
                         ((IndiMapFragment)activity).map.clear();
+                        ((IndiMapFragment)activity).mClusterManager.clearItems();
                         ((IndiMapFragment)activity).getList(specialityLists.get(getAdapterPosition()).specializationId, "", "", "", 0.0, 0.0, "", "", "");
                        /* ((IndiMapFragment)activity).offset = 0;
                         ((IndiMapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/
@@ -97,6 +98,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((MapFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((MapFragment)activity).searchLists.clear();
                         ((MapFragment)activity).map.clear();
+                        ((MapFragment)activity).mClusterManager.clearItems();
                         ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "", "", "");
                         /*((MapFragment)activity).offset = 0;
                         ((MapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/

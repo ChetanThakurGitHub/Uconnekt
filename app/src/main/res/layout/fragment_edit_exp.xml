@@ -66,6 +66,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_jobTittle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -80,17 +81,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_jobTitle"
+                <TextView
+                    android:id="@+id/tv_for_jobTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:hint="@string/area_of_specialty"
+                    android:layout_toLeftOf="@+id/image" />
 
             </RelativeLayout>
 
@@ -421,6 +427,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_aofs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -435,17 +442,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_interest"
+                <TextView
+                    android:id="@+id/tv_for_aofs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image3"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:hint="@string/area_of_specialtys"
+                    android:layout_toLeftOf="@+id/image3" />
 
             </RelativeLayout>
 
@@ -537,16 +549,16 @@
         android:id="@+id/layout_for_pRole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_for_pRole1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
+            android:layout_margin="@dimen/_3sdp"
             android:elevation="@dimen/_5sdp"
             android:visibility="gone"
-            android:layout_margin="@dimen/_3sdp"
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
@@ -558,22 +570,22 @@
                     android:id="@+id/tv_for_role1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:layout_toLeftOf="@+id/iv_for_cuentRole"
                     android:ellipsize="end"
-                    android:layout_marginRight="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
-                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
                     android:textColor="@color/darkgray"
-                    android:fontFamily="@font/montserrat_regular" />
+                    android:textSize="@dimen/_12sdp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_for_cuentRole"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentRight="true"
                     android:padding="@dimen/_3sdp"
-                    app:srcCompat="@drawable/ic_down_arrow"
-                    android:layout_alignParentRight="true" />
+                    app:srcCompat="@drawable/ic_down_arrow" />
 
             </RelativeLayout>
 
@@ -583,9 +595,9 @@
             android:id="@+id/card_for_pRole2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
+            android:layout_margin="@dimen/_3sdp"
             android:elevation="@dimen/_5sdp"
             android:visibility="gone"
-            android:layout_margin="@dimen/_3sdp"
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
@@ -598,23 +610,23 @@
                     android:id="@+id/tv_for_role2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Previous Role 2"
-                    android:singleLine="true"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:layout_toLeftOf="@+id/iv_for_cuentle"
                     android:ellipsize="end"
-                    android:layout_marginRight="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
-                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:text="Previous Role 2"
                     android:textColor="@color/darkgray"
-                    android:fontFamily="@font/montserrat_regular" />
+                    android:textSize="@dimen/_12sdp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_for_cuentle"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentRight="true"
                     android:padding="@dimen/_3sdp"
-                    app:srcCompat="@drawable/ic_down_arrow"
-                    android:layout_alignParentRight="true" />
+                    app:srcCompat="@drawable/ic_down_arrow" />
 
             </RelativeLayout>
 
@@ -624,9 +636,9 @@
             android:id="@+id/card_for_pRole3"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
+            android:layout_margin="@dimen/_3sdp"
             android:elevation="@dimen/_5sdp"
             android:visibility="gone"
-            android:layout_margin="@dimen/_3sdp"
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
@@ -639,23 +651,23 @@
                     android:id="@+id/tv_for_role3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Previous Role 3"
-                    android:singleLine="true"
+                    android:layout_marginRight="@dimen/_5sdp"
                     android:layout_toLeftOf="@+id/iv_for_cuenle"
                     android:ellipsize="end"
-                    android:layout_marginRight="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
-                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:text="Previous Role 3"
                     android:textColor="@color/darkgray"
-                    android:fontFamily="@font/montserrat_regular" />
+                    android:textSize="@dimen/_12sdp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_for_cuenle"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentRight="true"
                     android:padding="@dimen/_3sdp"
-                    app:srcCompat="@drawable/ic_down_arrow"
-                    android:layout_alignParentRight="true" />
+                    app:srcCompat="@drawable/ic_down_arrow" />
 
             </RelativeLayout>
 
@@ -697,36 +709,42 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
-                android:elevation="@dimen/_5sdp"
                 android:layout_margin="@dimen/_3sdp"
+                android:elevation="@dimen/_5sdp"
                 app:cardBackgroundColor="@color/white">
 
                 <RelativeLayout
+                    android:id="@+id/layout_for_jobTittle2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_3sdp">
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_5sdp">
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/image4"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
-                        android:padding="@dimen/_3sdp"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        app:srcCompat="@drawable/ic_down_arrow"
-                        android:layout_alignParentRight="true" />
+                        android:padding="@dimen/_3sdp"
+                        app:srcCompat="@drawable/ic_down_arrow" />
 
-                    <Spinner
-                        android:id="@+id/sp_for_jobTitle2"
+                    <TextView
+                        android:id="@+id/tv_for_jobTitle2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_toLeftOf="@+id/image4"
-                        android:background="@color/transparent"
-                        android:dropDownVerticalOffset="@dimen/_30sdp"
-                        android:dropDownWidth="@dimen/_240sdp"
-                        android:gravity="center"
-                        android:spinnerMode="dropdown"/>
+                        android:textSize="@dimen/_12sdp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColorHint="@color/lightgray"
+                        android:textColor="@color/darkgray"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:hint="@string/area_of_specialty"
+                        android:layout_toLeftOf="@+id/image4" />
 
                 </RelativeLayout>
 
@@ -735,73 +753,73 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
-                android:elevation="@dimen/_5sdp"
                 android:layout_margin="@dimen/_3sdp"
+                android:elevation="@dimen/_5sdp"
                 app:cardBackgroundColor="@color/white">
 
                 <EditText
                     android:id="@+id/et_for_compyName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:imeOptions="actionDone"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:scrollHorizontally="true"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textColor="@color/darkgray"
-                    android:padding="@dimen/_5sdp"
-                    android:textColorHint="@color/lightgray"
-                    android:textSize="@dimen/_12sdp"
                     android:layout_gravity="center_vertical"
-                    android:hint="@string/company_name"/>
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/company_name"
+                    android:imeOptions="actionDone"
+                    android:padding="@dimen/_5sdp"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:textColor="@color/darkgray"
+                    android:textColorHint="@color/lightgray"
+                    android:textSize="@dimen/_12sdp" />
 
             </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:elevation="@dimen/_5sdp"
-                    android:layout_weight="1"
                     android:layout_margin="@dimen/_3sdp"
+                    android:layout_weight="1"
+                    android:elevation="@dimen/_5sdp"
                     app:cardBackgroundColor="@color/white">
 
                     <RelativeLayout
                         android:id="@+id/layout_for_startDP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:padding="@dimen/_3sdp"
-                        android:layout_marginBottom="@dimen/_5sdp">
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:id="@+id/tv_for_startDP"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/start_date"
-                            android:singleLine="true"
+                            android:layout_marginRight="@dimen/_5sdp"
                             android:layout_toLeftOf="@+id/clock2"
                             android:ellipsize="end"
-                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:hint="@string/start_date"
                             android:scrollHorizontally="true"
-                            android:textSize="@dimen/_12sdp"
-                            android:textColorHint="@color/lightgray"
+                            android:singleLine="true"
                             android:textColor="@color/darkgray"
-                            android:fontFamily="@font/montserrat_regular" />
+                            android:textColorHint="@color/lightgray"
+                            android:textSize="@dimen/_12sdp" />
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/clock2"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_alignParentRight="true"
                             android:padding="@dimen/_2sdp"
-                            app:srcCompat="@drawable/ic_clock"
-                            android:layout_alignParentRight="true" />
+                            app:srcCompat="@drawable/ic_clock" />
 
                     </RelativeLayout>
 
@@ -810,41 +828,41 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:elevation="@dimen/_5sdp"
-                    android:layout_weight="1"
                     android:layout_margin="@dimen/_3sdp"
+                    android:layout_weight="1"
+                    android:elevation="@dimen/_5sdp"
                     app:cardBackgroundColor="@color/white">
 
                     <RelativeLayout
                         android:id="@+id/layout_for_finishDP"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:padding="@dimen/_3sdp"
-                        android:layout_marginBottom="@dimen/_5sdp">
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:id="@+id/tv_for_finishDP"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/finish_date"
-                            android:singleLine="true"
+                            android:layout_marginRight="@dimen/_5sdp"
                             android:layout_toLeftOf="@+id/clock3"
                             android:ellipsize="end"
-                            android:layout_marginRight="@dimen/_5sdp"
+                            android:fontFamily="@font/montserrat_regular"
+                            android:hint="@string/finish_date"
                             android:scrollHorizontally="true"
-                            android:textSize="@dimen/_12sdp"
+                            android:singleLine="true"
                             android:textColor="@color/darkgray"
                             android:textColorHint="@color/lightgray"
-                            android:fontFamily="@font/montserrat_regular" />
+                            android:textSize="@dimen/_12sdp" />
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/clock3"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_alignParentRight="true"
                             android:padding="@dimen/_2sdp"
-                            app:srcCompat="@drawable/ic_clock"
-                            android:layout_alignParentRight="true" />
+                            app:srcCompat="@drawable/ic_clock" />
 
                     </RelativeLayout>
 
@@ -854,21 +872,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
                 android:layout_marginBottom="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:textSize="@dimen/_12sdp"
                 android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/description"
                 android:textColor="@color/darkgray"
-                android:fontFamily="@font/montserrat_regular" />
+                android:textSize="@dimen/_12sdp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_200sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginLeft="@dimen/_3sdp"
                 android:layout_marginRight="@dimen/_3sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/layout_bg">
 
                 <EditText
@@ -876,40 +894,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
+                    android:fontFamily="@font/montserrat_regular"
                     android:gravity="top|left"
-                    android:textSize="@dimen/_11sdp"
-                    android:paddingBottom="@dimen/_20sdp"
-                    android:imeOptions="actionDone"
-                    android:textColor="@color/darkgray"
                     android:hint="@string/type_here"
+                    android:imeOptions="actionDone"
                     android:maxLength="500"
                     android:padding="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_20sdp"
+                    android:textColor="@color/darkgray"
                     android:textColorHint="@color/lightgray"
-                    android:fontFamily="@font/montserrat_regular"/>
+                    android:textSize="@dimen/_11sdp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true">
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tv_for_txt2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/lightgray"
-                        android:textSize="@dimen/_10sdp"
+                        android:padding="@dimen/_3sdp"
                         android:text="@string/_200"
-                        android:padding="@dimen/_3sdp"/>
+                        android:textColor="@color/lightgray"
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/lightgray"
-                        android:textSize="@dimen/_10sdp"
+                        android:padding="@dimen/_3sdp"
                         android:text="@string/max_200_character"
-                        android:padding="@dimen/_3sdp"/>
+                        android:textColor="@color/lightgray"
+                        android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
 
@@ -921,7 +939,7 @@
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="right"
                 android:padding="@dimen/_5sdp"
-                app:srcCompat="@drawable/ic_add"/>
+                app:srcCompat="@drawable/ic_add" />
 
         </LinearLayout>
 

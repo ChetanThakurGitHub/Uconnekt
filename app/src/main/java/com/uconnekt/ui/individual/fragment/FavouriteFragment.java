@@ -67,7 +67,7 @@ public class FavouriteFragment extends Fragment {
         if(extras != null) userId = extras.getString("USERID");*/
         getReviewsList();
 
-        fullListAdapter = new FavoriteAdapter(getActivity(),favourites,userId);
+        fullListAdapter = new FavoriteAdapter(getActivity(),favourites,userId, false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);

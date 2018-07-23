@@ -132,6 +132,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="@dimen/_12sdp"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColorHint="@color/lightgray"
             android:textColor="@color/darkgray"
             android:layout_marginTop="@dimen/_5sdp"

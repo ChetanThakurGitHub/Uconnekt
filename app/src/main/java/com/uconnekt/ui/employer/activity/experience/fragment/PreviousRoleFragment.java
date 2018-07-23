@@ -26,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,7 +100,8 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                             PreviousRole previousRole = new PreviousRole();
                             JSONObject jsonObject2 = array.getJSONObject(i);
                             previousRole.previous_company_name = jsonObject2.getString("previous_company_name");
-                            previousRole.previous_description = jsonObject2.getString("previous_description");
+                           // previousRole.previous_description = jsonObject2.getString("previous_description");
+                            previousRole.previous_description = URLDecoder.decode(jsonObject2.getString("previous_description"), "UTF-8");
                             previousRole.previous_finish_date = jsonObject2.getString("previous_finish_date");
                             previousRole.previous_job_title = jsonObject2.getString("previous_job_title");
                             previousRole.previous_start_date = jsonObject2.getString("previous_start_date");
@@ -113,6 +116,8 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
 
                 } catch (JSONException e) {
                     layout_for_noData.setVisibility(View.VISIBLE);
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
@@ -358,7 +363,7 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
     private void setDate(long elapsedYear, long elapsedMonth, int i, long elapsedDays, String startDate, String endDate){
         String result ;
         if (elapsedYear != 0 | elapsedMonth != 0){
-            result = elapsedYear+" Years ,";
+            result = elapsedYear+" Years, ";
             result = result +Math.abs( elapsedMonth) + " Months";
             dateSet(i,result,startDate,endDate);
         }

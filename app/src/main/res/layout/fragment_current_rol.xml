@@ -1,15 +1,42 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.uconnekt.ui.employer.activity.experience.fragment.CurrentRoleFragment">
+
+   <LinearLayout
+       android:id="@+id/layout_for_noData"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:visibility="gone"
+       android:layout_centerInParent="true">
+
+      <android.support.v7.widget.AppCompatImageView
+          android:layout_width="@dimen/_100sdp"
+          android:layout_height="@dimen/_100sdp"
+          app:srcCompat="@drawable/ic_meeting"
+          android:layout_gravity="center" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/current_role_not_added"
+          android:fontFamily="@font/montserrat_regular"
+          android:textColor="@color/lightgray"
+          android:textSize="@dimen/_15sdp"
+          android:layout_marginTop="@dimen/_10sdp"
+          android:layout_gravity="center"/>
+
+   </LinearLayout>
 
      <ScrollView
          android:layout_width="match_parent"
          android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/layout_for_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -125,6 +152,33 @@
             android:layout_marginBottom="@dimen/_5sdp"
             android:background="@color/lightgray" />
 
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/total_experience"
+               android:fontFamily="@font/montserrat_medium"
+               android:textSize="@dimen/_12sdp"
+               android:textColor="@color/yellow" />
+
+           <TextView
+               android:id="@+id/tv_for_totalExp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textColor="@color/darkgray"
+               android:singleLine="true"
+               android:layout_marginTop="@dimen/_3sdp"
+               android:ellipsize="end"
+               android:textSize="@dimen/_12sdp"
+               android:hint="@string/na"
+               android:fontFamily="@font/montserrat_light"/>
+
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="0.5dp"
+               android:layout_marginTop="@dimen/_5sdp"
+               android:layout_marginBottom="@dimen/_5sdp"
+               android:background="@color/lightgray" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -147,4 +201,4 @@
 
      </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

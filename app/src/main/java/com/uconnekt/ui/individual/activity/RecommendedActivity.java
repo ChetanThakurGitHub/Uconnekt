@@ -52,7 +52,7 @@ public class RecommendedActivity extends AppCompatActivity implements View.OnCli
         initView();
         getReviewsList();
 
-        fullListAdapter = new RecommededAdapter(this,reviewLists,userId.equals("-1")?Uconnekt.session.getUserInfo().userId:userId,0);
+        fullListAdapter = new RecommededAdapter(this,reviewLists,userId.equals("-1")?Uconnekt.session.getUserInfo().userId:userId,0,false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);

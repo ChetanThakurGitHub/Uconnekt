@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Map;
 
 public class IndiViewProfileFragment extends Fragment {
@@ -88,7 +90,8 @@ public class IndiViewProfileFragment extends Fragment {
                         String jobTitleName = object.getString("jobTitleName");
                         String specializationName = object.getString("specializationName");
                         String address = object.getString("address");
-                        tv_for_bio.setText(bio.isEmpty()?"NA":bio);
+                        String bios = URLDecoder.decode(bio, "UTF-8");
+                        tv_for_bio.setText(bios.isEmpty()?"NA":bios);
                         String view_count = jsonObject.getString("view_count");
                         tv_for_review_count.setText(view_count.isEmpty()?"0":view_count);
                         String favourite = jsonObject.getString("favourite_count");
@@ -104,6 +107,8 @@ public class IndiViewProfileFragment extends Fragment {
                         setData(profileImage,fullName,jobTitleName,specializationName,address);
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }

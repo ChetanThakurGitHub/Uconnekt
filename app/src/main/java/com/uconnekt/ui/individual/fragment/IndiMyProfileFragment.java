@@ -37,6 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Map;
 
 public class IndiMyProfileFragment extends Fragment implements View.OnClickListener {
@@ -124,6 +126,8 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -145,7 +149,7 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         }.executeVolley();
     }
 
-    private void setData(String fullName, String specializationName, String address, String jobTitleName, String profileImage, String view_count, String bio, String favourite_count, String recommend_count){
+    private void setData(String fullName, String specializationName, String address, String jobTitleName, String profileImage, String view_count, String bio, String favourite_count, String recommend_count) throws UnsupportedEncodingException {
         ImageView bg_profile = view.findViewById(R.id.bg_profile);
         ImageView iv_profile_image = view.findViewById(R.id.iv_profile_image);
         TextView tv_for_fullName = view.findViewById(R.id.tv_for_fullName);
@@ -168,7 +172,9 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         tv_for_favourite.setText(favourite_count.isEmpty()?"0":favourite_count);
         tv_for_views.setText(view_count.isEmpty()?"0":view_count);
         tv_for_recomend.setText(recommend_count.isEmpty()?"0":recommend_count);
-        tv_for_bio.setText(bio.isEmpty()?"NA":bio);
+
+        String bios = URLDecoder.decode(bio, "UTF-8");
+        tv_for_bio.setText(bios.isEmpty()?"NA":bios);
     }
 
     @Override

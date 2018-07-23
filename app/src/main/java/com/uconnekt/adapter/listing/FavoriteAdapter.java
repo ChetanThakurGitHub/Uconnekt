@@ -2,6 +2,7 @@ package com.uconnekt.adapter.listing;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +17,8 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.Favourite;
 import com.uconnekt.singleton.MyCustomMessage;
-import com.uconnekt.ui.employer.fragment.ProfileFragment;
-import com.uconnekt.ui.employer.home.HomeActivity;
-import com.uconnekt.ui.individual.activity.FavouriteActivity;
-import com.uconnekt.ui.individual.fragment.IndiProfileFragment;
-import com.uconnekt.ui.individual.home.JobHomeActivity;
+import com.uconnekt.ui.employer.activity.ProfileActivity;
+import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.util.Utils;
 
 import java.util.ArrayList;
@@ -31,11 +29,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     private Context context;
     private ArrayList<Favourite> favourites;
     private String userId = "";
+    private boolean isMove;
 
-    public FavoriteAdapter(Context context, ArrayList<Favourite> favourites, String userId){
+    public FavoriteAdapter(Context context, ArrayList<Favourite> favourites, String userId, boolean isMove){
         this.context = context;
         this.favourites = favourites;
         this.userId = userId;
+        this.isMove = isMove;
     }
 
     @NonNull
@@ -75,7 +75,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             tv_for_date = itemView.findViewById(R.id.tv_for_date);
             card_for_chat = itemView.findViewById(R.id.card_for_chat);
             card_for_chat.setOnClickListener(this);
-            //itemView.findViewById(R.id.cardview).setOnClickListener(this);
+            if (isMove)itemView.findViewById(R.id.cardview).setOnClickListener(this);
         }
 
 
@@ -85,9 +85,32 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 case R.id.card_for_chat:
                     MyCustomMessage.getInstance(context).customToast("Under development mode....");
                     break;
-              /*  case R.id.cardview:
+                case R.id.cardview:
+                    if (Uconnekt.session.getUserInfo().userType.equals("individual")) {
+                        if (favourites.get(getAdapterPosition()).favourite_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            Intent intent = new Intent(context, IndiProfileActivity.class);
+                            intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_for);
+                            context.startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(context, IndiProfileActivity.class);
+                            intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_by);
+                            context.startActivity(intent);
+                        }
+                    }else {
+                        if (favourites.get(getAdapterPosition()).favourite_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            Intent intent = new Intent(context, ProfileActivity.class);
+                            intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_for);
+                            context.startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(context, ProfileActivity.class);
+                            intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_by);
+                            context.startActivity(intent);
+                        }
+                    }
 
-                    if (context instanceof FavouriteActivity){
+                   // context.startActivity(new Intent(context, IndiProfileActivity.class));
+
+                   /* if (context instanceof FavouriteActivity){
 
                     }else {
                         if (context instanceof HomeActivity) {
@@ -95,8 +118,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                         } else {
                             ((JobHomeActivity) context).addFragment(IndiProfileFragment.newInstance(favourites.get(getAdapterPosition()).favourite_by));
                         }
-                    }
-                    break;*/
+                    }*/
+                    break;
             }
         }
     }

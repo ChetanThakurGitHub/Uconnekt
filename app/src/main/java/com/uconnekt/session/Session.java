@@ -31,6 +31,10 @@ public class Session {
     private final String PROFILE_IMAGE = "profileImage";
     private final String PASSWORD = "password";
     private final String IS_NOTIFY = "isNotify";
+    private final String JOB_TITLE = "jobTitleName";
+    private final String RATING = "rating";
+    private final String COMPANY_LOGO = "company_logo";
+    private final String SPECIALIXANTION_NAME = "specializationName";
 
     private final String EMAIL_R = "email_r";
     private final String PASSWORD_R = "password_r";
@@ -79,6 +83,10 @@ public class Session {
         editor.putString(PROFILE_IMAGE, userInfo.profileImage);
         editor.putString(PASSWORD, userInfo.password);
         editor.putString(IS_NOTIFY, userInfo.isNotify);
+        editor.putString(JOB_TITLE, userInfo.jobTitleName);
+        editor.putString(RATING, userInfo.rating);
+        editor.putString(COMPANY_LOGO, userInfo.company_logo);
+        editor.putString(SPECIALIXANTION_NAME, userInfo.specializationName);
 
         editor.putBoolean(IS_LOGGEDIN, true);
         editor.commit();
@@ -105,6 +113,10 @@ public class Session {
         userInfo.profileImage=(mypref.getString(PROFILE_IMAGE, ""));
         userInfo.password=(mypref.getString(PASSWORD, ""));
         userInfo.isNotify=(mypref.getString(IS_NOTIFY, ""));
+        userInfo.jobTitleName=(mypref.getString(JOB_TITLE, ""));
+        userInfo.rating=(mypref.getString(RATING, ""));
+        userInfo.company_logo=(mypref.getString(COMPANY_LOGO, ""));
+        userInfo.specializationName=(mypref.getString(SPECIALIXANTION_NAME, ""));
 
         return userInfo;
     }

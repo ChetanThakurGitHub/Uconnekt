@@ -10,24 +10,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.chat.model.Chatting;
+import com.uconnekt.chat.model.FullChatting;
+import com.uconnekt.volleymultipart.VolleyGetPost;
+import com.uconnekt.web_services.AllAPIs;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Chatting> chattings;
     private Context mContext;
     private Chatting chatting;
+    private  ViewHolder viewHolder;
 
     public ChatAdapter(ArrayList<Chatting> chattings, Context mContext) {
         this.chattings = chattings;
@@ -37,18 +50,120 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @NonNull
     @Override
     public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        chatting = chattings.get(viewType);
-
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_layout, parent, false);
-        return new ChatAdapter.ViewHolder(v);
-
+        viewHolder = new ChatAdapter.ViewHolder(v);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ChatAdapter.ViewHolder holder, final int position) {
-        chatting = chattings.get(position);
-        String time = null;
 
+        viewholderCheck(holder,position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return chattings.size();
+    }
+
+    /**
+     * Image zoom view and click
+     * @param mContext activity context
+     * @param position This is position
+     */
+
+    private void zoomImageDialog(Context mContext, int position) {
+        final Dialog dialog = new Dialog(this.mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_zoomimage);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView iv_for_cansel = dialog.findViewById(R.id.iv_for_cansel);
+        iv_for_cansel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        PhotoView iv_for_image = dialog.findViewById(R.id.iv_for_image);
+
+        Chatting chat = chattings.get(position);
+
+        if (chat.message != null && !chat.message.equals("")) {
+            Picasso.with(mContext).load(chat.message).placeholder(R.drawable.ic_background).into(iv_for_image);
+        } else {
+            Picasso.with(mContext).load(R.drawable.ic_background).fit().into(iv_for_image);
+        }
+        dialog.show();
+    }
+
+    /**
+     * all ids find in a viewHolder
+     */
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private RelativeLayout layout_for_sender, layout_for_reciver,indiView,busView;
+        private TextView tv_for_senderTxt, tv_for_senderTime, tv_for_reciverTxt, tv_for_reciverTime,
+                tv_senderName,tv_reciverName,tv_for_address,tv_for_address2,tv_for_detail,tv_for_detail2;
+        private ImageView iv_for_sender, iv_for_reciver,sender_Pic,reciver_Pic;
+        private Button btn_for_accept;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+
+            layout_for_sender = itemView.findViewById(R.id.layout_for_sender);
+            layout_for_reciver = itemView.findViewById(R.id.layout_for_reciver);
+            tv_for_reciverTime = itemView.findViewById(R.id.tv_for_reciverTime);
+            tv_for_senderTime = itemView.findViewById(R.id.tv_for_senderTime);
+            tv_for_senderTxt = itemView.findViewById(R.id.tv_for_senderTxt);
+            tv_for_reciverTxt = itemView.findViewById(R.id.tv_for_reciverTxt);
+            iv_for_sender = itemView.findViewById(R.id.iv_for_sender);
+            iv_for_reciver = itemView.findViewById(R.id.iv_for_reciver);
+            tv_senderName = itemView.findViewById(R.id.tv_senderName);
+            sender_Pic = itemView.findViewById(R.id.sender_Pic);
+            reciver_Pic = itemView.findViewById(R.id.reciver_Pic);
+            tv_reciverName = itemView.findViewById(R.id.tv_reciverName);
+            indiView = itemView.findViewById(R.id.indiView);
+            busView = itemView.findViewById(R.id.busView);
+            tv_for_address = itemView.findViewById(R.id.tv_for_address);
+            tv_for_address2 = itemView.findViewById(R.id.tv_for_address2);
+            tv_for_detail = itemView.findViewById(R.id.tv_for_detail);
+            tv_for_detail2 = itemView.findViewById(R.id.tv_for_detail2);
+            btn_for_accept = itemView.findViewById(R.id.btn_for_accept);
+
+            itemView.findViewById(R.id.btn_for_decline).setOnClickListener(this);
+            btn_for_accept.setOnClickListener(this);
+            iv_for_sender.setOnClickListener(this);
+            iv_for_reciver.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.iv_for_sender:
+                    zoomImageDialog(mContext, getAdapterPosition());
+                    break;
+                case R.id.iv_for_reciver:
+                    zoomImageDialog(mContext, getAdapterPosition());
+                    break;
+                case R.id.btn_for_accept:
+                   // ((ChatActivity)mContext).interviewRequestAPI();
+                    interviewRequestAPI(chattings.get(getAdapterPosition()));
+                    break;
+                case R.id.btn_for_decline:
+
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @return time
+     */
+    private String time(){
+        String time = null;
         try {
             long timeStamp = (long) chatting.timeStamp;
 
@@ -79,110 +194,133 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return time;
+    }
 
-        if (chatting.uid.equals("2")) {
-            holder.layout_for_reciver.setVisibility(View.GONE);
-            holder.layout_for_sender.setVisibility(View.VISIBLE);
-            if (chatting.message.contains("tbicaretaker-e76f6.appspot.com")) {
-                holder.tv_for_senderTxt.setVisibility(View.GONE);
-                holder.iv_for_sender.setVisibility(View.VISIBLE);
+    /**
+     * All the check inside the method for chat
+     * @param holder viewholder
+     * @param position position of item
+     */
+    @SuppressLint("SetTextI18n")
+    private void viewholderCheck(ViewHolder holder, int position){
 
-                if (chatting.message != null && !chatting.message.equals("")) {
-                    Picasso.with(mContext).load(chatting.message).placeholder(R.drawable.ic_background).into(holder.iv_for_sender);
+        chatting = chattings.get(position);
+
+        if (chatting.location.isEmpty()) {
+            holder.indiView.setVisibility(View.GONE);
+            holder.busView.setVisibility(View.GONE);
+            if (chatting.userId.equals(Uconnekt.session.getUserInfo().userId)) {
+                holder.layout_for_reciver.setVisibility(View.GONE);
+                holder.layout_for_sender.setVisibility(View.VISIBLE);
+                if (chatting.message.contains("https://firebasestorage.googleapis.com/v0/b/uconnekt-bce51.appspot.com")) {
+                    holder.tv_for_senderTxt.setVisibility(View.GONE);
+                    holder.iv_for_sender.setVisibility(View.VISIBLE);
+
+                    if (chatting.message != null && !chatting.message.equals("")) {
+                        Picasso.with(mContext).load(chatting.message).placeholder(R.drawable.ic_background).into(holder.iv_for_sender);
+                    } else {
+                        Picasso.with(mContext).load(R.drawable.ic_background).fit().into(holder.iv_for_sender);
+                    }
                 } else {
-                    Picasso.with(mContext).load(R.drawable.ic_background).fit().into(holder.iv_for_sender);
+                    holder.iv_for_sender.setVisibility(View.GONE);
+                    holder.tv_for_senderTxt.setVisibility(View.VISIBLE);
+                    holder.tv_for_senderTxt.setText(chatting.message);
+                    holder.tv_senderName.setText(Uconnekt.session.getUserInfo().fullName);
+                    Picasso.with(mContext).load(Uconnekt.session.getUserInfo().profileImage).into(holder.sender_Pic);
                 }
-            } else {
-                holder.iv_for_sender.setVisibility(View.GONE);
-                holder.tv_for_senderTxt.setVisibility(View.VISIBLE);
-                holder.tv_for_senderTxt.setText(chatting.message);
-            }
-            holder.tv_for_senderTime.setText(time);
+                holder.tv_for_senderTime.setText(time());
 
-        } else {
-            holder.layout_for_reciver.setVisibility(View.VISIBLE);
+            } else {
+                holder.layout_for_reciver.setVisibility(View.VISIBLE);
+                holder.layout_for_sender.setVisibility(View.GONE);
+
+                if (chatting.message.contains("https://firebasestorage.googleapis.com/v0/b/uconnekt-bce51.appspot.com")) {
+                    holder.tv_for_reciverTxt.setVisibility(View.GONE);
+                    holder.iv_for_reciver.setVisibility(View.VISIBLE);
+
+                    if (chatting.message != null && !chatting.message.equals("")) {
+                        Picasso.with(mContext).load(chatting.message).placeholder(R.drawable.ic_background).into(holder.iv_for_reciver);
+                    } else {
+                        Picasso.with(mContext).load(R.drawable.ic_background).fit().into(holder.iv_for_reciver);
+                    }
+                } else {
+                    holder.iv_for_reciver.setVisibility(View.GONE);
+                    holder.tv_for_reciverTxt.setVisibility(View.VISIBLE);
+                    holder.tv_for_reciverTxt.setText(chatting.message);
+                    holder.tv_reciverName.setText(chatting.fullName);
+                    Picasso.with(mContext).load(chatting.profileImage).into(holder.reciver_Pic);
+                }
+                holder.tv_for_reciverTime.setText(time());
+            }
+        }else {
+            holder.layout_for_reciver.setVisibility(View.GONE);
             holder.layout_for_sender.setVisibility(View.GONE);
 
-            if (chatting.message.contains("tbicaretaker-e76f6.appspot.com")) {
-                holder.tv_for_reciverTxt.setVisibility(View.GONE);
-                holder.iv_for_reciver.setVisibility(View.VISIBLE);
-
-                if (chatting.message != null && !chatting.message.equals("")) {
-                    Picasso.with(mContext).load(chatting.message).placeholder(R.drawable.ic_background).into(holder.iv_for_reciver);
-                } else {
-                    Picasso.with(mContext).load(R.drawable.ic_background).fit().into(holder.iv_for_reciver);
-                }
-            } else {
-                holder.iv_for_reciver.setVisibility(View.GONE);
-                holder.tv_for_reciverTxt.setVisibility(View.VISIBLE);
-                holder.tv_for_reciverTxt.setText(chatting.message);
+            if (Uconnekt.session.getUserInfo().userType.equals("individual")) {
+                holder.indiView.setVisibility(View.VISIBLE);
+                holder.busView.setVisibility(View.GONE);
+                holder.tv_for_address.setText(chatting.location);
+                holder.tv_for_detail.setText("Addison requested employer interview on "+chatting.date + " at "+chatting.time);
+            }else {
+                holder.busView.setVisibility(View.VISIBLE);
+                holder.indiView.setVisibility(View.GONE);
+                holder.tv_for_address2.setText(chatting.location);
+                holder.tv_for_detail2.setText("Addison requested employer interview on "+chatting.date + " at "+chatting.time);
             }
-            holder.tv_for_reciverTime.setText(time);
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return chattings.size();
-    }
 
-    private void zoomImageDialog(Context mContext, int position) {
-        final Dialog dialog = new Dialog(this.mContext);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dialog_zoomimage);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+    private void interviewRequestAPI(final Chatting chatting){
 
-        ImageView iv_for_cansel = dialog.findViewById(R.id.iv_for_cansel);
-        iv_for_cansel.setOnClickListener(new View.OnClickListener() {
+        new VolleyGetPost(((ChatActivity)mContext), AllAPIs.A_D_REQUEST, true, "REQUESTUPDATE", true) {
             @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    String message = jsonObject.getString("message");
+
+                    if (status.equals("success")){
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                        // {"status":"success","message":"Interview request accepted."}
+
+                        FullChatting fullChatting = new FullChatting();
+                        fullChatting.time = chatting.time;
+                        fullChatting.date = chatting.date;
+                        fullChatting.message = chatting.message;
+                        fullChatting.timeStamp = chatting.timeStamp;
+                        fullChatting.userId = chatting.userId;
+                        fullChatting.date = chatting.date;
+                        fullChatting.location = chatting.location;
+                        fullChatting.status = "1";
+                        viewHolder.btn_for_accept.setVisibility(View.VISIBLE);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        });
-        PhotoView iv_for_image = dialog.findViewById(R.id.iv_for_image);
 
-        Chatting chat = chattings.get(position);
+            @Override
+            public void onNetError() {
 
-        if (chat.message != null && !chat.message.equals("")) {
-            Picasso.with(mContext).load(chat.message).placeholder(R.drawable.ic_background).into(iv_for_image);
-        } else {
-            Picasso.with(mContext).load(R.drawable.ic_background).fit().into(iv_for_image);
-        }
+            }
 
-        dialog.show();
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                params.put("action","1");
+                params.put("interviewId",((ChatActivity)mContext).interviewID);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        private RelativeLayout layout_for_sender, layout_for_reciver;
-        private TextView tv_for_senderTxt, tv_for_senderTime, tv_for_reciverTxt, tv_for_reciverTime;
-        private ImageView iv_for_sender, iv_for_reciver;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-
-            layout_for_sender = itemView.findViewById(R.id.layout_for_sender);
-            layout_for_reciver = itemView.findViewById(R.id.layout_for_reciver);
-            tv_for_reciverTime = itemView.findViewById(R.id.tv_for_reciverTime);
-            tv_for_senderTime = itemView.findViewById(R.id.tv_for_senderTime);
-            tv_for_senderTxt = itemView.findViewById(R.id.tv_for_senderTxt);
-            tv_for_reciverTxt = itemView.findViewById(R.id.tv_for_reciverTxt);
-            iv_for_sender = itemView.findViewById(R.id.iv_for_sender);
-            iv_for_reciver = itemView.findViewById(R.id.iv_for_reciver);
-
-            iv_for_sender.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    zoomImageDialog(mContext, getAdapterPosition());
-                }
-            });
-            iv_for_reciver.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    zoomImageDialog(mContext, getAdapterPosition());
-                }
-            });
-        }
-    }
 }

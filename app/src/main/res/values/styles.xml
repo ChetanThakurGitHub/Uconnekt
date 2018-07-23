@@ -31,7 +31,7 @@
     <style name="DefaultNumberPickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimaryDark</item>
         <item name="colorControlNormal">@color/darkgray</item>
-        <item name="windowNoTitle">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
 
     <style name="SmoothCheckBoxStyle">

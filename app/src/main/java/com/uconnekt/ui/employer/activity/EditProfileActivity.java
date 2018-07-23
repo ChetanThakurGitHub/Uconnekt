@@ -50,8 +50,11 @@ import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.sp.OnSpinerItemClick;
+import com.uconnekt.sp.SpinnerDialog;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
+import com.uconnekt.ui.employer.employer_profile.EmpProfileActivity;
 import com.uconnekt.ui.employer.employer_profile.EmpProfileIntractorImpl;
 import com.uconnekt.ui.employer.employer_profile.EmpProfilePresenter;
 import com.uconnekt.ui.employer.employer_profile.EmpProfilePresenterImpl;
@@ -69,18 +72,19 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 
-public class EditProfileActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    private Spinner sp_for_jobTitle,sp_for_specialty;
-    private CustomSpAdapter customSpAdapter,customSpAdapterSpecialty;
     private ArrayList<JobTitle> arrayList,specialityArrayList;
-    private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo;
+    private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo,tv_for_jobTitle,tv_for_aofs;
     private Double latitude, longitude;
     private BottomSheetDialog dialog;
     private ImageView iv_for_profile;
@@ -93,6 +97,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout layout_for_address;
     private EditText et_for_businessName,et_for_fullname,et_for_email;
     private int image = -1;
+
+    private SpinnerDialog spinnerDialog,spinnerDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,19 +116,11 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         et_for_email.setText(Uconnekt.session.getUserInfo().email);
 
         arrayList = new ArrayList<>();
-        customSpAdapter = new CustomSpAdapter(this, arrayList,R.layout.custom_sp);
-        sp_for_jobTitle.setAdapter(customSpAdapter);
-
         specialityArrayList = new ArrayList<>();
-        customSpAdapterSpecialty = new CustomSpAdapter(this, specialityArrayList,R.layout.custom_sp2);
-        sp_for_specialty.setAdapter(customSpAdapterSpecialty);
-
         cusDialogProg = new CusDialogProg(this);
 
         getlist();
 
-        sp_for_jobTitle.setOnItemSelectedListener(this);
-        sp_for_specialty.setOnItemSelectedListener(this);
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -145,9 +143,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView(){
-        sp_for_jobTitle = findViewById(R.id.sp_for_jobTitle);
+        tv_for_jobTitle = findViewById(R.id.tv_for_jobTitle);
+        tv_for_aofs = findViewById(R.id.tv_for_aofs);
         tv_for_logo = findViewById(R.id.tv_for_logo);
-        sp_for_specialty = findViewById(R.id.sp_for_specialty);
         tv_for_address = findViewById(R.id.tv_for_address);
         iv_for_profile = findViewById(R.id.iv_for_profile);
         tv_for_fullName = findViewById(R.id.tv_for_fullName);
@@ -162,7 +160,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         findViewById(R.id.layout_for_address).setOnClickListener(this);
         findViewById(R.id.layout_for_addLogo).setOnClickListener(this);
+        findViewById(R.id.layout_for_jobTittle).setOnClickListener(this);
         findViewById(R.id.btn_for_next).setOnClickListener(this);
+        findViewById(R.id.layout_for_aofs).setOnClickListener(this);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.edit_profile);
 
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
@@ -218,6 +218,12 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 if (permissionAll.chackCameraPermission(EditProfileActivity.this))showBottomSheetDialog();
                 image = 1;
                 break;
+            case R.id.layout_for_jobTittle:
+                spinnerDialog.showSpinerDialog();
+                break;
+            case R.id.layout_for_aofs:
+                spinnerDialog1.showSpinerDialog();
+                break;
         }
     }
 
@@ -240,28 +246,11 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         }else if (address.isEmpty()) {
             MyCustomMessage.getInstance(this).snackbar(mainlayout, getString(R.string.address_v));
         }else {
-            doProfileUpdate(address,et_for_bio.getText().toString().trim(),businessName,fullname);
+            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  doProfileUpdate(address,et_for_bio.getText().toString().trim(),businessName,fullname);
+            else MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.select_location_again));
         }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()){
-            case R.id.sp_for_jobTitle:
-                JobTitle jobTitle = arrayList.get(position);
-                jobTitleId  = jobTitle.jobTitleId;
-                break;
-            case R.id.sp_for_specialty:
-                JobTitle jobTitle1 = specialityArrayList.get(position);
-                specialtyID  = jobTitle1.jobTitleId;
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     public void showBottomSheetDialog() {
         dialog = new BottomSheetDialog(this);
@@ -367,6 +356,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         new GioAddressTask(this, latLng, new GioAddressTask.LocationListner() {
             @Override
             public void onSuccess(com.uconnekt.model.Address address) {
+                city = ""; state = ""; country = "";
                 city = address.getCity();
                 state = address.getState();
                 country = address.getCountry();
@@ -397,8 +387,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void getlist(){
-        cusDialogProg.show();
-        new VolleyGetPost(this, AllAPIs.EMPLOYER_PROFILE,false,"list",false){
+        new VolleyGetPost(this, AllAPIs.EMPLOYER_PROFILE,false,"list",true){
 
             @Override
             public void onVolleyResponse(String response) {
@@ -411,10 +400,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         arrayList.clear();
                         JSONObject result = jsonObject.getJSONObject("result");
                         JSONArray results = result.getJSONArray("job_title");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        arrayList.add(jobTitle);
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results.getJSONObject(i);
@@ -422,14 +407,16 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                             jobTitles.jobTitleName = object.getString("jobTitleName");
                             arrayList.add(jobTitles);
                         }
-                        customSpAdapter.notifyDataSetChanged();
+                        spinnerDialog = new SpinnerDialog(EditProfileActivity.this, arrayList, getString(R.string.area_of_specialty));
+                        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                jobTitleId = job.jobTitleId;
+                                tv_for_jobTitle.setText(job.jobTitleName);
+                            }
+                        });
 
                         JSONArray speciality = result.getJSONArray("speciality_list");
-                        JobTitle jobTitle1 = new JobTitle();
-                        jobTitle1.jobTitleId = "";
-                        jobTitle1.jobTitleName = "";
-                        specialityArrayList.add(jobTitle1);
-
                         for (int i = 0; i<speciality.length(); i++){
                             JobTitle speciality1 = new JobTitle();
                             JSONObject object = speciality.getJSONObject(i);
@@ -438,8 +425,17 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                             speciality1.jobTitleName = object.getString("specializationName");
                             specialityArrayList.add(speciality1);
                         }
-                        customSpAdapterSpecialty.notifyDataSetChanged();
+                        spinnerDialog1 = new SpinnerDialog(EditProfileActivity.this, specialityArrayList, getString(R.string.area_of_specialtys));
+                        spinnerDialog1.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                specialtyID = job.jobTitleId;
+                                tv_for_aofs.setText(job.jobTitleName);
+                            }
+                        });
+
                         showPrefilledData();
+
                     }
 
                 } catch (JSONException e) {
@@ -468,7 +464,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     private void doProfileUpdate(final String address, final String bio, final String businessName, final String fullname) {
 
         if (isNetworkAvailable()) {
-
             cusDialogProg.show();
 
             VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, AllAPIs.PROFILE_UPDATE, new Response.Listener<NetworkResponse>() {
@@ -529,14 +524,19 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                     params.put("businessName", businessName);
                     params.put("area_of_specialization", specialtyID);
                     params.put("address", address);
-                    params.put("bio", bio);
+                    String  enCodedStatusCode = null;
+                    try {
+                        enCodedStatusCode = URLEncoder.encode(bio, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    params.put("bio", enCodedStatusCode==null?"":enCodedStatusCode);
                     params.put("city", city==null?"":city);
                     params.put("state", state==null?"":state);
                     params.put("country", country==null?"":country);
                     params.put("latitude", latitude+"");
                     params.put("longitude", longitude+"");
                     params.put("job_title", jobTitleId);
-
 
                     return params;
                 }
@@ -591,7 +591,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         JSONObject object = array.getJSONObject(0);
                         String address = object.getString("address");
                        // company_logo = object.getString("company_logo");
-                        String bio = object.getString("bio");
+                        String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
+                        //String bio = object.getString("bio");
                         city = object.getString("city");
                         state = object.getString("state");
                         country = object.getString("country");
@@ -612,7 +613,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                             jobTitleId = jobTitle;
                             for (int i = 0; arrayList.size() > i; i++) {
                                 if (arrayList.get(i).jobTitleId.equals(jobTitle)) {
-                                    sp_for_jobTitle.setSelection(i);
+                                    tv_for_jobTitle.setText(arrayList.get(i).jobTitleName);
                                     break;
                                 }
                             }
@@ -622,7 +623,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                             specialtyID = specializationId;
                             for (int i = 0; specialityArrayList.size() > i; i++) {
                                 if (specialityArrayList.get(i).jobTitleId.equals(specializationId)) {
-                                    sp_for_specialty.setSelection(i);
+                                    tv_for_aofs.setText(specialityArrayList.get(i).jobTitleName);
                                     break;
                                 }
                             }
@@ -634,6 +635,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                 } catch (JSONException e) {
                     dismissProg();
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }

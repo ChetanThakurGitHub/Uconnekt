@@ -50,10 +50,10 @@ public class RecommendByMeFragment extends Fragment {
 
         userId = "-1";
         initView(view);
-        getReviewsList();
+        getReviewsList(true);
 
-        fullListAdapter = new RecommededAdapter(activity,reviewLists,userId.equals("-1")? Uconnekt.session.getUserInfo().userId:userId,1);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
+        fullListAdapter = new RecommededAdapter(activity,reviewLists,userId.equals("-1")? Uconnekt.session.getUserInfo().userId:userId,1, true);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);
         recycler_view.setAdapter(fullListAdapter);
@@ -70,22 +70,26 @@ public class RecommendByMeFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getReviewsList();
+                        getReviewsList(true);
                     }
                 },1000);
 
             }
         });
 
+        pagination(linearLayoutManager);
+
+        return view;
+    }
+
+    private void pagination(LinearLayoutManager linearLayoutManager){
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getReviewsList();
+                getReviewsList(false);
             }
         };
         recycler_view.addOnScrollListener(scrollListener);
-
-        return view;
     }
 
     private void initView(View view) {
@@ -100,8 +104,8 @@ public class RecommendByMeFragment extends Fragment {
         activity = (BothRecommendedActivity) context;
     }
 
-    private void getReviewsList(){
-        new VolleyGetPost(activity, userId.equals("-1")? AllAPIs.RECOMMENDS_LIST_BY_ME+"&limit="+10+"&offset="+offset:AllAPIs.RECOMMENDS_LIST+userId+"&limit="+10+"&offset="+offset, false, "Recommended", true) {
+    private void getReviewsList(Boolean loader){
+        new VolleyGetPost(activity, userId.equals("-1")? AllAPIs.RECOMMENDS_LIST_BY_ME+"&limit="+10+"&offset="+offset:AllAPIs.RECOMMENDS_LIST+userId+"&limit="+10+"&offset="+offset, false, "Recommended", loader) {
             @Override
             public void onVolleyResponse(String response) {
 

@@ -37,11 +37,13 @@
         app:cardBackgroundColor="@color/white">
 
         <RelativeLayout
+            android:id="@+id/layout_for_jobTittle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_5sdp">
 
             <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_3sdp"
@@ -50,7 +52,7 @@
                 app:srcCompat="@drawable/ic_down_arrow"
                 android:layout_alignParentRight="true" />
 
-            <Spinner
+         <!--   <Spinner
                 android:id="@+id/sp_for_jobTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +62,24 @@
                 android:dropDownVerticalOffset="@dimen/_30sdp"
                 android:dropDownWidth="@dimen/_280sdp"
                 android:gravity="center"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown"/>-->
+
+            <TextView
+                android:id="@+id/tv_for_jobTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColorHint="@color/lightgray"
+                android:textColor="@color/darkgray"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:hint="@string/select_job_tittle"
+                android:layout_toLeftOf="@+id/image"/>
 
         </RelativeLayout>
 
@@ -84,11 +103,13 @@
         app:cardBackgroundColor="@color/white">
 
         <RelativeLayout
+            android:id="@+id/layout_for_aofs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_5sdp">
 
             <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image2"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_3sdp"
@@ -97,7 +118,24 @@
                 app:srcCompat="@drawable/ic_down_arrow"
                 android:layout_alignParentRight="true" />
 
-            <Spinner
+            <TextView
+                android:id="@+id/tv_for_aofs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="@dimen/_12sdp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textColorHint="@color/lightgray"
+                android:textColor="@color/darkgray"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:hint="@string/area_of_specialty_s"
+                android:layout_toLeftOf="@+id/image2"/>
+
+          <!--  <Spinner
                 android:id="@+id/sp_for_specialty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,7 +146,7 @@
                 android:layout_marginRight="@dimen/_25sdp"
                 android:gravity="center"
                 android:spinnerMode="dropdown"/>
-
+-->
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
@@ -190,12 +228,14 @@
                 app:cardBackgroundColor="@color/white">
 
                 <RelativeLayout
+                    android:id="@+id/layout_for_strength"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="@dimen/_5sdp">
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image3"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:padding="@dimen/_3sdp"
@@ -204,7 +244,24 @@
                         app:srcCompat="@drawable/ic_down_arrow"
                         android:layout_alignParentRight="true" />
 
-                    <Spinner
+                    <TextView
+                        android:id="@+id/tv_for_strength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColorHint="@color/lightgray"
+                        android:textColor="@color/darkgray"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:hint="@string/select"
+                        android:layout_toLeftOf="@+id/image3"/>
+
+                   <!-- <Spinner
                         android:id="@+id/sp_for_strength"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -214,7 +271,7 @@
                         android:dropDownVerticalOffset="@dimen/_30sdp"
                         android:dropDownWidth="@dimen/_280sdp"
                         android:gravity="center"
-                        android:spinnerMode="dropdown"/>
+                        android:spinnerMode="dropdown"/>-->
 
                 </RelativeLayout>
 
@@ -251,11 +308,13 @@
                 app:cardBackgroundColor="@color/white">
 
                 <RelativeLayout
+                    android:id="@+id/layout_for_values"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_5sdp">
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image4"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:padding="@dimen/_3sdp"
@@ -264,7 +323,24 @@
                         app:srcCompat="@drawable/ic_down_arrow"
                         android:layout_alignParentRight="true" />
 
-                    <Spinner
+                    <TextView
+                        android:id="@+id/tv_for_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textColorHint="@color/lightgray"
+                        android:textColor="@color/darkgray"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:hint="@string/select"
+                        android:layout_toLeftOf="@+id/image4"/>
+
+                    <!--<Spinner
                         android:id="@+id/sp_for_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -276,7 +352,7 @@
                         android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:spinnerMode="dropdown"/>
-
+-->
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>

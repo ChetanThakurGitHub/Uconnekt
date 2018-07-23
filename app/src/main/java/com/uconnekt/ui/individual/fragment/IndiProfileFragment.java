@@ -32,6 +32,7 @@ import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.adapter.listing.ReviewListAdapter;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.ReviewList;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
@@ -51,6 +52,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -161,7 +164,8 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                         businessName = object.getString("businessName");
                         specializationName = object.getString("specializationName");
                         address = object.getString("address");
-                        String bio = object.getString("bio");
+                       // String bio = object.getString("bio");
+                        String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         rating = object.getString("rating");
                         String review_count = jsonObject.getString("review_count");
                         String favourite = jsonObject.getString("favourite_count");
@@ -188,6 +192,8 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 } catch (JSONException e) {
                     e.printStackTrace();
                     tv_for_noReview.setVisibility(View.VISIBLE);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -215,13 +221,17 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_for_chat:
-                MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
+                Intent intent = new Intent(activity,ChatActivity.class);
+                intent.putExtra("USERID",userId);
+                activity.startActivity(intent);
+
+                //MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
                 break;
             case R.id.iv_for_share:
                 deletelDailog();
                 break;
             case R.id.layout_for_rate:
-                Intent intent = new Intent(activity,RatingActivity.class);
+                intent = new Intent(activity,RatingActivity.class);
                 intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;

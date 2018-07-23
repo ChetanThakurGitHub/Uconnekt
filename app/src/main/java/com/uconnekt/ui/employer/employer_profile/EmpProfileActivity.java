@@ -17,11 +17,9 @@ import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -38,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.BuildConfig;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.cropper.CropImage;
 import com.uconnekt.cropper.CropImageView;
@@ -48,6 +45,8 @@ import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.sp.OnSpinerItemClick;
+import com.uconnekt.sp.SpinnerDialog;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
@@ -64,20 +63,20 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 
-public class EmpProfileActivity extends BaseActivity implements View.OnClickListener,EmpProfileView, AdapterView.OnItemSelectedListener {
+public class EmpProfileActivity extends BaseActivity implements View.OnClickListener,EmpProfileView {
 
-    private Spinner sp_for_jobTitle,sp_for_specialty;
-    private CustomSpAdapter customSpAdapter,customSpAdapterSpecialty;
     private ArrayList<JobTitle> arrayList,specialityArrayList;
     private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo;
    // private FusedLocationProviderClient mFusedLocationClient;
-    public TextView tvTags;
+    public TextView tvTags,tv_for_jobTitle,tv_for_aofs;
     private Double latitude, longitude;
    // private PermissionAll permissionAll;
     private BottomSheetDialog dialog;
@@ -92,6 +91,8 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     private EmpProfilePresenter empProfilePresenter;
     private Uri imageUri;
     private RelativeLayout layout_for_address;
+
+    private SpinnerDialog spinnerDialog,spinnerDialog1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,21 +113,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
        // location();
 
         arrayList = new ArrayList<>();
-        customSpAdapter = new CustomSpAdapter(this, arrayList,R.layout.custom_sp);
-        sp_for_jobTitle.setAdapter(customSpAdapter);
-
         specialityArrayList = new ArrayList<>();
-        customSpAdapterSpecialty = new CustomSpAdapter(this, specialityArrayList,R.layout.custom_sp2);
-        sp_for_specialty.setAdapter(customSpAdapterSpecialty);
-
-
         cusDialogProg = new CusDialogProg(this);
-
         getlist();
-
-        sp_for_jobTitle.setOnItemSelectedListener(this);
-        sp_for_specialty.setOnItemSelectedListener(this);
-
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -174,9 +163,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     }*/
 
     private void initView(){
-        sp_for_jobTitle = findViewById(R.id.sp_for_jobTitle);
+        tv_for_jobTitle = findViewById(R.id.tv_for_jobTitle);
+        tv_for_aofs = findViewById(R.id.tv_for_aofs);
         tv_for_logo = findViewById(R.id.tv_for_logo);
-        sp_for_specialty = findViewById(R.id.sp_for_specialty);
         tv_for_address = findViewById(R.id.tv_for_address);
         iv_for_profile = findViewById(R.id.iv_for_profile);
         tv_for_fullName = findViewById(R.id.tv_for_fullName);
@@ -188,7 +177,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
         findViewById(R.id.layout_for_address).setOnClickListener(this);
         findViewById(R.id.layout_for_addLogo).setOnClickListener(this);
+        findViewById(R.id.layout_for_jobTittle).setOnClickListener(this);
         findViewById(R.id.btn_for_next).setOnClickListener(this);
+        findViewById(R.id.layout_for_aofs).setOnClickListener(this);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.profile);
     }
 
@@ -233,28 +224,15 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                     String address = tv_for_address.getText().toString().trim();
                     empProfilePresenter.validationCondition(jobTitleId,specialtyID,address,profileImageBitmap);
                     break;
+                case R.id.layout_for_jobTittle:
+                    spinnerDialog.showSpinerDialog();
+                    break;
+                case R.id.layout_for_aofs:
+                    spinnerDialog1.showSpinerDialog();
+                    break;
             }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()){
-            case R.id.sp_for_jobTitle:
-                JobTitle jobTitle = arrayList.get(position);
-                jobTitleId  = jobTitle.jobTitleId;
-                break;
-            case R.id.sp_for_specialty:
-                JobTitle jobTitle1 = specialityArrayList.get(position);
-                specialtyID  = jobTitle1.jobTitleId;
-                break;
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     public void showBottomSheetDialog() {
         dialog = new BottomSheetDialog(this);
@@ -425,10 +403,6 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                         arrayList.clear();
                         JSONObject result = jsonObject.getJSONObject("result");
                         JSONArray results = result.getJSONArray("job_title");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        arrayList.add(jobTitle);
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results.getJSONObject(i);
@@ -436,14 +410,16 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                             jobTitles.jobTitleName = object.getString("jobTitleName");
                             arrayList.add(jobTitles);
                         }
-                        customSpAdapter.notifyDataSetChanged();
+                        spinnerDialog = new SpinnerDialog(EmpProfileActivity.this, arrayList, getString(R.string.area_of_specialty));
+                        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                jobTitleId = job.jobTitleId;
+                                tv_for_jobTitle.setText(job.jobTitleName);
+                            }
+                        });
 
                         JSONArray speciality = result.getJSONArray("speciality_list");
-                        JobTitle jobTitle1 = new JobTitle();
-                        jobTitle1.jobTitleId = "";
-                        jobTitle1.jobTitleName = "";
-                        specialityArrayList.add(jobTitle1);
-
                         for (int i = 0; i<speciality.length(); i++){
                             JobTitle speciality1 = new JobTitle();
                             JSONObject object = speciality.getJSONObject(i);
@@ -452,7 +428,14 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                             speciality1.jobTitleName = object.getString("specializationName");
                             specialityArrayList.add(speciality1);
                         }
-                        customSpAdapterSpecialty.notifyDataSetChanged();
+                        spinnerDialog1 = new SpinnerDialog(EmpProfileActivity.this, specialityArrayList, getString(R.string.area_of_specialtys));
+                        spinnerDialog1.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                specialtyID = job.jobTitleId;
+                                tv_for_aofs.setText(job.jobTitleName);
+                            }
+                        });
 
                     }
 
@@ -529,7 +512,13 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
                         params.put("area_of_specialization", specialtyID);
                         params.put("address", address);
-                        params.put("bio", bio);
+                    String  enCodedStatusCode = null;
+                    try {
+                        enCodedStatusCode = URLEncoder.encode(bio, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                        params.put("bio", enCodedStatusCode==null?"":enCodedStatusCode);
                         params.put("city", city==null?"":city);
                         params.put("state", state==null?"":state);
                         params.put("country", country==null?"":country);

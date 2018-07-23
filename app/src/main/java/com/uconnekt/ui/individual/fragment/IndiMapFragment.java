@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +95,7 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
     private ImageView iv_profile_image, iv_company_logo;
     private RatingBar ratingBar;
     public int position = 0;
-    private ClusterManager<MyItem> mClusterManager;
+    public ClusterManager<MyItem> mClusterManager;
     private Random r = new Random();
 
     @Override
@@ -282,7 +282,7 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
                                 longitude = Double.valueOf(String.valueOf(location.getLongitude()));
                                 Uconnekt.latitude = latitude;
                                 Uconnekt.longitude = longitude;
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
+                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
                                 map.animateCamera(cameraUpdate);
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
@@ -292,7 +292,7 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
                                 if (Uconnekt.latitude != 0.0) {
                                     latitude = Uconnekt.latitude;
                                     longitude = Uconnekt.longitude;
-                                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
+                                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
                                     map.animateCamera(cameraUpdate);
                                     clatitude = Uconnekt.latitude;
                                     clongitude = Uconnekt.longitude;
@@ -356,23 +356,17 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
-    public void getList(String specialtyIds, String ratingNos, String companys, String location, Double latitude, Double longitude, final String citys, String states, String countrys) {
+    public void getList(String specialtyIds, String ratingNos, String companys, String location, final Double latitude, final Double longitude, final String citys, String states, String countrys) {
         card_for_viewPro.setVisibility(View.GONE);
         if (clatitude != null && clongitude != null) createMarkerCurrent(clatitude, clongitude);
-        specialtyId = specialtyIds;
-        ratingNo = ratingNos;
-        company = companys;
-        address = location;
-        city = citys;
-        state = states;
-        country = countrys;
+        specialtyId = specialtyIds;ratingNo = ratingNos;company = companys;address = location;city = citys;state = states;country = countrys;
 
         mClusterManager.clearItems();
 
-        if (latitude != 0.0 && longitude != 0.0) {
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
+  /*      if (latitude != 0.0 && longitude != 0.0) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
             map.animateCamera(cameraUpdate);
-        }
+        }*/
 
         new VolleyGetPost(activity, AllAPIs.INDI_SEARCH_LIST, true, "List", true) {
             @Override
@@ -380,7 +374,8 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
                 try {
                     JSONObject object = new JSONObject(response);
                     String status = object.getString("status");
-
+                    String recordFound = object.getString("recordFound");
+if (recordFound.equals("0")) MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.no_map_data));
                     if (status.equalsIgnoreCase("success")) {
                         JSONArray array = object.getJSONArray("searchList");
                         if (array != null) {
@@ -392,12 +387,30 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
                             }
                             //offset = offset + 10;
                             multipleMarkers();
-                            if (searchLists.size() != 0 && !searchLists.get(0).latitude.isEmpty()) {
-                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(searchLists.get(0).latitude), Double.parseDouble(searchLists.get(0).longitude)), 10);
+
+                            if (latitude != 0.0 && longitude != 0.0) {
+                                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
                                 map.animateCamera(cameraUpdate);
                             }
+
+
+                            if (searchLists.size() != 0 && !searchLists.get(0).latitude.isEmpty()) {
+                                if (recordFound.equals("0")){
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(searchLists.get(0).latitude), Double.parseDouble(searchLists.get(0).longitude)), 10);
+                                            map.animateCamera(cameraUpdate);
+                                        }
+                                    },2000);
+
+                                }else {
+                                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(searchLists.get(0).latitude), Double.parseDouble(searchLists.get(0).longitude)), 10);
+                                    map.animateCamera(cameraUpdate);
+                                }
+                            }
                             if (searchLists.size() == 0)
-                                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.no_map_data));
+                                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.no_result_found));
                         }
                     }
                 } catch (JSONException e) {
@@ -508,7 +521,7 @@ public class IndiMapFragment extends Fragment implements View.OnClickListener,
 
         // Animate camera to the bounds
         try {
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 17));
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 15));
         } catch (Exception e) {
             e.printStackTrace();
         }

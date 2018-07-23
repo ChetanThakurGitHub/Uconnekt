@@ -18,6 +18,7 @@ import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.model.JobTitle;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 
 public class SpinnerDialog{
@@ -26,8 +27,9 @@ public class SpinnerDialog{
     private String dTitle;
     private OnSpinerItemClick onSpinerItemClick;
     private AlertDialog alertDialog;
-    CustomSpAdapter adapter;
+    private CustomSpAdapter adapter;
     private ArrayList<JobTitle>tmpList = new ArrayList<>();
+
 
     public SpinnerDialog(Activity activity, ArrayList<JobTitle> items, String dialogTitle) {
         this.items = items;
@@ -40,6 +42,12 @@ public class SpinnerDialog{
     }
 
     public void showSpinerDialog() {
+       /* new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        },1000);*/
         tmpList.clear();
         tmpList.addAll(items);
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
@@ -55,7 +63,7 @@ public class SpinnerDialog{
         listView.setAdapter(adapter);
         adb.setView(v);
         alertDialog = adb.create();
-        alertDialog.setCancelable(false);
+        alertDialog.setCancelable(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -26,16 +24,15 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.adapter.WeekSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
-import com.uconnekt.model.FilterList;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.Weeks;
-import com.uconnekt.shared_preference.Filter;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.sp.OnSpinerItemClick;
+import com.uconnekt.sp.SpinnerDialog;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.util.Constant;
@@ -48,8 +45,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
@@ -63,16 +58,16 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private ArrayList<JobTitle> valuesList = new ArrayList<>();
     private ArrayList<JobTitle> jobTitleList = new ArrayList<>();
     private ArrayList<Weeks> weekList = new ArrayList<>();
-    private CustomSpAdapter customSpAdapter,customSpAdapter2,valueSpAdapter,spTitleAdapter;
-    private Spinner sp_for_specialty,sp_for_strength,sp_for_value,sp_for_availability,sp_for_jobTitle;
+    private Spinner sp_for_availability;
     private WeekSpAdapter weekSpAdapter;
-    private TextView tv_for_address;
+    private TextView tv_for_address,tv_for_jobTitle,tv_for_aofs,tv_for_value,tv_for_strength;
     private LinearLayout mainlayout;
     private RelativeLayout layout_for_address;
     private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",city = "",state = "" ,country;
     private SearchFragment searchFragment;
     private MapFragment mapFragment;
     private Double latitude = 0.0,longitude = 0.0;
+   private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3,spinnerDialog4;
 
     public static  FilterFragment newInstance() {
         return new FilterFragment();
@@ -89,24 +84,11 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         View view = inflater.inflate(R.layout.fragment_filter, container, false);
         initView(view);
 
-        customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp_filete);
-        customSpAdapter2 = new CustomSpAdapter(activity, strengthsList,R.layout.custom_sp_select);
-        valueSpAdapter = new CustomSpAdapter(activity, valuesList,R.layout.custom_sp_select);
-        spTitleAdapter = new CustomSpAdapter(activity, jobTitleList,R.layout.title_sp);
         weekSpAdapter = new WeekSpAdapter(activity, weekList,R.layout.week_sp);
-        sp_for_specialty.setAdapter(customSpAdapter);
-        sp_for_strength.setAdapter(customSpAdapter2);
-        sp_for_value.setAdapter(valueSpAdapter);
         sp_for_availability.setAdapter(weekSpAdapter);
-        sp_for_jobTitle.setAdapter(spTitleAdapter);
 
         getlist();
-
-        sp_for_specialty.setOnItemSelectedListener(this);
-        sp_for_strength.setOnItemSelectedListener(this);
-        sp_for_value.setOnItemSelectedListener(this);
         sp_for_availability.setOnItemSelectedListener(this);
-        sp_for_jobTitle.setOnItemSelectedListener(this);
 
         return view;
     }
@@ -123,11 +105,15 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private void initView(View view) {
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
         view.findViewById(R.id.btn_for_search).setOnClickListener(this);
-        sp_for_specialty = view.findViewById(R.id.sp_for_specialty);
-        sp_for_strength = view.findViewById(R.id.sp_for_strength);
-        sp_for_value = view.findViewById(R.id.sp_for_value);
+        view.findViewById(R.id.layout_for_jobTittle).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_aofs).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_values).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_strength).setOnClickListener(this);
+        tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
+        tv_for_strength = view.findViewById(R.id.tv_for_strength);
+        tv_for_value = view.findViewById(R.id.tv_for_value);
         sp_for_availability = view.findViewById(R.id.sp_for_availability);
-        sp_for_jobTitle = view.findViewById(R.id.sp_for_jobTitle);
+        tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);
         tv_for_address = view.findViewById(R.id.tv_for_address);
         mainlayout = view.findViewById(R.id.mainlayout);
         layout_for_address = view.findViewById(R.id.layout_for_address);
@@ -154,6 +140,18 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             case R.id.iv_for_circular_arrow:
                 refresh();
                 break;
+            case R.id.layout_for_jobTittle:
+                spinnerDialog.showSpinerDialog();
+                break;
+            case R.id.layout_for_aofs:
+                spinnerDialog2.showSpinerDialog();
+                break;
+            case R.id.layout_for_values:
+                spinnerDialog4.showSpinerDialog();
+                break;
+            case R.id.layout_for_strength:
+                spinnerDialog3.showSpinerDialog();
+                break;
         }
     }
 
@@ -163,16 +161,12 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         if (searchFragment != null)searchFragment.tv_for_speName.setText("");
         if (mapFragment != null)mapFragment.tv_for_speName.setText("");
 
-        sp_for_specialty.setAdapter(customSpAdapter);
-        sp_for_strength.setAdapter(customSpAdapter2);
-        sp_for_value.setAdapter(valueSpAdapter);
         sp_for_availability.setAdapter(weekSpAdapter);
-        sp_for_jobTitle.setAdapter(spTitleAdapter);
+        tv_for_jobTitle.setText("");
+        tv_for_aofs.setText("");
+        tv_for_value.setText("");
+        tv_for_strength.setText("");
 
-        customSpAdapter.notifyDataSetChanged();
-        spTitleAdapter.notifyDataSetChanged();
-        customSpAdapter2.notifyDataSetChanged();
-        valueSpAdapter.notifyDataSetChanged();
         weekSpAdapter.notifyDataSetChanged();
         tv_for_address.setText("");
     }
@@ -189,6 +183,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
       //  if (mapFragment != null)mapFragment.offset = 0;
         if (mapFragment != null)mapFragment.searchLists.clear();
         if (mapFragment != null)mapFragment.map.clear();
+        if (mapFragment != null)mapFragment.mClusterManager.clearItems();
         if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country);
 
         activity.onBackPressed();
@@ -298,8 +293,6 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                         JobTitle jobTitle = new JobTitle();
                         jobTitle.jobTitleId = "";
                         jobTitle.jobTitleName = "";
-                        arrayList.add(jobTitle);
-                        jobTitleList.add(jobTitle);
                         strengthsList.add(jobTitle);
                         valuesList.add(jobTitle);
 
@@ -311,7 +304,14 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             jobTitles.jobTitleName = object.getString("specializationName");
                             arrayList.add(jobTitles);
                         }
-                        customSpAdapter.notifyDataSetChanged();
+                        spinnerDialog2 = new SpinnerDialog(activity, arrayList, getString(R.string.area_of_specialty_s));
+                        spinnerDialog2.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                specialtyId = job.jobTitleId;
+                                tv_for_aofs.setText(job.jobTitleName);
+                            }
+                        });
 
                         JSONArray results2 = result.getJSONArray("opposite_job_title");
                         for (int i = 0; i < results2.length(); i++) {
@@ -321,9 +321,17 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             jobTitles.jobTitleName = object.getString("jobTitleName");
                             jobTitleList.add(jobTitles);
                         }
-                        spTitleAdapter.notifyDataSetChanged();
+                        spinnerDialog = new SpinnerDialog(activity, jobTitleList, getString(R.string.select_job_tittle));
+                        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                jobTitleId = job.jobTitleId;
+                                tv_for_jobTitle.setText(job.jobTitleName);
+                                if (searchFragment != null)searchFragment.tv_for_speName.setText(job.jobTitleName);
+                            }
+                        });
 
-                        JSONArray strenght = result.getJSONArray("strenght_list");
+                        final JSONArray strenght = result.getJSONArray("strenght_list");
                         for (int i = 0; i < strenght.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = strenght.getJSONObject(i);
@@ -331,7 +339,14 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             jobTitles.jobTitleName = object.getString("strengthName");
                             strengthsList.add(jobTitles);
                         }
-                        customSpAdapter2.notifyDataSetChanged();
+                        spinnerDialog3 = new SpinnerDialog(activity, strengthsList, getString(R.string.select));
+                        spinnerDialog3.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                strengthId = job.jobTitleId;
+                                tv_for_strength.setText(job.jobTitleName);
+                            }
+                        });
 
                         JSONArray values = result.getJSONArray("value_list");
                         for (int i = 0; i < values.length(); i++) {
@@ -341,7 +356,14 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             jobTitles.jobTitleName = object.getString("valueName");
                             valuesList.add(jobTitles);
                         }
-                        valueSpAdapter.notifyDataSetChanged();
+                        spinnerDialog4 = new SpinnerDialog(activity, valuesList, getString(R.string.select));
+                        spinnerDialog4.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                valueId = job.jobTitleId;
+                                tv_for_value.setText(job.jobTitleName);
+                            }
+                        });
 
                         Weeks week0 = new Weeks();
                         week0.week = "";
@@ -389,27 +411,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()){
-            case R.id.sp_for_specialty:
-                JobTitle jobTitle = arrayList.get(position);
-                specialtyId = jobTitle.jobTitleId;
-                break;
-            case R.id.sp_for_strength:
-                jobTitle = strengthsList.get(position);
-                strengthId = jobTitle.jobTitleId;
-                break;
-            case R.id.sp_for_value:
-                jobTitle = valuesList.get(position);
-                valueId = jobTitle.jobTitleId;
-                break;
             case R.id.sp_for_availability:
                 Weeks weeks = weekList.get(position);
                 availabilityId = weeks.week;
-                break;
-            case R.id.sp_for_jobTitle:
-                jobTitle = jobTitleList.get(position);
-                jobTitleId = jobTitle.jobTitleId;
-                String name = jobTitle.jobTitleName;
-                if (searchFragment != null)searchFragment.tv_for_speName.setText(name);
                 break;
         }
     }

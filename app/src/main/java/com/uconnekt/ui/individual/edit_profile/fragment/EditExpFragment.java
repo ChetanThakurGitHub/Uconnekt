@@ -31,7 +31,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.adapter.WeekSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.custom_view.CusDialogProg;
@@ -40,6 +39,8 @@ import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.PreviousRole;
 import com.uconnekt.model.Weeks;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.sp.OnSpinerItemClick;
+import com.uconnekt.sp.SpinnerDialog;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.individual.edit_profile.EditListener;
 import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
@@ -51,6 +52,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,18 +69,17 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
     private IndiEditProfileActivity activity;
     private EditListener listener;
-    private CustomSpAdapter customSpAdapter,specialitySpAdapter,customSpAdapter2;
     private WeekSpAdapter weekSpAdapter;
     private ArrayList<JobTitle> arrayList,arrayList2,arrayList3;
     private ArrayList<PreviousRole> roleArrayList = new ArrayList<>();
     private ArrayList<Weeks> weekList;
-    private Spinner sp_for_jobTitle,sp_for_weeklist,sp_for_interest,sp_for_jobTitle2;
+    private Spinner sp_for_weeklist;
     private LinearLayout mainlayout,layout_for_cRole,layout_for_nextR,layout_for_pRole,layout_for_preRole;
     private String jobTitleId = "",interestId = "",availability = "",jobTitleId2 = "";
     private int setValue = -1,index = -1,checkMange = -1;
     private EditText et_for_companyName,et_for_cdescription,et_for_pdescription,et_for_compyName;
     private TextView tv_for_startD,tv_for_finishD,tv_for_txt,tv_for_address,tv_for_startDP,tv_for_finishDP,
-            tv_for_txt2,tv_for_role1,tv_for_role2,tv_for_role3;
+            tv_for_txt2,tv_for_role1,tv_for_role2,tv_for_role3,tv_for_jobTitle,tv_for_jobTitle2,tv_for_aofs;
     private ImageView iv_for_checkBox,iv_for_currentRole,iv_for_nextRole,iv_for_previousRole;
     private Boolean checkBox = false,opnClo = false,opnClo2 = false,opnClo3 =false;
     private RelativeLayout layout_for_address;
@@ -84,6 +87,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     private CusDialogProg cusDialogProg;
     private String cCompanyName = "",startDate = "",finshdate = "",address = "";
 
+    private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3;
     public static int userFillData =-1;
 
     @Override
@@ -96,20 +100,11 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         arrayList2 = new ArrayList<>();
         arrayList3 = new ArrayList<>();
         weekList = new ArrayList<>();
-        customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp);
-        customSpAdapter2 = new CustomSpAdapter(activity, arrayList3,R.layout.custom_sp);
-        specialitySpAdapter = new CustomSpAdapter(activity, arrayList2,R.layout.custom_sp_speciality);
         weekSpAdapter = new WeekSpAdapter(activity, weekList,R.layout.custom_sp_week);
-        sp_for_jobTitle.setAdapter(customSpAdapter);
-        sp_for_jobTitle2.setAdapter(customSpAdapter2);
-        sp_for_interest.setAdapter(specialitySpAdapter);
         sp_for_weeklist.setAdapter(weekSpAdapter);
 
         getlist();
 
-        sp_for_jobTitle.setOnItemSelectedListener(this);
-        sp_for_jobTitle2.setOnItemSelectedListener(this);
-        sp_for_interest.setOnItemSelectedListener(this);
         sp_for_weeklist.setOnItemSelectedListener(this);
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -168,12 +163,13 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         String current_company = object1.getString("current_company");
                         String current_start_date = object1.getString("current_start_date");
                         String current_finish_date = object1.getString("current_finish_date");
-                        String current_description = object1.getString("current_description");
+                        //String current_description = object1.getString("current_description");
+                        String current_description = URLDecoder.decode(object1.getString("current_description"), "UTF-8");
 
                         if (!jobTitleId.isEmpty()) {
                             for (int i = 0; arrayList.size() > i; i++) {
                                 if (arrayList.get(i).jobTitleId.equals(jobTitleId)) {
-                                    sp_for_jobTitle.setSelection(i);
+                                    tv_for_jobTitle.setText(arrayList.get(i).jobTitleName);
                                     break;
                                 }
                             }
@@ -238,7 +234,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                             interestId = next_speciality;
                             for (int i = 0; arrayList2.size() > i; i++) {
                                 if (arrayList2.get(i).jobTitleId.equals(next_speciality)) {
-                                    sp_for_interest.setSelection(i);
+                                    tv_for_aofs.setText(arrayList2.get(i).jobTitleName);
                                     break;
                                 }
                             }
@@ -254,6 +250,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 } catch (JSONException e) {
                     e.printStackTrace();
                     cusDialogProg.dismiss();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -287,7 +285,10 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         view.findViewById(R.id.layout_for_nextRole).setOnClickListener(this);
         view.findViewById(R.id.layout_for_previousRole).setOnClickListener(this);
         view.findViewById(R.id.iv_for_add).setOnClickListener(this);
-        sp_for_jobTitle = view.findViewById(R.id.sp_for_jobTitle);
+        view.findViewById(R.id.layout_for_jobTittle).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_jobTittle2).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_aofs).setOnClickListener(this);
+        tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);
         card_for_pRole2 = view.findViewById(R.id.card_for_pRole2);
         tv_for_role3 = view.findViewById(R.id.tv_for_role3);
         card_for_pRole3 = view.findViewById(R.id.card_for_pRole3);
@@ -295,7 +296,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         tv_for_role1 = view.findViewById(R.id.tv_for_role1);
         card_for_pRole1 = view.findViewById(R.id.card_for_pRole1);
         layout_for_preRole = view.findViewById(R.id.layout_for_preRole);
-        sp_for_jobTitle2 = view.findViewById(R.id.sp_for_jobTitle2);
+        tv_for_jobTitle2 = view.findViewById(R.id.tv_for_jobTitle2);
         et_for_compyName = view.findViewById(R.id.et_for_compyName);
         tv_for_txt2 = view.findViewById(R.id.tv_for_txt2);
         et_for_pdescription = view.findViewById(R.id.et_for_pdescription);
@@ -312,7 +313,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         tv_for_address = view.findViewById(R.id.tv_for_address);
         tv_for_txt = view.findViewById(R.id.tv_for_txt);
         tv_for_finishDP = view.findViewById(R.id.tv_for_finishDP);
-        sp_for_interest = view.findViewById(R.id.sp_for_interest);
+        tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
         iv_for_checkBox = view.findViewById(R.id.iv_for_checkBox);
         et_for_cdescription = view.findViewById(R.id.et_for_cdescription);
         sp_for_weeklist = view.findViewById(R.id.sp_for_weeklist);
@@ -417,21 +418,42 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
             case R.id.card_for_pRole1:
                 layout_for_preRole.setVisibility(View.VISIBLE);
-                roleUpdate(0);
+                try {
+                    roleUpdate(0);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 index = 0;
                 setVisibilty();
                 break;
             case R.id.card_for_pRole2:
                 layout_for_preRole.setVisibility(View.VISIBLE);
-                roleUpdate(1);
+                try {
+                    roleUpdate(1);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 index = 1;
                 setVisibilty();
                 break;
             case R.id.card_for_pRole3:
                 layout_for_preRole.setVisibility(View.VISIBLE);
-                roleUpdate(2);
+                try {
+                    roleUpdate(2);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 index = 2;
                 setVisibilty();
+                break;
+            case R.id.layout_for_jobTittle:
+                spinnerDialog.showSpinerDialog();
+                break;
+            case R.id.layout_for_jobTittle2:
+                spinnerDialog2.showSpinerDialog();
+                break;
+            case R.id.layout_for_aofs:
+                spinnerDialog3.showSpinerDialog();
                 break;
         }
     }
@@ -497,7 +519,13 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         previousRole.previous_company_name = companyName;
         previousRole.previous_start_date = startDateP;
         previousRole.previous_finish_date = finishDateP;
-        previousRole.previous_description = pdescription;
+        String  enCodedStatusCode = null;
+        try {
+            enCodedStatusCode = URLEncoder.encode(pdescription, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        previousRole.previous_description = enCodedStatusCode==null?"":enCodedStatusCode;
 
         if (index == -1) {
             if (!et_for_compyName.getText().toString().isEmpty()) {
@@ -542,8 +570,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
             }
         }
 
-        sp_for_jobTitle2.setAdapter(customSpAdapter2);
-        customSpAdapter2.notifyDataSetChanged();
+        tv_for_jobTitle2.setText("");
         et_for_compyName.setText("");
         jobTitleId2 = "";
         tv_for_startDP.setText("");
@@ -574,7 +601,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         }
     }
 
-    private void roleUpdate(int index){
+    private void roleUpdate(int index) throws UnsupportedEncodingException {
         switch (index){
             case 0:
                 card_for_pRole1.setVisibility(View.GONE);
@@ -590,11 +617,14 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         et_for_compyName.setText(roleArrayList.get(index).previous_company_name);
         tv_for_startDP.setText(roleArrayList.get(index).previous_start_date);
         tv_for_finishDP.setText(roleArrayList.get(index).previous_finish_date);
-        et_for_pdescription.setText(roleArrayList.get(index).previous_description);
+        String previous_description = URLDecoder.decode(roleArrayList.get(index).previous_description, "UTF-8");
+        et_for_pdescription.setText(previous_description);
 
         for (int i=0; arrayList3.size() > i ; i ++){
             if (arrayList3.get(i).jobTitleId.equals(roleArrayList.get(index).previous_job_title)){
-                sp_for_jobTitle2.setSelection(i);
+                tv_for_jobTitle2.setText(arrayList3.get(i).jobTitleName);
+                jobTitleId2 = arrayList3.get(i).jobTitleId;
+              //  jobTitleId2 = arrayList3.get(i).jobTitleId;
                 return;
             }
         }
@@ -650,7 +680,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         }else if (address.equalsIgnoreCase("")){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please add address");
         }else if (roleArrayList == null) {
-            if (jobTitleId2.equalsIgnoreCase("")) {
+            if (jobTitleId2.equals("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous job title");
             } else if (companyName.equalsIgnoreCase("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company name");
@@ -673,16 +703,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()){
-            case R.id.sp_for_jobTitle:
-                JobTitle jobTitles = arrayList.get(position);
-                jobTitleId = jobTitles.jobTitleId;
-                activity.Isuserfilldata= true;
-                break;
-            case R.id.sp_for_jobTitle2:
-                jobTitles = arrayList3.get(position);
-                jobTitleId2 = jobTitles.jobTitleId;
-                activity.Isuserfilldata = true;
-                break;
             case R.id.sp_for_interest:
                 JobTitle jobTitles1 = arrayList2.get(position);
                 interestId = jobTitles1.jobTitleId;
@@ -690,7 +710,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
             case R.id.sp_for_weeklist:
                 Weeks weeks = weekList.get(position);
                 availability = weeks.week;
-               activity.Isuserfilldata= true;
+                activity.Isuserfilldata= true;
                 break;
         }
     }
@@ -768,12 +788,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         arrayList.clear();
                         JSONObject result = jsonObject.getJSONObject("result");
                         JSONArray results = result.getJSONArray("job_title");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        arrayList.add(jobTitle);
-                        arrayList2.add(jobTitle);
-                        arrayList3.add(jobTitle);
+
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results.getJSONObject(i);
@@ -782,10 +797,27 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                             arrayList.add(jobTitles);
                             arrayList3.add(jobTitles);
                         }
-                        customSpAdapter.notifyDataSetChanged();
-                        customSpAdapter2.notifyDataSetChanged();
+                        spinnerDialog = new SpinnerDialog(activity, arrayList, getString(R.string.area_of_specialty));
+                        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                jobTitleId = job.jobTitleId;
+                                tv_for_jobTitle.setText(job.jobTitleName);
 
-                        JSONArray speciality = result.getJSONArray("speciality_list");
+                            }
+                        });
+                        spinnerDialog2 = new SpinnerDialog(activity, arrayList3, getString(R.string.area_of_specialty));
+                        spinnerDialog2.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                jobTitleId2 = job.jobTitleId;
+                                tv_for_jobTitle2.setText(job.jobTitleName);
+
+                            }
+                        });
+
+
+                        final JSONArray speciality = result.getJSONArray("speciality_list");
                         for (int i = 0; i < speciality.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = speciality.getJSONObject(i);
@@ -793,7 +825,15 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                             jobTitles.jobTitleName = object.getString("specializationName");
                             arrayList2.add(jobTitles);
                         }
-                        specialitySpAdapter.notifyDataSetChanged();
+                        spinnerDialog3 = new SpinnerDialog(activity, arrayList2, getString(R.string.area_of_specialtys));
+                        spinnerDialog3.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                interestId = job.jobTitleId;
+                                tv_for_aofs.setText(job.jobTitleName);
+
+                            }
+                        });
 
                         Weeks week0 = new Weeks();
                         week0.week = "";
@@ -872,9 +912,16 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 params.put("current_start_date", startDate);
                 params.put("current_finish_date",  checkBox?"":finshdate);
                 String one=(et_for_cdescription!=null)?et_for_cdescription.getText().toString():"";
-                params.put("current_description", one);
                 String two=(et_for_pdescription!=null)?et_for_pdescription.getText().toString():"";
-                params.put("previous_description",  two);
+                String  enCodedStatusCode = null,enCodedStatusCode2 = null;
+                try {
+                    enCodedStatusCode = URLEncoder.encode(one, "UTF-8");
+                    enCodedStatusCode2 = URLEncoder.encode(two, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                params.put("current_description", enCodedStatusCode == null?"":enCodedStatusCode);
+                params.put("previous_description",  enCodedStatusCode2 == null?"":enCodedStatusCode2);
                 if (array != null) params.put("previous_role",  array.toString());
                 params.put("next_availability", availability);
                 params.put("next_speciality", interestId);

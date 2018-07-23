@@ -47,6 +47,7 @@ import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
 import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.model.Address;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
@@ -67,8 +68,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.RESULT_OK;
@@ -101,9 +111,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
     private CusDialogProg cusDialogProg;
 
     private TextView tv_for_specialty;
-
-    SpinnerDialog spinnerDialog;
-    ArrayList<String> items = new ArrayList<>();
+    private SpinnerDialog spinnerDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -341,7 +349,8 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         }else if (tv_for_address.getText().toString().trim().isEmpty()){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.address_v));
         }else {
-            editUpdateBasicInfoOnServer(fullname);
+            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  editUpdateBasicInfoOnServer(fullname);
+            else MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_location_again));
         }
     }
 
@@ -399,15 +408,10 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
 
                         JSONObject result = jsonObject.getJSONObject("result");
                         JSONArray results = result.getJSONArray("speciality_list");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                      //  arrayList.add(jobTitle);
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results.getJSONObject(i);
                             jobTitles.jobTitleId = object.getString("specializationId");
-                            items.add(object.getString("specializationName"));
                             jobTitles.jobTitleName = object.getString("specializationName");
                             arrayList.add(jobTitles);
                         }
@@ -419,10 +423,8 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                             public void onClick(JobTitle job) {
                                 specialtyId = job.jobTitleId;
                                 tv_for_specialty.setText(job.jobTitleName);
-
                             }
                         });
-
 
                         JobTitle jobTitle1 = new JobTitle();
                         jobTitle1.jobTitleId = "";
@@ -524,7 +526,13 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             public Map<String, String> setParams(Map<String, String> params) {
                 params.put("area_of_specialization", specialtyId);
                 params.put("address", tv_for_address.getText().toString().trim());
-                params.put("bio", et_for_bio.getText().toString().trim());
+                String  enCodedStatusCode = null;
+                try {
+                    enCodedStatusCode = URLEncoder.encode(et_for_bio.getText().toString().trim(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                params.put("bio", enCodedStatusCode==null?"":enCodedStatusCode);
                 params.put("latitude", latitude + "");
                 params.put("longitude", longitude + "");
                 params.put("city", city==null?"":city);
@@ -609,8 +617,13 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                         params.put("fullName", fullname);
                         params.put("area_of_specialization", specialtyId);
                         params.put("address", tv_for_address.getText().toString().trim());
-                        String data = et_for_bio.getText().toString();
-                        params.put("bio", et_for_bio.getText().toString().trim());
+                        String  enCodedStatusCode = null;
+                        try {
+                            enCodedStatusCode = URLEncoder.encode(et_for_bio.getText().toString().trim(), "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        params.put("bio",enCodedStatusCode==null?"":enCodedStatusCode);
                         params.put("latitude", latitude + "");
                         params.put("longitude", longitude + "");
                         params.put("city", city==null?"":city);
@@ -654,7 +667,8 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject object = jsonObject.getJSONObject("basic_info");
                         String address = object.getString("address");
-                        String bio = object.getString("bio");
+                        //String bio = object.getString("bio");
+                        String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         city = object.getString("city");
                         state = object.getString("state");
                         country = object.getString("country");
@@ -690,6 +704,8 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
 
                 } catch (JSONException e) {
                     dismissProg();
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
@@ -870,7 +886,8 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         LatLng latLng = new LatLng(latitude,longitude);
         new GioAddressTask(activity, latLng, new GioAddressTask.LocationListner() {
             @Override
-            public void onSuccess(com.uconnekt.model.Address address) {
+            public void onSuccess(Address address) {
+                city = ""; state = ""; country = "";
                 city = address.getCity();
                 state = address.getState();
                 country = address.getCountry();

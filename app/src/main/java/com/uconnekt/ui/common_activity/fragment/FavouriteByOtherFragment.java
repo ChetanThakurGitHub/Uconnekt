@@ -2,8 +2,8 @@ package com.uconnekt.ui.common_activity.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -50,9 +50,9 @@ public class FavouriteByOtherFragment extends Fragment {
 
         userId = Uconnekt.session.getUserInfo().userId;
         initView(view);
-        getReviewsList();
+        getReviewsList(true);
 
-        fullListAdapter = new FavoriteAdapter(activity,favourites,userId.equals("-1")? Uconnekt.session.getUserInfo().userId:userId);
+        fullListAdapter = new FavoriteAdapter(activity,favourites,userId.equals("-1")? Uconnekt.session.getUserInfo().userId:userId, true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity);
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);
@@ -67,21 +67,24 @@ public class FavouriteByOtherFragment extends Fragment {
                 fullListAdapter.notifyDataSetChanged();
                 offset = 0;
                 VolleySingleton.getInstance(activity).cancelPendingRequests("FavouriteList");
-                getReviewsList();
+                getReviewsList(true);
             }
         });
 
-        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getReviewsList();
-            }
-        };
-        recycler_view.addOnScrollListener(scrollListener);
+        pagination(linearLayoutManager);
 
         return view;
     }
 
+    private void pagination(LinearLayoutManager linearLayoutManager){
+        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                getReviewsList(false);
+            }
+        };
+        recycler_view.addOnScrollListener(scrollListener);
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -96,8 +99,8 @@ public class FavouriteByOtherFragment extends Fragment {
 
 
 
-    private void getReviewsList(){
-        new VolleyGetPost(activity, userId.equals("-1")? AllAPIs.FAVOURITES_LIST_BY_ME+"&limit="+10+"&offset="+offset:AllAPIs.FAVOURITES_LIST+userId+"&limit="+10+"&offset="+offset, false, "FavouriteList", true) {
+    private void getReviewsList(boolean loader){
+        new VolleyGetPost(activity, userId.equals("-1")? AllAPIs.FAVOURITES_LIST_BY_ME+"&limit="+10+"&offset="+offset:AllAPIs.FAVOURITES_LIST+userId+"&limit="+10+"&offset="+offset, false, "FavouriteList", loader) {
             @Override
             public void onVolleyResponse(String response) {
 

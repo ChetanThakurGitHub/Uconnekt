@@ -29,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -99,7 +101,7 @@ public class ViewProifileFragment extends Fragment {
                     if (status.equals("success")) {
                         JSONArray array = jsonObject.getJSONArray("profile");
                         JSONObject object = array.getJSONObject(0);
-                        String bio = object.getString("bio");
+                        String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         String address = object.getString("address");
                         String jobTitleName = object.getString("jobTitleName");
                         String specializationName = object.getString("specializationName");
@@ -129,6 +131,8 @@ public class ViewProifileFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     tv_for_noReview.setVisibility(View.VISIBLE);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
             }
 

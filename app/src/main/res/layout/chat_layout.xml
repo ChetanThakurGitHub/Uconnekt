@@ -13,10 +13,30 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_senderName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="@dimen/_200sdp"
+            android:text="Chetan Thakur"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/montserrat_regular"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/yellow"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_below="@+id/tv_senderName">
+
+        <LinearLayout
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/corner"
+            android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/receiver_bg"
             android:orientation="vertical"
             android:padding="@dimen/_10sdp">
@@ -27,15 +47,15 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:maxWidth="@dimen/_200sdp"
-                android:text="hiii ertrejtlrjetljrtlrjtkljlketjle"
+                android:text="hiii ertrejtlrjetljr"
                 android:textColor="@color/darkgray"
                 android:textSize="@dimen/_12sdp"
                 android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/iv_for_sender"
-                android:layout_width="@dimen/_200sdp"
-                android:layout_height="@dimen/_200sdp"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
                 android:scaleType="fitXY"
                 android:visibility="gone" />
 
@@ -47,7 +67,7 @@
                 android:fontFamily="@font/montserrat_light"
                 android:text="5:30 PM"
                 android:textColor="@color/darkgray"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_10sdp" />
 
         </LinearLayout>
 
@@ -55,11 +75,23 @@
             android:id="@+id/corner"
             android:layout_width="@dimen/_10sdp"
             android:layout_height="@dimen/_10sdp"
-            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+           android:layout_toLeftOf="@+id/sender_Pic"
             app:srcCompat="@drawable/ic_chat_corner" />
 
-    </RelativeLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/sender_Pic"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_alignParentRight="true"
+            app:civ_border_width="@dimen/_1sdp"
+            app:civ_border_color="@color/chat"
+            android:src="@drawable/user"/>
 
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_for_reciver"
@@ -68,11 +100,46 @@
         android:layout_below="@+id/layout_for_sender"
         android:layout_marginTop="@dimen/_5sdp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_reciverName"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="wrap_content"
+            android:text="Chetan Thakur"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_regular"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/yellow"/>
+
+        <RelativeLayout
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_below="@+id/tv_reciverName">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/corner1"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_toRightOf="@+id/reciver_Pic"
+            app:srcCompat="@drawable/ic_chat_corner_green" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/reciver_Pic"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            app:civ_border_width="@dimen/_1sdp"
+            app:civ_border_color="@color/yellow"
+            android:src="@drawable/user"/>
+
+        <LinearLayout
+            android:layout_width="@dimen/_170sdp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/corner1"
             android:background="@drawable/sender_bg"
+            android:layout_marginTop="@dimen/_10sdp"
             android:orientation="vertical"
             android:padding="@dimen/_10sdp">
 
@@ -88,8 +155,8 @@
 
             <ImageView
                 android:id="@+id/iv_for_reciver"
-                android:layout_width="@dimen/_200sdp"
-                android:layout_height="@dimen/_200sdp"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_150sdp"
                 android:scaleType="fitXY"
                 android:visibility="gone" />
 
@@ -102,17 +169,220 @@
                 android:fontFamily="@font/montserrat_light"
                 android:text="5:30 PM"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_10sdp" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/corner1"
-            android:layout_width="@dimen/_10sdp"
-            android:layout_height="@dimen/_10sdp"
-            android:layout_alignParentLeft="true"
-            app:srcCompat="@drawable/ic_chat_corner_green" />
+        </RelativeLayout>
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/indiView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_below="@+id/layout_for_reciver">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/corner2"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_toRightOf="@+id/image"
+            app:srcCompat="@drawable/ic_chat_corner_green" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:padding="@dimen/_10sdp"
+            android:background="@drawable/indi_circle_chat"
+            android:tint="@color/yellow"
+            app:srcCompat="@drawable/ic_meeting"/>
+
+        <LinearLayout
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/corner2"
+            android:background="@drawable/sender_bg"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv_for_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:maxWidth="@dimen/_200sdp"
+                android:gravity="center"
+                android:text="Addison requested employer interview on 09.04.2018 at 11.00 am"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:src="@drawable/ic_map_icon"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:tint="@color/white"/>
+
+                <TextView
+                    android:id="@id/tv_for_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Indore mp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:textSize="@dimen/_8sdp"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_for_accept"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:textSize="@dimen/_8sdp"
+                    android:text="Accept"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/yellow"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:background="@drawable/button_bg_white"/>
+
+                <Button
+                    android:id="@+id/btn_for_decline"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:textSize="@dimen/_8sdp"
+                    android:text="Decline"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/yellow"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:background="@drawable/button_bg_white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/busView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/indiView"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_5sdp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp">
+
+            <LinearLayout
+                android:layout_width="@dimen/_170sdp"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/corner3"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/receiver_bg"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/tv_for_detail2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:maxWidth="@dimen/_200sdp"
+                    android:gravity="center"
+                    android:text="Addison requested employer interview on 09.04.2018 at 11.00 am"
+                    android:textColor="@color/darkgray"
+                    android:textSize="@dimen/_10sdp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="@dimen/_10sdp"
+                        android:src="@drawable/ic_map_icon"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:tint="@color/darkgray"/>
+
+                    <TextView
+                        android:id="@+id/tv_for_address2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Indore mp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:textSize="@dimen/_8sdp"
+                        android:textColor="@color/darkgray"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:textSize="@dimen/_8sdp"
+                    android:text="Request Send"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:textColor="@color/yellow"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:background="@drawable/button_bg_white"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/corner3"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_toLeftOf="@+id/sender_Pic1"
+                app:srcCompat="@drawable/ic_chat_corner" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/sender_Pic1"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:padding="@dimen/_10sdp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bus_circle_chat"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_meeting"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

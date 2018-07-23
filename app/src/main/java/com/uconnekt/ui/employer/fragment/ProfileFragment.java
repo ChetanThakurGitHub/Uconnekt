@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.BasicInfoActivity;
@@ -47,6 +48,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -138,7 +141,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                     if (status.equals("success")) {
                         JSONArray array = jsonObject.getJSONArray("profile");
                         JSONObject object = array.getJSONObject(0);
-                        String bio = object.getString("bio");
+                       // String bio = object.getString("bio");
+                        String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                        // String company_logo = object.getString("company_logo");
                         profileImage = object.getString("profileImage");
                         fullName = object.getString("fullName");
@@ -161,6 +165,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                         setData(profileImage,fullName,jobTitleName,specializationName,address);
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
@@ -335,7 +341,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 activity.startActivity(intent);
                 break;
             case R.id.card_for_chat:
-                MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
+               // MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
+                intent = new Intent(activity,ChatActivity.class);
+                intent.putExtra("USERID",userId);
+                activity.startActivity(intent);
                 break;
             case R.id.tv_for_favourite:
                // activity.addFragment(FavouriteFragment.newInstance(userId));

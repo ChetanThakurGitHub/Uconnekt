@@ -26,7 +26,7 @@ public class FirebaseLogin {
 
     private void writeToDBProfiles(FirebaseData firebaseData) {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference myRef = database.child("users/" + firebaseData.uid);
+        DatabaseReference myRef = database.child("users/" + firebaseData.userId);
         myRef.setValue(firebaseData);
     }
 
@@ -40,10 +40,15 @@ public class FirebaseLogin {
 
         //added
         final FirebaseData firebaseData = new FirebaseData();
-        firebaseData.name = userDetails.fullName;
+        firebaseData.fullName = userDetails.fullName;
         firebaseData.firebaseToken = FirebaseInstanceId.getInstance().getToken();
         firebaseData.userType = userDetails.userType;
-        firebaseData.uid = userDetails.userId;
+        firebaseData.userId = userDetails.userId;
+        firebaseData.profileImage = userDetails.profileImage;
+        firebaseData.specializationName = userDetails.specializationName;
+        firebaseData.jobTitleName = userDetails.jobTitleName;
+        firebaseData.rating = userDetails.rating;
+        firebaseData.company_logo = userDetails.company_logo;
         //
 
         auth.signInWithEmailAndPassword(email, password)
@@ -98,7 +103,7 @@ public class FirebaseLogin {
                 });
     }
 
-    public void firebaseRagistration(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg, final Boolean pUpdate,final Boolean isFinish) {
+    private void firebaseRagistration(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg, final Boolean pUpdate, final Boolean isFinish) {
         auth = FirebaseAuth.getInstance();
 
         String id = userDetails.userId;
@@ -106,10 +111,15 @@ public class FirebaseLogin {
         final String password = "123456";
 
         final FirebaseData firebaseData = new FirebaseData();
-        firebaseData.name = userDetails.fullName;
+        firebaseData.fullName = userDetails.fullName;
         firebaseData.firebaseToken = FirebaseInstanceId.getInstance().getToken();
         firebaseData.userType = userDetails.userType;
-        firebaseData.uid = userDetails.userId;
+        firebaseData.userId = userDetails.userId;
+        firebaseData.profileImage = userDetails.profileImage;
+        firebaseData.specializationName = userDetails.specializationName;
+        firebaseData.jobTitleName = userDetails.jobTitleName;
+        firebaseData.rating = userDetails.rating;
+        firebaseData.company_logo = userDetails.company_logo;
 
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener( loginActivity  , new OnCompleteListener<AuthResult>() {

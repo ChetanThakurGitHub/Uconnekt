@@ -13,12 +13,21 @@ import android.widget.TextView;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.ui.employer.activity.experience.ExpActivity;
+import com.uconnekt.util.Utils;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Map;
 
 public class CurrentRoleFragment extends Fragment {
@@ -59,12 +68,23 @@ public class CurrentRoleFragment extends Fragment {
                         String current_company = object.getString("current_company");
                         String current_start_date = object.getString("current_start_date");
                         String current_finish_date = object.getString("current_finish_date");
-                        String current_description = object.getString("current_description");
+                        //String current_description = object.getString("current_description");
+                        String current_description = URLDecoder.decode(object.getString("current_description"), "UTF-8");
+                        getDayDifference(current_start_date,current_finish_date,view);
+                        if (current_job_title_name.isEmpty()){
+                            view.findViewById(R.id.layout_for_noData).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.layout_for_data).setVisibility(View.GONE);
+                        }else {
+                            view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
+                            view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);
+                        }
 
                         setData(current_job_title_name,current_company,current_start_date,current_finish_date,current_description,view);
                     }
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }
@@ -91,5 +111,78 @@ public class CurrentRoleFragment extends Fragment {
         TextView tv_for_startD = view.findViewById(R.id.tv_for_startD);tv_for_startD.setText(current_start_date.isEmpty()?"NA":current_start_date);
         TextView tv_for_finishD = view.findViewById(R.id.tv_for_finishD);tv_for_finishD.setText(current_finish_date.isEmpty()?current_start_date.isEmpty()?"NA":"Still here":current_finish_date);
         TextView tv_for_description = view.findViewById(R.id.tv_for_description);tv_for_description.setText(current_description.isEmpty()?"NA":current_description);
+    }
+
+    private void getDayDifference(String departDateTime, String returnDateTime, View view) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
+        if (returnDateTime.isEmpty()){
+            returnDateTime = Utils.getCurrentDate();
+        }
+
+        try {
+            Date startDate = simpleDateFormat.parse(departDateTime);
+            Date endDate = simpleDateFormat.parse(returnDateTime);
+
+            Calendar startCalendar = new GregorianCalendar();
+            startCalendar.setTime(startDate);
+            Calendar endCalendar = new GregorianCalendar();
+            endCalendar.setTime(endDate);
+
+            int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+            int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+
+            if (diffMonth != 0){
+                diffMonth = diffMonth - 12*diffYear;
+            }
+
+            long days = 0;
+
+            if (diffMonth == 0 && diffYear == 0) {
+
+                long different = endDate.getTime() - startDate.getTime();
+
+                System.out.println("startDate : " + startDate);
+                System.out.println("endDate : " + endDate);
+                System.out.println("different : " + different);
+
+
+                long secondsInMilli = 1000;
+                long minutesInMilli = secondsInMilli * 60;
+                long hoursInMilli = minutesInMilli * 60;
+                long daysInMilli = hoursInMilli * 24;
+                long monthInMilli = daysInMilli * 30;
+                long yearInMilli = monthInMilli * 12;
+
+                long elapsedYear = different / yearInMilli;
+                different = different % yearInMilli;
+
+                long elapsedMonth = different / monthInMilli;
+                different = different % monthInMilli;
+
+                long elapsedDays = different / daysInMilli;
+
+                days = elapsedDays;
+            }
+
+
+            setDate(diffYear,diffMonth,days,view);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setDate(long elapsedYear, long elapsedMonth, long elapsedDays ,View view){
+        String result ;
+        if (elapsedYear != 0 | elapsedMonth != 0){
+            result = elapsedYear+" Years, ";
+            result = result +Math.abs( elapsedMonth) + " Months";
+            TextView tv_for_totalExp = view.findViewById(R.id.tv_for_totalExp);tv_for_totalExp.setText(result);
+        }
+
+        if (elapsedMonth == 0 && elapsedYear == 0) {
+            result = Math.abs(elapsedDays) + " Days";
+            TextView tv_for_totalExp = view.findViewById(R.id.tv_for_totalExp);tv_for_totalExp.setText(result);
+        }
     }
 }

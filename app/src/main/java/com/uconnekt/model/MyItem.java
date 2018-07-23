@@ -22,11 +22,11 @@ public class MyItem implements ClusterItem {
         profilePhoto = pictureResource;
     }
 
-  public MyItem(double lat, double lng, String title, String snippet) {
+/*  public MyItem(double lat, double lng, String title, String snippet) {
         mPosition = new LatLng(lat, lng);
         mTitle = title;
         mSnippet = snippet;
-    }
+    }*/
 
     @Override
     public LatLng getPosition() {

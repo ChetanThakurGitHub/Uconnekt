@@ -33,6 +33,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Map;
 
 public class MyProfileFragment extends Fragment implements View.OnClickListener {
@@ -107,7 +109,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                         String businessName = jsonObject.getString("businessName");
                         String jobTitleName = jsonObject.getString("jobTitleName");
                         String address = jsonObject.getString("address");
-                        String bio = jsonObject.getString("bio");
+
+                       // String bio = jsonObject.getString("bio");
+                        String bio = URLDecoder.decode(jsonObject.getString("bio"), "UTF-8");
                         String specializationName = jsonObject.getString("specializationName");
                         String rating = jsonObject.getString("rating");
                         String company_logo = jsonObject.getString("company_logo");
@@ -116,6 +120,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                         setData(fullName,businessName,jobTitleName,address,view,rating,bio,specializationName,company_logo,profileImage,favourite_count,recommend_count);
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
             }

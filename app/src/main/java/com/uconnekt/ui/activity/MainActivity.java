@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.uconnekt.R;
-import com.uconnekt.chat.fragment.ChatFragment;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addFragment(ChatFragment.newInstance(),false,R.id.framlayout);
+        //addFragment(ChatFragment.newInstance(),false,R.id.framlayout);
     }
 
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {

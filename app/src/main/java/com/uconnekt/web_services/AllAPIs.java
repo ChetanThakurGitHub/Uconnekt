@@ -19,6 +19,8 @@ public class AllAPIs {
  public static final String INDI_PROFILE = URL_WITH_LOGIN +"getUserPersonalInfo?user_id=";
  public static final String MY_PROFILE = URL_WITH_LOGIN +"getMyProfile";
  public static final String PROFILE_UPDATE = URL_WITH_LOGIN +"profileUpdate";
+ public static final String REQUEST_INTERVIEW = URL_WITHOUT_LOGIN +"requests/makeRequest";
+
 
  /*Comman APIs*/
  public static final String EMPLOYER_PROFILE = URL_WITH_LOGIN +"getDropdownList";
@@ -26,6 +28,7 @@ public class AllAPIs {
  public static final String PROFILE = URL_WITH_LOGIN +"getPublicProfile?";
  public static final String LOGOUT = URL_WITH_LOGIN +"logout";
  public static final String NOTIFICATION = URL_WITH_LOGIN +"sendNotification";
+ public static final String CHANGE_PASSWOWD = URL_WITH_LOGIN +"changePassword";
 
  public static final String RECOMMEND = URL_WITH_LOGIN +"addRecommends";
  public static final String FACOURITES = URL_WITH_LOGIN +"addFavourites";
@@ -41,8 +44,8 @@ public class AllAPIs {
  public static final String INDI_SEARCH_LIST = URL_WITH_LOGIN +"getBusinessSearchList";
  public static final String REVIEW = URL_WITH_LOGIN +"addReview";
  public static final String REVIEWS_LIST = URL_WITH_LOGIN +"getUserReviews?user_id=";
-
  public static final String VIEW_LIST = URL_WITH_LOGIN +"getUserView?user_id=";
  public static final String INDI_PROFILE_UPDATE = URL_WITH_LOGIN +"updateIndivisualProfile";
+ public static final String A_D_REQUEST = URL_WITHOUT_LOGIN +"requests/acceptDeclinedRequest";
 
 }

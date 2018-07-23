@@ -52,7 +52,7 @@ public class FavouriteActivity extends AppCompatActivity implements View.OnClick
         initView();
         getReviewsList();
 
-        fullListAdapter = new FavoriteAdapter(this,favourites,userId.equals("-1")?Uconnekt.session.getUserInfo().userId:userId);
+        fullListAdapter = new FavoriteAdapter(this,favourites,userId.equals("-1")?Uconnekt.session.getUserInfo().userId:userId,false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recycler_view.setLayoutManager(linearLayoutManager);
         linearLayoutManager.setStackFromEnd(false);

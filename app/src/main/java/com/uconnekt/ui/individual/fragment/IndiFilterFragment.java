@@ -5,8 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,11 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -28,12 +24,13 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.sp.OnSpinerItemClick;
+import com.uconnekt.sp.SpinnerDialog;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.util.Constant;
@@ -46,28 +43,25 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 import static com.uconnekt.util.Constant.RESULT_OK;
 
-public class IndiFilterFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class IndiFilterFragment extends Fragment implements View.OnClickListener {
 
     private JobHomeActivity activity;
     private LinearLayout mainlayout;
-    private TextView tv_for_address,tv_for_rating;
+    private TextView tv_for_address,tv_for_rating,tv_for_aofs,tv_for_company;
     private RelativeLayout layout_for_address;
-    private Spinner sp_for_specialty,sp_for_company;
     private ArrayList<JobTitle> arrayList = new ArrayList<>();
     private ArrayList<JobTitle> companyList = new ArrayList<>();
-    private CustomSpAdapter customSpAdapter,customSpAdapter2;
     private RatingBar ratingBar;
     private IndiSearchFragment searchFragment;
     private IndiMapFragment indiMapFragment;
     private String specialtyId = "",company = "",ratingNo = "",city = "",state = "",country = "";
     private Double latitude = 0.0,longitude = 0.0;
+    private SpinnerDialog spinnerDialog,spinnerDialog2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,15 +74,8 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_indi_filter, container, false);
         initView(view);
 
-        customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp_filete);
-        customSpAdapter2 = new CustomSpAdapter(activity, companyList,R.layout.company_sp_filete);
-        sp_for_specialty.setAdapter(customSpAdapter);
-        sp_for_company.setAdapter(customSpAdapter2);
         getlist();
-
         layout_for_address.setOnClickListener(this);
-        sp_for_specialty.setOnItemSelectedListener(this);
-        sp_for_company.setOnItemSelectedListener(this);
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @SuppressLint("SetTextI18n")
@@ -107,12 +94,14 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
         mainlayout = view.findViewById(R.id.mainlayout);
         tv_for_address = view.findViewById(R.id.tv_for_address);
         layout_for_address = view.findViewById(R.id.layout_for_address);
-        sp_for_specialty = view.findViewById(R.id.sp_for_specialty);
-        sp_for_company = view.findViewById(R.id.sp_for_company);
+        tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
+        tv_for_company = view.findViewById(R.id.tv_for_company);
         ratingBar = view.findViewById(R.id.ratingBar);
         tv_for_rating = view.findViewById(R.id.tv_for_rating);
         mainlayout.setOnClickListener(this);
         view.findViewById(R.id.btn_for_search).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_aofs).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_company).setOnClickListener(this);
         activity.findViewById(R.id.iv_for_circular_arrow).setOnClickListener(this);
     }
 
@@ -136,11 +125,6 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
                         JSONObject result = jsonObject.getJSONObject("result");
 
                         JSONArray results = result.getJSONArray("opposite_speciality_list");
-                        JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        companyList.add(jobTitle);
-                        arrayList.add(jobTitle);
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results.getJSONObject(i);
@@ -148,7 +132,16 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
                             jobTitles.jobTitleName = object.getString("specializationName");
                             arrayList.add(jobTitles);
                         }
-                        customSpAdapter.notifyDataSetChanged();
+                        spinnerDialog = new SpinnerDialog(activity, arrayList, getString(R.string.area_of_specialty_s));
+                        spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                specialtyId = job.jobTitleId;
+                                tv_for_aofs.setText(job.jobTitleName);
+                                if (searchFragment != null) searchFragment.tv_for_speName.setText(job.jobTitleName);
+                                if (indiMapFragment != null)indiMapFragment.tv_for_speName.setText(job.jobTitleName);
+                            }
+                        });
 
                         JSONArray companies = result.getJSONArray("company_list");
                         for (int i = 0; i < companies.length(); i++) {
@@ -157,7 +150,14 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
                             jobTitles.jobTitleName = object.getString("company_name");
                             companyList.add(jobTitles);
                         }
-                        customSpAdapter2.notifyDataSetChanged();
+                        spinnerDialog2 = new SpinnerDialog(activity, companyList, getString(R.string.company));
+                        spinnerDialog2.bindOnSpinerListener(new OnSpinerItemClick() {
+                            @Override
+                            public void onClick(JobTitle job) {
+                                company = job.jobTitleName;
+                                tv_for_company.setText(job.jobTitleName);
+                            }
+                        });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -269,6 +269,12 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
             case R.id.iv_for_circular_arrow:
                 refresh();
                 break;
+            case R.id.layout_for_aofs:
+                spinnerDialog.showSpinerDialog();
+                break;
+            case R.id.layout_for_company:
+                spinnerDialog2.showSpinerDialog();
+                break;
         }
     }
 
@@ -277,13 +283,12 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
        if (searchFragment != null)searchFragment.tv_for_speName.setText("");
         if (indiMapFragment != null) indiMapFragment.tv_for_speName.setText("");
 
-        sp_for_specialty.setAdapter(customSpAdapter);
-        sp_for_company.setAdapter(customSpAdapter2);
+        tv_for_aofs.setText("");
+        tv_for_company.setText("");
+
         ratingBar.setRating(0);
         ratingNo = "";
 
-        customSpAdapter.notifyDataSetChanged();
-        customSpAdapter2.notifyDataSetChanged();
         tv_for_address.setText("");
     }
 
@@ -300,12 +305,13 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
        // indiMapFragment.mSwipeRefreshLayout.setRefreshing(true);
         if (indiMapFragment != null)indiMapFragment.searchLists.clear();
         if (indiMapFragment != null)indiMapFragment.map.clear();
+        if (indiMapFragment != null)indiMapFragment.mClusterManager.clearItems();
         if (indiMapFragment != null)indiMapFragment.getList(specialtyId,ratingNo,company,address,latitude,longitude,city,state,country);
 
         activity.onBackPressed();
     }
 
-    @Override
+/*    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.sp_for_specialty:
@@ -324,7 +330,7 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
-    }
+    }*/
 
     public void setFragment(IndiSearchFragment searchFragment) {
         this.searchFragment=searchFragment;

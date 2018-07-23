@@ -2,6 +2,7 @@ package com.uconnekt.adapter.listing;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.RecommendedList;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.employer.activity.ProfileActivity;
+import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.util.Utils;
 
 import java.util.ArrayList;
@@ -25,12 +28,14 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
     private ArrayList<RecommendedList> recommendedLists;
     private String userId;
     private int myReco = 0;
+    private Boolean isMove;
 
-    public RecommededAdapter(Context context, ArrayList<RecommendedList> recommendedLists, String userId, int i){
+    public RecommededAdapter(Context context, ArrayList<RecommendedList> recommendedLists, String userId, int i, boolean isMove){
         this.context = context;
         this.recommendedLists = recommendedLists;
         this.userId = userId;
         this.myReco = i;
+        this.isMove = isMove;
     }
 
     @NonNull
@@ -78,6 +83,7 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
             iv_for_profile = itemView.findViewById(R.id.iv_for_profile);
             tv_for_rName = itemView.findViewById(R.id.tv_for_rName);
             tv_for_date = itemView.findViewById(R.id.tv_for_date);
+            if (isMove)itemView.findViewById(R.id.cardview).setOnClickListener(this);
             if (userId.equals(Uconnekt.session.getUserInfo().userId)) {
                 itemView.findViewById(R.id.card_for_chat).setOnClickListener(this);
             }
@@ -88,6 +94,29 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
             switch (v.getId()){
                 case R.id.card_for_chat:
                     MyCustomMessage.getInstance(context).customToast("Under development mode....");
+                    break;
+                case R.id.cardview:
+                    if (Uconnekt.session.getUserInfo().userType.equals("individual")){
+                    if (recommendedLists.get(getAdapterPosition()).recommend_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                        Intent intent = new Intent(context, IndiProfileActivity.class);
+                        intent.putExtra("UserId", recommendedLists.get(getAdapterPosition()).recommend_for);
+                        context.startActivity(intent);
+                    }else {
+                        Intent intent = new Intent(context, IndiProfileActivity.class);
+                        intent.putExtra("UserId", recommendedLists.get(getAdapterPosition()).recommend_by);
+                        context.startActivity(intent);
+                    }
+                    }else {
+                        if (recommendedLists.get(getAdapterPosition()).recommend_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            Intent intent = new Intent(context, ProfileActivity.class);
+                            intent.putExtra("UserId", recommendedLists.get(getAdapterPosition()).recommend_for);
+                            context.startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(context, ProfileActivity.class);
+                            intent.putExtra("UserId", recommendedLists.get(getAdapterPosition()).recommend_by);
+                            context.startActivity(intent);
+                        }
+                    }
                     break;
             }
         }

@@ -55,7 +55,6 @@
             android:dividerHeight="0.1dp"/>
 
         <TextView
-            android:clickable="true"
             android:padding="5dp"
             android:layout_gravity="right"
             android:id="@+id/close"

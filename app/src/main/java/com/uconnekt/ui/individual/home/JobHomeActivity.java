@@ -45,7 +45,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
     private TabLayout tabs;
     private TextView tv_for_tittle;
     private int click = 0;
-    private ImageView iv_for_backIco,iv_for_filter,iv_for_circular_arrow,iv_for_menu,iv_for_edit,iv_for_view;
+    private ImageView iv_for_backIco,iv_for_filter,iv_for_circular_arrow,iv_for_menu,iv_for_edit,iv_for_view,iv_for_share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
         iv_for_menu = findViewById(R.id.iv_for_menu);
         iv_for_edit = findViewById(R.id.iv_for_edit);
         iv_for_view = findViewById(R.id.iv_for_view);
+        iv_for_share = findViewById(R.id.iv_for_share);
     }
 
 
@@ -111,6 +112,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 1:
                 iv_for_backIco.setVisibility(View.VISIBLE);
@@ -119,6 +121,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 2:
                 tv_for_tittle.setText(R.string.profile);
@@ -128,6 +131,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 3:
                 tv_for_tittle.setText(R.string.favorites);
@@ -137,6 +141,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 4:
                 tv_for_tittle.setText(R.string.my_profile);
@@ -146,6 +151,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.VISIBLE);
                 iv_for_view.setVisibility(View.VISIBLE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 5:
                 tv_for_tittle.setText(R.string.setting);
@@ -155,6 +161,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 6:
                 tv_for_tittle.setText(R.string.messages);
@@ -164,6 +171,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.GONE);
                 break;
             case 7:
                 tv_for_tittle.setText(R.string.my_profile);
@@ -173,6 +181,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_menu.setVisibility(View.GONE);
                 iv_for_edit.setVisibility(View.GONE);
                 iv_for_view.setVisibility(View.GONE);
+                iv_for_share.setVisibility(View.VISIBLE);
                 break;
         }
     }
