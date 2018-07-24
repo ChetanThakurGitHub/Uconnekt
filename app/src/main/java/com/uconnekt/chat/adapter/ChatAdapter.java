@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +36,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Chatting> chattings;
     private Context mContext;
     private Chatting chatting;
-    private  ViewHolder viewHolder;
+    private ViewHolder viewHolder;
 
     public ChatAdapter(ArrayList<Chatting> chattings, Context mContext) {
         this.chattings = chattings;
@@ -58,7 +60,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final ChatAdapter.ViewHolder holder, final int position) {
 
-        viewholderCheck(holder,position);
+        viewholderCheck(holder, position);
     }
 
     @Override
@@ -68,6 +70,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     /**
      * Image zoom view and click
+     *
      * @param mContext activity context
      * @param position This is position
      */
@@ -102,13 +105,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
      * all ids find in a viewHolder
      */
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private RelativeLayout layout_for_sender, layout_for_reciver,indiView,busView;
+        private RelativeLayout layout_for_sender, layout_for_reciver, indiView, busView;
         private TextView tv_for_senderTxt, tv_for_senderTime, tv_for_reciverTxt, tv_for_reciverTime,
-                tv_senderName,tv_reciverName,tv_for_address,tv_for_address2,tv_for_detail,tv_for_detail2;
-        private ImageView iv_for_sender, iv_for_reciver,sender_Pic,reciver_Pic;
-        private Button btn_for_accept;
+                tv_senderName, tv_reciverName, tv_for_address, tv_for_address2, tv_for_detail,
+                tv_for_detail2,tv_for_btn;
+        private ImageView iv_for_sender, iv_for_reciver, sender_Pic, reciver_Pic;
+        private LinearLayout layout_for_btn;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -131,12 +135,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             tv_for_address2 = itemView.findViewById(R.id.tv_for_address2);
             tv_for_detail = itemView.findViewById(R.id.tv_for_detail);
             tv_for_detail2 = itemView.findViewById(R.id.tv_for_detail2);
-            btn_for_accept = itemView.findViewById(R.id.btn_for_accept);
+            tv_for_btn = itemView.findViewById(R.id.tv_for_btn);
+            layout_for_btn = itemView.findViewById(R.id.layout_for_btn);
 
             itemView.findViewById(R.id.btn_for_decline).setOnClickListener(this);
-            btn_for_accept.setOnClickListener(this);
+            itemView.findViewById(R.id.btn_for_accept).setOnClickListener(this);
             iv_for_sender.setOnClickListener(this);
             iv_for_reciver.setOnClickListener(this);
+            tv_for_btn.setOnClickListener(this);
         }
 
         @Override
@@ -149,10 +155,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     zoomImageDialog(mContext, getAdapterPosition());
                     break;
                 case R.id.btn_for_accept:
-                   // ((ChatActivity)mContext).interviewRequestAPI();
-                    interviewRequestAPI(chattings.get(getAdapterPosition()));
+                    // ((ChatActivity)mContext).interviewRequestAPI();
+                    interviewRequestAPI(chattings.get(getAdapterPosition()),1);
                     break;
                 case R.id.btn_for_decline:
+                    interviewRequestAPI(chattings.get(getAdapterPosition()), 2);
+                    break;
+                case R.id.tv_for_btn:
 
                     break;
             }
@@ -162,7 +171,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     /**
      * @return time
      */
-    private String time(){
+    private String time() {
         String time = null;
         try {
             long timeStamp = (long) chatting.timeStamp;
@@ -199,11 +208,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     /**
      * All the check inside the method for chat
-     * @param holder viewholder
+     *
+     * @param holder   viewholder
      * @param position position of item
      */
     @SuppressLint("SetTextI18n")
-    private void viewholderCheck(ViewHolder holder, int position){
+    private void viewholderCheck(ViewHolder holder, int position) {
 
         chatting = chattings.get(position);
 
@@ -253,28 +263,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 }
                 holder.tv_for_reciverTime.setText(time());
             }
-        }else {
+        } else {
             holder.layout_for_reciver.setVisibility(View.GONE);
             holder.layout_for_sender.setVisibility(View.GONE);
+
+            if(!chatting.status.equals("0")) {
+                viewHolder.tv_for_btn.setVisibility(View.VISIBLE);
+                viewHolder.layout_for_btn.setVisibility(View.GONE);
+                viewHolder.tv_for_btn.setText(chatting.status.equals("1")?"Accepted interview":"Decline interview");
+            }else {
+                viewHolder.tv_for_btn.setVisibility(View.GONE);
+                viewHolder.layout_for_btn.setVisibility(View.VISIBLE);
+            }
 
             if (Uconnekt.session.getUserInfo().userType.equals("individual")) {
                 holder.indiView.setVisibility(View.VISIBLE);
                 holder.busView.setVisibility(View.GONE);
                 holder.tv_for_address.setText(chatting.location);
-                holder.tv_for_detail.setText("Addison requested employer interview on "+chatting.date + " at "+chatting.time);
-            }else {
+                holder.tv_for_detail.setText("Addison requested employer interview on " + chatting.date + " at " + chatting.time);
+            } else {
                 holder.busView.setVisibility(View.VISIBLE);
                 holder.indiView.setVisibility(View.GONE);
                 holder.tv_for_address2.setText(chatting.location);
-                holder.tv_for_detail2.setText("Addison requested employer interview on "+chatting.date + " at "+chatting.time);
+                holder.tv_for_detail2.setText("Addison requested employer interview on " + chatting.date + " at " + chatting.time);
             }
         }
     }
 
-
-    private void interviewRequestAPI(final Chatting chatting){
-
-        new VolleyGetPost(((ChatActivity)mContext), AllAPIs.A_D_REQUEST, true, "REQUESTUPDATE", true) {
+    private void interviewRequestAPI(final Chatting chatting, final int i) {
+        new VolleyGetPost(((ChatActivity) mContext), AllAPIs.A_D_REQUEST, true, "REQUESTUPDATE", true) {
             @Override
             public void onVolleyResponse(String response) {
                 try {
@@ -284,20 +301,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                     if (status.equals("success")){
                         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                        // {"status":"success","message":"Interview request accepted."}
-
                         FullChatting fullChatting = new FullChatting();
-                        fullChatting.time = chatting.time;
-                        fullChatting.date = chatting.date;
-                        fullChatting.message = chatting.message;
-                        fullChatting.timeStamp = chatting.timeStamp;
-                        fullChatting.userId = chatting.userId;
-                        fullChatting.date = chatting.date;
-                        fullChatting.location = chatting.location;
-                        fullChatting.status = "1";
-                        viewHolder.btn_for_accept.setVisibility(View.VISIBLE);
+                        fullChatting.status = String.valueOf(i);
+                        FirebaseDatabase.getInstance().getReference()
+                                .child("chat_rooms/" + ((ChatActivity) mContext).chatNode).child(chatting.noadKey)
+                                .child("status").setValue(fullChatting.status);
+                        new android.os.Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((ChatActivity) mContext).getMessageList();
+                            }
+                        },1000);
+                    }else {
+                        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -310,14 +327,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("action","1");
-                params.put("interviewId",((ChatActivity)mContext).interviewID);
+                params.put("action", i+"");
+                params.put("interviewId", ((ChatActivity) mContext).interviewID);
                 return params;
             }
 
             @Override
             public Map<String, String> setHeaders(Map<String, String> params) {
-                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
                 return params;
             }
         }.executeVolley();

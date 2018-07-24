@@ -9,6 +9,7 @@ public class FullChatting {
     public String time = "";
     public String location = "";
     public String status = "";
+    public String noadKey="";
 }
 
 

@@ -23,6 +23,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.uconnekt.R;
@@ -271,9 +272,9 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     String message = jsonObject.getString("message");
-                    JSONObject object = jsonObject.getJSONObject("data");
-                    String interviewId = object.getString("interviewId");
                     if (status.equalsIgnoreCase("success")) {
+                        JSONObject object = jsonObject.getJSONObject("data");
+                        String interviewId = object.getString("interviewId");
                         sendDataOnFirebase(address,date,time,interviewId);
                         Toast.makeText(RequestActivity.this, message, Toast.LENGTH_SHORT).show();
                         finish();
@@ -338,8 +339,13 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         chatModel.date = date;
         chatModel.time = time;
         chatModel.location = address;
+        chatModel.status = "0";
 
-        FirebaseDatabase.getInstance().getReference().child("chat_rooms/" + chatNode).push().setValue(chatModel);
+       // FirebaseDatabase.getInstance().getReference().child("chat_rooms/" + chatNode).push().setValue(chatModel);
+        DatabaseReference genkey =  FirebaseDatabase.getInstance().getReference().child("chat_rooms/" + chatNode).push();
+        chatModel.noadKey = genkey.getKey();
+        genkey.setValue(chatModel);
+
         Interview interview = new Interview();
         interview.interviewId = interviewId;
         FirebaseDatabase.getInstance().getReference().child("interview/" + userId).setValue(interview);

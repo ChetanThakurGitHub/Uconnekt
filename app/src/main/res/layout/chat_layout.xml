@@ -251,6 +251,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_for_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -283,7 +284,23 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_for_btn"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:textSize="@dimen/_8sdp"
+                android:text="Decline"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textColor="@color/yellow"
+                android:fontFamily="@font/montserrat_regular"
+                android:background="@drawable/button_bg_white"/>
+
         </LinearLayout>
+
+
 
     </RelativeLayout>
 

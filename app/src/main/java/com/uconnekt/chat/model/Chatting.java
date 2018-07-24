@@ -14,6 +14,7 @@ public class Chatting {
     public String date = "";
     public String time = "";
     public String status = "";
+    public String noadKey="";
 }
 
 
