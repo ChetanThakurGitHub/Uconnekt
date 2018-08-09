@@ -1,6 +1,7 @@
 package com.uconnekt.chat.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,10 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -33,7 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -45,14 +45,17 @@ import com.uconnekt.chat.model.BlockUsers;
 import com.uconnekt.chat.model.Chatting;
 import com.uconnekt.chat.model.FirebaseData;
 import com.uconnekt.chat.model.FullChatting;
-import com.uconnekt.chat.model.MessageCount;
+import com.uconnekt.chat.model.History;
 import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.fcm.FcmNotificationBuilder;
 import com.uconnekt.helper.ImageRotator;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.helper.SendImageOnFirebase;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.employer.activity.RequestActivity;
+import com.uconnekt.ui.employer.activity.TrackInterviewActivity;
+import com.uconnekt.ui.individual.activity.TrakProgressActivity;
 import com.uconnekt.util.Constant;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -64,36 +67,49 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView iv_for_send, iv_for_pickImage, iv_for_block;
     private EditText et_for_sendTxt;
     private LinearLayout layout_for_noChat;
     private RecyclerView recycler_view;
     private ArrayList<Chatting> chattings = new ArrayList<>();
+    private HashMap<String, Chatting> listmap = new HashMap<>();
     private CusDialogProg cusDialogProg;
     private ChatAdapter chatAdapter;
-    public String uID, chatNode, blockBy = "", myID = "", interviewID = "";
-    private DatabaseReference chatRef, databaseReference, msgCountRef, msgCountRefMy;
+    public String uID, chatNode, blockBy = "", myID = "", interviewID = "",is_finished = "",deleteNode = "",type = "";
+    private DatabaseReference chatRef, databaseReference ;
     private Uri imageUri, photoURI;
     private RelativeLayout mainlayout;
-  //  private ArrayList<String> keys = new ArrayList<>();
-    private boolean isCamera;
-    private FirebaseData firebaseData;
+    private boolean isCamera,ischeck = true;
+    public FirebaseData firebaseData;
+    private Object deleteTime;
+    private int totalCount = 0, tempCount = 0, listIndex = 0, increment = 0;
+    private String lastIndexmessagekey= "";
+    private SwipeRefreshLayout chat_swipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        Constant.CHAT = 1;
         Bundle extras = getIntent().getExtras();
         if (extras != null) uID = extras.getString("USERID");
+        if (extras != null) type = extras.getString("Interview_request_delete.");
         myID = Uconnekt.session.getUserInfo().userId;
 
+        getDeleteTime();
+
         cusDialogProg = new CusDialogProg(this);
+        cusDialogProg.show();
 
         initView();
 
@@ -103,29 +119,52 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         chatAdapter = new ChatAdapter(chattings, this);
         recycler_view.setAdapter(chatAdapter);
 
-
-        if (uID != null) {
-            if (Integer.parseInt(uID) > Integer.parseInt(myID)) {
-                chatNode = myID + "_" + uID;
-            } else {
-                chatNode = uID + "_" + myID;
+       chat_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ischeck = true;
+                if (lastIndexmessagekey != null) {
+                    if (totalCount >= tempCount) {
+                        increment += 10;
+                        getListPagination(lastIndexmessagekey);
+                    } else {
+                        chat_swipe.setEnabled(false);
+                    }
+                } else {
+                    chat_swipe.setRefreshing(false);
+                }
             }
-        }
+        });
+
+        if (uID != null) chatNode = (Integer.parseInt(uID) > Integer.parseInt(myID))?myID + "_" + uID:uID + "_" + myID;
 
         chatRef = FirebaseDatabase.getInstance().getReference().child("chat_rooms/" + chatNode);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("block_users/" + chatNode);
-        msgCountRef = FirebaseDatabase.getInstance().getReference().child("massage_count/" + uID);
-        msgCountRefMy = FirebaseDatabase.getInstance().getReference().child("massage_count/" + myID);
-        msgCountRefMy.setValue(new MessageCount().setValue(0));
 
-
-
-
+        getMsgCount();
         getInterviewID();
         getBlockList();
         getDataFromUserTable();
+    }
 
-        //messageCount();
+
+    private void getDeleteTime(){
+        FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(uID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(uID).child("readUnread").setValue("0");
+                    History history = dataSnapshot.getValue(History.class);
+                    if (history.deleteTime != null){
+                        deleteTime = history.deleteTime;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getDataFromUserTable() {
@@ -139,7 +178,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
                                     firebaseData = dataSnapshot.getValue(FirebaseData.class);
-                                    chatListColling(firebaseData);
+                                    chatListCalling();
                                 }
                             }
 
@@ -148,8 +187,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                     } else {
-                        FirebaseData firebaseData = new FirebaseData();
-                        chatListColling(firebaseData);
+                        firebaseData = new FirebaseData();
+                        chatListCalling();
                     }
                 }
             }
@@ -160,16 +199,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void chatListColling(final FirebaseData firebaseData) {
+    private void chatListCalling() {
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    cusDialogProg.show();
                     getMessageList();
                 } else {
                     layout_for_noChat.setVisibility(View.VISIBLE);
                     getMessageList();
+                    cusDialogProg.dismiss();
                 }
             }
 
@@ -184,40 +223,71 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+        hideKeyboard();
+        Constant.CHAT = 0;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Constant.CHAT = 0;
     }
 
     public void getMessageList() {
         chattings.clear();
-        chatRef.addChildEventListener(new ChildEventListener() {
+        chatRef.limitToLast(1).orderByKey().addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Chatting messageOutput = dataSnapshot.getValue(Chatting.class);
+                if (dataSnapshot.getValue() != null){
+                    getListPagination(dataSnapshot.getKey());
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) getListPagination(dataSnapshot.getKey());
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                messageOutput.company_logo = firebaseData.company_logo;
-                messageOutput.specializationName = firebaseData.specializationName;
-                messageOutput.rating = firebaseData.rating;
-                messageOutput.jobTitleName = firebaseData.jobTitleName;
-                messageOutput.fullName = firebaseData.fullName;
-                messageOutput.profileImage = firebaseData.profileImage;
-                chattings.add(messageOutput);
-                layout_for_noChat.setVisibility(View.GONE);
-                //keys.add(dataSnapshot.getKey());
-                //iv_for_deleteChat.setClickable(true);
-                recycler_view.scrollToPosition(chattings.size() - 1);
-                chatAdapter.notifyDataSetChanged();
-                cusDialogProg.dismiss();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getListPagination(String dataSnapshot){
+
+        chatRef.orderByKey().endAt(dataSnapshot).limitToLast(20).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null){
+                    tempCount += 1;
+                    getList(dataSnapshot);
+                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                layout_for_noChat.setVisibility(View.GONE);
-                recycler_view.scrollToPosition(chattings.size() - 1);
-                //keys.add(dataSnapshot.getKey());
+                if (dataSnapshot.getValue() != null)getList(dataSnapshot);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                for(int i = 0 ; i<chattings.size();i++){
+                    if (chattings.get(i).userId != null) {
+                        if (chattings.get(i).userId.equals(dataSnapshot.getKey())) {
+                            chattings.remove(i);
+                        }
+                    }
+                }
+                layout_for_noChat.setVisibility(chattings.size() == 0?View.VISIBLE:View.GONE);
+                shortList();
             }
 
             @Override
@@ -232,6 +302,69 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void  getList(DataSnapshot dataSnapshot) {
+        chattings.clear();
+        Chatting messageOutput = dataSnapshot.getValue(Chatting.class);
+
+        messageOutput.company_logo = firebaseData.company_logo;
+        messageOutput.specializationName = firebaseData.specializationName;
+        messageOutput.rating = firebaseData.rating;
+        messageOutput.jobTitleName = firebaseData.jobTitleName;
+        messageOutput.fullName = firebaseData.fullName;
+        messageOutput.profileImage = firebaseData.profileImage;
+
+        if (deleteTime != null) {
+            if ((Long) messageOutput.timeStamp > (Long) deleteTime){
+                if (ischeck) {
+                    lastIndexmessagekey = dataSnapshot.getKey();
+                    ischeck = false;
+                    listIndex = increment;
+                }
+                listmap.put(dataSnapshot.getKey(), messageOutput);
+            }
+        }else {
+            if (ischeck) {
+                lastIndexmessagekey = dataSnapshot.getKey();
+                ischeck = false;
+                listIndex = increment;
+            }
+            listmap.put(dataSnapshot.getKey(), messageOutput);
+        }
+
+        Collection<Chatting> demoValues = listmap.values();
+        chattings.addAll(demoValues);
+
+        layout_for_noChat.setVisibility((chattings.size() == 0)?View.VISIBLE:View.GONE);
+
+        if (listIndex == 0) {
+            recycler_view.scrollToPosition(chattings.size() - 1);
+        } else if (chattings.size() != (totalCount - 10)) {
+            recycler_view.scrollToPosition(20);
+        } else if (chattings.size() == totalCount - 10) {
+            chat_swipe.setEnabled(false);
+        }
+
+        cusDialogProg.dismiss();
+        shortList();
+    }
+
+    private void shortList() {
+        Collections.sort(chattings,new Comparator<Chatting>(){
+            @Override
+            public int compare(Chatting a1, Chatting a2) {
+                if (a1.timeStamp == null || a2.timeStamp == null)
+                    return -1;
+                else {
+                    Long long1 = Long.valueOf(String.valueOf(a1.timeStamp));
+                    Long long2 = Long.valueOf(String.valueOf(a2.timeStamp));
+                    return long1.compareTo(long2);
+                }
+            }
+        });
+        chatAdapter.notifyDataSetChanged();
+        chat_swipe.setRefreshing(false);
+    }
+
     private void initView() {
         mainlayout = findViewById(R.id.mainlayout);
         iv_for_send = findViewById(R.id.iv_for_send);
@@ -242,28 +375,45 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         layout_for_noChat = findViewById(R.id.layout_for_noChat);
         findViewById(R.id.iv_for_backIco).setOnClickListener(this);
         iv_for_block.setOnClickListener(this);
-        if (Uconnekt.session.getUserInfo().userType.equals("business"))
-            findViewById(R.id.iv_for_menu).setOnClickListener(this);
+        findViewById(R.id.iv_for_menu).setOnClickListener(this);
+
+        chat_swipe = findViewById(R.id.chat_swipe);
+        chat_swipe.setColorSchemeResources(R.color.yellow);
     }
 
     private void writeToDBProfiles(FullChatting chatModel) {
 
-        DatabaseReference genkey = chatRef.push()/*.setValue(chatModel)*/;
+        DatabaseReference genkey = chatRef.push();
         chatModel.noadKey = genkey.getKey();
         genkey.setValue(chatModel);
-        String message;
-        if (chatModel.message.contains("https://firebasestorage.googleapis.com/v0/b/uconnekt-bce51.appspot.com")) {
-            message = "Image";
-        } else {
-            message = chatModel.message;
-        }
-        //sendPushNotificationToReceiver(message, myID, firebaseData.firebaseToken);
+
+        String message = chatModel.message.contains("https://firebasestorage.googleapis.com")?"Image":chatModel.message;
+
+        History history = new History();
+        history.message = message;
+        history.timeStamp = chatModel.timeStamp;
+        history.userId = uID;
+        history.deleteTime = deleteTime;
+        history.readUnread = "0";
+        FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(uID).setValue(history);
+
+        History history2 = new History();
+        history2.message = message;
+        history2.timeStamp = chatModel.timeStamp;
+        history2.userId = myID;
+        history2.deleteTime = deleteTime;
+        history2.readUnread = "1";
+        FirebaseDatabase.getInstance().getReference().child("history").child(uID).child(myID).setValue(history2);
+
+        sendPushNotificationToReceiver(message, myID);
     }
 
-    private void sendPushNotificationToReceiver(String message, String userID, String otherFirebaseToken) {
+    private void sendPushNotificationToReceiver(String message, String userID) {
         FcmNotificationBuilder.initialize().title(Uconnekt.session.getUserInfo().fullName)
-                .message(message).clickaction(Uconnekt.session.getUserInfo().userType).username(Uconnekt.session.getUserInfo().fullName)
-                .receiverFirebaseToken(otherFirebaseToken)
+                .message(message).clickaction(Uconnekt.session.getUserInfo().userType.equals("business")?"individual":"business")
+                .username(Uconnekt.session.getUserInfo().fullName)
+                .receiverFirebaseToken(firebaseData.firebaseToken)
+                .profilePic(Uconnekt.session.getUserInfo().profileImage)
                 .uid(userID).send();
     }
 
@@ -376,7 +526,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                             chatModel.date = "";
                             chatModel.time = "";
                             chatModel.location = "";
-                            chatModel.status = "0";
+                            chatModel.status = "";
                             writeToDBProfiles(chatModel);
                             imageUri = null;
                             photoURI = null;
@@ -415,7 +565,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     chatModel.date = "";
                     chatModel.time = "";
                     chatModel.location = "";
-                    chatModel.status = "0";
+                    chatModel.status = "";
 
                     if (blockBy.equals("")) {
                         // messageCount();
@@ -424,7 +574,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     } else if (blockBy.equals(myID)) {
                         MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + firebaseData.fullName + ". " + "Can't send any message.");
                     } else if (!blockBy.equals("")) {
-                        MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + Uconnekt.session.getUserInfo().fullName + ". " + "Can't send any message.");
+                        MyCustomMessage.getInstance(this).snackbar(mainlayout, "You currently blocked by " + firebaseData.fullName + ". " + "Can't send any message.");
                     }
 
                 } else {
@@ -440,7 +590,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 } else if (blockBy.equals(myID)) {
                     MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + firebaseData.fullName + ". " + "Can't send any image.");
                 } else if (!blockBy.equals("")) {
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + Uconnekt.session.getUserInfo().fullName + ". " + "Can't send any image.");
+                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "You currently blocked by " + firebaseData.fullName + ". " + "Can't send any image.");
                 }
                 break;
             case R.id.iv_for_block:
@@ -450,11 +600,39 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
                 break;
             case R.id.iv_for_menu:
-                Intent intent = new Intent(this, RequestActivity.class);
-                intent.putExtra("USERID", uID);
-                intent.putExtra("NODE", chatNode);
-                startActivity(intent);
+                menuClick();
                 break;
+        }
+    }
+
+    private void menuClick(){
+        if (blockBy.equals("")) {
+            if (Uconnekt.session.getUserInfo().userType.equals("business")){
+                if (is_finished.equals("0")){
+                    Intent intent = new Intent(this,TrackInterviewActivity.class);
+                    intent.putExtra("requestBy",uID);
+                    intent.putExtra("interviewID", interviewID);
+                    intent.putExtra("deleteNode", deleteNode);
+                    intent.putExtra("chatNode", chatNode);
+                    intent.putExtra("startChat",String.valueOf(chattings.get(0).timeStamp));
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(this, RequestActivity.class);
+                    intent.putExtra("USERID", uID);
+                    intent.putExtra("NODE", chatNode);
+                    startActivity(intent);
+                }
+            }else {
+                    Intent intent = new Intent(this, TrakProgressActivity.class);
+                    intent.putExtra("requestBy", uID);
+                    if (chattings.size() > 0)
+                        intent.putExtra("startChat", String.valueOf(chattings.get(0).timeStamp));
+                    startActivity(intent);
+            }
+        } else if (blockBy.equals(myID)) {
+            MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + firebaseData.fullName + ". ");
+        } else if (!blockBy.equals("")) {
+            MyCustomMessage.getInstance(this).snackbar(mainlayout, "You currently blocked by " + firebaseData.fullName + ". ");
         }
     }
 
@@ -518,7 +696,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     iv_for_block.setImageResource(R.drawable.ic_block);
                 }
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 blockBy = dataSnapshot.getValue(String.class);
@@ -533,7 +710,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     iv_for_block.setImageResource(R.drawable.ic_block);
                 }
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
@@ -549,15 +725,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getInterviewID() {
-        FirebaseDatabase.getInstance().getReference().child("interview/" + myID).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("interview/" + chatNode).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                interviewID = dataSnapshot.getValue(String.class);
+                if (dataSnapshot.getValue() != null) interviewID = dataSnapshot.getValue(String.class);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                interviewID = dataSnapshot.getValue(String.class);
+                if (dataSnapshot.getValue() != null)  interviewID = dataSnapshot.getValue(String.class);
             }
 
             @Override
@@ -574,22 +750,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void interviewRequestAPI(){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        trackAndRequestCheck();
+    }
 
-        new VolleyGetPost(this, AllAPIs.A_D_REQUEST, true, "REQUESTUPDATE", true) {
+    public void trackAndRequestCheck(){
+        new VolleyGetPost(this, AllAPIs.TRACK_PROCESS, true, "Process", false) {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onVolleyResponse(String response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    String status = jsonObject.getString("status");
-                    String message = jsonObject.getString("message");
-
+                    JSONObject object = new JSONObject(response);
+                    String status = object.getString("status");
                     if (status.equals("success")){
-                        Toast.makeText(ChatActivity.this, message, Toast.LENGTH_SHORT).show();
-                       // {"status":"success","message":"Interview request accepted."}
-
+                        JSONObject object1 = object.getJSONObject("data");
+                        is_finished = object1.getString("is_finished");
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -602,18 +780,31 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("action","1");
-                params.put("interviewId",interviewID);
+                params.put("requestBy",myID);
+                params.put("requestFor", uID);
                 return params;
             }
 
             @Override
             public Map<String, String> setHeaders(Map<String, String> params) {
-                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
                 return params;
             }
         }.executeVolley();
     }
 
+    private void getMsgCount() {
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                totalCount = (int) dataSnapshot.getChildrenCount() + 10;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

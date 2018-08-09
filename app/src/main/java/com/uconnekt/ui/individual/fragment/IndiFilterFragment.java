@@ -158,6 +158,8 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
                                 tv_for_company.setText(job.jobTitleName);
                             }
                         });
+
+                        setOldData();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -180,6 +182,51 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
                 return params;
             }
         }.executeVolley();
+    }
+
+    private void setOldData(){
+        if(searchFragment != null) {
+            specialtyId = searchFragment.specialtyId;
+            if (!specialtyId.isEmpty()) {
+                for (int i = 0; arrayList.size() > i; i++) {
+                    if (arrayList.get(i).jobTitleId.equals(specialtyId)) {
+                        tv_for_aofs.setText(arrayList.get(i).jobTitleName);
+                        break;
+                    }
+                }
+            }
+            ratingNo = searchFragment.ratingNo;
+            ratingBar.setRating(ratingNo.isEmpty() ? 0 : Float.parseFloat(ratingNo));
+
+            company = searchFragment.company;
+            if (!company.isEmpty()) tv_for_company.setText(company);
+
+            tv_for_address.setText(searchFragment.address);
+            city = searchFragment.city;
+            state = searchFragment.state;
+            country = searchFragment.country;
+        }else if(indiMapFragment != null){
+
+            specialtyId = indiMapFragment.specialtyId;
+            if (!specialtyId.isEmpty()) {
+                for (int i = 0; arrayList.size() > i; i++) {
+                    if (arrayList.get(i).jobTitleId.equals(specialtyId)) {
+                        tv_for_aofs.setText(arrayList.get(i).jobTitleName);
+                        break;
+                    }
+                }
+            }
+            ratingNo = indiMapFragment.ratingNo;
+            ratingBar.setRating(ratingNo.isEmpty() ? 0 : Float.parseFloat(ratingNo));
+
+            company = indiMapFragment.company;
+            if (!company.isEmpty()) tv_for_company.setText(company);
+
+            tv_for_address.setText(indiMapFragment.address);
+            city = indiMapFragment.city;
+            state = indiMapFragment.state;
+            country = indiMapFragment.country;
+        }
     }
 
     private void addressClick() {
@@ -301,8 +348,6 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
         if (searchFragment != null)searchFragment.mSwipeRefreshLayout.setRefreshing(true);
         if (searchFragment != null)searchFragment.getList(specialtyId,ratingNo,company,address,city,state,country);
 
-       // indiMapFragment.offset = 0;
-       // indiMapFragment.mSwipeRefreshLayout.setRefreshing(true);
         if (indiMapFragment != null)indiMapFragment.searchLists.clear();
         if (indiMapFragment != null)indiMapFragment.map.clear();
         if (indiMapFragment != null)indiMapFragment.mClusterManager.clearItems();
@@ -310,27 +355,6 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
 
         activity.onBackPressed();
     }
-
-/*    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.sp_for_specialty:
-                JobTitle jobTitle = arrayList.get(position);
-                specialtyId = jobTitle.jobTitleId;
-                if (searchFragment != null) searchFragment.tv_for_speName.setText(jobTitle.jobTitleName);
-                if (indiMapFragment != null)indiMapFragment.tv_for_speName.setText(jobTitle.jobTitleName);
-                break;
-            case R.id.sp_for_company:
-                jobTitle = companyList.get(position);
-                company = jobTitle.jobTitleName;
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }*/
 
     public void setFragment(IndiSearchFragment searchFragment) {
         this.searchFragment=searchFragment;

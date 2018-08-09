@@ -60,18 +60,15 @@ public class NextRoleFragment extends Fragment {
                         String next_speciality_name = object.getString("next_speciality_name");
                         String next_location = object.getString("next_location");
 
-                        if (next_speciality_name.isEmpty()){
-                            view.findViewById(R.id.layout_for_noData).setVisibility(View.VISIBLE);
-                            view.findViewById(R.id.layout_for_data).setVisibility(View.GONE);
-                        }else {
-                            view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
-                            view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);
-                        }
+                        view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
+                        view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);
 
                         setData(view,next_availability,next_speciality_name,next_location);
                     }
 
                 } catch (JSONException e) {
+                    view.findViewById(R.id.layout_for_noData).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.layout_for_data).setVisibility(View.GONE);
                     e.printStackTrace();
                 }
             }

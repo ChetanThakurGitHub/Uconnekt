@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class FcmNotificationBuilder {
     public static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "FcmNotificationBuilder";
-    private static final String SERVER_API_KEY = "AAAAQo-UCPo:APA91bH3G27h65xV5jkzBhVy9QaGcPSzORUKUHPHMyt8SRDLle_Lgttnl76sw657G3Q2m05b-RmqmJmOwItgb4gluOgEDdUVpV0VZfHeox-W1n2HDJsRvwrmXcO5_nhnP4xTfOOFpzzd";
+    private static final String SERVER_API_KEY = "AAAA_sUc3YE:APA91bFnx2sflGpyrQ_Gg5LL482r8aPOOnK3q3ZDo7ic90qHsAvtZX_tLV9vlohsj976rh7p0CId0z9i1DjKRq-MoulBGGYyA3fTV-g-dgUxY-KvKseMBIBthl8vLNYv_cgf5LJFt8iC";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String APPLICATION_JSON = "application/json";
     private static final String AUTHORIZATION = "Authorization";
@@ -25,7 +25,7 @@ public class FcmNotificationBuilder {
     private static final String FCM_URL = "https://fcm.googleapis.com/fcm/send";
     // json related keys
     private static final String KEY_TO = "to";
-    private static final String KEY_PROFILE_PIC = "profilepic";
+    private static final String KEY_PROFILE_PIC = "profile_image";
     private static final String KEY_NOTIFICATION = "notification";
     private static final String KEY_TITLE = "title";
     private static final String KEY_CLICKACTION = "click_action";
@@ -34,7 +34,7 @@ public class FcmNotificationBuilder {
     private static final String KEY_DATA = "data";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_CHATNODE = "reference_id";
-    private static final String KEY_UID = "uid";
+    private static final String KEY_UID = "reference_id";
     private static final String KEY_FCM_TOKEN = "fcm_token";
 
     private String mTitle;
@@ -150,7 +150,7 @@ public class FcmNotificationBuilder {
         object.put(KEY_TITLE, mTitle);
         object.put(KEY_TEXT, mMessage);
         object.put("type", "chat");
-        object.put("click_action", "ChatActivity");
+        object.put(KEY_CLICKACTION, mClickAction);
         object.put("sound", "default");
         object.put("icon", "icon");
         object.put("badge", "1");

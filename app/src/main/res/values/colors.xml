@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FAD299</color>
     <color name="colorPrimaryDark">#FCAC35</color>
-    <color name="colorAccent">#333333</color>
+    <color name="colorAccent">#FCAC35</color>
 
     <color name="yellow">#FCAC35</color>
     <color name="lightyellow">#FAD299</color>
@@ -12,6 +12,8 @@
     <color name="Black">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="darkTransparent">#80000000</color>
+    <color name="green">#0d7d1d</color>
+    <color name="red">#e21b1b</color>
 
     <color name="calender">#265258</color>
     <color name="chat">#ECECEC</color>

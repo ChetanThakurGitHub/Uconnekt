@@ -22,7 +22,7 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/current_role_not_added"
+          android:text="@string/no_experience_added"
           android:fontFamily="@font/montserrat_regular"
           android:textColor="@color/lightgray"
           android:textSize="@dimen/_15sdp"

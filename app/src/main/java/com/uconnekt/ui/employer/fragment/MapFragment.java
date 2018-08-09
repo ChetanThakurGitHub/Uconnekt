@@ -1,19 +1,12 @@
 package com.uconnekt.ui.employer.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -48,14 +41,13 @@ import com.google.gson.Gson;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
-import com.google.maps.android.clustering.algo.GridBasedAlgorithm;
+import com.google.maps.android.clustering.algo.NonHierarchicalDistanceBasedAlgorithm;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.adapter.listing.SpecialityListAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.BusiSearchList;
-import com.uconnekt.model.IndiSearchList;
 import com.uconnekt.model.MyItem;
 import com.uconnekt.model.SpecialityList;
 import com.uconnekt.singleton.MyCustomMessage;
@@ -178,6 +170,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         view.findViewById(R.id.tv_for_speName).setOnClickListener(this);
         view.findViewById(R.id.card_for_viewPro).setOnClickListener(this);
         view.findViewById(R.id.tv_for_profile).setOnClickListener(this);
+        if (!goneVisi)iv_for_arrow.setOnClickListener(this);
     }
 
 
@@ -194,18 +187,28 @@ public class MapFragment extends Fragment implements View.OnClickListener,
             case R.id.tv_for_speName:
                 if (!goneVisi) {
                     layout_for_list.setVisibility(View.VISIBLE);
-                    iv_for_arrow.setImageResource(R.drawable.ic_up_arrow);
+                    iv_for_arrow.setImageResource(R.drawable.ic_cross);
+                    iv_for_arrow.setPadding(11,11,11,11);
                     goneVisi = true;
                     tv_for_speName.setFocusableInTouchMode(true);
                 }else {
                     layout_for_list.setVisibility(View.GONE);
                     iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                    iv_for_arrow.setPadding(3,3,3,3);
                     goneVisi = false;
                     activity.hideKeyboard();
                 }
                 break;
             case R.id.tv_for_profile:
-                if (position!=-1){((HomeActivity)activity).addFragment(ProfileFragment.newInstance(searchLists.get(position).userId));}
+                if (position!=-1){activity.addFragment(ProfileFragment.newInstance(searchLists.get(position).userId));}
+                break;
+            case R.id.iv_for_arrow:
+                activity.hideKeyboard();
+                tv_for_speName.setText("");
+                goneVisi = false;
+                iv_for_arrow.setPadding(3,3,3,3);
+                iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                layout_for_list.setVisibility(View.GONE);
                 break;
         }
     }
@@ -235,7 +238,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         map = googleMap;
         intiMapView();
         mClusterManager = new ClusterManager<>(activity, map);
-        mClusterManager.setAlgorithm(new GridBasedAlgorithm<MyItem>());
+        mClusterManager.setAlgorithm((new NonHierarchicalDistanceBasedAlgorithm<MyItem>()));
         map.setOnCameraIdleListener(mClusterManager);
         map.setOnMarkerClickListener(mClusterManager);
         mClusterManager.setOnClusterClickListener(this);
@@ -249,26 +252,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
             e.printStackTrace();
         }
 
-
-       /* map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-
-                position = (int) marker.getTag();
-                if (position != -1) {
-                    BusiSearchList busiSearchList = searchLists.get(position);
-                    card_for_viewPro.setVisibility(View.VISIBLE);
-                    if (!busiSearchList.profileImage.isEmpty())
-                        Picasso.with(activity).load(busiSearchList.profileImage).into(iv_profile_image);
-                    tv_for_fullName.setText(busiSearchList.fullName.isEmpty() ? "NA" : busiSearchList.fullName);
-                    tv_for_jobTitle.setText(busiSearchList.jobTitleName.isEmpty() ? "NA" : busiSearchList.jobTitleName);
-                    tv_for_address.setText(busiSearchList.address.isEmpty() ? "NA" : busiSearchList.address);
-                }else {
-                    card_for_viewPro.setVisibility(View.GONE);
-                }
-                return false;
-            }
-        });*/
     }
 
     private void intiMapView() {
@@ -293,34 +276,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
             break;
         }
     }
-
-
-
-   /* private void location() {
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionAll.checkLocationPermission(activity);
-        } else {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                latitude = Double.valueOf(String.valueOf(location.getLatitude()));
-                                longitude = Double.valueOf(String.valueOf(location.getLongitude()));
-                                if (latitude != null && longitude != null) {
-                                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 12);
-                                    map.animateCamera(cameraUpdate);
-                                    createMarkerCurrent(latitude,longitude);
-                                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, "");
-                                }
-                            }
-                        }
-                    });
-        }
-
-    }*/
-
-
 
     private void location() {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -415,11 +370,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
        if (clatitude!=null&&clongitude!=null)createMarkerCurrent(clatitude,clongitude);
         card_for_viewPro.setVisibility(View.GONE);
 
-     /*   if (latitude != 0.0 && longitude != 0.0){
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10);
-            map.animateCamera(cameraUpdate);
-        } */
-
         new VolleyGetPost(activity, AllAPIs.BUSI_SEARCH_LIST,true,"List",false ) {
             @Override
             public void onVolleyResponse(String response) {
@@ -438,7 +388,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 BusiSearchList busiSearchList = new Gson().fromJson(jsonObject.toString(),BusiSearchList.class);
                                 searchLists.add(busiSearchList);
                             }
-                            //offset = offset + 10;
                             multipleMarkers();
 
                             if (latitude != 0.0 && longitude != 0.0) {
@@ -486,6 +435,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 params.put("state",state==null?"":state);
                 params.put("country",country==null?"":country);
                 params.put("value",valueId);
+                params.put("pagination","1");
                 params.put("limit","20");
                 params.put("offset","0");
                 return params;
@@ -502,9 +452,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
 
 
     private void multipleMarkers() {
-        if (searchLists == null) {
-            return;
-        } else {
+        if (searchLists != null) {
             for (int i = 0; i < searchLists.size(); i++) {
                 BusiSearchList busiSearchList=searchLists.get(i);
 

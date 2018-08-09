@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.Favourite;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.employer.activity.ProfileActivity;
@@ -83,26 +84,40 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.card_for_chat:
-                    MyCustomMessage.getInstance(context).customToast("Under development mode....");
+                    Intent intent = new Intent(context,ChatActivity.class);
+                    if (Uconnekt.session.getUserInfo().userType.equals("individual")) {
+                        if (favourites.get(getAdapterPosition()).favourite_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            intent.putExtra("USERID", favourites.get(getAdapterPosition()).favourite_for);
+                        } else {
+                            intent.putExtra("USERID", favourites.get(getAdapterPosition()).favourite_by);
+                        }
+                    }else {
+                        if (favourites.get(getAdapterPosition()).favourite_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            intent.putExtra("USERID", favourites.get(getAdapterPosition()).favourite_for);
+                        } else {
+                            intent.putExtra("USERID", favourites.get(getAdapterPosition()).favourite_by);
+                        }
+                    }
+                    context.startActivity(intent);
                     break;
                 case R.id.cardview:
                     if (Uconnekt.session.getUserInfo().userType.equals("individual")) {
                         if (favourites.get(getAdapterPosition()).favourite_by.equals(Uconnekt.session.getUserInfo().userId)) {
-                            Intent intent = new Intent(context, IndiProfileActivity.class);
+                            intent = new Intent(context, IndiProfileActivity.class);
                             intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_for);
                             context.startActivity(intent);
                         } else {
-                            Intent intent = new Intent(context, IndiProfileActivity.class);
+                            intent = new Intent(context, IndiProfileActivity.class);
                             intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_by);
                             context.startActivity(intent);
                         }
                     }else {
                         if (favourites.get(getAdapterPosition()).favourite_by.equals(Uconnekt.session.getUserInfo().userId)) {
-                            Intent intent = new Intent(context, ProfileActivity.class);
+                            intent = new Intent(context, ProfileActivity.class);
                             intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_for);
                             context.startActivity(intent);
                         } else {
-                            Intent intent = new Intent(context, ProfileActivity.class);
+                            intent = new Intent(context, ProfileActivity.class);
                             intent.putExtra("UserId", favourites.get(getAdapterPosition()).favourite_by);
                             context.startActivity(intent);
                         }

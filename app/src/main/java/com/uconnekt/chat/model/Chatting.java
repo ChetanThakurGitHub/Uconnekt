@@ -15,6 +15,8 @@ public class Chatting {
     public String time = "";
     public String status = "";
     public String noadKey="";
+    public String type = "";
+    public String interviewerName = "";
 }
 
 

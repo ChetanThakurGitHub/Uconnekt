@@ -22,11 +22,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
@@ -68,21 +66,18 @@ public class CurrentRoleFragment extends Fragment {
                         String current_company = object.getString("current_company");
                         String current_start_date = object.getString("current_start_date");
                         String current_finish_date = object.getString("current_finish_date");
-                        //String current_description = object.getString("current_description");
                         String current_description = URLDecoder.decode(object.getString("current_description"), "UTF-8");
-                        getDayDifference(current_start_date,current_finish_date,view);
-                        if (current_job_title_name.isEmpty()){
-                            view.findViewById(R.id.layout_for_noData).setVisibility(View.VISIBLE);
-                            view.findViewById(R.id.layout_for_data).setVisibility(View.GONE);
-                        }else {
-                            view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
-                            view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);
-                        }
+                        getDateDifferenceInDDMMYYYY(current_start_date,current_finish_date,view);
+
+                        view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
+                        view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);
 
                         setData(current_job_title_name,current_company,current_start_date,current_finish_date,current_description,view);
                     }
 
                 } catch (JSONException e) {
+                    view.findViewById(R.id.layout_for_noData).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.layout_for_data).setVisibility(View.GONE);
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -113,64 +108,63 @@ public class CurrentRoleFragment extends Fragment {
         TextView tv_for_description = view.findViewById(R.id.tv_for_description);tv_for_description.setText(current_description.isEmpty()?"NA":current_description);
     }
 
-    private void getDayDifference(String departDateTime, String returnDateTime, View view) {
+    //*****************calculation********************
+
+    public void getDateDifferenceInDDMMYYYY(String departDateTime, String returnDateTime, View view) {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
         if (returnDateTime.isEmpty()){
             returnDateTime = Utils.getCurrentDate();
         }
 
+
         try {
             Date startDate = simpleDateFormat.parse(departDateTime);
             Date endDate = simpleDateFormat.parse(returnDateTime);
 
-            Calendar startCalendar = new GregorianCalendar();
-            startCalendar.setTime(startDate);
-            Calendar endCalendar = new GregorianCalendar();
-            endCalendar.setTime(endDate);
 
-            int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-            int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-
-            if (diffMonth != 0){
-                diffMonth = diffMonth - 12*diffYear;
+            Calendar fromDate = Calendar.getInstance();
+            Calendar toDate = Calendar.getInstance();
+            fromDate.setTime(startDate);
+            toDate.setTime(endDate);
+            int increment = 0;
+            int year, month, day;
+            System.out.println(fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            if (fromDate.get(Calendar.DAY_OF_MONTH) > toDate.get(Calendar.DAY_OF_MONTH)) {
+                increment = fromDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+            }
+            System.out.println("increment" + increment);
+// DAY CALCULATION
+            if (increment != 0) {
+                day = (toDate.get(Calendar.DAY_OF_MONTH) + increment) - fromDate.get(Calendar.DAY_OF_MONTH);
+                increment = 1;
+            } else {
+                day = toDate.get(Calendar.DAY_OF_MONTH) - fromDate.get(Calendar.DAY_OF_MONTH);
             }
 
-            long days = 0;
-
-            if (diffMonth == 0 && diffYear == 0) {
-
-                long different = endDate.getTime() - startDate.getTime();
-
-                System.out.println("startDate : " + startDate);
-                System.out.println("endDate : " + endDate);
-                System.out.println("different : " + different);
-
-
-                long secondsInMilli = 1000;
-                long minutesInMilli = secondsInMilli * 60;
-                long hoursInMilli = minutesInMilli * 60;
-                long daysInMilli = hoursInMilli * 24;
-                long monthInMilli = daysInMilli * 30;
-                long yearInMilli = monthInMilli * 12;
-
-                long elapsedYear = different / yearInMilli;
-                different = different % yearInMilli;
-
-                long elapsedMonth = different / monthInMilli;
-                different = different % monthInMilli;
-
-                long elapsedDays = different / daysInMilli;
-
-                days = elapsedDays;
+// MONTH CALCULATION
+            if ((fromDate.get(Calendar.MONTH) + increment) > toDate.get(Calendar.MONTH)) {
+                month = (toDate.get(Calendar.MONTH) + 12) - (fromDate.get(Calendar.MONTH) + increment);
+                increment = 1;
+            } else {
+                month = (toDate.get(Calendar.MONTH)) - (fromDate.get(Calendar.MONTH) + increment);
+                increment = 0;
             }
 
+// YEAR CALCULATION
+            year = toDate.get(Calendar.YEAR) - (fromDate.get(Calendar.YEAR) + increment);
 
-            setDate(diffYear,diffMonth,days,view);
-        } catch (ParseException e) {
+            setDate(year,month,day,view);
+
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
+
+
     }
+
 
     private void setDate(long elapsedYear, long elapsedMonth, long elapsedDays ,View view){
         String result ;

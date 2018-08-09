@@ -149,6 +149,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         tv_for_speName = view.findViewById(R.id.tv_for_speName);
         iv_for_arrow = view.findViewById(R.id.iv_for_arrow);
         view.findViewById(R.id.tv_for_speName).setOnClickListener(this);
+        if (!goneVisi)iv_for_arrow.setOnClickListener(this);
     }
 
     @Override
@@ -218,6 +219,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 params.put("country",country==null?"":country);
                 params.put("value",valueId);
                 params.put("limit","10");
+                params.put("pagination","1");
                 params.put("offset",offset+"");
                 return params;
             }
@@ -300,15 +302,25 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
             case R.id.tv_for_speName:
                 if (!goneVisi) {
                     layout_for_list.setVisibility(View.VISIBLE);
-                    iv_for_arrow.setImageResource(R.drawable.ic_up_arrow);
+                    iv_for_arrow.setImageResource(R.drawable.ic_cross);
+                    iv_for_arrow.setPadding(11,11,11,11);
                     goneVisi = true;
                     tv_for_speName.setFocusableInTouchMode(true);
                 }else {
                     layout_for_list.setVisibility(View.GONE);
                     iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                    iv_for_arrow.setPadding(3,3,3,3);
                     goneVisi = false;
                     activity.hideKeyboard();
                 }
+                break;
+            case R.id.iv_for_arrow:
+                activity.hideKeyboard();
+                tv_for_speName.setText("");
+                goneVisi = false;
+                iv_for_arrow.setPadding(3,3,3,3);
+                iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                layout_for_list.setVisibility(View.GONE);
                 break;
         }
     }

@@ -165,6 +165,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notifications_ico" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+
 
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
@@ -200,7 +204,20 @@
             android:name=".ui.employer.activity.RequestActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".ui.individual.activity.TrakProgressActivity"></activity>
+        <activity
+            android:name=".ui.individual.activity.TrakProgressActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity
+            android:name=".ui.employer.activity.TrackInterviewActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+       <!-- <receiver android:name=".MyBroadcastReceiver"  android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
+            </intent-filter>
+        </receiver>-->
     </application>
 
 </manifest>

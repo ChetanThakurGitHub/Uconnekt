@@ -290,11 +290,11 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject result = jsonObject.getJSONObject("result");
 
-                        JobTitle jobTitle = new JobTitle();
+                        /*JobTitle jobTitle = new JobTitle();
                         jobTitle.jobTitleId = "";
                         jobTitle.jobTitleName = "";
                         strengthsList.add(jobTitle);
-                        valuesList.add(jobTitle);
+                        valuesList.add(jobTitle);*/
 
                         JSONArray results = result.getJSONArray("opposite_speciality_list");
                         for (int i = 0; i < results.length(); i++) {
@@ -339,7 +339,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             jobTitles.jobTitleName = object.getString("strengthName");
                             strengthsList.add(jobTitles);
                         }
-                        spinnerDialog3 = new SpinnerDialog(activity, strengthsList, getString(R.string.select));
+                        spinnerDialog3 = new SpinnerDialog(activity, strengthsList, "Select strength");
                         spinnerDialog3.bindOnSpinerListener(new OnSpinerItemClick() {
                             @Override
                             public void onClick(JobTitle job) {
@@ -356,7 +356,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             jobTitles.jobTitleName = object.getString("valueName");
                             valuesList.add(jobTitles);
                         }
-                        spinnerDialog4 = new SpinnerDialog(activity, valuesList, getString(R.string.select));
+                        spinnerDialog4 = new SpinnerDialog(activity, valuesList, "Select value");
                         spinnerDialog4.bindOnSpinerListener(new OnSpinerItemClick() {
                             @Override
                             public void onClick(JobTitle job) {
@@ -369,6 +369,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                         week0.week = "";
                         weekList.add(week0);
                         JSONObject week = result.getJSONObject("availability_list");
+                        Weeks week5 = new Weeks();
+                        week5.week = week.getString("immediate");
+                        weekList.add(week5);
                         Weeks week1 = new Weeks();
                         week1.week = week.getString("1-4");
                         weekList.add(week1);
@@ -382,6 +385,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                         week4.week = week.getString("12+");
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
+
+                        setOldData();
 
                     }
 
@@ -406,6 +411,120 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 return params;
             }
         }.executeVolley();
+    }
+
+    private void setOldData(){
+        if(searchFragment != null) {
+            jobTitleId = searchFragment.jobTitleId;
+            if (!jobTitleId.isEmpty()) {
+                for (int i = 0; jobTitleList.size() > i; i++) {
+                    if (jobTitleList.get(i).jobTitleId.equals(jobTitleId)) {
+                        tv_for_jobTitle.setText(jobTitleList.get(i).jobTitleName);
+                        break;
+                    }
+                }
+            }
+            specialtyId = searchFragment.specialityID;
+            if (!specialtyId.isEmpty()) {
+                for (int i = 0; arrayList.size() > i; i++) {
+                    if (arrayList.get(i).jobTitleId.equals(specialtyId)) {
+                        tv_for_aofs.setText(arrayList.get(i).jobTitleName);
+                        break;
+                    }
+                }
+            }
+
+            availabilityId = searchFragment.availabilityId;
+            if (!availabilityId.isEmpty()) {
+                for (int i = 0; weekList.size() > i; i++) {
+                    if (weekList.get(i).week.equals(availabilityId)) {
+                        sp_for_availability.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            strengthId = searchFragment.strengthId;
+            if (!strengthId.isEmpty()) {
+                for (int i = 0; strengthsList.size() > i; i++) {
+                    if (strengthsList.get(i).jobTitleId.equals(strengthId)) {
+                        tv_for_strength.setText(strengthsList.get(i).jobTitleName);
+                        break;
+                    }
+                }
+            }
+
+            valueId = searchFragment.valueId;
+            if (!valueId.isEmpty()) {
+                for (int i = 0; valuesList.size() > i; i++) {
+                    if (valuesList.get(i).jobTitleId.equals(valueId)) {
+                        tv_for_value.setText(valuesList.get(i).jobTitleName);
+                        break;
+                    }
+                }
+            }
+
+            tv_for_address.setText(searchFragment.location);
+            city = searchFragment.city;
+            state = searchFragment.state;
+            country = searchFragment.country;
+
+        }else if(mapFragment != null){
+
+                jobTitleId = mapFragment.jobTitleId;
+                if (!jobTitleId.isEmpty()) {
+                    for (int i = 0; jobTitleList.size() > i; i++) {
+                        if (jobTitleList.get(i).jobTitleId.equals(jobTitleId)) {
+                            tv_for_jobTitle.setText(jobTitleList.get(i).jobTitleName);
+                            break;
+                        }
+                    }
+                }
+                specialtyId = mapFragment.specialityID;
+                if (!specialtyId.isEmpty()) {
+                    for (int i = 0; arrayList.size() > i; i++) {
+                        if (arrayList.get(i).jobTitleId.equals(specialtyId)) {
+                            tv_for_aofs.setText(arrayList.get(i).jobTitleName);
+                            break;
+                        }
+                    }
+                }
+
+                availabilityId = mapFragment.availabilityId;
+            if (!availabilityId.isEmpty()) {
+                for (int i = 0; weekList.size() > i; i++) {
+                    if (weekList.get(i).week.equals(availabilityId)) {
+                        sp_for_availability.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+                strengthId = mapFragment.strengthId;
+                if (!strengthId.isEmpty()) {
+                    for (int i = 0; strengthsList.size() > i; i++) {
+                        if (strengthsList.get(i).jobTitleId.equals(strengthId)) {
+                            tv_for_strength.setText(strengthsList.get(i).jobTitleName);
+                            break;
+                        }
+                    }
+                }
+
+                valueId = mapFragment.valueId;
+                if (!valueId.isEmpty()) {
+                    for (int i = 0; valuesList.size() > i; i++) {
+                        if (valuesList.get(i).jobTitleId.equals(valueId)) {
+                            tv_for_value.setText(valuesList.get(i).jobTitleName);
+                            break;
+                        }
+                    }
+                }
+
+                tv_for_address.setText(mapFragment.locations);
+                city = mapFragment.city;
+                state = mapFragment.state;
+                country = mapFragment.country;
+        }
     }
 
     @Override

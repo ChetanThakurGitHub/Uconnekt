@@ -1,16 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.employer.fragment.ChatFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".chat.history.ChatFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/under_development_mode"
-        android:textColor="@color/yellow"
-        android:textSize="@dimen/_14sdp"
-        android:fontFamily="@font/montserrat_regular"
-        android:layout_gravity="center"/>
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/layout_for_noData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_centerInParent="true">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            app:srcCompat="@drawable/ic_meeting"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_chat_history_found"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/lightgray"
+            android:textSize="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

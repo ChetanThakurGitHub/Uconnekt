@@ -2,16 +2,15 @@ package com.uconnekt.ui.employer.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.Window;
@@ -24,13 +23,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
-import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.experience.ExpActivity;
-import com.uconnekt.ui.employer.fragment.ProfileFragment;
-import com.uconnekt.ui.employer.home.HomeActivity;
-import com.uconnekt.ui.individual.activity.FavouriteActivity;
-import com.uconnekt.ui.individual.activity.RecommendedActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
@@ -315,7 +310,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.card_for_chat:
-                MyCustomMessage.getInstance(this).customToast(getString(R.string.under_development_mode));
+                intent = new Intent(this,ChatActivity.class);
+                intent.putExtra("USERID",userId);
+                startActivity(intent);
                 break;
             case R.id.iv_for_share:
                 deletelDailog();

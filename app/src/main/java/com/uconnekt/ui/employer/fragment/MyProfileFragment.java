@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
-import com.uconnekt.model.RecommendedList;
 import com.uconnekt.ui.common_activity.BothFavouriteActivity;
 import com.uconnekt.ui.common_activity.BothRecommendedActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
@@ -24,7 +23,6 @@ import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.ui.individual.activity.FavouriteActivity;
 import com.uconnekt.ui.individual.activity.RecommendedActivity;
 import com.uconnekt.ui.individual.activity.ReviewActivity;
-import com.uconnekt.ui.individual.fragment.FavouriteFragment;
 import com.uconnekt.util.Constant;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -55,20 +53,26 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments()!=null){
-            String userID = "";
-            userID =  getArguments().getString(ARG_PARAM1);
-            if (userID.equals("user_review")){
-                Intent intent = new Intent(activity,ReviewActivity.class);
-                intent.putExtra("USERID",Uconnekt.session.getUserInfo().userId);
-                activity.startActivity(intent);
-            }else if (userID.equals("user_favourites")){
-                Intent intent = new Intent(activity,FavouriteActivity.class);
-                intent.putExtra("USERID",Uconnekt.session.getUserInfo().userId);
-                activity.startActivity(intent);
-            }else if (userID.equals("user_recommends")){
-                Intent intent = new Intent(activity,RecommendedActivity.class);
-                intent.putExtra("USERID",Uconnekt.session.getUserInfo().userId);
-                activity.startActivity(intent);
+            String userID =  getArguments().getString(ARG_PARAM1);
+            switch (userID) {
+                case "user_review": {
+                    Intent intent = new Intent(activity, ReviewActivity.class);
+                    intent.putExtra("USERID", Uconnekt.session.getUserInfo().userId);
+                    activity.startActivity(intent);
+                    break;
+                }
+                case "user_favourites": {
+                    Intent intent = new Intent(activity, FavouriteActivity.class);
+                    intent.putExtra("USERID", Uconnekt.session.getUserInfo().userId);
+                    activity.startActivity(intent);
+                    break;
+                }
+                case "user_recommends": {
+                    Intent intent = new Intent(activity, RecommendedActivity.class);
+                    intent.putExtra("USERID", Uconnekt.session.getUserInfo().userId);
+                    activity.startActivity(intent);
+                    break;
+                }
             }
         }
     }
@@ -172,19 +176,9 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
        switch (v.getId()){
             case R.id.card_for_favourite:
-
-                /*activity.addFragment(FavouriteFragment.newInstance(Uconnekt.session.getUserInfo().userId));
-                activity.setToolbarIcon(7);*/
-
                 startActivity(new Intent(activity,BothFavouriteActivity.class));
-
                 break;
             case R.id.card_for_recommend:
-
-             /*   Intent intent = new Intent(activity,RecommendedActivity.class);
-                intent.putExtra("USERID",Uconnekt.session.getUserInfo().userId);
-                activity.startActivity(intent)*/;
-
                 startActivity(new Intent(activity, BothRecommendedActivity.class));
                 break;
             case R.id.tv_for_view:

@@ -14,7 +14,6 @@ import com.uconnekt.R;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.authentication.login.LoginActivity;
-import com.uconnekt.ui.authentication.registration.RegistrationActivity;
 import com.uconnekt.util.Constant;
 
 public class UserSelectionActivity extends AppCompatActivity implements View.OnClickListener,UserSelectionView{

@@ -3,14 +3,11 @@ package com.uconnekt.ui.employer.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.os.StatFs;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -26,7 +23,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -129,6 +125,7 @@ public class DocFullViewActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
         @Override

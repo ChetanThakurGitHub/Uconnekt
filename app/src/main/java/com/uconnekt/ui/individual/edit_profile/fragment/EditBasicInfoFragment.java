@@ -13,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -35,13 +33,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
-import com.uconnekt.adapter.strengths.Strength1SpAdapter;
-import com.uconnekt.adapter.strengths.Strength2SpAdapter;
-import com.uconnekt.adapter.strengths.Strength3SpAdapter;
-import com.uconnekt.adapter.values.Value1SpAdapter;
-import com.uconnekt.adapter.values.Value2SpAdapter;
-import com.uconnekt.adapter.values.Value3SpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
 import com.uconnekt.custom_view.CusDialogProg;
@@ -51,8 +42,10 @@ import com.uconnekt.model.Address;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.sp.OnSpinerFragItemClick;
 import com.uconnekt.sp.OnSpinerItemClick;
 import com.uconnekt.sp.SpinnerDialog;
+import com.uconnekt.sp.SpinnerDialogFragment;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.individual.edit_profile.EditListener;
 import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
@@ -71,38 +64,23 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.RESULT_OK;
 
-public class EditBasicInfoFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class EditBasicInfoFragment extends Fragment implements View.OnClickListener {
 
     private IndiEditProfileActivity activity;
     private EditListener listener;
     private ArrayList<JobTitle> arrayList, strengthsList,strengthsList2,strengthsList3, valuesList, valuesList2, valuesList3;
-    private CustomSpAdapter customSpAdapter;
-    private Value1SpAdapter value1SpAdapter;
-    private Value2SpAdapter value2SpAdapter;
-    private Value3SpAdapter value3SpAdapter;
-    private Strength1SpAdapter strength1SpAdapter;
-    private Strength2SpAdapter strength2SpAdapter;
-    private Strength3SpAdapter strength3SpAdapter;
-    private Spinner sp_for_specialty, sp_for_value1, sp_for_value2, sp_for_value3,sp_for_strength1,sp_for_strength2,sp_for_strength3;
     private LinearLayout layout_for_values, mainlayout,layout_for_strengths;
     private Boolean opnClo = false,opnClo2 = false;
     private ImageView iv_for_up,iv_for_upDown;
     private EditText et_for_bio,et_for_fullname;
     private RelativeLayout layout_for_address;
     public TextView tv_for_address;
-    private TextView tv_for_txt;
     private Double latitude;
     private Double longitude;
     public String specialtyId = "",value = "",strengthID ="";
@@ -110,8 +88,9 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
     public int spValue1 = -1,spValue2 = -1,spValue3 = -1,spStrength1 = -1,spStrength2 = -1,spStrength3 = -1;
     private CusDialogProg cusDialogProg;
 
-    private TextView tv_for_specialty;
+    private TextView tv_for_specialty,tv_for_txt,tv_for_value1,tv_for_value2,tv_for_value3,tv_for_strength1,tv_for_strength2,tv_for_strength3;
     private SpinnerDialog spinnerDialog;
+    private SpinnerDialogFragment spinnerDialog2,spinnerDialog3,spinnerDialog4,spinnerDialog5,spinnerDialog6,spinnerDialog7;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,30 +104,9 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         valuesList = new ArrayList<>();
         valuesList2 = new ArrayList<>();
         valuesList3 = new ArrayList<>();
-        customSpAdapter = new CustomSpAdapter(activity, arrayList,R.layout.custom_sp2);
-        strength1SpAdapter = new Strength1SpAdapter(activity, strengthsList,this);
-        strength2SpAdapter = new Strength2SpAdapter(activity, strengthsList2,this);
-        strength3SpAdapter = new Strength3SpAdapter(activity, strengthsList3,this);
-        value1SpAdapter = new Value1SpAdapter(activity, valuesList,this);
-        value2SpAdapter = new Value2SpAdapter(activity, valuesList2,this);
-        value3SpAdapter = new Value3SpAdapter(activity, valuesList3,this);
-        sp_for_specialty.setAdapter(customSpAdapter);
-        sp_for_strength1.setAdapter(strength1SpAdapter);
-        sp_for_strength2.setAdapter(strength2SpAdapter);
-        sp_for_strength3.setAdapter(strength3SpAdapter);
-        sp_for_value1.setAdapter(value1SpAdapter);
-        sp_for_value2.setAdapter(value2SpAdapter);
-        sp_for_value3.setAdapter(value3SpAdapter);
 
         getlist();
 
-        sp_for_specialty.setOnItemSelectedListener(this);
-        sp_for_strength1.setOnItemSelectedListener(this);
-        sp_for_strength2.setOnItemSelectedListener(this);
-        sp_for_strength3.setOnItemSelectedListener(this);
-        sp_for_value1.setOnItemSelectedListener(this);
-        sp_for_value2.setOnItemSelectedListener(this);
-        sp_for_value3.setOnItemSelectedListener(this);
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -185,55 +143,9 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             listener = activity;
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()) {
-            case R.id.sp_for_specialty:
-                spinnerHide();
-                JobTitle jobTitle = arrayList.get(position);
-                specialtyId = jobTitle.jobTitleId;
-                break;
-            case R.id.sp_for_strength1:
-                JobTitle jobTitle1 = strengthsList.get(position);
-                strength1 = jobTitle1.jobTitleId;
-                spStrength1 = position;
-                break;
-            case R.id.sp_for_strength2:
-                JobTitle jobTitle5 = strengthsList.get(position);
-                strength2 = jobTitle5.jobTitleId;
-                spStrength2 = position;
-                break;
-            case R.id.sp_for_strength3:
-                JobTitle jobTitle6 = strengthsList.get(position);
-                strength3 = jobTitle6.jobTitleId;
-                spStrength3 = position;
-                break;
-            case R.id.sp_for_value1:
-                JobTitle jobTitle2 = valuesList.get(position);
-                value1 = jobTitle2.jobTitleId;
-                spValue1=position;
-                break;
-            case R.id.sp_for_value2:
-                JobTitle jobTitle3 = valuesList2.get(position);
-                value2 = jobTitle3.jobTitleId;
-                spValue2=position;
-                break;
-            case R.id.sp_for_value3:
-                JobTitle jobTitle4 = valuesList3.get(position);
-                value3 = jobTitle4.jobTitleId;
-                spValue3=position;
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     private void initView(View view) {
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
-        sp_for_specialty = view.findViewById(R.id.sp_for_specialty);
         mainlayout = view.findViewById(R.id.mainlayout);
         et_for_fullname = view.findViewById(R.id.et_for_fullname);
         EditText et_for_email = view.findViewById(R.id.et_for_email);
@@ -241,13 +153,15 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         tv_for_txt = view.findViewById(R.id.tv_for_txt);
         iv_for_upDown = view.findViewById(R.id.iv_for_upDown);
         et_for_bio = view.findViewById(R.id.et_for_bio);
-        sp_for_value1 = view.findViewById(R.id.sp_for_value1);
-        sp_for_value2 = view.findViewById(R.id.sp_for_value2);
-        sp_for_value3 = view.findViewById(R.id.sp_for_value3);
+
+        tv_for_value1 = view.findViewById(R.id.tv_for_value1);
+        tv_for_value2 = view.findViewById(R.id.tv_for_value2);
+        tv_for_value3 = view.findViewById(R.id.tv_for_value3);
+        tv_for_strength1 = view.findViewById(R.id.tv_for_strength1);
+        tv_for_strength2 = view.findViewById(R.id.tv_for_strength2);
+        tv_for_strength3 = view.findViewById(R.id.tv_for_strength3);
         tv_for_address = view.findViewById(R.id.tv_for_address);
-        sp_for_strength1 = view.findViewById(R.id.sp_for_strength1);
-        sp_for_strength2 = view.findViewById(R.id.sp_for_strength2);
-        sp_for_strength3 = view.findViewById(R.id.sp_for_strength3);
+
         layout_for_address = view.findViewById(R.id.layout_for_address);
         layout_for_address.setOnClickListener(this);
         layout_for_values = view.findViewById(R.id.layout_for_values);
@@ -261,8 +175,13 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         et_for_fullname.setText(Uconnekt.session.getUserInfo().fullName);
         et_for_email.setText(Uconnekt.session.getUserInfo().email);
 
-
         view.findViewById(R.id.layout_for_test).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_value1).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_value2).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_value3).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_strength1).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_strength2).setOnClickListener(this);
+        view.findViewById(R.id.layout_for_strength3).setOnClickListener(this);
         tv_for_specialty = view.findViewById(R.id.tv_for_specialty);
     }
 
@@ -305,18 +224,30 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             case R.id.layout_for_test:
                 spinnerDialog.showSpinerDialog();
                 break;
+            case R.id.layout_for_value1:
+                spinnerDialog2.showSpinerDialogFragment(1);
+                break;
+            case R.id.layout_for_value2:
+                spinnerDialog3.showSpinerDialogFragment(2);
+                break;
+            case R.id.layout_for_value3:
+                spinnerDialog4.showSpinerDialogFragment(3);
+                break;
+            case R.id.layout_for_strength1:
+                spinnerDialog5.showSpinerDialogFragment(4);
+                break;
+            case R.id.layout_for_strength2:
+                spinnerDialog6.showSpinerDialogFragment(5);
+                break;
+            case R.id.layout_for_strength3:
+                spinnerDialog7.showSpinerDialogFragment(6);
+                break;
         }
     }
 
 
     public void onSubmit(){
         spinnerHide();
-       /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                checkSpinnCheck();
-            }
-        }).start();*/
         checkSpinnCheck();
         if (activity.check.equals("Edit"))editValidation();else validation();
     }
@@ -415,7 +346,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                             jobTitles.jobTitleName = object.getString("specializationName");
                             arrayList.add(jobTitles);
                         }
-                        customSpAdapter.notifyDataSetChanged();
 
                         spinnerDialog = new SpinnerDialog(activity, arrayList, getString(R.string.area_of_specialtys));
                         spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
@@ -424,14 +354,15 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                                 specialtyId = job.jobTitleId;
                                 tv_for_specialty.setText(job.jobTitleName);
                             }
+
                         });
 
-                        JobTitle jobTitle1 = new JobTitle();
+                  /*      JobTitle jobTitle1 = new JobTitle();
                         jobTitle1.jobTitleId = "";
                         jobTitle1.jobTitleName = "";
                         strengthsList.add(jobTitle1);
                         strengthsList2.add(jobTitle1);
-                        strengthsList3.add(jobTitle1);
+                        strengthsList3.add(jobTitle1);*/
 
                         JSONArray strenght = result.getJSONArray("strenght_list");
                         for (int i = 0; i < strenght.length(); i++) {
@@ -443,16 +374,59 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                             strengthsList2.add(jobTitles);
                             strengthsList3.add(jobTitles);
                         }
-                        strength1SpAdapter.notifyDataSetChanged();
-                        strength2SpAdapter.notifyDataSetChanged();
-                        strength3SpAdapter.notifyDataSetChanged();
 
-                        JobTitle jobTitle2 = new JobTitle();
+                        spinnerDialog5 = new SpinnerDialogFragment(EditBasicInfoFragment.this, strengthsList, getString(R.string.strength_1),activity);
+                        spinnerDialog5.bindOnSpinerListener(new OnSpinerFragItemClick() {
+                            @Override
+                            public void onClick(int pos, JobTitle job) {
+                                strength1 = job.jobTitleId;
+                                if (!strength1.equals(strength2)&&!strength1.equals(strength3)){
+                                    strength1 = job.jobTitleId;
+                                    spStrength1 = pos;
+                                    tv_for_strength1.setText(job.jobTitleName);
+                                }else {
+                                    strength1 = "";
+                                }
+                            }
+                        });
+                        spinnerDialog6 = new SpinnerDialogFragment(EditBasicInfoFragment.this, strengthsList2, getString(R.string.strength_2),activity);
+                        spinnerDialog6.bindOnSpinerListener(new OnSpinerFragItemClick() {
+                            @Override
+                            public void onClick(int pos, JobTitle job) {
+                                strength2 = job.jobTitleId;
+                                if (!strength2.equals(strength1)&&!strength2.equals(strength3)){
+                                    strength2 = job.jobTitleId;
+                                    spStrength2 = pos;
+                                    tv_for_strength2.setText(job.jobTitleName);
+                                }else {
+                                    strength2 = "";
+                                }
+                            }
+                        });
+                        spinnerDialog7 = new SpinnerDialogFragment(EditBasicInfoFragment.this, strengthsList3, getString(R.string.strength_3),activity);
+                        spinnerDialog7.bindOnSpinerListener(new OnSpinerFragItemClick() {
+                            @Override
+                            public void onClick(int pos, JobTitle job) {
+                                strength3 = job.jobTitleId;
+                                if (!strength3.equals(strength2)&&!strength3.equals(strength1)){
+                                    strength3 = job.jobTitleId;
+                                    spStrength3 = pos;
+                                    tv_for_strength3.setText(job.jobTitleName);
+                                }else {
+                                    strength3 = "";
+                                }
+                            }
+                        });
+                        /*strength1SpAdapter.notifyDataSetChanged();
+                        strength2SpAdapter.notifyDataSetChanged();
+                        strength3SpAdapter.notifyDataSetChanged();*/
+
+                        /*JobTitle jobTitle2 = new JobTitle();
                         jobTitle2.jobTitleId = "";
                         jobTitle2.jobTitleName = "";
                         valuesList.add(jobTitle2);
                         valuesList2.add(jobTitle2);
-                        valuesList3.add(jobTitle2);
+                        valuesList3.add(jobTitle2);*/
 
                         JSONArray values = result.getJSONArray("value_list");
                         for (int i = 0; i < values.length(); i++) {
@@ -464,9 +438,54 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                             valuesList2.add(jobTitles);
                             valuesList3.add(jobTitles);
                         }
-                        value1SpAdapter.notifyDataSetChanged();
+
+                        spinnerDialog2 = new SpinnerDialogFragment(EditBasicInfoFragment.this, valuesList, getString(R.string.value_1),activity);
+                        spinnerDialog2.bindOnSpinerListener(new OnSpinerFragItemClick() {
+                            @Override
+                            public void onClick(int pos, JobTitle job) {
+                                value1 = job.jobTitleId;
+                                if (!value1.equals(value2)&&!value1.equals(value3)){
+                                    value1 = job.jobTitleId;
+                                    spValue1 = pos;
+                                    tv_for_value1.setText(job.jobTitleName);
+                                }else {
+                                    value1 = "";
+                                }
+                            }
+                        });
+                        spinnerDialog3 = new SpinnerDialogFragment(EditBasicInfoFragment.this, valuesList2, getString(R.string.value_2),activity);
+                        spinnerDialog3.bindOnSpinerListener(new OnSpinerFragItemClick() {
+                            @Override
+                            public void onClick(int pos, JobTitle job) {
+                                value2 = job.jobTitleId;
+                                if (!value2.equals(value1)&&!value2.equals(value3)){
+                                    value2 = job.jobTitleId;
+                                    spValue2 = pos;
+                                    tv_for_value2.setText(job.jobTitleName);
+                                }else {
+                                    value2 = "";
+                                }
+                            }
+                        });
+
+                        spinnerDialog4 = new SpinnerDialogFragment(EditBasicInfoFragment.this, valuesList3, getString(R.string.value_3),activity);
+                        spinnerDialog4.bindOnSpinerListener(new OnSpinerFragItemClick() {
+                            @Override
+                            public void onClick(int pos, JobTitle job) {
+                                value3 = job.jobTitleId;
+                                if (!value3.equals(value2)&&!value3.equals(value1)){
+                                    value3 = job.jobTitleId;
+                                    spValue3 = pos;
+                                    tv_for_value3.setText(job.jobTitleName);
+                                }else {
+                                    value3 = "";
+                                }
+                            }
+                        });
+
+                        /*value1SpAdapter.notifyDataSetChanged();
                         value2SpAdapter.notifyDataSetChanged();
-                        value3SpAdapter.notifyDataSetChanged();
+                        value3SpAdapter.notifyDataSetChanged();*/
 
                         showPrefilledData();
                     }
@@ -507,6 +526,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                         if(listener!=null) listener.onSwitchFragment(1);
                         UserInfo userInfo = Uconnekt.session.getUserInfo();
                         userInfo.isProfile = "1";
+
                         activity.clickable();
                         Uconnekt.session.createSession(userInfo);
                     } else {
@@ -568,16 +588,15 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
 
                         if (status.equalsIgnoreCase("success")) {
                             et_for_fullname.setText(fullname);
-                            JSONArray array = jsonObject.getJSONArray("user_profile");
-                            JSONObject userDetail = array.getJSONObject(0);
-                            UserInfo userFullDetail = new Gson().fromJson(userDetail.toString(), UserInfo.class);
+                            JSONObject object = jsonObject.getJSONObject("user_profile");
+                            UserInfo userFullDetail = new Gson().fromJson(object.toString(), UserInfo.class);
                             userFullDetail.password = Uconnekt.session.getUserInfo().password;
 
                             if (userFullDetail.status.equals("1")) {
-                                activity.clickable();
-                                if(listener!=null) listener.onSwitchFragment(1);
+                                if (!activity.check.equals("Edit")){activity.clickable();
+                                    if(listener!=null) listener.onSwitchFragment(1);}
                                 FirebaseLogin firebaseLogin = new FirebaseLogin();
-                                firebaseLogin.firebaseLogin(userFullDetail,activity,false, cusDialogProg ,false,false);
+                                firebaseLogin.firebaseLogin(userFullDetail,activity,false, cusDialogProg ,false,true);
                                 Constant.NETWORK_CHECK = 1;
 
                             } else {
@@ -693,7 +712,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                             specialtyId = specializationId;
                             for (int i = 0; arrayList.size() > i; i++) {
                                 if (arrayList.get(i).jobTitleId.equals(specializationId)) {
-                                    sp_for_specialty.setSelection(i);
                                     tv_for_specialty.setText(arrayList.get(i).jobTitleName);
                                     break;
                                 }
@@ -754,7 +772,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             value = value1;
             for (int i = 0; valuesList.size() > i; i++) {
                 if (valuesList.get(i).jobTitleId.equals(value11)) {
-                    sp_for_value1.setSelection(i);
+                    tv_for_value1.setText(valuesList.get(i).jobTitleName);
                     break;
                 }
             }
@@ -764,7 +782,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             value2 = value22;
             for (int i = 0; valuesList2.size() > i; i++) {
                 if (valuesList2.get(i).jobTitleId.equals(value22)) {
-                    sp_for_value2.setSelection(i);
+                    tv_for_value2.setText(valuesList2.get(i).jobTitleName);
                     break;
                 }
             }
@@ -774,7 +792,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             value3 =value33;
             for (int i = 0; valuesList3.size() > i; i++) {
                 if (valuesList3.get(i).jobTitleId.equals(value33)) {
-                    sp_for_value3.setSelection(i);
+                    tv_for_value3.setText(valuesList3.get(i).jobTitleName);
                     break;
                 }
             }
@@ -802,7 +820,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             strengthID = strength11;
             for (int i = 0; strengthsList.size() > i; i++) {
                 if (strengthsList.get(i).jobTitleId.equals(strength11)) {
-                    sp_for_strength1.setSelection(i);
+                    tv_for_strength1.setText(strengthsList.get(i).jobTitleName);
                     break;
                 }
             }
@@ -811,7 +829,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         if (!strength22.isEmpty()){
             for (int i = 0; strengthsList2.size() > i; i++) {
                 if (strengthsList2.get(i).jobTitleId.equals(strength22)) {
-                    sp_for_strength2.setSelection(i);
+                    tv_for_strength2.setText(strengthsList2.get(i).jobTitleName);
                     break;
                 }
             }
@@ -820,7 +838,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         if (!strength33.isEmpty()){
             for (int i = 0; strengthsList3.size() > i; i++) {
                 if (strengthsList3.get(i).jobTitleId.equals(strength33)) {
-                    sp_for_strength3.setSelection(i);
+                    tv_for_strength3.setText(strengthsList3.get(i).jobTitleName);
                     strength3 = strength33;
                     break;
                 }
@@ -879,7 +897,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                 tv_for_address.setText(placename);
             }
         }
-
     } // onActivityResult
 
     private void latlong(Double latitude, Double longitude) throws IOException {
@@ -894,5 +911,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             }
         }).execute();
     } // latlog to address find
+
 
 }

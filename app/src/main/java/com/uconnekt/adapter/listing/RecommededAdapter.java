@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.RecommendedList;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.employer.activity.ProfileActivity;
@@ -59,10 +60,10 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
         if (Uconnekt.session.getUserInfo().fullName.equals(recommendedList.fullName)){
             holder.tv_for_rName.setText("Recommeded by you");
         }else {
-            holder.tv_for_rName.setText(recommendedList.fullName.isEmpty()?"NA":"Recommended by "+"\""+recommendedList.fullName+"\"");
+            holder.tv_for_rName.setText(recommendedList.fullName.isEmpty()?"NA":"You are recommended by "+"\""+recommendedList.fullName+"\"");
         }
         }else {
-            holder.tv_for_rName.setText(recommendedList.fullName.isEmpty()?"NA":"Recommended to "+"\""+recommendedList.fullName+"\"");
+            holder.tv_for_rName.setText(recommendedList.fullName.isEmpty()?"NA":"You recommended "+"\""+recommendedList.fullName+"\"");
         }
         holder.tv_for_date.setText(recommendedList.created_on.isEmpty()?"NA": Utils.parseDateToddMMyyyy(recommendedList.created_on).substring(0,10));
 
@@ -92,9 +93,6 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.card_for_chat:
-                    MyCustomMessage.getInstance(context).customToast("Under development mode....");
-                    break;
                 case R.id.cardview:
                     if (Uconnekt.session.getUserInfo().userType.equals("individual")){
                     if (recommendedLists.get(getAdapterPosition()).recommend_by.equals(Uconnekt.session.getUserInfo().userId)) {
@@ -117,6 +115,23 @@ public class RecommededAdapter extends RecyclerView.Adapter<RecommededAdapter.Vi
                             context.startActivity(intent);
                         }
                     }
+                    break;
+                case R.id.card_for_chat:
+                    Intent intent = new Intent(context,ChatActivity.class);
+                    if (Uconnekt.session.getUserInfo().userType.equals("individual")){
+                        if (recommendedLists.get(getAdapterPosition()).recommend_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            intent.putExtra("USERID", recommendedLists.get(getAdapterPosition()).recommend_for);
+                        }else {
+                            intent.putExtra("USERID", recommendedLists.get(getAdapterPosition()).recommend_by);
+                        }
+                    }else {
+                        if (recommendedLists.get(getAdapterPosition()).recommend_by.equals(Uconnekt.session.getUserInfo().userId)) {
+                            intent.putExtra("USERID", recommendedLists.get(getAdapterPosition()).recommend_for);
+                        }else {
+                            intent.putExtra("USERID", recommendedLists.get(getAdapterPosition()).recommend_by);
+                        }
+                    }
+                    context.startActivity(intent);
                     break;
             }
         }

@@ -1,5 +1,6 @@
 package com.uconnekt.ui.employer.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,6 +57,7 @@ public class ResumeActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.layout_for_cv).setOnClickListener(this);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView(String url) {
         webView_resume.setWebViewClient(new MyWebViewClient());
         webView_resume.loadUrl(url);
@@ -73,6 +75,7 @@ public class ResumeActivity extends AppCompatActivity implements View.OnClickLis
         webView_resume.loadUrl("https://docs.google.com/gview?embedded=true&url="+url);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView2(String url) {
         webView_cv.setWebViewClient(new MyWebViewClient());
         webView_cv.loadUrl(url);

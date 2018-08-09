@@ -2,6 +2,7 @@ package com.uconnekt.adapter.listing;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +14,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.ViewList;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.util.Utils;
 
 import java.util.ArrayList;
@@ -74,10 +77,14 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.card_for_chat:
-                    MyCustomMessage.getInstance(context).customToast("Under development mode....");
+                    Intent intent = new Intent(context,ChatActivity.class);
+                    intent.putExtra("USERID",favourites.get(getAdapterPosition()).view_by);
+                    context.startActivity(intent);
                     break;
                 case R.id.cardview:
-
+                    intent = new Intent(context, IndiProfileActivity.class);
+                    intent.putExtra("UserId", favourites.get(getAdapterPosition()).view_by);
+                    context.startActivity(intent);
                     break;
             }
         }

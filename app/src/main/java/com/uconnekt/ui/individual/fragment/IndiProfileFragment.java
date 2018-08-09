@@ -34,7 +34,6 @@ import com.uconnekt.adapter.listing.ReviewListAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.ReviewList;
-import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.individual.activity.FavouriteActivity;
 import com.uconnekt.ui.individual.activity.RatingActivity;
@@ -439,7 +438,9 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".png";
+            File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Shared Profiles");
+            if (!f.exists()) f.mkdirs();
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/Uconnekt/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
             File imageFile = new File(mPath);

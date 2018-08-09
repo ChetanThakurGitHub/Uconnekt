@@ -3,7 +3,6 @@ package com.uconnekt.ui.individual.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.TestLooperManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,17 +15,14 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
-import com.uconnekt.model.RecommendedList;
 import com.uconnekt.ui.common_activity.BothFavouriteActivity;
 import com.uconnekt.ui.common_activity.BothRecommendedActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.BasicInfoActivity;
 import com.uconnekt.ui.employer.activity.ResumeActivity;
 import com.uconnekt.ui.employer.activity.experience.ExpActivity;
-import com.uconnekt.ui.employer.fragment.MyProfileFragment;
 import com.uconnekt.ui.individual.activity.FavouriteActivity;
 import com.uconnekt.ui.individual.activity.RecommendedActivity;
-import com.uconnekt.ui.individual.activity.ReviewActivity;
 import com.uconnekt.ui.individual.activity.ViewActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.util.Constant;
@@ -60,18 +56,23 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments()!=null){
-            String userID = "";
-            userID =  getArguments().getString(ARG_PARAM1);
-            if (userID.equals("profile_view")){
-                activity.startActivity(new Intent(activity,ViewActivity.class));
-            }else if (userID.equals("user_favourites")){
-                Intent intent = new Intent(activity,FavouriteActivity.class);
-                intent.putExtra("USERID",Uconnekt.session.getUserInfo().userId);
-                activity.startActivity(intent);
-            }else if (userID.equals("user_recommends")){
-                Intent intent = new Intent(activity,RecommendedActivity.class);
-                intent.putExtra("USERID",Uconnekt.session.getUserInfo().userId);
-                activity.startActivity(intent);
+            String userID =  getArguments().getString(ARG_PARAM1);
+            switch (userID) {
+                case "profile_view":
+                    activity.startActivity(new Intent(activity, ViewActivity.class));
+                    break;
+                case "user_favourites": {
+                    Intent intent = new Intent(activity, FavouriteActivity.class);
+                    intent.putExtra("USERID", Uconnekt.session.getUserInfo().userId);
+                    activity.startActivity(intent);
+                    break;
+                }
+                case "user_recommends": {
+                    Intent intent = new Intent(activity, RecommendedActivity.class);
+                    intent.putExtra("USERID", Uconnekt.session.getUserInfo().userId);
+                    activity.startActivity(intent);
+                    break;
+                }
             }
         }
     }

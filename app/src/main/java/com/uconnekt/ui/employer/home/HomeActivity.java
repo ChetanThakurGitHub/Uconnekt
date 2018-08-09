@@ -11,11 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
-import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.history.ChatFragment;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.employer.activity.EditProfileActivity;
-import com.uconnekt.ui.employer.fragment.ChatFragment;
 import com.uconnekt.ui.employer.fragment.FilterFragment;
 import com.uconnekt.ui.employer.fragment.MapFragment;
 import com.uconnekt.ui.employer.fragment.MyProfileFragment;
@@ -23,12 +22,7 @@ import com.uconnekt.ui.employer.fragment.ProfileFragment;
 import com.uconnekt.ui.employer.fragment.SearchFragment;
 import com.uconnekt.ui.employer.fragment.SettingFragment;
 import com.uconnekt.ui.employer.fragment.ViewProifileFragment;
-import com.uconnekt.ui.individual.activity.ReviewActivity;
 import com.uconnekt.ui.individual.fragment.FavouriteFragment;
-import com.uconnekt.ui.individual.fragment.IndiMapFragment;
-import com.uconnekt.util.Constant;
-
-import java.text.ParseException;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 
@@ -65,13 +59,22 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             String userType = extras.getString("type");
-            notificationManage(userType);
+            String userId = extras.getString("userId");
+            if (userId == null)userId = extras.getString("reference_id");
+            notificationManage(userType,userId);
         }
     }
 
-    private void notificationManage( String userType){
-        tabs.getTabAt(3).select();
-        replaceFragment(MyProfileFragment.newInstance(userType));
+    private void notificationManage(String userType, String userId){
+        if (userType.equals("Interview_offered_action.")|userType.equals("chat")){
+            tabs.getTabAt(2).select();
+            setToolbarIcon(6);
+            replaceFragment(ChatFragment.newInstance(userType,userId));
+        }else {
+            tabs.getTabAt(3).select();
+            replaceFragment(MyProfileFragment.newInstance(userType));
+        }
+
     }
 
     private void initView(){
@@ -177,41 +180,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 break;
         }
     }
-
-
-   /* @Override
-    public void onBackPressed() {
-        if (Uconnekt.session.isLoggedIn()) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-                setToolbarIcon(0);
-                //if (getCurrentFragment() instanceof SearchFragment) ((SearchFragment)getCurrentFragment()).getList();
-                tv_for_tittle.setText(R.string.search);
-
-            } else {
-                if (!doubleBackToExitPressedOnce) {
-                    this.doubleBackToExitPressedOnce = true;
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, getResources().getString(R.string.for_exit));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, Constant.BackPressed_Exit);
-                } else {
-                    super.onBackPressed();
-                }
-            }
-
-        } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                finish();
-            }
-        }
-    }
-*/
 
     @Override
     public void onBackPressed() {

@@ -3,7 +3,6 @@ package com.uconnekt.ui.common_activity.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -67,13 +66,11 @@ public class RecommendByMeFragment extends Fragment {
                 fullListAdapter.notifyDataSetChanged();
                 offset = 0;
                 VolleySingleton.getInstance(activity).cancelPendingRequests("Recommended");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getReviewsList(true);
-                    }
-                },1000);
-
+              try {
+                  getReviewsList(true);
+              }catch (Exception e){
+                  e.printStackTrace();
+              }
             }
         });
 

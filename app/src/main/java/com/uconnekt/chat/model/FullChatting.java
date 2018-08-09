@@ -10,7 +10,6 @@ public class FullChatting {
     public String location = "";
     public String status = "";
     public String noadKey="";
+    public String type = "";
+    public String interviewerName = "";
 }
-
-
-

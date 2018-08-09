@@ -101,7 +101,6 @@
         android:id="@+id/layout_for_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_minus5sdp"
         android:layout_marginBottom="@dimen/_5sdp">
 
         <android.support.v7.widget.AppCompatImageView
@@ -112,19 +111,6 @@
             android:layout_centerVertical="true"
             app:srcCompat="@drawable/ic_down_arrow"
             android:layout_alignParentRight="true" />
-
-        <Spinner
-            android:id="@+id/sp_for_specialty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_toLeftOf="@+id/image8"
-            android:background="@color/transparent"
-            android:dropDownVerticalOffset="@dimen/_30sdp"
-            android:dropDownWidth="@dimen/_245sdp"
-            android:gravity="center"
-            android:spinnerMode="dropdown"/>
 
         <TextView
             android:id="@+id/tv_for_specialty"
@@ -139,7 +125,6 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:fontFamily="@font/montserrat_regular"
-            android:layout_marginLeft="@dimen/_5sdp"
             android:hint="@string/area_of_specialtys"
             android:layout_toLeftOf="@+id/image8" />
 
@@ -196,6 +181,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_value1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -210,17 +196,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_value1"
+                <TextView
+                    android:id="@+id/tv_for_value1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image4"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/value_1"
+                    android:layout_toLeftOf="@+id/image4" />
 
             </RelativeLayout>
 
@@ -234,6 +225,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_value2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -248,17 +240,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_value2"
+                <TextView
+                    android:id="@+id/tv_for_value2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image6"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/value_2"
+                    android:layout_toLeftOf="@+id/image6" />
 
             </RelativeLayout>
 
@@ -272,6 +269,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_value3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -286,17 +284,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_value3"
+                <TextView
+                    android:id="@+id/tv_for_value3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image7"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/value_3"
+                    android:layout_toLeftOf="@+id/image7" />
 
             </RelativeLayout>
 
@@ -356,6 +359,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_strength1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -370,17 +374,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_strength1"
+                <TextView
+                    android:id="@+id/tv_for_strength1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/strength_1"
+                    android:layout_toLeftOf="@+id/image" />
 
             </RelativeLayout>
 
@@ -394,6 +403,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_strength2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -408,17 +418,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_strength2"
+                <TextView
+                    android:id="@+id/tv_for_strength2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image2"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/strength_2"
+                    android:layout_toLeftOf="@+id/image2" />
 
             </RelativeLayout>
 
@@ -432,6 +447,7 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:id="@+id/layout_for_strength3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -446,17 +462,22 @@
                     app:srcCompat="@drawable/ic_down_arrow"
                     android:layout_alignParentRight="true" />
 
-                <Spinner
-                    android:id="@+id/sp_for_strength3"
+                <TextView
+                    android:id="@+id/tv_for_strength3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_toLeftOf="@+id/image3"
-                    android:background="@color/transparent"
-                    android:dropDownVerticalOffset="@dimen/_30sdp"
-                    android:dropDownWidth="@dimen/_240sdp"
-                    android:gravity="center"
-                    android:spinnerMode="dropdown"/>
+                    android:textSize="@dimen/_12sdp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textColorHint="@color/lightgray"
+                    android:textColor="@color/darkgray"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="@string/strength_3"
+                    android:layout_toLeftOf="@+id/image3" />
 
             </RelativeLayout>
 

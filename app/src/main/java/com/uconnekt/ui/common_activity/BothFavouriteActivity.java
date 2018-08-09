@@ -1,6 +1,7 @@
 package com.uconnekt.ui.common_activity;
 
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +9,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,10 +17,6 @@ import android.widget.TextView;
 import com.uconnekt.R;
 import com.uconnekt.ui.common_activity.fragment.FavouriteByMeFragment;
 import com.uconnekt.ui.common_activity.fragment.FavouriteByOtherFragment;
-import com.uconnekt.ui.employer.activity.experience.ExpActivity;
-import com.uconnekt.ui.employer.activity.experience.fragment.CurrentRoleFragment;
-import com.uconnekt.ui.employer.activity.experience.fragment.NextRoleFragment;
-import com.uconnekt.ui.employer.activity.experience.fragment.PreviousRoleFragment;
 
 import java.util.ArrayList;
 import java.util.List;

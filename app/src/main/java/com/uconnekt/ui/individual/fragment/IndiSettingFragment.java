@@ -3,9 +3,7 @@ package com.uconnekt.ui.individual.fragment;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -24,8 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.UserInfo;
-import com.uconnekt.ui.individual.activity.FavouriteActivity;
-import com.uconnekt.ui.individual.activity.RecommendedActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -65,7 +61,10 @@ public class IndiSettingFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.layout_for_logout:
-                logout();
+                try{logout();
+                }catch (Exception e){
+                  e.printStackTrace();
+                }
                 break;
             case R.id.iv_for_btn:
                 noticaitonOnOff();
@@ -84,12 +83,11 @@ public class IndiSettingFragment extends Fragment implements View.OnClickListene
                     JSONObject object = new JSONObject(response);
                     String status = object.getString("status");
                     if (status.equals("success")){
-
                         FirebaseDatabase.getInstance().getReference().child("users").child(Uconnekt.session.getUserInfo().userId).child("firebaseToken").setValue("");
                         FirebaseAuth auth = FirebaseAuth.getInstance();
                         auth.signOut();
-                        NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancelAll();
+                        NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+                        assert notificationManager != null; notificationManager.cancelAll();
                         Uconnekt.session.logout(activity);
                     }
                 } catch (JSONException e) {

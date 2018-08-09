@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,11 +34,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
-        initView();
 
+        initView();
         SplashPresenter splashPresenter = new SplashPresenterImpl(this, new SplashIntractorImpl(), this);
         splashPresenter.validationCondition(this);
     }
+
+
 
     @Override
     protected void onStart() {
@@ -101,8 +102,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
-
+                //Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
+                Constant.CHAT = 0;
                if (Uconnekt.session.getUserInfo().userType.equals("business")){
                     //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
                     if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {

@@ -3,8 +3,8 @@ package com.uconnekt.web_services;
 public class AllAPIs {
 
  /*Base URL*/
- //private static final String URL_WITHOUT_LOGIN = "http://uconnekt.com.au/service/";
- private static final String URL_WITHOUT_LOGIN = "http://dev.uconnekt.com.au/service/";
+ private static final String URL_WITHOUT_LOGIN = "http://uconnekt.com.au/service/";
+ //private static final String URL_WITHOUT_LOGIN = "http://dev.uconnekt.com.au/service/";
  private static final String URL_WITH_LOGIN = URL_WITHOUT_LOGIN +"users/";
 
  /*Authontication*/
@@ -20,7 +20,8 @@ public class AllAPIs {
  public static final String MY_PROFILE = URL_WITH_LOGIN +"getMyProfile";
  public static final String PROFILE_UPDATE = URL_WITH_LOGIN +"profileUpdate";
  public static final String REQUEST_INTERVIEW = URL_WITHOUT_LOGIN +"requests/makeRequest";
-
+ public static final String DELETE_INTERVIEW = URL_WITHOUT_LOGIN +"requests/deleteRequest";
+ public static final String OFFER_OR_NOT = URL_WITHOUT_LOGIN +"requests/offerdNotOfferd";
 
  /*Comman APIs*/
  public static final String EMPLOYER_PROFILE = URL_WITH_LOGIN +"getDropdownList";
@@ -29,13 +30,13 @@ public class AllAPIs {
  public static final String LOGOUT = URL_WITH_LOGIN +"logout";
  public static final String NOTIFICATION = URL_WITH_LOGIN +"sendNotification";
  public static final String CHANGE_PASSWOWD = URL_WITH_LOGIN +"changePassword";
-
  public static final String RECOMMEND = URL_WITH_LOGIN +"addRecommends";
  public static final String FACOURITES = URL_WITH_LOGIN +"addFavourites";
  public static final String RECOMMENDS_LIST = URL_WITH_LOGIN +"getUserRecommends?user_id=";
  public static final String FAVOURITES_LIST = URL_WITH_LOGIN +"getUserFavourites?user_id=";
  public static final String FAVOURITES_LIST_BY_ME = URL_WITH_LOGIN +"getMyFavourites?user_id=";
  public static final String RECOMMENDS_LIST_BY_ME = URL_WITH_LOGIN +"getMyRecommands?user_id=";
+ public static final String TRACK_PROCESS = URL_WITHOUT_LOGIN +"requests/processData";
 
  /*Individual Side*/
  public static final String BASIC_INFO = URL_WITH_LOGIN +"updateBasicInfo";

@@ -29,7 +29,6 @@ import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
-import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.BasicInfoActivity;
 import com.uconnekt.ui.employer.activity.ResumeActivity;
@@ -37,7 +36,6 @@ import com.uconnekt.ui.employer.activity.experience.ExpActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.ui.individual.activity.FavouriteActivity;
 import com.uconnekt.ui.individual.activity.RecommendedActivity;
-import com.uconnekt.ui.individual.fragment.FavouriteFragment;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
@@ -59,7 +57,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static final String ARG_PARAM1 = "param1";
     private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "";
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,profile;
-    private int favourite_count = 0,recommend_count = 0;
+    private int favourite_count = 0,recommend_count = 0,check = 0;
     private TextView tv_for_bio,tv_for_review_count,tv_for_favourite_count,tv_for_recomend,
             tv_for_aofs,tv_for_address,tv_for_company,tv_for_fullName;
 
@@ -85,7 +83,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_profile2, container, false);
         activity.setToolbarIcon(2);
         initView(view);
-        view();
+        if (check == 0){view();check = 1;}
 
         iv_for_favourite.setOnClickListener(this);
         iv_for_recommend.setOnClickListener(this);
@@ -425,7 +423,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".png";
+            File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Shared Profiles");
+            if (!f.exists()) f.mkdirs();
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/Uconnekt/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
             File imageFile = new File(mPath);

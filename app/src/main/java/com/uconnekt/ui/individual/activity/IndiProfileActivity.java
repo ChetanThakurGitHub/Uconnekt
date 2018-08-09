@@ -27,8 +27,8 @@ import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.adapter.listing.ReviewListAdapter;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.ReviewList;
-import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.util.Constant;
 import com.uconnekt.volleymultipart.VolleyGetPost;
@@ -195,13 +195,15 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_for_chat:
-                MyCustomMessage.getInstance(this).customToast(getString(R.string.under_development_mode));
+                Intent intent = new Intent(this,ChatActivity.class);
+                intent.putExtra("USERID",userId);
+                startActivity(intent);
                 break;
             case R.id.iv_for_share:
                 deletelDailog();
                 break;
             case R.id.layout_for_rate:
-                Intent intent = new Intent(this,RatingActivity.class);
+                 intent = new Intent(this,RatingActivity.class);
                 intent.putExtra("USERID",userId);
                 startActivity(intent);
                 break;

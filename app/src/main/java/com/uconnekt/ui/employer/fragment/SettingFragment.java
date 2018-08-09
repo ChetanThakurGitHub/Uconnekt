@@ -70,7 +70,10 @@ private ImageView iv_for_btn;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.layout_for_logout:
-                logout();
+                try{logout();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 break;
             case R.id.iv_for_btn:
                 noticaitonOnOff();
@@ -92,8 +95,8 @@ private ImageView iv_for_btn;
                         FirebaseDatabase.getInstance().getReference().child("users").child(Uconnekt.session.getUserInfo().userId).child("firebaseToken").setValue("");
                         FirebaseAuth auth = FirebaseAuth.getInstance();
                         auth.signOut();
-                        NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.cancelAll();
+                        NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+                        assert notificationManager != null; notificationManager.cancelAll();
                         Uconnekt.session.logout(activity);
                     }
                 } catch (JSONException e) {

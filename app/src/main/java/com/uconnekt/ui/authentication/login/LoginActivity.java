@@ -18,7 +18,6 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
 import com.uconnekt.custom_view.CusDialogProg;
-import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.authentication.forgot_password.ForgotPasswordActivity;

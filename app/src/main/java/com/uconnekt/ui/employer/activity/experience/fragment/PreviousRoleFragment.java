@@ -28,12 +28,10 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
@@ -216,7 +214,7 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_description1.setText(previousRole.previous_description);
 
                 if (!previousRole.previous_start_date.isEmpty()&&!previousRole.previous_finish_date.isEmpty()) {
-                   getDayDifference(previousRole.previous_start_date, previousRole.previous_finish_date,0);
+                    getDateDifferenceInDDMMYYYY(previousRole.previous_start_date, previousRole.previous_finish_date,0);
                 }
 
                 break;
@@ -237,7 +235,7 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_description2.setText(previousRole1.previous_description);
 
                 if (!previousRole1.previous_start_date.isEmpty()&&!previousRole1.previous_finish_date.isEmpty()) {
-                    getDayDifference(previousRole1.previous_start_date, previousRole1.previous_finish_date,1);
+                    getDateDifferenceInDDMMYYYY(previousRole1.previous_start_date, previousRole1.previous_finish_date, 1);
                 }
                 break;
             case 2:
@@ -257,7 +255,7 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_description3.setText(previousRole2.previous_description);
 
                 if (!previousRole2.previous_start_date.isEmpty()&&!previousRole2.previous_finish_date.isEmpty()) {
-                    getDayDifference(previousRole2.previous_start_date, previousRole2.previous_finish_date,2);
+                    getDateDifferenceInDDMMYYYY(previousRole2.previous_start_date, previousRole2.previous_finish_date, 2);
                 }
                 break;
         }
@@ -304,62 +302,6 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
     }
 
 
-
-    private void getDayDifference(String departDateTime, String returnDateTime, int i) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
-
-        try {
-            Date startDate = simpleDateFormat.parse(departDateTime);
-            Date endDate = simpleDateFormat.parse(returnDateTime);
-
-            Calendar startCalendar = new GregorianCalendar();
-            startCalendar.setTime(startDate);
-            Calendar endCalendar = new GregorianCalendar();
-            endCalendar.setTime(endDate);
-
-            int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-            int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-
-            if (diffMonth != 0){
-                diffMonth = diffMonth - 12*diffYear;
-            }
-
-            long days = 0;
-
-            if (diffMonth == 0 && diffYear == 0) {
-
-                long different = endDate.getTime() - startDate.getTime();
-
-                System.out.println("startDate : " + startDate);
-                System.out.println("endDate : " + endDate);
-                System.out.println("different : " + different);
-
-
-                long secondsInMilli = 1000;
-                long minutesInMilli = secondsInMilli * 60;
-                long hoursInMilli = minutesInMilli * 60;
-                long daysInMilli = hoursInMilli * 24;
-                long monthInMilli = daysInMilli * 30;
-                long yearInMilli = monthInMilli * 12;
-
-                long elapsedYear = different / yearInMilli;
-                different = different % yearInMilli;
-
-                long elapsedMonth = different / monthInMilli;
-                different = different % monthInMilli;
-
-                long elapsedDays = different / daysInMilli;
-                
-                days = elapsedDays;
-            }
-   
-
-            setDate(diffYear,diffMonth,i,days,departDateTime,returnDateTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void setDate(long elapsedYear, long elapsedMonth, int i, long elapsedDays, String startDate, String endDate){
         String result ;
         if (elapsedYear != 0 | elapsedMonth != 0){
@@ -375,7 +317,57 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
     }
 
 
+    //*****************calculation********************
 
+    public void getDateDifferenceInDDMMYYYY(String departDateTime, String returnDateTime, int i) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
+        try {
+            Date startDate = simpleDateFormat.parse(departDateTime);
+            Date endDate = simpleDateFormat.parse(returnDateTime);
+
+
+            Calendar fromDate = Calendar.getInstance();
+            Calendar toDate = Calendar.getInstance();
+            fromDate.setTime(startDate);
+            toDate.setTime(endDate);
+            int increment = 0;
+            int year, month, day;
+            System.out.println(fromDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+            if (fromDate.get(Calendar.DAY_OF_MONTH) > toDate.get(Calendar.DAY_OF_MONTH)) {
+                increment = fromDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+            }
+            System.out.println("increment" + increment);
+// DAY CALCULATION
+            if (increment != 0) {
+                day = (toDate.get(Calendar.DAY_OF_MONTH) + increment) - fromDate.get(Calendar.DAY_OF_MONTH);
+                increment = 1;
+            } else {
+                day = toDate.get(Calendar.DAY_OF_MONTH) - fromDate.get(Calendar.DAY_OF_MONTH);
+            }
+
+// MONTH CALCULATION
+            if ((fromDate.get(Calendar.MONTH) + increment) > toDate.get(Calendar.MONTH)) {
+                month = (toDate.get(Calendar.MONTH) + 12) - (fromDate.get(Calendar.MONTH) + increment);
+                increment = 1;
+            } else {
+                month = (toDate.get(Calendar.MONTH)) - (fromDate.get(Calendar.MONTH) + increment);
+                increment = 0;
+            }
+
+// YEAR CALCULATION
+            year = toDate.get(Calendar.YEAR) - (fromDate.get(Calendar.YEAR) + increment);
+
+            setDate(year,month,i,day,departDateTime,returnDateTime);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     @SuppressLint("SetTextI18n")
     private void dateSet(int i, String result, String startDate, String endDate){

@@ -23,13 +23,17 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.uconnekt.R;
 import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.model.FullChatting;
+import com.uconnekt.chat.model.History;
 import com.uconnekt.chat.model.Interview;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
@@ -58,6 +62,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout layout_for_address;
     private Double latitude,longitude;
     private LinearLayout mainlayout;
+    private Object deleteTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         Bundle extras = getIntent().getExtras();
         if(extras != null)userId = extras.getString("USERID");
         if(extras != null)chatNode = extras.getString("NODE");
+        getDeleteTime();
     }
 
     private void addVelues(){
@@ -134,6 +140,8 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.interviewer_type));
         }else if (fullName.isEmpty()){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.interviewer_name));
+        }else if (fullName.length() > 30 ) {
+            MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string._name_r));
         }else if (date.isEmpty()){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.date_V));
         }else if (time.isEmpty()){
@@ -209,10 +217,10 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
             month = i2 - 1;
             year = i3;
         }
-        DatePickerDialog datepickerdialog = new DatePickerDialog(this, R.style.DefaultNumberPickerTheme, this, year, month, day);
-
+        DatePickerDialog datepickerdialog = new DatePickerDialog(this, this, year, month, day);
         datepickerdialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datepickerdialog.getWindow().setBackgroundDrawableResource(R.color.white);
+        datepickerdialog.setTitle("");
         datepickerdialog.show();
     }
 
@@ -275,29 +283,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject object = jsonObject.getJSONObject("data");
                         String interviewId = object.getString("interviewId");
-                        sendDataOnFirebase(address,date,time,interviewId);
-                        Toast.makeText(RequestActivity.this, message, Toast.LENGTH_SHORT).show();
-                        finish();
-
-                       /* "status":"success",
-                                "message":"Interview request successfully done.",
-                                "data":{
-                            "interviewId":"12",
-                                    "request_id":"8",
-                                    "type":"Recruiter",
-                                    "interviewer_name":"gbnnn",
-                                    "location":"Gujarat, India",
-                                    "latitude":"22.258652",
-                                    "longitude":"71.1923805",
-                                    "date":"2018-07-26",
-                                    "time":"03:14 AM",
-                                    "interview_status":"0",
-                                    "request_for":"312",
-                                    "request_by":"349",
-                                    "request_offer_status":"0",
-                                    "is_finished":"0"
-                        }*/
-
+                        sendDataOnFirebase(address,date,time,interviewId,fullName);
                     }else {
                         Toast.makeText(RequestActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
@@ -331,7 +317,25 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         }.executeVolley();
     }
 
-    private void sendDataOnFirebase(String address, String date, String time, String interviewId){
+    private void getDeleteTime(){
+        FirebaseDatabase.getInstance().getReference().child("history").child(userId).child(Uconnekt.session.getUserInfo().userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    History history = dataSnapshot.getValue(History.class);
+                    if (history.deleteTime != null){
+                        deleteTime = history.deleteTime;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void sendDataOnFirebase(String address, String date, String time, String interviewId, String fullName){
         FullChatting chatModel = new FullChatting();
         chatModel.message = "";
         chatModel.timeStamp = ServerValue.TIMESTAMP;
@@ -340,15 +344,34 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         chatModel.time = time;
         chatModel.location = address;
         chatModel.status = "0";
+        chatModel.type = type.toLowerCase();
+        chatModel.interviewerName = fullName;
 
-       // FirebaseDatabase.getInstance().getReference().child("chat_rooms/" + chatNode).push().setValue(chatModel);
         DatabaseReference genkey =  FirebaseDatabase.getInstance().getReference().child("chat_rooms/" + chatNode).push();
         chatModel.noadKey = genkey.getKey();
         genkey.setValue(chatModel);
 
         Interview interview = new Interview();
         interview.interviewId = interviewId;
-        FirebaseDatabase.getInstance().getReference().child("interview/" + userId).setValue(interview);
+        FirebaseDatabase.getInstance().getReference().child("interview/" + chatNode).setValue(interview);
+
+        History history = new History();
+        history.message = "Interview request";
+        history.timeStamp = chatModel.timeStamp;
+        history.userId = userId;
+        history.deleteTime = deleteTime;
+        history.readUnread = "0";
+        FirebaseDatabase.getInstance().getReference().child("history").child(chatModel.userId).child(userId).setValue(history);
+
+        History history2 = new History();
+        history2.message = "Interview request";
+        history2.timeStamp = chatModel.timeStamp;
+        history2.userId = chatModel.userId;
+        history2.deleteTime = deleteTime;
+        history2.readUnread = "1";
+        FirebaseDatabase.getInstance().getReference().child("history").child(userId).child(chatModel.userId).setValue(history2);
+
+        finish();
     }
 
 }

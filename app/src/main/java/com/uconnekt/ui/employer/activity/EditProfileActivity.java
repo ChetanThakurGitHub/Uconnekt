@@ -1,6 +1,6 @@
 package com.uconnekt.ui.employer.activity;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,20 +8,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -39,7 +35,6 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.BuildConfig;
 import com.uconnekt.R;
-import com.uconnekt.adapter.CustomSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
 import com.uconnekt.cropper.CropImage;
@@ -54,11 +49,6 @@ import com.uconnekt.sp.OnSpinerItemClick;
 import com.uconnekt.sp.SpinnerDialog;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
-import com.uconnekt.ui.employer.employer_profile.EmpProfileActivity;
-import com.uconnekt.ui.employer.employer_profile.EmpProfileIntractorImpl;
-import com.uconnekt.ui.employer.employer_profile.EmpProfilePresenter;
-import com.uconnekt.ui.employer.employer_profile.EmpProfilePresenterImpl;
-import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.util.Constant;
 import com.uconnekt.volleymultipart.AppHelper;
 import com.uconnekt.volleymultipart.VolleyGetPost;
@@ -254,7 +244,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     public void showBottomSheetDialog() {
         dialog = new BottomSheetDialog(this);
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
         dialog.setContentView(view);
         dialog.findViewById(R.id.layout_for_camera).setOnClickListener(this);
         dialog.findViewById(R.id.layout_for_gallery).setOnClickListener(this);
@@ -374,11 +364,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
             case MY_PERMISSIONS_REQUEST_LOCATION: {
 
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        //location();
-                    }
-                } else {
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.parmission));
                 }
             }
@@ -477,9 +463,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         String message = jsonObject.getString("message");
 
                         if (status.equalsIgnoreCase("success")) {
-                            JSONArray array = jsonObject.getJSONArray("user_profile");
-                           JSONObject userDetail = array.getJSONObject(0);
-                            UserInfo userFullDetail = new Gson().fromJson(userDetail.toString(), UserInfo.class);
+                            JSONObject array = jsonObject.getJSONObject("user_profile");
+                            UserInfo userFullDetail = new Gson().fromJson(array.toString(), UserInfo.class);
                             userFullDetail.password = Uconnekt.session.getUserInfo().password;
 
                             if (userFullDetail.status.equals("1")) {

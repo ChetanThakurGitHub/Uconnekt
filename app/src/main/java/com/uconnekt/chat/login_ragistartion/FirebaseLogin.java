@@ -137,6 +137,7 @@ public class FirebaseLogin {
                             Uconnekt.session.createSession(userDetails);
                             cusDialogProg.dismiss();
 
+
                             if (!isChecked) {
                                 Uconnekt.session.logoutMyPre();
                             }

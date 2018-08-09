@@ -33,37 +33,6 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-  /* public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
-        String backStackName = fragment.getClass().getName();
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        int i = fm.getBackStackEntryCount();
-        while (i > 0) {
-            fm.popBackStackImmediate();
-            i--;
-        }
-        boolean fragmentPopped = getFragmentManager().popBackStackImmediate(backStackName, 0);
-        if (!fragmentPopped) {
-            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(containerId, fragment, backStackName).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            if (addToBackStack)
-                transaction.addToBackStack(backStackName);
-            transaction.commit();
-        }
-    }
-
-    public void addFragment(Fragment fragment, boolean addToBackStack, int containerId) {
-        String backStackName = fragment.getClass().getName();
-        boolean fragmentPopped = getFragmentManager().popBackStackImmediate(backStackName, 0);
-        if (!fragmentPopped) {
-            android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            transaction.add(containerId, fragment, backStackName); //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            if (addToBackStack)
-                transaction.addToBackStack(backStackName);
-            transaction.commit();
-        }
-    }*/
-
     public void replaceFragment(Fragment fragmentHolder) {
         try{
             FragmentManager fragmentManager = getSupportFragmentManager();

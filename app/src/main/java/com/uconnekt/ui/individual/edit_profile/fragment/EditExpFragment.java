@@ -33,10 +33,12 @@ import com.google.gson.JsonArray;
 import com.uconnekt.R;
 import com.uconnekt.adapter.WeekSpAdapter;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
 import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.PreviousRole;
+import com.uconnekt.model.UserInfo;
 import com.uconnekt.model.Weeks;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.sp.OnSpinerItemClick;
@@ -88,7 +90,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     private String cCompanyName = "",startDate = "",finshdate = "",address = "";
 
     private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3;
-    public static int userFillData =-1;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -839,6 +840,9 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         week0.week = "";
                         weekList.add(week0);
                         JSONObject week = result.getJSONObject("availability_list");
+                        Weeks week5 = new Weeks();
+                        week5.week = week.getString("immediate");
+                        weekList.add(week5);
                         Weeks week1 = new Weeks();
                         week1.week = week.getString("1-4");
                         weekList.add(week1);
@@ -891,6 +895,13 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                     String status = jsonObject.getString("status");
                     String message = jsonObject.getString("message");
                     if (status.equalsIgnoreCase("success")) {
+
+                        String jobTitle = tv_for_jobTitle.getText().toString().trim();
+                        UserInfo userInfo = Uconnekt.session.getUserInfo();
+                        userInfo.jobTitleName = jobTitle;
+                        FirebaseLogin firebaseLogin = new FirebaseLogin();
+                        firebaseLogin.firebaseLogin(userInfo,activity,false, cusDialogProg,false,false);
+
                         if(listener!=null) listener.onSwitchFragment(2);
                     } else {
                         MyCustomMessage.getInstance(activity).snackbar(mainlayout,message);

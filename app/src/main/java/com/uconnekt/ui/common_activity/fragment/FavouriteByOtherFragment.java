@@ -3,7 +3,6 @@ package com.uconnekt.ui.common_activity.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -67,7 +66,11 @@ public class FavouriteByOtherFragment extends Fragment {
                 fullListAdapter.notifyDataSetChanged();
                 offset = 0;
                 VolleySingleton.getInstance(activity).cancelPendingRequests("FavouriteList");
-                getReviewsList(true);
+                try {
+                    getReviewsList(true);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 

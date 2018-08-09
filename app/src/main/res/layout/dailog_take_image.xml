@@ -28,6 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/_5sdp"
+            android:tint="@color/yellow"
             android:background="@drawable/circle_for_cross_bg"
             app:srcCompat="@drawable/ic_cross" />
     </RelativeLayout>
@@ -77,6 +78,7 @@
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
+                android:tint="@color/yellow"
                 app:srcCompat="@drawable/ic_image_pic" />
 
             <TextView

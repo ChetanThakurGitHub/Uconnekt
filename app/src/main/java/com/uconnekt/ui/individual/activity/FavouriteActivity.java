@@ -1,28 +1,23 @@
 package com.uconnekt.ui.individual.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.uconnekt.R;
 import com.uconnekt.adapter.listing.FavoriteAdapter;
-import com.uconnekt.adapter.listing.RecommededAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.Favourite;
-import com.uconnekt.model.RecommendedList;
 import com.uconnekt.pagination.EndlessRecyclerViewScrollListener;
 import com.uconnekt.ui.common_activity.NetworkActivity;
-import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 

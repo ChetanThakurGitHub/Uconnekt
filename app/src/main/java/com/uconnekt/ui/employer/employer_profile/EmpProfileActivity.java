@@ -1,6 +1,6 @@
 package com.uconnekt.ui.employer.employer_profile;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,6 +36,7 @@ import com.squareup.picasso.Picasso;
 import com.uconnekt.BuildConfig;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.chat.login_ragistartion.FirebaseLogin;
 import com.uconnekt.cropper.CropImage;
 import com.uconnekt.cropper.CropImageView;
 import com.uconnekt.custom_view.CusDialogProg;
@@ -75,10 +75,8 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
     private ArrayList<JobTitle> arrayList,specialityArrayList;
     private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo;
-   // private FusedLocationProviderClient mFusedLocationClient;
     public TextView tvTags,tv_for_jobTitle,tv_for_aofs;
     private Double latitude, longitude;
-   // private PermissionAll permissionAll;
     private BottomSheetDialog dialog;
     private ImageView iv_for_profile;
     private Bitmap profileImageBitmap;
@@ -108,10 +106,6 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         tv_for_fullName.setText(Uconnekt.session.getUserInfo().fullName);
         tv_for_businessName.setText(Uconnekt.session.getUserInfo().businessName);
 
-      //  mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-      //  permissionAll = new PermissionAll();
-       // location();
-
         arrayList = new ArrayList<>();
         specialityArrayList = new ArrayList<>();
         cusDialogProg = new CusDialogProg(this);
@@ -134,33 +128,6 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         et_for_bio.addTextChangedListener(textWatcher);
 
     }
-
-    /*private void location() {
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                permissionAll.checkLocationPermission(this);
-            }else {
-                mFusedLocationClient.getLastLocation()
-                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-                                    // Logic to handle location object
-                                    latitude = Double.valueOf(String.valueOf(location.getLatitude()));
-                                    longitude = Double.valueOf(String.valueOf(location.getLongitude()));
-
-                                    try {
-                                        latlong(latitude, longitude);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        });
-            }
-
-    }*/
 
     private void initView(){
         tv_for_jobTitle = findViewById(R.id.tv_for_jobTitle);
@@ -236,44 +203,13 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
     public void showBottomSheetDialog() {
         dialog = new BottomSheetDialog(this);
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
         dialog.setContentView(view);
         dialog.findViewById(R.id.layout_for_camera).setOnClickListener(this);
         dialog.findViewById(R.id.layout_for_gallery).setOnClickListener(this);
         dialog.findViewById(R.id.btn_for_close).setOnClickListener(this);
         dialog.show();
     }
-
-   /* private void spaiceltyClick() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_spaicelty);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        RecyclerView recycler_view = dialog.findViewById(R.id.recycler_view);
-        Button btn_for_save = dialog.findViewById(R.id.btn_for_save);
-        ImageView iv_for_crossDailog = dialog.findViewById(R.id.iv_for_crossDailog);
-
-        iv_for_crossDailog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btn_for_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        selectionAdapter = new MultipalSelectionAdapter(specialityArrayList,this);
-        recycler_view.setAdapter(selectionAdapter);
-
-        dialog.show();
-    }
-*/
 
 
     private void addressClick() {
@@ -361,7 +297,6 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                 city = address.getCity();
                 state = address.getState();
                 country = address.getCountry();
-               // city = (city == null)?(address.getState()== null)?address.getCountry():address.getState():address.getCountry();
             }
         }).execute();
 
@@ -376,11 +311,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
             case MY_PERMISSIONS_REQUEST_LOCATION: {
 
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        //location();
-                    }
-                } else {
+                if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.parmission));
                 }
             }
@@ -474,18 +405,28 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                     String data = new String(response.data);
                     try {
                         JSONObject jsonObject = new JSONObject(data);
-                        cusDialogProg.dismiss();
                         String status = jsonObject.getString("status");
                         String message = jsonObject.getString("message");
 
                         if (status.equalsIgnoreCase("success")) {
 
+                            String company_logo = jsonObject.getString("company_logo");
+
                             UserInfo userInfo = Uconnekt.session.getUserInfo();
                             userInfo.isProfile = "1";
-                            Uconnekt.session.createSession(userInfo);
+                            userInfo.specializationName = tv_for_aofs.getText().toString().trim();
+                            userInfo.company_logo = company_logo;
 
-                            startActivity(new Intent(EmpProfileActivity.this,HomeActivity.class));
-                            finish();
+                            FirebaseLogin firebaseLogin = new FirebaseLogin();
+                            firebaseLogin.firebaseLogin(userInfo,EmpProfileActivity.this,false, cusDialogProg,false,false);
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(EmpProfileActivity.this,HomeActivity.class));
+                                }
+                            },2000);
+
 
                         } else {
                             MyCustomMessage.getInstance(EmpProfileActivity.this).snackbar(mainlayout,message);

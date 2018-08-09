@@ -67,7 +67,11 @@ public class FavouriteByMeFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(true);
                 offset = 0;
                 VolleySingleton.getInstance(activity).cancelPendingRequests("Favourite");
-                getReviewsList(true);
+                try {
+                    getReviewsList(true);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 

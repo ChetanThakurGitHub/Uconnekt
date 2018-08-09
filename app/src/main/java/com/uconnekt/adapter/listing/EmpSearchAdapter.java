@@ -51,7 +51,6 @@ public class EmpSearchAdapter extends RecyclerView.Adapter<EmpSearchAdapter.View
         holder.tv_for_fullName.setText(busiSearchList.fullName.isEmpty()?"NA":busiSearchList.fullName);
         holder.tv_for_jobTitle.setText(busiSearchList.jobTitleName.isEmpty()?"NA":busiSearchList.jobTitleName);
         holder.tv_for_address.setText(busiSearchList.address.isEmpty()?"NA":busiSearchList.address);
-
     }
 
     @Override

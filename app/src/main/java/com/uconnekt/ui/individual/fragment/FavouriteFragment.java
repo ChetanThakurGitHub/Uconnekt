@@ -63,8 +63,6 @@ public class FavouriteFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
         initView(view);
-       /* Bundle extras = getIntent().getExtras();
-        if(extras != null) userId = extras.getString("USERID");*/
         getReviewsList();
 
         fullListAdapter = new FavoriteAdapter(getActivity(),favourites,userId, false);
@@ -96,9 +94,6 @@ public class FavouriteFragment extends Fragment {
     }
 
     private void initView(View view) {
-        /*ImageView iv_for_backIco = view.findViewById(R.id.iv_for_backIco);
-        iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
-        TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.favorites);*/
         recycler_view = view.findViewById(R.id.recycler_view);
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);

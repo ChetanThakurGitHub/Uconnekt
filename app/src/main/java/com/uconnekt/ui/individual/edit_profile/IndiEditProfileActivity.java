@@ -1,5 +1,6 @@
 package com.uconnekt.ui.individual.edit_profile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -19,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -74,34 +76,30 @@ public class IndiEditProfileActivity extends BaseActivity implements View.OnClic
 
         tabLayout.addOnTabSelectedListener(this);
 
-        findViewById(R.id.btn_for_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                manageClick();
+        if (!check.equals("Edit")) {
+            tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
+            for (int i = 0; i < tabStrip.getChildCount(); i++) {
+                tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+                    @SuppressLint("ClickableViewAccessibility")
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        MyCustomMessage.getInstance(IndiEditProfileActivity.this).snackbar(mainlayout, "Please press next button for upload basic info");
+                        return true;
+                    }
+                });
             }
-        });
-
-
-        tabStrip = ((LinearLayout)tabLayout.getChildAt(0));
-        for(int i = 0; i < tabStrip.getChildCount(); i++) {
-            tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    MyCustomMessage.getInstance(IndiEditProfileActivity.this).snackbar(mainlayout,"Please press next button for upload basic info");
-                    return true;
-                }
-            });
         }
     }
 
     private void manageClick(){
+        hideKeyboard();
         Fragment fragment = adapter.getItem(tabLayout.getSelectedTabPosition());
-
         if(fragment instanceof EditBasicInfoFragment){
             EditBasicInfoFragment tmp = (EditBasicInfoFragment) fragment;
             tmp.onSubmit();
         }else  if(fragment instanceof EditExpFragment){
             EditExpFragment tmp = (EditExpFragment) fragment;
+            Constant.NETWORK_CHECK = 1;
             tmp.onSubmit();
         }else if(fragment instanceof EditResumeFragment){
             EditResumeFragment tmp = (EditResumeFragment) fragment;
@@ -135,6 +133,15 @@ public class IndiEditProfileActivity extends BaseActivity implements View.OnClic
 
         if (check.equals("Edit"))iv_for_profile.setOnClickListener(this);
 
+        Button btn_for_next = findViewById(R.id.btn_for_next);
+        if (check.equals("Edit"))btn_for_next.setText(R.string.save);
+        findViewById(R.id.btn_for_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manageClick();
+            }
+        });
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -156,6 +163,7 @@ public class IndiEditProfileActivity extends BaseActivity implements View.OnClic
     public void clickable(){
         for(int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
+                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     return false;
@@ -163,19 +171,6 @@ public class IndiEditProfileActivity extends BaseActivity implements View.OnClic
             });
         }
     }
-
-   /* public void check(){
-
-        if (getCurrentFragment() instanceof EditBasicInfoFragment){
-            iv_for_camera.setVisibility(View.VISIBLE);
-            iv_for_profile.setEnabled(true);
-        }else {
-            iv_for_camera.setVisibility(View.GONE);
-            iv_for_profile.setEnabled(false);
-        }
-    }*/
-
-
 
     @Override
     public void onClick(View v) {
@@ -270,7 +265,7 @@ public class IndiEditProfileActivity extends BaseActivity implements View.OnClic
 
     private void showBottomSheetDialog() {
         dialog = new BottomSheetDialog(this);
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+        @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
         dialog.setContentView(view);
         dialog.findViewById(R.id.layout_for_camera).setOnClickListener(this);
         dialog.findViewById(R.id.layout_for_gallery).setOnClickListener(this);

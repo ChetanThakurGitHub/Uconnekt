@@ -9,23 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLngBounds;
-
-import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
-import com.uconnekt.application.Uconnekt;
-import com.uconnekt.model.IndiSearchList;
+import com.uconnekt.chat.history.IndiChatFragment;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
-import com.uconnekt.ui.employer.activity.EditProfileActivity;
-import com.uconnekt.ui.employer.activity.ResumeActivity;
-import com.uconnekt.ui.employer.fragment.ChatFragment;
-import com.uconnekt.ui.employer.fragment.MyProfileFragment;
-import com.uconnekt.ui.employer.fragment.ProfileFragment;
-import com.uconnekt.ui.employer.fragment.SettingFragment;
 import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
 import com.uconnekt.ui.individual.fragment.FavouriteFragment;
 import com.uconnekt.ui.individual.fragment.IndiFilterFragment;
@@ -73,13 +61,21 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             String userType = extras.getString("type");
-            notificationManage(userType);
+            String userId = extras.getString("userId");
+            if (userId == null)userId = extras.getString("reference_id");
+            notificationManage(userType,userId);
         }
     }
 
-    private void notificationManage( String userType){
-        tabs.getTabAt(3).select();
-        replaceFragment(IndiMyProfileFragment.newInstance(userType));
+    private void notificationManage(String userType, String userId){
+        if (userType.equals("interview_request.")|userType.equals("Interview_request_delete.")|userType.equals("chat")){
+            tabs.getTabAt(2).select();
+            setToolbarIcon(6);
+            replaceFragment(IndiChatFragment.newInstance(userType,userId));
+        } else {
+            tabs.getTabAt(3).select();
+            replaceFragment(IndiMyProfileFragment.newInstance(userType));
+        }
     }
 
     private void initView(){
@@ -164,7 +160,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_share.setVisibility(View.GONE);
                 break;
             case 6:
-                tv_for_tittle.setText(R.string.messages);
+                tv_for_tittle.setText(R.string.chat);
                 iv_for_backIco.setVisibility(View.GONE);
                 iv_for_filter.setVisibility(View.GONE);
                 iv_for_circular_arrow.setVisibility(View.GONE);
@@ -204,10 +200,8 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 Intent intent = new Intent(this,IndiEditProfileActivity.class);
                 intent.putExtra("FROM", "Edit");
                 startActivity(intent);
-                //startActivity(new Intent(this, IndiEditProfileActivity.class));
                 break;
             case R.id.iv_for_view:
-               // MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.under_development_mode));
                 addFragment(new IndiViewProfileFragment());
                 break;
         }
@@ -238,7 +232,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                     break;
                 case 2:
                     click = 2;
-                    replaceFragment(new ChatFragment());
+                    replaceFragment(new IndiChatFragment());
                     setTab(tab, R.drawable.ic_chat_yellow, true);
                     setToolbarIcon(6);
                     break;
@@ -332,36 +326,6 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-    /*@Override
-    public void onBackPressed() {
-        if (Uconnekt.session.isLoggedIn()) {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-                setToolbarIcon(0);
-                tv_for_tittle.setText(R.string.search);
-            } else {
-                if (!doubleBackToExitPressedOnce) {
-                    this.doubleBackToExitPressedOnce = true;
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, getResources().getString(R.string.for_exit));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, Constant.BackPressed_Exit);
-                } else {
-                    super.onBackPressed();
-                }
-            }
-
-        } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                finish();
-            }
-        }
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

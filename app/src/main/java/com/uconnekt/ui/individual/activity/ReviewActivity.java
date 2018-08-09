@@ -1,7 +1,6 @@
 package com.uconnekt.ui.individual.activity;
 
 import android.content.Intent;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -47,14 +46,6 @@ public class ReviewActivity extends AppCompatActivity implements View.OnClickLis
 
         Bundle extras = getIntent().getExtras();
         if(extras != null) userId = extras.getString("USERID");
-
-       /* if (userId.isEmpty()){
-        try {
-            String notification_id = getIntent().getStringExtra("notification_id");
-            userId = notification_id;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }}*/
 
         getReviewsList();
 

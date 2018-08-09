@@ -135,7 +135,7 @@
     <string name="select_from_gallery">Select from gallery</string>
     <string name="image">Image</string>
     <string name="take_new_photo">Take new photo</string>
-    <string name="select_form_gallery">Select form gallery</string>
+    <string name="select_form_gallery">Select from gallery</string>
     <string name="upload_resume">Upload Resume</string>
     <string name="attachment">Attachment</string>
     <string name="notifications">Notifications</string>
@@ -151,7 +151,9 @@
     <string name="no_result_found">No Result Found</string>
     <string name="no_matches_found">No Matches Found</string>
     <string name="no_favourite_found">No Favourites Found</string>
+    <string name="no_my_favourite_found">No My Favourites Found</string>
     <string name="no_rec_found">No Recommended Found</string>
+    <string name="no_my_rec_found">No My Recommended Found</string>
     <string name="no_review_found">No Review Found</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="no_internet_des">No internet connection found.\nPlease check your internet connection\nand try again.</string>
@@ -192,7 +194,7 @@
     <string name="na">NA</string>
     <string name="title_activity_experince">ExperinceActivity</string>
     <string name="previous_role_not_added">Previous Role Not Added</string>
-    <string name="no_resume_added">No Resume Added</string>
+    <string name="no_resume_added">No file found</string>
     <string name="_0">0</string>
     <string name="recommends">Recommend</string>
     <string name="my_profile">My Profile</string>
@@ -228,6 +230,7 @@
     <string name="interviewer_type">Please select Interviewer type</string>
     <string name="interviewer_name">Please select Interviewer name</string>
     <string name="date_V">Please select date of interview</string>
+    <string name="_name_r">Interviewer name should not be greater than 30 character\'s</string>
     <string name="time_v">Please select time of interview</string>
     <string name="location_V">Please add location</string>
     <string name="type_here_msg">Type here…</string>
@@ -237,5 +240,23 @@
     <string name="unblock_user">Do you want to unblock this user</string>
     <string name="current_role_not_added">Current Role Not Added</string>
     <string name="next_rol_not_added">Next Rol Not Added</string>
+    <string name="start_chat">Start chat</string>
+    <string name="job_offer_status">Job offer status</string>
+    <string name="pending">Pending</string>
+    <string name="offered">Offered</string>
+    <string name="offered_job">Job offered</string>
+    <string name="not_offered">Not offered</string>
+    <string name="not_offered_job">Job not offered</string>
+    <string name="your_interview_request_is_still_pending">Your interview request is still pending.</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="track_title">Track Progress</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="interview_request">Interviewee decline your interview request.</string>
+    <string name="acepted_inteview">Accepted this interview request.</string>
+    <string name="no_experience_added">No Experience Added</string>
+    <string name="request_sent">Request Sent</string>
+    <string name="pending_interview">Pending this interview request.</string>
+    <string name="delete">Delete</string>
+    <string name="no_chat_history_found">No Chat History Found</string>
 
 </resources>

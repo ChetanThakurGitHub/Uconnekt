@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:fontFamily="@font/montserrat_regular"
             android:textSize="@dimen/_12sdp"
-            android:textColor="@color/yellow"/>
+            android:textColor="@color/darkgray"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
                 android:id="@+id/iv_for_sender"
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_150sdp"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:visibility="gone" />
 
             <TextView
@@ -157,7 +157,7 @@
                 android:id="@+id/iv_for_reciver"
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_150sdp"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:visibility="gone" />
 
             <TextView
@@ -254,6 +254,7 @@
                 android:id="@+id/layout_for_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_gravity="center"
                 android:orientation="horizontal">
 
@@ -364,15 +365,17 @@
 
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="@dimen/_80sdp"
+                <TextView
+                    android:id="@+id/tv_for_rSend"
+                    android:layout_width="@dimen/_100sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:textSize="@dimen/_8sdp"
-                    android:text="Request Send"
+                    android:hint="@string/request_sent"
                     android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColorHint="@color/yellow"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:textColor="@color/yellow"
-                    android:textAllCaps="false"
                     android:fontFamily="@font/montserrat_regular"
                     android:background="@drawable/button_bg_white"/>
 
