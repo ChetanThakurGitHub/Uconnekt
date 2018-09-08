@@ -49,7 +49,7 @@ import java.util.Map;
 
 public class IndiProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "";
+    private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "",profileUrl = "";
     private TextView tv_for_bio,tv_for_favofite,tv_for_review,tv_for_aofs,tv_for_address,tv_for_recomend,tv_for_noReview,tv_for_specializationName,iv_for_fullName,tv_for_businessName;
     private RatingBar ratingBar;
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo;
@@ -81,8 +81,8 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
 
     private void initView() {
         findViewById(R.id.iv_for_chat).setOnClickListener(this);
-        findViewById(R.id.iv_for_share).setOnClickListener(this);
         findViewById(R.id.layout_for_rate).setOnClickListener(this);
+        findViewById(R.id.iv_for_share).setOnClickListener(this);
         findViewById(R.id.iv_for_backIco).setOnClickListener(this);
         findViewById(R.id.iv_for_backIco).setVisibility(View.VISIBLE);
         iv_profile_image = findViewById(R.id.iv_profile_image);
@@ -129,8 +129,7 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (status.equals("success")) {
-                        JSONArray array = jsonObject.getJSONArray("profile");
-                        JSONObject object = array.getJSONObject(0);
+                        JSONObject object = jsonObject.getJSONObject("profile");
                         company_logo = object.getString("company_logo");
                         profileImage = object.getString("profileImage");
                         fullName = object.getString("fullName");
@@ -138,7 +137,7 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
                         businessName = object.getString("businessName");
                         specializationName = object.getString("specializationName");
                         address = object.getString("address");
-                        // String bio = object.getString("bio");
+                        profileUrl = object.getString("profileUrl");
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         rating = object.getString("rating");
                         String review_count = jsonObject.getString("review_count");
@@ -255,7 +254,6 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
                         String isFavourite = jsonObject.getString("isFavourite");
 
                         iv_for_favourite.setImageResource(isFavourite.equals("1")?R.drawable.ic_love:R.drawable.ic_like_blank);
-                        //tv_for_favofite.setText(isFavourite.equals("1")?(favourite_count+1)+ " Favourite":(favourite_count!=0)?(favourite_count-1)+ " Favourite":(favourite_count)+ " Favourite");
 
                         if (isFavourite.equals("1")){
                             favourite_count = favourite_count + 1;
@@ -301,7 +299,6 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
                     if (status.equals("success")){
                         String isRecommend = jsonObject.getString("isRecommend");
                         iv_for_recommend.setImageResource(isRecommend.equals("1")?R.drawable.ic_thumbs:R.drawable.ic_like);
-                        //tv_for_recomend.setText(isRecommend.equals("1")?(recommend_count+1)+ " Recommend":(recommend_count!=0)?(recommend_count-1)+ " Recommend":(recommend_count)+ " Recommend");
                         if (isRecommend.equals("1")){
                             recommend_count = recommend_count + 1;
                             tv_for_recomend.setText(recommend_count+ " Recommend");
@@ -362,7 +359,6 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
         card_for_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
                 screenShot(layout_for_share);
             }
         });
@@ -410,7 +406,7 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
             Bitmap bitmap = Bitmap.createBitmap(scr_shot_view.getDrawingCache());
             bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream);
             scr_shot_view.destroyDrawingCache();
-            sharOnsocial(imageFile,"Testing");
+            sharOnsocial(imageFile,"Check this out “ Employer ” profile.");
             //onShareClick(imageFile,text);
             //doShareLink(text,otherProfileInfo.UserDetail.profileUrl);
         } catch (FileNotFoundException e) {
@@ -439,7 +435,7 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
         sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
-        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+"https://play.google.com/store");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
 
     }

@@ -22,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/yellow"
-            android:text="Chetan thakur"
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="@dimen/_14sdp"
@@ -32,7 +31,6 @@
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sdfdsfdsf"
             android:maxLines="1"
             android:ellipsize="end"
             android:fontFamily="@font/montserrat_regular"
@@ -40,6 +38,5 @@
             android:textSize="@dimen/_12sdp" />
 
     </LinearLayout>
-
 
 </RelativeLayout>

@@ -123,19 +123,6 @@
                             app:srcCompat="@drawable/ic_down_arrow"
                             android:layout_alignParentRight="true" />
 
-                      <!--  <Spinner
-                            android:id="@+id/sp_for_jobTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="gone"
-                            android:layout_toLeftOf="@+id/image"
-                            android:background="@color/transparent"
-                            android:dropDownVerticalOffset="@dimen/_30sdp"
-                            android:dropDownWidth="@dimen/_265sdp"
-                            android:gravity="center"
-                            android:spinnerMode="dropdown"/>-->
-
                         <TextView
                             android:id="@+id/tv_for_jobTitle"
                             android:layout_width="match_parent"
@@ -176,18 +163,6 @@
                             android:layout_centerVertical="true"
                             app:srcCompat="@drawable/ic_down_arrow"
                             android:layout_alignParentRight="true" />
-
-                      <!--  <Spinner
-                            android:id="@+id/sp_for_specialty"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_toLeftOf="@+id/image2"
-                            android:background="@color/transparent"
-                            android:dropDownVerticalOffset="@dimen/_30sdp"
-                            android:dropDownWidth="@dimen/_265sdp"
-                            android:gravity="center"
-                            android:spinnerMode="dropdown"/>-->
 
                         <TextView
                             android:id="@+id/tv_for_aofs"

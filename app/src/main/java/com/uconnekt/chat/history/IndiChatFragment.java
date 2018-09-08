@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,14 +20,10 @@ import com.uconnekt.R;
 import com.uconnekt.adapter.listing.IndiHistoryAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
-import com.uconnekt.chat.model.Chatting;
 import com.uconnekt.chat.model.FirebaseData;
 import com.uconnekt.chat.model.History;
 import com.uconnekt.chat.model.IndiChatHistory;
-import com.uconnekt.ui.individual.activity.FavouriteActivity;
-import com.uconnekt.ui.individual.activity.RecommendedActivity;
-import com.uconnekt.ui.individual.activity.ViewActivity;
-import com.uconnekt.ui.individual.fragment.IndiMyProfileFragment;
+import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 
 import java.util.ArrayList;
@@ -45,6 +40,7 @@ public class IndiChatFragment extends Fragment {
     private HashMap<String, IndiChatHistory> hashMap = new HashMap<>();
     private LinearLayout layout_for_noData;
     private static final String ARG_PARAM1 = "param1",ARG_PARAM2 = "param2";
+    private CusDialogProg cusDialogProg;
 
     public static IndiChatFragment newInstance(String notificationId, String userId) {
         IndiChatFragment fragment = new IndiChatFragment();
@@ -62,7 +58,7 @@ public class IndiChatFragment extends Fragment {
         if (getArguments()!=null){
             String type =  getArguments().getString(ARG_PARAM1);
             String userID =  getArguments().getString(ARG_PARAM2);
-            if (type.equals("interview_request.")| type.equals("Interview_request_delete.")|type.equals("chat")){
+            if (type.equals("interview_request.")| type.equals("Interview_request_delete.")|type.equals("chat")|type.equals("Interview_offered_action.")){
                Intent intent = new Intent(activity,ChatActivity.class);
                 intent.putExtra("USERID",userID);
                 activity.startActivity(intent);
@@ -78,6 +74,9 @@ public class IndiChatFragment extends Fragment {
         RecyclerView recycler_view = view.findViewById(R.id.recycler_view);
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
         recycler_view.setAdapter(indiHistoryAdapter);
+
+        cusDialogProg = new CusDialogProg(activity);
+        cusDialogProg.show();
 
         try {
             chatListCalling();
@@ -97,6 +96,7 @@ public class IndiChatFragment extends Fragment {
                 } else {
                     layout_for_noData.setVisibility(View.VISIBLE);
                     getMessageList();
+                    cusDialogProg.dismiss();
                 }
             }
             @Override
@@ -127,13 +127,9 @@ public class IndiChatFragment extends Fragment {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    for (int i = 0; i < indiChatHistories.size(); i++) {
-                        if (indiChatHistories.get(i).userId != null) {
-                            if (indiChatHistories.get(i).userId.equals(dataSnapshot.getKey())) {
-                                indiChatHistories.remove(i);
-                            }
-                        }
-                    }
+                    indiChatHistories.clear();
+                    hashMap.remove(dataSnapshot.getKey());
+                    indiChatHistories.addAll(hashMap.values());
                     shortList(indiChatHistories);
                 }
             }
@@ -156,29 +152,33 @@ public class IndiChatFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
-
+                    cusDialogProg.dismiss();
                     FirebaseData messageOutput = dataSnapshot.getValue(FirebaseData.class);
-                    IndiChatHistory indiChatHistory  = new IndiChatHistory();
-                    indiChatHistory.fullName = messageOutput.fullName;
-                    indiChatHistory.specializationName = messageOutput.specializationName;
-                    indiChatHistory.profileImage = messageOutput.profileImage;
-                    indiChatHistory.userId = messageOutput.userId;
-                    indiChatHistory.rating = messageOutput.rating;
-                    indiChatHistory.company_logo = messageOutput.company_logo;
-                    indiChatHistory.timeStamp = history.timeStamp;
-                    indiChatHistory.message = history.message;
-                    indiChatHistory.readUnread = history.readUnread;
-                    indiChatHistory.deleteTime = history.deleteTime;
+                    if (messageOutput != null) {
+                        IndiChatHistory indiChatHistory = new IndiChatHistory();
+                        indiChatHistory.fullName = messageOutput.fullName;
+                        indiChatHistory.specializationName = messageOutput.specializationName;
+                        indiChatHistory.profileImage = messageOutput.profileImage;
+                        indiChatHistory.userId = messageOutput.userId;
+                        indiChatHistory.rating = messageOutput.rating;
+                        indiChatHistory.company_logo = messageOutput.company_logo;
+                        indiChatHistory.timeStamp = history.timeStamp;
+                        indiChatHistory.message = history.message;
+                        indiChatHistory.readUnread = history.readUnread;
+                        indiChatHistory.deleteTime = history.deleteTime;
 
-                    Long deleteTime = (Long)indiChatHistory.deleteTime;
-                    if (deleteTime!=null) {
-                        if ((Long) indiChatHistory.timeStamp > deleteTime) hashMap.put(dataSnapshot.getKey(),indiChatHistory);
-                    }else hashMap.put(dataSnapshot.getKey(),indiChatHistory);
+                        Long deleteTime = (Long) indiChatHistory.deleteTime;
+                        if (deleteTime != null) {
+                            if ((Long) indiChatHistory.timeStamp > deleteTime)
+                                hashMap.put(dataSnapshot.getKey(), indiChatHistory);
+                        } else hashMap.put(dataSnapshot.getKey(), indiChatHistory);
 
-                    Collection<IndiChatHistory> demoValues = hashMap.values();
-                    indiChatHistories.clear();
-                    indiChatHistories.addAll(demoValues);
-                    shortList(indiChatHistories);
+                        Collection<IndiChatHistory> demoValues = hashMap.values();
+                        indiChatHistories.clear();
+                        indiChatHistories.addAll(demoValues);
+                        cusDialogProg.dismiss();
+                        shortList(indiChatHistories);
+                    }
                 }
             }
             @Override

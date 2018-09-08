@@ -17,7 +17,6 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.Favourite;
-import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.employer.activity.ProfileActivity;
 import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.util.Utils;
@@ -122,18 +121,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                             context.startActivity(intent);
                         }
                     }
-
-                   // context.startActivity(new Intent(context, IndiProfileActivity.class));
-
-                   /* if (context instanceof FavouriteActivity){
-
-                    }else {
-                        if (context instanceof HomeActivity) {
-                            ((HomeActivity) context).addFragment(ProfileFragment.newInstance(favourites.get(getAdapterPosition()).favourite_by));
-                        } else {
-                            ((JobHomeActivity) context).addFragment(IndiProfileFragment.newInstance(favourites.get(getAdapterPosition()).favourite_by));
-                        }
-                    }*/
                     break;
             }
         }

@@ -1,17 +1,23 @@
 package com.uconnekt.adapter.listing;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
@@ -75,6 +81,7 @@ public class EmpHistoryAdapter extends RecyclerView.Adapter<EmpHistoryAdapter.Vi
         private ImageView iv_profile_image;
         private TextView tv_for_fullName,tv_for_jobTitle,tv_for_message,tv_for_date;
         private View view_for_readUnread;
+        private SwipeRevealLayout swipe_layout;
         public ViewHolder(View itemView) {
             super(itemView);
             view_for_readUnread = itemView.findViewById(R.id.view_for_readUnread);
@@ -83,6 +90,7 @@ public class EmpHistoryAdapter extends RecyclerView.Adapter<EmpHistoryAdapter.Vi
             tv_for_jobTitle = itemView.findViewById(R.id.tv_for_jobTitle);
             tv_for_message = itemView.findViewById(R.id.tv_for_message);
             tv_for_date = itemView.findViewById(R.id.tv_for_date);
+            swipe_layout = itemView.findViewById(R.id.swipe_layout);
             itemView.findViewById(R.id.delete_layout).setOnClickListener(this);
             itemView.findViewById(R.id.layout).setOnClickListener(this);
         }
@@ -96,21 +104,59 @@ public class EmpHistoryAdapter extends RecyclerView.Adapter<EmpHistoryAdapter.Vi
                     context.startActivity(intent);
                     break;
                 case R.id.delete_layout:
-                    String myID = Uconnekt.session.getUserInfo().userId;
-                    EmpChatHistory empChatHistory = empChatHistories.get(getAdapterPosition());
+                    deleteDialog(getAdapterPosition(),swipe_layout);
 
-                    History history = new History();
-                    history.deleteTime = ServerValue.TIMESTAMP;
-                    history.timeStamp = empChatHistory.timeStamp;
-                    history.message = empChatHistory.message;
-                    history.userId = empChatHistory.userId;
-                    history.readUnread = "0";
-
-                    FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(empChatHistory.userId).setValue(history);
-                    chatFragment.getMessageList();
                     break;
             }
         }
+    }
+
+    private void deleteDialog(final int adapterPosition, final SwipeRevealLayout swipe_layout) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dailog_delete_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(dialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lWindowParams);
+
+
+        TextView tv_for_txt = dialog.findViewById(R.id.tv_for_txt);
+        TextView title = dialog.findViewById(R.id.title);
+        title.setText(R.string.delete);
+        tv_for_txt.setText(R.string.delete_txt);
+
+        dialog.findViewById(R.id.btn_for_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.btn_for_yes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipe_layout.close(true);
+                String myID = Uconnekt.session.getUserInfo().userId;
+                EmpChatHistory empChatHistory = empChatHistories.get(adapterPosition);
+
+                History history = new History();
+                history.deleteTime = ServerValue.TIMESTAMP;
+                history.timeStamp = empChatHistory.timeStamp;
+                history.message = empChatHistory.message;
+                history.userId = empChatHistory.userId;
+                history.readUnread = "0";
+
+                FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(empChatHistory.userId).setValue(history);
+                chatFragment.getMessageList();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 
@@ -122,32 +168,11 @@ public class EmpHistoryAdapter extends RecyclerView.Adapter<EmpHistoryAdapter.Vi
         String time = null;
         try {
             long timeStamp = (long) empChatHistory.timeStamp;
-
             @SuppressLint("SimpleDateFormat")
             DateFormat f = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.mmm'Z'");
             System.out.println(f.format(timeStamp));
-
             String currentString = f.format(timeStamp);
             time = currentString.substring(0,10);
-        /*    int hourOfDay = Integer.parseInt(CurrentString.substring(11, 13));
-            int minute = Integer.parseInt(CurrentString.substring(14, 16));
-
-            String status, minutes;
-
-            if (hourOfDay > 12) {
-                hourOfDay -= 12;
-                status = "PM";
-            } else if (hourOfDay == 0) {
-                hourOfDay += 12;
-                status = "AM";
-            } else if (hourOfDay == 12) {
-                status = "PM";
-            } else {
-                status = "AM";
-            }
-
-            minutes = (minute < 10) ? "0" + minute : String.valueOf(minute);
-            time = hourOfDay + ":" + minutes + " " + status;*/
         } catch (Exception e) {
             e.printStackTrace();
         }

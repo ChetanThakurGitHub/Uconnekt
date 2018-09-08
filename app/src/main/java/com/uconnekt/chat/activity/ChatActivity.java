@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,13 +15,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.adapter.ChatAdapter;
@@ -57,6 +62,7 @@ import com.uconnekt.ui.employer.activity.RequestActivity;
 import com.uconnekt.ui.employer.activity.TrackInterviewActivity;
 import com.uconnekt.ui.individual.activity.TrakProgressActivity;
 import com.uconnekt.util.Constant;
+import com.uconnekt.util.Utils;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
@@ -76,7 +82,8 @@ import java.util.UUID;
 
 public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView iv_for_send, iv_for_pickImage, iv_for_block;
+    private ImageView iv_for_send;
+    private ImageView iv_for_pickImage;
     private EditText et_for_sendTxt;
     private LinearLayout layout_for_noChat;
     private RecyclerView recycler_view;
@@ -87,13 +94,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     public String uID, chatNode, blockBy = "", myID = "", interviewID = "",is_finished = "",deleteNode = "",type = "";
     private DatabaseReference chatRef, databaseReference ;
     private Uri imageUri, photoURI;
-    private RelativeLayout mainlayout;
+    private RelativeLayout mainlayout,layoutTyping;
     private boolean isCamera,ischeck = true;
     public FirebaseData firebaseData;
-    private Object deleteTime;
+    public Object deleteTime,oppDeleteTime;
     private int totalCount = 0, tempCount = 0, listIndex = 0, increment = 0;
     private String lastIndexmessagekey= "";
     private SwipeRefreshLayout chat_swipe;
+    private PopupMenu popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +111,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         Constant.CHAT = 1;
         Bundle extras = getIntent().getExtras();
         if (extras != null) uID = extras.getString("USERID");
-        if (extras != null) type = extras.getString("Interview_request_delete.");
         myID = Uconnekt.session.getUserInfo().userId;
 
         getDeleteTime();
+        getOppDeleteTime();
 
         cusDialogProg = new CusDialogProg(this);
         cusDialogProg.show();
@@ -119,7 +127,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         chatAdapter = new ChatAdapter(chattings, this);
         recycler_view.setAdapter(chatAdapter);
 
-       chat_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        chat_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 ischeck = true;
@@ -145,19 +153,21 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         getInterviewID();
         getBlockList();
         getDataFromUserTable();
-    }
+        isTyping();
+        getTypingData();
 
+    }
 
     private void getDeleteTime(){
         FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(uID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.getValue() != null) {
                     FirebaseDatabase.getInstance().getReference().child("history").child(myID).child(uID).child("readUnread").setValue("0");
                     History history = dataSnapshot.getValue(History.class);
-                    if (history.deleteTime != null){
+                    if (history.deleteTime != null)
                         deleteTime = history.deleteTime;
-                    }
                 }
             }
             @Override
@@ -167,6 +177,39 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    private void getOppDeleteTime(){
+        FirebaseDatabase.getInstance().getReference().child("history").child(uID).child(myID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getKey().equals("deleteTime")) {
+                    oppDeleteTime = dataSnapshot.getValue();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getKey().equals("deleteTime")) {
+                    oppDeleteTime = dataSnapshot.getValue();
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        }) ;
+    }
+
     private void getDataFromUserTable() {
         FirebaseDatabase.getInstance().getReference().child("users").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
@@ -174,14 +217,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 if (dataSnapshot.getValue() != null) {
                     if (dataSnapshot.hasChild(uID)) {
                         FirebaseDatabase.getInstance().getReference().child("users").child(uID).addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
                                     firebaseData = dataSnapshot.getValue(FirebaseData.class);
                                     chatListCalling();
+                                    ImageView iv_for_profile = findViewById(R.id.iv_for_profile);
+                                    TextView tv_for_typing = findViewById(R.id.tv_for_typing);
+                                    if (firebaseData.profileImage != null)Picasso.with(ChatActivity.this).load(firebaseData.profileImage).into(iv_for_profile);
+                                    tv_for_typing.setText(firebaseData.fullName + " is typing...");
                                 }
                             }
-
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                             }
@@ -225,12 +272,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         finish();
         hideKeyboard();
         Constant.CHAT = 0;
+        getDeleteTime();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Constant.CHAT = 0;
+
     }
 
     public void getMessageList() {
@@ -279,25 +328,19 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                for(int i = 0 ; i<chattings.size();i++){
-                    if (chattings.get(i).userId != null) {
-                        if (chattings.get(i).userId.equals(dataSnapshot.getKey())) {
-                            chattings.remove(i);
-                        }
-                    }
-                }
+                chattings.clear();
+                listmap.remove(dataSnapshot.getKey());
+                chattings.addAll(listmap.values());
                 layout_for_noChat.setVisibility(chattings.size() == 0?View.VISIBLE:View.GONE);
                 shortList();
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -321,7 +364,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     listIndex = increment;
                 }
                 listmap.put(dataSnapshot.getKey(), messageOutput);
-            }
+            }/*else {
+                chatRef.child(messageOutput.noadKey).removeValue();//delete message
+            }*/
         }else {
             if (ischeck) {
                 lastIndexmessagekey = dataSnapshot.getKey();
@@ -361,6 +406,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 }
             }
         });
+        recycler_view.scrollToPosition(chattings.size() - 1);
         chatAdapter.notifyDataSetChanged();
         chat_swipe.setRefreshing(false);
     }
@@ -371,14 +417,18 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         et_for_sendTxt = findViewById(R.id.et_for_sendTxt);
         recycler_view = findViewById(R.id.recycler_view);
         iv_for_pickImage = findViewById(R.id.iv_for_pickImage);
-        iv_for_block = findViewById(R.id.iv_for_block);
         layout_for_noChat = findViewById(R.id.layout_for_noChat);
         findViewById(R.id.iv_for_backIco).setOnClickListener(this);
-        iv_for_block.setOnClickListener(this);
-        findViewById(R.id.iv_for_menu).setOnClickListener(this);
 
         chat_swipe = findViewById(R.id.chat_swipe);
         chat_swipe.setColorSchemeResources(R.color.yellow);
+
+        ImageView iv_for_menu = findViewById(R.id.iv_for_menu);
+        iv_for_menu.setOnClickListener(this);
+        popup = new PopupMenu(this, iv_for_menu);
+        popup.getMenuInflater().inflate(R.menu.menu_main, popup.getMenu());
+
+        layoutTyping = findViewById(R.id.layoutTyping);
     }
 
     private void writeToDBProfiles(FullChatting chatModel) {
@@ -401,7 +451,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         history2.message = message;
         history2.timeStamp = chatModel.timeStamp;
         history2.userId = myID;
-        history2.deleteTime = deleteTime;
+        history2.deleteTime = oppDeleteTime;
         history2.readUnread = "1";
         FirebaseDatabase.getInstance().getReference().child("history").child(uID).child(myID).setValue(history2);
 
@@ -555,31 +605,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()) {
 
             case R.id.iv_for_send:
-                String txt = et_for_sendTxt.getText().toString().trim();
-                if (!txt.equals("")) {
-
-                    FullChatting chatModel = new FullChatting();
-                    chatModel.message = txt;
-                    chatModel.timeStamp = ServerValue.TIMESTAMP;
-                    chatModel.userId = myID;
-                    chatModel.date = "";
-                    chatModel.time = "";
-                    chatModel.location = "";
-                    chatModel.status = "";
-
-                    if (blockBy.equals("")) {
-                        // messageCount();
-                        writeToDBProfiles(chatModel);
-                        et_for_sendTxt.setText("");
-                    } else if (blockBy.equals(myID)) {
-                        MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + firebaseData.fullName + ". " + "Can't send any message.");
-                    } else if (!blockBy.equals("")) {
-                        MyCustomMessage.getInstance(this).snackbar(mainlayout, "You currently blocked by " + firebaseData.fullName + ". " + "Can't send any message.");
-                    }
-
-                } else {
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "Please enter text");
-                }
+                sendMessage();
                 break;
             case R.id.iv_for_pickImage:
                 if (blockBy.equals("")) {
@@ -588,13 +614,10 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     if (new PermissionAll().RequestMultiplePermission1(ChatActivity.this))
                         userImageClick();
                 } else if (blockBy.equals(myID)) {
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + firebaseData.fullName + ". " + "Can't send any image.");
+                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "Your unable to contact "+firebaseData.fullName+"."+" Please seek an alternate method");
                 } else if (!blockBy.equals("")) {
-                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "You currently blocked by " + firebaseData.fullName + ". " + "Can't send any image.");
+                    MyCustomMessage.getInstance(this).snackbar(mainlayout, "Your unable to contact "+firebaseData.fullName+"."+" Please seek an alternate method");
                 }
-                break;
-            case R.id.iv_for_block:
-                blockUserDialog();
                 break;
             case R.id.iv_for_backIco:
                 onBackPressed();
@@ -605,35 +628,75 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    private void menuClick(){
-        if (blockBy.equals("")) {
-            if (Uconnekt.session.getUserInfo().userType.equals("business")){
-                if (is_finished.equals("0")){
-                    Intent intent = new Intent(this,TrackInterviewActivity.class);
-                    intent.putExtra("requestBy",uID);
-                    intent.putExtra("interviewID", interviewID);
-                    intent.putExtra("deleteNode", deleteNode);
-                    intent.putExtra("chatNode", chatNode);
-                    intent.putExtra("startChat",String.valueOf(chattings.get(0).timeStamp));
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(this, RequestActivity.class);
-                    intent.putExtra("USERID", uID);
-                    intent.putExtra("NODE", chatNode);
-                    startActivity(intent);
-                }
-            }else {
-                    Intent intent = new Intent(this, TrakProgressActivity.class);
-                    intent.putExtra("requestBy", uID);
-                    if (chattings.size() > 0)
-                        intent.putExtra("startChat", String.valueOf(chattings.get(0).timeStamp));
-                    startActivity(intent);
+    private void sendMessage(){
+        String txt = et_for_sendTxt.getText().toString().trim();
+        if (!txt.equals("")) {
+
+            FullChatting chatModel = new FullChatting();
+            chatModel.message = txt;
+            chatModel.timeStamp = ServerValue.TIMESTAMP;
+            chatModel.userId = myID;
+            chatModel.date = "";
+            chatModel.time = "";
+            chatModel.location = "";
+            chatModel.status = "";
+
+            if (blockBy.equals("")) {
+                writeToDBProfiles(chatModel);
+                et_for_sendTxt.setText("");
+            } else if (blockBy.equals(myID)) {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout, "Your unable to contact "+firebaseData.fullName+"."+" Please seek an alternate method");
+            } else if (!blockBy.equals("")) {
+                MyCustomMessage.getInstance(this).snackbar(mainlayout, "Your unable to contact "+firebaseData.fullName+"."+" Please seek an alternate method");
             }
-        } else if (blockBy.equals(myID)) {
-            MyCustomMessage.getInstance(this).snackbar(mainlayout, "You blocked " + firebaseData.fullName + ". ");
-        } else if (!blockBy.equals("")) {
-            MyCustomMessage.getInstance(this).snackbar(mainlayout, "You currently blocked by " + firebaseData.fullName + ". ");
+
+        } else {
+            MyCustomMessage.getInstance(this).snackbar(mainlayout, "Please enter text");
         }
+    }
+
+    private void menuClick() {
+        popup.getMenu().findItem(R.id.request).setVisible(Uconnekt.session.getUserInfo().userType.equals("business"));
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.track:
+                        if (Uconnekt.session.getUserInfo().userType.equals("business")) {
+                            Intent intent = new Intent(ChatActivity.this, TrackInterviewActivity.class);
+                            intent.putExtra("requestBy", uID);
+                            intent.putExtra("interviewID", interviewID);
+                            intent.putExtra("deleteNode", deleteNode);
+                            intent.putExtra("chatNode", chatNode);
+                            if (chattings.size() > 0)
+                                intent.putExtra("startChat", String.valueOf(chattings.get(0).timeStamp));
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(ChatActivity.this, TrakProgressActivity.class);
+                            intent.putExtra("requestBy", uID);
+                            if (chattings.size() > 0)
+                                intent.putExtra("startChat", String.valueOf(chattings.get(0).timeStamp));
+                            startActivity(intent);
+                        }
+                        break;
+                    case R.id.request:
+                        if (!is_finished.equals("0")){
+                            Intent intent = new Intent(ChatActivity.this, RequestActivity.class);
+                            intent.putExtra("USERID", uID);
+                            intent.putExtra("NODE", chatNode);
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(ChatActivity.this, "Already sent interview request", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case R.id.block:
+                        blockUserDialog();
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
     }
 
     private void blockUserDialog() {
@@ -643,8 +706,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         dialog.setContentView(R.layout.dailog_delete_layout);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(dialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lWindowParams);
+
         Button btn_for_yes = dialog.findViewById(R.id.btn_for_yes);
-        ImageView layout_for_crossDailog = dialog.findViewById(R.id.layout_for_crossDailog);
+        Button btn_for_no = dialog.findViewById(R.id.btn_for_no);
         final TextView tv_for_txt = dialog.findViewById(R.id.tv_for_txt);
 
         final BlockUsers blockUsers = new BlockUsers();
@@ -662,7 +731,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             tv_for_txt.setText(R.string.block_user);
         }
 
-        layout_for_crossDailog.setOnClickListener(new View.OnClickListener() {
+        btn_for_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
@@ -679,36 +748,29 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         dialog.show();
     }
 
+    private void blockCustom(DataSnapshot dataSnapshot){
+
+        blockBy = dataSnapshot.getValue(String.class);
+        if (blockBy.equals("")) {
+            popup.getMenu().findItem(R.id.block).setTitle("Block User");
+        } else if (blockBy.equals(myID)) {
+            popup.getMenu().findItem(R.id.block).setTitle("Unblock User");
+        } else if (blockBy.equals("Both")) {
+            popup.getMenu().findItem(R.id.block).setTitle("Unblock User");
+        } else if (blockBy.equals(uID)) {
+            popup.getMenu().findItem(R.id.block).setTitle("Block User");
+        }
+    }
+
     private void getBlockList() {
         databaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                blockBy = dataSnapshot.getValue(String.class);
-
-                if (blockBy.equals("")) {
-                    iv_for_block.setImageResource(R.drawable.ic_block);
-                } else if (blockBy.equals(myID)) {
-                    iv_for_block.setImageResource(R.drawable.ic_block_red);
-                } else if (blockBy.equals("Both")) {
-                    iv_for_block.setImageResource(R.drawable.ic_block_red);
-                } else if (blockBy.equals(uID)) {
-                    iv_for_block.setImageResource(R.drawable.ic_block);
-                }
+                blockCustom(dataSnapshot);
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                blockBy = dataSnapshot.getValue(String.class);
-
-                if (blockBy.equals("")) {
-                    iv_for_block.setImageResource(R.drawable.ic_block);
-                } else if (blockBy.equals(myID)) {
-                    iv_for_block.setImageResource(R.drawable.ic_block_red);
-                } else if (blockBy.equals("Both")) {
-                    iv_for_block.setImageResource(R.drawable.ic_block_red);
-                } else if (blockBy.equals(uID)) {
-                    iv_for_block.setImageResource(R.drawable.ic_block);
-                }
+                blockCustom(dataSnapshot);
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -807,4 +869,82 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    private void isTyping(){
+        mainlayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                mainlayout.getWindowVisibleDisplayFrame(r);
+                int screenHeight = mainlayout.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+                if (keypadHeight > screenHeight * 0.15) {
+                    FirebaseDatabase.getInstance().getReference().child("typing").child(myID).child("isTyping").setValue(1);
+                } else {
+                    FirebaseDatabase.getInstance().getReference().child("typing").child(myID).child("isTyping").setValue(0);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseDatabase.getInstance().getReference().child("typing").child(myID).child("isTyping").setValue(0);
+        getDeleteTime();
+    }
+
+    private void getTypingData(){
+        FirebaseDatabase.getInstance().getReference().child("typing").child(uID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot != null){
+                    int typing = dataSnapshot.getValue(Integer.class);
+                    scrollShowHide(typing);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot != null){
+                    int typing = dataSnapshot.getValue(Integer.class);
+                    scrollShowHide(typing);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void scrollShowHide(final int typing){
+        layoutTyping.setVisibility(typing==1?View.VISIBLE:View.GONE);
+        recycler_view.scrollToPosition(chattings.size() - 1);
+        recycler_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 && !layoutTyping.isShown()) {
+                    layoutTyping.setVisibility(typing==1?View.VISIBLE:View.GONE);
+                } else if (dy < 0 ) {
+                    layoutTyping.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+    }
 }

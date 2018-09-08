@@ -1,5 +1,6 @@
 package com.uconnekt.fcm;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -118,12 +119,12 @@ public class FcmNotificationBuilder {
         okhttp3.Call call = new OkHttpClient().newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
+            public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException e) {
                 Log.e(TAG, "onGetAllUsersFailure: " + e.getMessage());
             }
 
             @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+            public void onResponse(@NonNull okhttp3.Call call, @NonNull Response response) throws IOException {
                 Log.e(TAG, "onResponse: " + response.body().string());
             }
         });

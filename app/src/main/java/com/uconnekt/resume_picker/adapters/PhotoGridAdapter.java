@@ -1,6 +1,7 @@
 package com.uconnekt.resume_picker.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -50,7 +51,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   }
 
   @Override
-  public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View itemView = LayoutInflater.from(context).inflate(R.layout.item_photo_layout, parent, false);
 
     return new PhotoViewHolder(itemView);
@@ -65,7 +66,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   }
 
   @Override
-  public void onBindViewHolder(final PhotoViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull final PhotoViewHolder holder, int position) {
     if(getItemViewType(position) == ITEM_TYPE_PHOTO) {
 
       final Media media = getItems().get(showCamera?position-1:position);
@@ -185,9 +186,9 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
-      checkBox = (SmoothCheckBox) itemView.findViewById(R.id.checkbox);
-      imageView = (ImageView) itemView.findViewById(R.id.iv_photo);
-      videoIcon = (ImageView) itemView.findViewById(R.id.video_icon);
+      checkBox =  itemView.findViewById(R.id.checkbox);
+      imageView =  itemView.findViewById(R.id.iv_photo);
+      videoIcon =  itemView.findViewById(R.id.video_icon);
       selectBg = itemView.findViewById(R.id.transparent_bg);
     }
   }

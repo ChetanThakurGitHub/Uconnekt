@@ -324,8 +324,8 @@
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="@dimen/_12sdp"
-                            app:srcCompat="@drawable/ic_folded_newspaper"/>
+                            android:padding="@dimen/_10sdp"
+                            app:srcCompat="@drawable/ic_information"/>
 
                     </android.support.v7.widget.CardView>
 
@@ -389,10 +389,18 @@
                         app:cardElevation="@dimen/_5sdp">
 
                         <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:padding="@dimen/_11sdp"
+                            android:tint="@color/lightgray"
+                            android:layout_gravity="center"
+                            android:background="@drawable/circle_send_bg" />
+
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="@dimen/_12sdp"
-                            app:srcCompat="@drawable/ic_job"/>
+                            app:srcCompat="@drawable/ic_resume_icon"/>
 
                     </android.support.v7.widget.CardView>
 

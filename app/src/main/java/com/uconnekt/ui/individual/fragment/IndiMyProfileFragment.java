@@ -113,8 +113,7 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
                     String favourite_count = object.getString("favourite_count");
                     String recommend_count = object.getString("recommend_count");
                     if (status.equals("success")){
-                        JSONArray array = object.getJSONArray("indivisual_profile");
-                        JSONObject jsonObject = array.getJSONObject(0);
+                        JSONObject jsonObject = object.getJSONObject("indivisual_profile");
                         String fullName = jsonObject.getString("fullName");
                         String specializationName = jsonObject.getString("specializationName");
                         String address = jsonObject.getString("address");
@@ -171,7 +170,7 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         TextView tv_for_bio = view.findViewById(R.id.tv_for_bio);
 
         tv_for_favourite.setText(favourite_count.isEmpty()?"0":favourite_count);
-        tv_for_views.setText(view_count.isEmpty()?"0":view_count);
+        tv_for_views.setText(view_count.isEmpty()||view_count.equals("null")?"0":view_count);
         tv_for_recomend.setText(recommend_count.isEmpty()?"0":recommend_count);
 
         String bios = URLDecoder.decode(bio, "UTF-8");

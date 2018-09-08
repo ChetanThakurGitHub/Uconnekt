@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class MultiDrawable extends Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         if (mDrawables.size() == 1) {
             mDrawables.get(0).draw(canvas);
             return;

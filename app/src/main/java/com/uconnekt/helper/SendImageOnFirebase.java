@@ -6,18 +6,21 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.uconnekt.helper.ImagePicker.decodeBitmap;
 
 
 public class SendImageOnFirebase {
 
-    public static final String TEMP_IMAGE_NAME = "tempImage.jpg";
+    //public static final String TEMP_IMAGE_NAME = "tempImage.jpg";
     private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
     private static final int DEFAULT_MIN_HEIGHT_QUALITY = 400;
     private static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
@@ -51,7 +54,14 @@ public class SendImageOnFirebase {
     }
 
     public static File getTemporalFile(Context context) {
-        return new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
+        Log.e("path", String.valueOf(context.getExternalCacheDir()));
+
+        File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Pictures");
+        if (!f.exists()) f.mkdirs();
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/Uconnekt/Pictures/";
+
+        Log.e("path", mPath);
+        return new File(mPath, UUID.randomUUID() + ".jpg");  //TEMP_IMAGE_NAME
     }
 
     /**

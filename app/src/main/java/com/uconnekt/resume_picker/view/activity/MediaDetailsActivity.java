@@ -160,7 +160,7 @@ public class MediaDetailsActivity extends BaseFilePickerActivity implements File
       photoGridAdapter.setData(medias);
       photoGridAdapter.notifyDataSetChanged();
     } else {
-      photoGridAdapter = new PhotoGridAdapter(this, mGlideRequestManager, (ArrayList<Media>) medias,
+      photoGridAdapter = new PhotoGridAdapter(this, mGlideRequestManager, medias,
           PickerManager.getInstance().getSelectedPhotos(), false, this);
       recyclerView.setAdapter(photoGridAdapter);
     }

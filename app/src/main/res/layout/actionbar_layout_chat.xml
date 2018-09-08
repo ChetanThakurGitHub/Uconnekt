@@ -39,14 +39,4 @@
         app:srcCompat="@drawable/ic_menu"
         android:padding="@dimen/_5sdp" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/iv_for_block"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:padding="@dimen/_2sdp"
-        android:layout_toLeftOf="@+id/iv_for_menu"
-        app:srcCompat="@drawable/ic_block" />
-
 </RelativeLayout>

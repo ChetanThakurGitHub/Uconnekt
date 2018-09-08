@@ -60,12 +60,12 @@ import java.util.Map;
 public class IndiProfileFragment extends Fragment implements View.OnClickListener{
 
     private JobHomeActivity activity;
-    private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "";
+    private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "",profileUrl = "";
     private static final String ARG_PARAM1 = "param1";
     private TextView tv_for_bio,tv_for_favofite,tv_for_review,tv_for_aofs,tv_for_address,tv_for_recomend,tv_for_noReview,tv_for_specializationName,iv_for_fullName,tv_for_businessName;
     private RatingBar ratingBar;
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo;
-    private int favourite_count = 0,recommend_count = 0;
+    private int favourite_count = 0,recommend_count = 0,check = 0;;
     public ArrayList<ReviewList> list = new ArrayList<>();
     private ReviewListAdapter reviewListAdapter;
     private RecyclerView recycler_view;
@@ -103,6 +103,8 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         tv_for_recomend.setOnClickListener(this);
         iv_for_recommend.setOnClickListener(this);
         tv_for_review.setOnClickListener(this);
+
+        if (check == 0){view();check = 1;}
         return view;
     }
 
@@ -127,6 +129,30 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         iv_for_recommend = view.findViewById(R.id.iv_for_recommend);
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_for_noReview = view.findViewById(R.id.tv_for_noReview);
+    }
+
+    private void view(){
+        new VolleyGetPost(activity, AllAPIs.VIEW, true, "Recommend", false) {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onVolleyResponse(String response) {
+
+            }
+            @Override
+            public void onNetError() {
+            }
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                params.put("view_for",userId);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
     }
 
     private void setData(){
@@ -154,8 +180,8 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (status.equals("success")) {
-                        JSONArray array = jsonObject.getJSONArray("profile");
-                        JSONObject object = array.getJSONObject(0);
+                        JSONObject object = jsonObject.getJSONObject("profile");
+
                         company_logo = object.getString("company_logo");
                         profileImage = object.getString("profileImage");
                         fullName = object.getString("fullName");
@@ -163,9 +189,9 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                         businessName = object.getString("businessName");
                         specializationName = object.getString("specializationName");
                         address = object.getString("address");
-                       // String bio = object.getString("bio");
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         rating = object.getString("rating");
+                        profileUrl = object.getString("profileUrl");
                         String review_count = jsonObject.getString("review_count");
                         String favourite = jsonObject.getString("favourite_count");
                         if (!favourite.isEmpty())favourite_count = Integer.parseInt(favourite);
@@ -223,8 +249,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 Intent intent = new Intent(activity,ChatActivity.class);
                 intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
-
-                //MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
                 break;
             case R.id.iv_for_share:
                 deletelDailog();
@@ -241,8 +265,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 intent = new Intent(activity,FavouriteActivity.class);
                 intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
-                //activity.addFragment(FavouriteFragment.newInstance(userId));
-               // activity.setToolbarIcon(3);
                 break;
             case R.id.tv_for_recomend:
                 intent = new Intent(activity,RecommendedActivity.class);
@@ -291,7 +313,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                         String isFavourite = jsonObject.getString("isFavourite");
 
                         iv_for_favourite.setImageResource(isFavourite.equals("1")?R.drawable.ic_love:R.drawable.ic_like_blank);
-                        //tv_for_favofite.setText(isFavourite.equals("1")?(favourite_count+1)+ " Favourite":(favourite_count!=0)?(favourite_count-1)+ " Favourite":(favourite_count)+ " Favourite");
 
                         if (isFavourite.equals("1")){
                             favourite_count = favourite_count + 1;
@@ -337,7 +358,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                     if (status.equals("success")){
                         String isRecommend = jsonObject.getString("isRecommend");
                         iv_for_recommend.setImageResource(isRecommend.equals("1")?R.drawable.ic_thumbs:R.drawable.ic_like);
-                        //tv_for_recomend.setText(isRecommend.equals("1")?(recommend_count+1)+ " Recommend":(recommend_count!=0)?(recommend_count-1)+ " Recommend":(recommend_count)+ " Recommend");
                         if (isRecommend.equals("1")){
                             recommend_count = recommend_count + 1;
                             tv_for_recomend.setText(recommend_count+ " Recommend");
@@ -398,7 +418,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         card_for_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //MyCustomMessage.getInstance(activity).customToast(getString(R.string.under_development_mode));
                 screenShot(layout_for_share);
             }
         });
@@ -448,7 +467,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
             Bitmap bitmap = Bitmap.createBitmap(scr_shot_view.getDrawingCache());
             bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream);
             scr_shot_view.destroyDrawingCache();
-            sharOnsocial(imageFile,"Testing");
+            sharOnsocial(imageFile,"Check this out “ Employer ” profile.");
             //onShareClick(imageFile,text);
             //doShareLink(text,otherProfileInfo.UserDetail.profileUrl);
         } catch (FileNotFoundException e) {
@@ -477,7 +496,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
         sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
-        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+"https://play.google.com/store");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
 
     }

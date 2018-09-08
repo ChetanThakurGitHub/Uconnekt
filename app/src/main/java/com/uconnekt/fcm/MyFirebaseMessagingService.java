@@ -1,6 +1,7 @@
 package com.uconnekt.fcm;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,7 +27,9 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.ui.authentication.splash.SplashActivity;
+import com.uconnekt.ui.employer.activity.TrackInterviewActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
+import com.uconnekt.ui.individual.activity.TrakProgressActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.util.Constant;
 
@@ -35,112 +38,142 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMessagingService";
-   // Random r = new Random();
+    // Random r = new Random();
   //  private NotificationTarget notificationTarget;
 
     @SuppressLint("LongLogTag")
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Log.d(TAG, "getFrom : " + remoteMessage.getFrom().toString());
+        Log.d(TAG, "getFrom : " + remoteMessage.getFrom());
         Log.d(TAG, "getData : " + remoteMessage.getData().toString());
         Log.d(TAG, "getNotification : " + remoteMessage.getNotification().toString());
-
-        String sdklfj = Uconnekt.session.getUserInfo().isNotify;
 
         if (Uconnekt.session.getUserInfo().isNotify.equals("1") && Constant.CHAT == 0) {
             if (remoteMessage.getData() != null) {
                 notificationHandle(remoteMessage);
             }
+        }else {
+            Intent intent = new Intent(this, (Uconnekt.session.getUserInfo().userType.equals("business"))?TrackInterviewActivity.class:TrakProgressActivity.class);
+            sendBroadcast(intent);
         }
     }
 
     private void notificationHandle(RemoteMessage remoteMessage) {
 
-        //  getData : {profile_image=http://dev.uconnekt.com.au/uploads/profile/placeholder.png, reference_id=305, body=Chetan Thakur posted a review, type=user_review, sound=default, title=Reviewed your profile, click_action=business}
-
-        // getData : {reference_id=305, body=Chetan Thakur added to favourites, type=user_favourites, sound=default, title=Added to favourites, click_action=business}
-        //bus    // getData : {reference_id=305, body=Chetan Thakur posted a review, type=user_review, sound=default, title=Reviewed your profile, click_action=business}
-        //getData : {reference_id=516, body=Chetan Thakur added to favourites, type=user_favourites, sound=default, title=Added to favourites, click_action=business}
-        //getData : {reference_id=305, body=Chetan Thakur recommended you, type=user_recommends, sound=default, title=Recommended you, click_action=business}
-
-        //INDI // getData : {reference_id=305, body=Chetan Thakur recommended you, type=user_recommends, sound=default, title=Recommended you, click_action=individual}
-        //getData : {reference_id=306, body=Chetan Thakur recommended you, type=user_recommends, sound=default, title=Recommended you, click_action=individual}
-        // getData : {reference_id=306, body=Chetan Thakur recommended you, type=user_recommends, sound=default, title=Recommended you, click_action=individual}
+       // delete//{mutable-content=true, profile_image=http://dev.uconnekt.com.au/uploads/profile/placeholder.png, reference_id=349, body=Interview request has been deleted  by thakur, type=Interview_request_delete., sound=default, title=Action on request., click_action=individual}// calsel//{mutable-content=true, profile_image=http://dev.uconnekt.com.au/uploads/profile/placeholder.png, reference_id=349, body=Interview request has been deleted  by thakur, type=Interview_request_delete., sound=default, title=Action on request., click_action=individual}
+       //view profile {mutable-content=true, profile_image=http://www.dev.uconnekt.com.au/uploads/profile/medium/71c2e03f6eeabe121aea8a9e306db1d9.jpg, reference_id=349, body=Chetan thakur viewed your profile, type=profile_view, sound=default, title=Viewed your profile, click_action=business}
+        //{other_key=true, profile_image=http://www.uconnekt.com.au/uploads/profile/medium/9ab7c31f85fd887073a1dc689ff7fc45.jpg, reference_id=5, username=Chetan Thakur, body=chetan thkafjlasdfjlkfjslfj, type=chat, title=Chetan Thakur, click_action=individual}
 
         String type = remoteMessage.getData().get("type");
         String click_action = remoteMessage.getData().get("click_action");
         String profile_image = remoteMessage.getData().get("profile_image");
         String reference_id = remoteMessage.getData().get("reference_id");
 
+
         if (type != null && !type.equals("")) {
             if (click_action.equals("business")){
-                if (type.equals("user_review")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "1";
-                    sendNotificationAddReminder(body,title ,intentType,profile_image,reference_id);
-                } else if (type.equals("user_favourites")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "2";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                } else if (type.equals("user_recommends")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "3";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("Interview_offered_action.")){
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "8";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("chat")){
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "11";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
+                switch (type) {
+                    case "user_review": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "1";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "user_favourites": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "2";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "user_recommends": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "3";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "Request_action.": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "8";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "chat": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "11";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "profile_view": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "13";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
                 }
             }else {
-                if (type.equals("user_recommends")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "4";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("user_favourites")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "5";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("profile_view")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "6";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("interview_request.")){
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "7";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("Interview_request_delete.")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "9";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("Request_action.")) {
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "10";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
-                }else if (type.equals("chat")){
-                    String body = remoteMessage.getData().get("body");
-                    String title = remoteMessage.getData().get("title");
-                    String intentType = "12";
-                    sendNotificationAddReminder(body,title ,intentType, profile_image, reference_id);
+                switch (type) {
+                    case "user_recommends": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "4";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "user_favourites": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "5";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "profile_view": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "6";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "interview_request.": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "7";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "Interview_request_delete.": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "9";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "Interview_offered_action.": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "10";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
+                    case "chat": {
+                        String body = remoteMessage.getData().get("body");
+                        String title = remoteMessage.getData().get("title");
+                        String intentType = "12";
+                        sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
+                        break;
+                    }
                 }
             }
         }
@@ -150,60 +183,79 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = null;
 
         if (Uconnekt.session.isLoggedIn()) {
-            if (intentType.equals("1")) {
-                intent = new Intent(this, HomeActivity.class);
-                intent.putExtra("type", "user_review");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("2")) {
-                intent = new Intent(this, HomeActivity.class);
-                intent.putExtra("type", "user_favourites");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("3")) {
-                intent = new Intent(this, HomeActivity.class);
-                intent.putExtra("type", "user_recommends");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("4")) {
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "user_recommends");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("5")) {
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "user_favourites");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("6")) {
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "user_view");
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("7")){
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "interview_request.");
-                intent.putExtra("userId", reference_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            } else if (intentType.equals("8")){
-                intent = new Intent(this, HomeActivity.class);
-                intent.putExtra("type", "Interview_offered_action.");
-                intent.putExtra("userId", reference_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            }else if (intentType.equals("9")){
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "Interview_request_delete.");
-                intent.putExtra("userId", reference_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            }else if (intentType.equals("10")){
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "Interview_offered_action.");
-                intent.putExtra("userId", reference_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            }else if (intentType.equals("11")){
-                intent = new Intent(this, HomeActivity.class);
-                intent.putExtra("type", "chat");
-                intent.putExtra("userId", reference_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            }else if (intentType.equals("12")){
-                intent = new Intent(this, JobHomeActivity.class);
-                intent.putExtra("type", "chat");
-                intent.putExtra("userId", reference_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            switch (intentType) {
+                case "1":
+                    intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("type", "user_review");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "2":
+                    intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("type", "user_favourites");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "3":
+                    intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("type", "user_recommends");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "4":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "user_recommends");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "5":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "user_favourites");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "6":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "user_view");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "7":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "interview_request.");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "8":
+                    intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("type", "Request_action.");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "9":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "Interview_request_delete.");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "10":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "Interview_offered_action.");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "11":
+                    intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("type", "chat");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "12":
+                    intent = new Intent(this, JobHomeActivity.class);
+                    intent.putExtra("type", "chat");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
+                case "13":
+                    intent = new Intent(this, HomeActivity.class);
+                    intent.putExtra("type", "profile_view");
+                    intent.putExtra("userId", reference_id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    break;
             }
 
         } else {
@@ -213,13 +265,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         int num = (int) System.currentTimeMillis();
 
-        PendingIntent pendingIntent = PendingIntent.getActivities(this, num, new Intent[]{intent}, PendingIntent.FLAG_ONE_SHOT);
-        Uri notificaitonSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         String CHANNEL_ID = "my_channel_01";// The id of the channel.
         CharSequence name = "Abc";// The user-visible name of the channel.
-        int importance = NotificationManager.IMPORTANCE_HIGH;
-        NotificationChannel mChannel = null;
+        int importance = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            importance = NotificationManager.IMPORTANCE_HIGH;
+        }
+        NotificationChannel mChannel;
 
   /*      NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.new_app_ico))
@@ -229,8 +281,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(notificaitonSound)
-                .setContentIntent(pendingIntent)*/
-        ;
+                .setContentIntent(pendingIntent); */
 
         //custom notification .....
 
@@ -249,21 +300,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         remoteViews.setTextViewText(R.id.text, body);
 
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_notifications_ico)
                 .setTicker(body)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setContentIntent(resultIntent)
                 .setSound(defaultSoundUri)
+                .setNumber(1)
                 .setContent(remoteViews);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.setShowBadge(true);
+            mChannel.enableLights(true);
             notificationManager.createNotificationChannel(mChannel);
         }
-        notificationManager.notify(num, notificationBuilder.build());
+        Notification notification = notificationBuilder.build();
+        int notificatoinCount = +1;
+        ShortcutBadger.applyNotification(getApplicationContext(), notification, notificatoinCount);
+        notificationManager.notify(num, notification);
     }
 
     public Bitmap getBitmapFromURL(String strURL) {
@@ -304,8 +363,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         return output;
     }
 
-
-
        /* if (intentType.equals("7")) {
             NotificationCompat.Builder notificationBuilder1 = new NotificationCompat.Builder(this)
                     .setLargeIcon(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.new_app_ico))
@@ -319,40 +376,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationManager notificationManager1 = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager1.notify(0, notificationBuilder1.build());
         }*/
-
-
-
-
-   /* public void customNotificationRequest(String title, String userType, int requestId) {
-        int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
-        // Using RemoteViews to bind custom layouts into Notification
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.customnotification);
-
-        Intent intent = new Intent(this, MainActivityChefOrCook.class);
-        intent.putExtra("from", "notification");
-        intent.putExtra("requestId", String.valueOf(requestId));
-        // intent.putExtra("dataMap", (Serializable) dataMap);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent resultIntent = PendingIntent.getActivity(this, iUniqueId, intent, PendingIntent.FLAG_ONE_SHOT);
-        Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder(this)
-                .setAutoCancel(true)
-                .setSmallIcon(R.drawable.statusbar_icon)
-                .setTicker(title)
-                // .setAutoCancel(true)
-                .setContentIntent(resultIntent)
-                .setSound(defaultSoundUri)
-                .setContent(remoteViews);
-        remoteViews.setImageViewResource(R.id.imagenotileft, R.drawable.app_icon);
-        remoteViews.setTextViewText(R.id.title, "Ovengo");
-        remoteViews.setTextViewText(R.id.text, title);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(iUniqueId, mNotificationBuilder.build());
-    }*/
-
 
 }

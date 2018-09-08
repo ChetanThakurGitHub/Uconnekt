@@ -203,12 +203,20 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 if (position!=-1){activity.addFragment(ProfileFragment.newInstance(searchLists.get(position).userId));}
                 break;
             case R.id.iv_for_arrow:
-                activity.hideKeyboard();
-                tv_for_speName.setText("");
-                goneVisi = false;
-                iv_for_arrow.setPadding(3,3,3,3);
-                iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
-                layout_for_list.setVisibility(View.GONE);
+                if (!goneVisi) {
+                    layout_for_list.setVisibility(View.VISIBLE);
+                    iv_for_arrow.setImageResource(R.drawable.ic_cross);
+                    iv_for_arrow.setPadding(11,11,11,11);
+                    goneVisi = true;
+                    tv_for_speName.setFocusableInTouchMode(true);
+                }else {
+                    activity.hideKeyboard();
+                    tv_for_speName.setText("");
+                    goneVisi = false;
+                    iv_for_arrow.setPadding(3,3,3,3);
+                    iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                    layout_for_list.setVisibility(View.GONE);
+                }
                 break;
         }
     }
@@ -270,7 +278,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                     }
                 } else {
                     MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.parmission));
-                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country);
+                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false);
                 }
             }
             break;
@@ -295,7 +303,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
                                 createMarkerCurrent(clatitude,clongitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false);
                             }else if (Uconnekt.latitude!=0.0){
                                 latitude=Uconnekt.latitude;
                                 longitude=Uconnekt.longitude;
@@ -304,7 +312,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
                                 createMarkerCurrent(clatitude,clongitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false);
                             }
                         }
                     });
@@ -363,7 +371,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys){
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys, final boolean check){
         specialityID = specialityIDs;city = citys;state = states;country=countrys;
         jobTitleId = jobTitleIds;availabilityId = availabilityIds;locations = address;strengthId = strengthIds;valueId = valueIds;
 
@@ -377,7 +385,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                     JSONObject object = new JSONObject(response);
                     String status = object.getString("status");
                     String recordFound = object.getString("recordFound");
-                    if (recordFound.equals("0")) MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.no_map_data));
 
                     if (status.equalsIgnoreCase("success")) {
                         JSONArray array = object.getJSONArray("searchList");
@@ -388,6 +395,13 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 BusiSearchList busiSearchList = new Gson().fromJson(jsonObject.toString(),BusiSearchList.class);
                                 searchLists.add(busiSearchList);
                             }
+
+                            if (searchLists.size() == 0){
+                                MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.no_result_found));
+                            }else {
+                                if (recordFound.equals("0") && check) MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.no_map_data));
+                            }
+
                             multipleMarkers();
 
                             if (latitude != 0.0 && longitude != 0.0) {
@@ -410,8 +424,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                     map.animateCamera(cameraUpdate);
                                 }
                             }
-
-                            if (searchLists.size() == 0)MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.no_result_found));
                         }
                     }
                 } catch (JSONException e) {
@@ -435,9 +447,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 params.put("state",state==null?"":state);
                 params.put("country",country==null?"":country);
                 params.put("value",valueId);
-                params.put("pagination","1");
-                params.put("limit","20");
-                params.put("offset","0");
+                params.put("pagination","0");
                 return params;
             }
 
@@ -495,29 +505,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public boolean onClusterClick(Cluster<MyItem> cluster) {
-        // Show a toast with some info when the cluster is clicked.
-        // String firstName = cluster.getItems().iterator().next().name;
-        //Toast.makeText(activity, cluster.getSize() + " (including " + firstName + ")", Toast.LENGTH_SHORT).show();
-
-      /*  position = (int) cluster.getItems().iterator().next().position;
-        if (position != -1) {
-            IndiSearchList indiSearchList = searchLists.get(position);
-            card_for_viewPro.setVisibility(View.VISIBLE);
-            if (!indiSearchList.profileImage.isEmpty())
-                Picasso.with(activity).load(indiSearchList.profileImage).into(iv_profile_image);
-            if (!indiSearchList.company_logo.isEmpty())
-                Picasso.with(activity).load(indiSearchList.company_logo).into(iv_company_logo);
-            tv_for_fullName.setText(indiSearchList.fullName.isEmpty() ? "NA" : indiSearchList.fullName);
-            tv_for_businessName.setText(indiSearchList.businessName.isEmpty() ? "NA" : indiSearchList.businessName);
-            tv_for_specializationName.setText(indiSearchList.specializationName.isEmpty() ? "NA" : indiSearchList.specializationName);
-            tv_for_address.setText(indiSearchList.address.isEmpty() ? "NA" : indiSearchList.address);
-            ratingBar.setRating(indiSearchList.rating.isEmpty() ? 0 : Float.parseFloat(indiSearchList.rating));
-        } else {
-            card_for_viewPro.setVisibility(View.GONE);
-        }*/
-
-        // Zoom in the cluster. Need to create LatLngBounds and including all the cluster items
-        // inside of bounds, then animate to center of the bounds.
 
         // Create the builder to collect all essential cluster items for the bounds.
         LatLngBounds.Builder builder = LatLngBounds.builder();
@@ -529,7 +516,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
 
         // Animate camera to the bounds
         try {
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 15));
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
         } catch (Exception e) {
             e.printStackTrace();
         }

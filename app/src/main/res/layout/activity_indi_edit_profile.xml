@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mainlayout"
-    tools:context="com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity">14
+    tools:context="com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity">
 
     <include
         android:id="@+id/toolbar"

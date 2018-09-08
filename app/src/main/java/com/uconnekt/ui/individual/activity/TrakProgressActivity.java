@@ -1,6 +1,10 @@
 package com.uconnekt.ui.individual.activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,10 +15,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.ui.common_activity.NetworkActivity;
+import com.uconnekt.ui.employer.activity.TrackInterviewActivity;
 import com.uconnekt.util.Utils;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +31,8 @@ import java.util.Map;
 
 public class TrakProgressActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private String userId = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,28 +40,72 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
         Bundle bundle = getIntent().getExtras();
         time(bundle.getString("startChat"));
         initView();
-        trackProcess(bundle.getString("requestBy"));
+        userId = bundle.getString("requestBy");
+        getUserInfo(userId);
+        trackProcess();
     }
 
     private void initView() {
-        ImageView iv_for_profile = findViewById(R.id.iv_for_profile);
-        ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
-        TextView tv_for_fullName = findViewById(R.id.tv_for_fullName);
-        TextView tv_for_aofs = findViewById(R.id.tv_for_aofs);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
-
-        setData(iv_for_profile,tv_for_fullName,tv_for_aofs,iv_for_backIco,tv_for_tittle);
-    }
-
-    private void setData(ImageView iv_for_profile, TextView tv_for_fullName, TextView tv_for_aofs, ImageView iv_for_backIco, TextView tv_for_tittle) {
-        Picasso.with(this).load(Uconnekt.session.getUserInfo().profileImage).into(iv_for_profile);
-        tv_for_fullName.setText(Uconnekt.session.getUserInfo().fullName);
-        tv_for_aofs.setText(Uconnekt.session.getUserInfo().specializationName);
+        ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
         tv_for_tittle.setText(R.string.track_title);
     }
 
-    private void trackProcess(final String requestBy){
+    private void setDataProfile(String profileImage, String fullName, String businessName, String specializationName) {
+
+        ImageView iv_for_profile = findViewById(R.id.iv_for_profile);
+        TextView tv_for_fullName = findViewById(R.id.tv_for_fullName);
+        TextView tv_for_aofs = findViewById(R.id.tv_for_aofs);
+        TextView tv_for_company = findViewById(R.id.tv_for_company);
+
+        Picasso.with(this).load(profileImage).into(iv_for_profile);
+        tv_for_fullName.setText(fullName);
+        tv_for_company.setText(businessName);
+        tv_for_aofs.setText(specializationName);
+
+    }
+
+    private void getUserInfo(String requestBy){
+        new VolleyGetPost(this, AllAPIs.PROFILE+"user_id="+requestBy,false,"Profile",false) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if (status.equals("success")) {
+                        JSONObject object = jsonObject.getJSONObject("profile");
+                        String profileImage = object.getString("profileImage");
+                        String fullName = object.getString("fullName");
+                        String businessName = object.getString("businessName");
+                        String specializationName = object.getString("specializationName");
+                        setDataProfile(profileImage,fullName,businessName,specializationName);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+                startActivity(new Intent(TrakProgressActivity.this, NetworkActivity.class));
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+
+        }.executeVolley();
+    }
+
+    private void trackProcess(){
         new VolleyGetPost(this, AllAPIs.TRACK_PROCESS, true, "Process", true) {
             @SuppressLint("SetTextI18n")
             @Override
@@ -60,23 +113,40 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
                 try {
                     JSONObject object = new JSONObject(response);
                     String status = object.getString("status");
-                   // String message = object.getString("message");
+
                     if (status.equals("success")){
+
                         JSONObject object1 = object.getJSONObject("data");
+                        String requestId = object1.getString("requestId");
                         String request_offer_status = object1.getString("request_offer_status");
-                        String type = object1.getString("type");
-                        String interview_status = object1.getString("interview_status");
-                        String interview_date = Utils.formatDate(object1.getString("interview_time"), "yyyy-MM-dd", "dd-MM-yyyy");
-                        String interview_time = object1.getString("interview_date");
-                        String accept_declined_time = object1.getString("accept_declined_time");
+                        String is_finished = object1.getString("is_finished");
+                        String interviewData = object1.getString("interviewData");
+                        String createdDate = object1.getString("Created Date");
+                        String count = object1.getString("count");
+                        JSONArray array = object1.getJSONArray("interviewData");
 
-                        TextView tv_for_date3 = findViewById(R.id.tv_for_date3);
-                        tv_for_date3.setText(interview_date+" "+interview_time);
+                        JSONObject object2 = array.getJSONObject(0);
+                        String type = object2.getString("type");
+                        String is_delete = object2.getString("is_delete");
+                        String interview_status = object2.getString("interview_status");
+                        String upd = object2.getString("upd");
+                        String date = Utils.formatDate(object2.getString("date"), "yyyy-MM-dd", "dd-MM-yyyy");
+                        String time = object2.getString("time");
 
-                        TextView tv_for_type = findViewById(R.id.tv_for_type);
-                        tv_for_type.setText("Interview with "+type);
+                        String interview_status1 = "";
+                        if (count.equals("2")){
+                            JSONObject object3 = array.getJSONObject(1);
+                            interview_status1 = object3.getString("interview_status");
+                        }
 
-                        setData(accept_declined_time,interview_status,request_offer_status);
+                        if (!is_delete.equals("1")) {
+                            TextView tv_for_date3 = findViewById(R.id.tv_for_date3);
+                            tv_for_date3.setText(date + " " + time);
+                            TextView tv_for_date2 = findViewById(R.id.tv_for_date2);
+                            tv_for_date2.setText(date + " " + time);
+                        }
+
+                       if (!is_finished.equals("2"))setData(interview_status,request_offer_status,type,interview_status1);
 
                     }
 
@@ -92,7 +162,7 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public Map<String, String> setParams(Map<String, String> params) {
-                params.put("requestBy",requestBy);
+                params.put("requestBy",userId);
                 params.put("requestFor", Uconnekt.session.getUserInfo().userId);
                 return params;
             }
@@ -105,36 +175,132 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
         }.executeVolley();
     }
 
-    private void setData(String accept_declined_time, String interview_status, String request_offer_status){
-        dateTime(accept_declined_time);
+    private void setData(String interview_status, String request_offer_status, String type, String interview_status1){
+        //dateTime(accept_declined_time);
 
+        // sent request
         if (interview_status.equals("0")){
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.darkgray);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.GONE);
+            findViewById(R.id.iv_for_second).setVisibility(View.GONE);
+            TextView tv_for_data = findViewById(R.id.tv_for_data);
+            tv_for_data.setText(R.string.pending_recruiter);
+            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.active_img);
+            findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
+        }
+
+
+        if (interview_status.equals("0")&& type.equals("Employer")){
             findViewById(R.id.view_for_line1).setBackgroundResource(R.color.darkgray);
             findViewById(R.id.iv_for_secondIco).setVisibility(View.VISIBLE);
             findViewById(R.id.iv_for_second).setVisibility(View.GONE);
             TextView tv_for_data = findViewById(R.id.tv_for_data);
-            tv_for_data.setText(R.string.pending_interview);
-        }
-
-        if (interview_status.equals("1")){
+            tv_for_data.setText(R.string.interview_with_recruiter);
+            findViewById(R.id.tv_for_date2).setVisibility(View.GONE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.GONE);
             ImageView iv_for_second = findViewById(R.id.iv_for_second);
             iv_for_second.setImageResource(R.drawable.ic_tick_user_ico);
             findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);
             findViewById(R.id.iv_for_secondIco).setVisibility(View.GONE);
             findViewById(R.id.iv_for_image3).setVisibility(View.VISIBLE);
-            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.active_img);
-            TextView tv_for_data = findViewById(R.id.tv_for_data);
+            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.inactive_img);
+            findViewById(R.id.tv_for_date2).setVisibility(View.GONE);
             findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
             findViewById(R.id.view_for_line2).setBackgroundResource(R.color.yellow);
             findViewById(R.id.layout_for_data).setBackgroundResource(R.drawable.active_img);
-            tv_for_data.setText(R.string.acepted_inteview);
+            TextView tv_for_type = findViewById(R.id.tv_for_type);
+            tv_for_type.setText(R.string.pending_employer);
+            findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
         }
 
+
+
+        // decline employer
+        if (interview_status.equals("2")&& type.equals("Employer")){
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.darkgray);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_for_second).setVisibility(View.GONE);
+            TextView tv_for_data = findViewById(R.id.tv_for_data);
+            tv_for_data.setText(R.string.interview_with_recruiter);
+            findViewById(R.id.tv_for_date2).setVisibility(View.GONE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.GONE);
+            ImageView iv_for_second = findViewById(R.id.iv_for_second);
+            iv_for_second.setImageResource(R.drawable.ic_tick_user_ico);
+            findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.GONE);
+            findViewById(R.id.iv_for_image3).setVisibility(View.VISIBLE);
+            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.inactive_img);
+            findViewById(R.id.tv_for_date2).setVisibility(View.GONE);
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
+            findViewById(R.id.view_for_line2).setBackgroundResource(R.color.yellow);
+            findViewById(R.id.layout_for_data).setBackgroundResource(R.drawable.active_img);
+            TextView tv_for_type = findViewById(R.id.tv_for_type);
+            tv_for_type.setText(R.string.declined_employer);
+            findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
+        }
+
+
+        // accept emp
+        if (interview_status.equals("1")&& type.equals("Employer")|| interview_status1.equals("1")){
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.darkgray);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_for_second).setVisibility(View.GONE);
+            TextView tv_for_data = findViewById(R.id.tv_for_data);
+            tv_for_data.setText(R.string.interview_with_recruiter);
+            findViewById(R.id.tv_for_date2).setVisibility(View.GONE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.GONE);
+            ImageView iv_for_second = findViewById(R.id.iv_for_second);
+            iv_for_second.setImageResource(R.drawable.ic_tick_user_ico);
+            findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.GONE);
+            findViewById(R.id.iv_for_image3).setVisibility(View.VISIBLE);
+            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.inactive_img);
+            findViewById(R.id.tv_for_date2).setVisibility(View.GONE);
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
+            findViewById(R.id.view_for_line2).setBackgroundResource(R.color.yellow);
+            findViewById(R.id.layout_for_data).setBackgroundResource(R.drawable.active_img);
+            TextView tv_for_type = findViewById(R.id.tv_for_type);
+            tv_for_type.setText(R.string.accepted_employer);
+            findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
+        }
+
+
+
+        // accept recruter
+        if (interview_status.equals("1")&& !type.equals("Employer")){
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
+            TextView tv_for_data = findViewById(R.id.tv_for_data);
+            tv_for_data.setText(R.string.accepted_recruiter);
+            ImageView iv_for_second = findViewById(R.id.iv_for_second);
+            iv_for_second.setImageResource(R.drawable.ic_tick_user_ico);
+            findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.GONE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.GONE);
+            findViewById(R.id.tv_for_date2).setVisibility(View.VISIBLE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
+            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.active_img);
+        }
+
+        // decline recruter
+        if (interview_status.equals("2")&& !type.equals("Employer")){
+            findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
+            TextView tv_for_data = findViewById(R.id.tv_for_data);
+            tv_for_data.setText(R.string.decliend_recruiter);
+            ImageView iv_for_second = findViewById(R.id.iv_for_second);
+            iv_for_second.setImageResource(R.drawable.ic_tick_user_ico);
+            findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_for_secondIco).setVisibility(View.GONE);
+            findViewById(R.id.layout_for_request).setBackgroundResource(R.drawable.active_img);
+        }
+
+        // offered
         if (request_offer_status.equals("1")){
             findViewById(R.id.layout_for_data).setBackgroundResource(R.drawable.active_img);
             findViewById(R.id.layout_for_data2).setBackgroundResource(R.drawable.active_img);
             TextView tv_for_status = findViewById(R.id.tv_for_status);
             tv_for_status.setText(R.string.offered_job);
+            if(type.equals("Recruiter"))findViewById(R.id.tv_for_date2).setVisibility(View.VISIBLE);
             tv_for_status.setTextColor(Color.parseColor("#0d7d1d"));
             findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
             findViewById(R.id.view_for_line2).setBackgroundResource(R.color.yellow);
@@ -143,6 +309,7 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
             findViewById(R.id.iv_for_image4).setVisibility(View.VISIBLE);
         }
 
+        // not offered
         if (request_offer_status.equals("2")){
             findViewById(R.id.layout_for_data).setBackgroundResource(R.drawable.active_img);
             findViewById(R.id.layout_for_data2).setBackgroundResource(R.drawable.active_img);
@@ -221,6 +388,25 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
             String time = Utils.format12HourTime(hourOfDay + ":" + minute, "HH:mm", "hh:mm a");
             TextView tv_for_date2 = findViewById(R.id.tv_for_date2);
             tv_for_date2.setText(date + " " + time + "");
+    }
 
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            trackProcess();
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("IntentFilterTracking");
+        this.registerReceiver(broadcastReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
     }
 }

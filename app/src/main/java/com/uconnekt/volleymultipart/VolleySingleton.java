@@ -1,5 +1,6 @@
 package com.uconnekt.volleymultipart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -17,7 +18,9 @@ import com.android.volley.toolbox.Volley;
 
 public class VolleySingleton {
 
+    @SuppressLint("StaticFieldLeak")
     private static VolleySingleton mInstance;
+    @SuppressLint("StaticFieldLeak")
     private static Context mCtx;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;

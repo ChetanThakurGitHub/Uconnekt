@@ -54,7 +54,7 @@ public class PermissionAll {
         if (ContextCompat.checkSelfPermission(context , Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             // No explanation needed, we can request the permission.
-            ActivityCompat.requestPermissions((Activity) context,
+            ActivityCompat.requestPermissions( context,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     Constant.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             return false;
@@ -88,7 +88,7 @@ public class PermissionAll {
                 ThirdPermissionResult != PackageManager.PERMISSION_GRANTED) {
             // No explanation needed, we can request the permission.
             // Creating String Array with Permissions.
-            ActivityCompat.requestPermissions((Activity) context, new String[]
+            ActivityCompat.requestPermissions( context, new String[]
                     {
                             Manifest.permission.CAMERA,
                             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -111,7 +111,7 @@ public class PermissionAll {
                 ThirdPermissionResult != PackageManager.PERMISSION_GRANTED) {
             // No explanation needed, we can request the permission.
             // Creating String Array with Permissions.
-            ActivityCompat.requestPermissions((Activity) context, new String[]
+            ActivityCompat.requestPermissions( context, new String[]
                     {
                             Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,

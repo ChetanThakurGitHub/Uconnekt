@@ -16,7 +16,6 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.RecommendedList;
-import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.employer.activity.ProfileActivity;
 import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.util.Utils;

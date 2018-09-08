@@ -1,6 +1,7 @@
 package com.uconnekt.resume_picker.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -35,13 +36,14 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
     this.mListener = fileAdapterListener;
   }
 
-  @Override public FileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @NonNull
+  @Override public FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View itemView = LayoutInflater.from(context).inflate(R.layout.item_doc_layout, parent, false);
 
     return new FileViewHolder(itemView);
   }
 
-  @Override public void onBindViewHolder(final FileViewHolder holder, int position) {
+  @Override public void onBindViewHolder(@NonNull final FileViewHolder holder, int position) {
     final Document document = mFilteredList.get(position);
 
     int drawable = document.getFileType().getDrawable();

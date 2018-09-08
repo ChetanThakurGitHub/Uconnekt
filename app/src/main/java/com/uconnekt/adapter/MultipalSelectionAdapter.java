@@ -53,10 +53,10 @@ public class MultipalSelectionAdapter extends RecyclerView.Adapter<MultipalSelec
                     holder.imgCheck.setImageResource(R.drawable.ic_uncheck);
                     list.get(position).isCheck=false;
                 }
-                String result="";
+                StringBuilder result= new StringBuilder();
                 for (Speciality s:list){
                     String data=s.isCheck?s.name+",":"";
-                    result=result+data;
+                    result.append(data);
                 }
 
                 tagId = speciality.id+",";
@@ -68,11 +68,11 @@ public class MultipalSelectionAdapter extends RecyclerView.Adapter<MultipalSelec
                     }
                 }
 
-                if (result.endsWith(",")) {
-                    result = result.substring(0, result.length() - 1);
+                if (result.toString().endsWith(",")) {
+                    result = new StringBuilder(result.substring(0, result.length() - 1));
                 }
 
-                activity.tvTags.setText(result);
+                activity.tvTags.setText(result.toString());
             }
         });
     }

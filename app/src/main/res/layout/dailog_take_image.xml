@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_margin="@dimen/_10sdp"
-            android:text="@string/image"
+            android:text="@string/image_op"
             android:textColor="@color/white"
             android:textSize="@dimen/_14sdp" />
 

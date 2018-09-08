@@ -60,11 +60,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public String specialityID = "",jobTitleId = "",availabilityId = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
@@ -315,12 +310,20 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.iv_for_arrow:
-                activity.hideKeyboard();
-                tv_for_speName.setText("");
-                goneVisi = false;
-                iv_for_arrow.setPadding(3,3,3,3);
-                iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
-                layout_for_list.setVisibility(View.GONE);
+                if (!goneVisi) {
+                    layout_for_list.setVisibility(View.VISIBLE);
+                    iv_for_arrow.setImageResource(R.drawable.ic_cross);
+                    iv_for_arrow.setPadding(11,11,11,11);
+                    goneVisi = true;
+                    tv_for_speName.setFocusableInTouchMode(true);
+                }else {
+                    activity.hideKeyboard();
+                    tv_for_speName.setText("");
+                    goneVisi = false;
+                    iv_for_arrow.setPadding(3,3,3,3);
+                    iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
+                    layout_for_list.setVisibility(View.GONE);
+                }
                 break;
         }
     }

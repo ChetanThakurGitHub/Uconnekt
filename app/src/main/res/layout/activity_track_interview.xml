@@ -33,20 +33,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/iv_for_profile"
-                android:text="Chetan thakur"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="@color/darkgray"
                 android:textSize="@dimen/_14sdp"
                 android:fontFamily="@font/montserrat_medium"/>
 
             <TextView
-                android:id="@+id/tv_for_aofs"
+                android:id="@+id/tv_for_jobTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sdfjdsfkdsf"
-                android:layout_marginTop="@dimen/_3sdp"
                 android:textSize="@dimen/_10sdp"
                 android:textColor="@color/darkgray"
                 android:singleLine="true"
@@ -54,6 +50,18 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:layout_toRightOf="@+id/iv_for_profile"
                 android:layout_below="@+id/tv_for_fullName"/>
+
+            <TextView
+                android:id="@+id/tv_for_aofs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:textColor="@color/darkgray"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_toRightOf="@+id/iv_for_profile"
+                android:layout_below="@+id/tv_for_jobTitle"/>
 
         </RelativeLayout>
 
@@ -74,12 +82,12 @@
             android:layout_height="@dimen/_80sdp"
             android:layout_marginLeft="@dimen/_12sdp"
             android:layout_marginTop="@dimen/_20sdp"
-            android:background="@color/yellow"/>
+            android:background="@color/darkgray"/>
 
         <View
             android:id="@+id/view_for_line2"
             android:layout_width="1dp"
-            android:layout_height="@dimen/_80sdp"
+            android:layout_height="@dimen/_100sdp"
             android:layout_marginLeft="@dimen/_12sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_below="@+id/view_for_line1"
@@ -88,9 +96,9 @@
         <View
             android:id="@+id/view_for_line3"
             android:layout_width="1dp"
-            android:layout_height="@dimen/_80sdp"
+            android:layout_height="@dimen/_110sdp"
             android:layout_marginLeft="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_below="@+id/view_for_line2"
             android:background="@color/darkgray"/>
 
@@ -107,8 +115,9 @@
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="@dimen/_28sdp"
                     android:layout_height="@dimen/_28sdp"
-                    android:background="@color/white"
-                    app:srcCompat="@drawable/ic_chat_profile"/>
+                    android:tint="@color/yellow"
+                    android:background="@drawable/circle_track_bg"
+                    app:srcCompat="@drawable/ic_calendar"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/start_chat"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/darkgray"
                         android:textSize="@dimen/_12sdp"
@@ -133,8 +142,7 @@
                         android:id="@+id/tv_for_date1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="10-12-2018 2:00PM"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_4sdp"
@@ -152,28 +160,43 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/iv_for_process"
+                <RelativeLayout
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:background="@drawable/circle_track_bg"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    app:srcCompat="@drawable/ic_hourglass"/>
+                    android:layout_marginTop="@dimen/_20sdp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:tint="@color/darkgray"
+                        android:background="@drawable/circle_track_bg_gray"
+                        app:srcCompat="@drawable/ic_hourglass"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/iv_for_process"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:background="@drawable/circle_track_bg"
+                        app:srcCompat="@drawable/ic_hourglass"/>
+
+                </RelativeLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_for_delete"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_70sdp"
+                    android:layout_height="@dimen/_85sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_20sdp"
-                    android:background="@drawable/active_img"
+                    android:background="@drawable/inactive_img"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_for_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/your_interview_request_is_still_pending"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:text="Interview with recruiter"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/darkgray"
                         android:textSize="@dimen/_12sdp"
@@ -181,37 +204,30 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_regular" />
 
-                    <RelativeLayout
+
+                    <TextView
+                        android:id="@+id/tv_for_date4"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_17sdp"
+                        android:textColor="@color/lightgray"
+                        android:textSize="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat_light" />
 
                     <TextView
                         android:id="@+id/tv_for_delete"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/cancel_request"
+                        android:visibility="gone"
                         android:textSize="@dimen/_10sdp"
                         android:textColor="@color/white"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:background="@drawable/button_bg_not_offered"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:background="@drawable/button_bg_test"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:fontFamily="@font/montserrat_regular" />
-
-                    <TextView
-                        android:id="@+id/tv_for_date2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="10-12-2018 2:00PM"
-                        android:layout_marginLeft="@dimen/_20sdp"
-                        android:textColor="@color/lightgray"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat_light" />
-
-                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -248,8 +264,8 @@
                 <LinearLayout
                     android:id="@+id/layout_for_interview"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_height="@dimen/_85sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:background="@drawable/inactive_img"
                     android:orientation="vertical">
@@ -258,27 +274,63 @@
                         android:id="@+id/tv_for_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/darkgray"
                         android:textSize="@dimen/_12sdp"
-                        android:singleLine="true"
+                        android:text="Interview with employer"
+                       android:maxLines="2"
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_regular" />
-
 
                     <TextView
                         android:id="@+id/tv_for_date3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="10-12-2018 2:00PM"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/tv_for_delete2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cancel_request"
+                            android:visibility="gone"
+                            android:textSize="@dimen/_10sdp"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:background="@drawable/button_bg_not_offered"
+                            android:layout_marginLeft="@dimen/_17sdp"
+                            android:fontFamily="@font/montserrat_regular" />
+
+                    <TextView
+                        android:id="@+id/iv_for_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Accept"
+                        android:visibility="gone"
+                        android:textSize="@dimen/_10sdp"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="@dimen/_17sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@drawable/button_bg_offered"
+                        android:fontFamily="@font/montserrat_regular" />
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -291,14 +343,30 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <RelativeLayout
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_20sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@drawable/circle_track_bg_gray"
-                    android:layout_marginTop="@dimen/_20sdp"
                     app:srcCompat="@drawable/ic_note"/>
 
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivLastImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:tint="@color/yellow"
+                        android:visibility="gone"
+                        android:background="@drawable/circle_track_bg"
+                        app:srcCompat="@drawable/ic_note"/>
+
+                </RelativeLayout>
+
                 <LinearLayout
+                    android:id="@+id/layout_for_status"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_55sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
@@ -310,7 +378,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/job_offer_status"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:layout_marginLeft="@dimen/_17sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/darkgray"
                         android:textSize="@dimen/_12sdp"
@@ -318,12 +386,26 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_regular" />
 
+                    <TextView
+                        android:id="@+id/tv_for_statusJob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginLeft="@dimen/_17sdp"
+                        android:textColor="@color/lightgray"
+                        android:textSize="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/montserrat_light" />
+
                     <LinearLayout
+                        android:id="@+id/layoutStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:layout_marginLeft="@dimen/_20sdp">
+                        android:layout_marginLeft="@dimen/_17sdp">
 
                         <TextView
                             android:id="@+id/tv_for_offered"
@@ -359,6 +441,5 @@
     </RelativeLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

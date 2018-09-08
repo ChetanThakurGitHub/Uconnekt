@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.uconnekt.R;
 import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.common_activity.DocViewActivity;
 
 import java.io.BufferedInputStream;
 import java.io.File;

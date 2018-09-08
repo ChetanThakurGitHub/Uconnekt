@@ -10,7 +10,7 @@
     android:background="@color/white"
     android:id="@+id/mainlayout"
     android:animateLayoutChanges="true"
-    tools:context=".ui.individual.individual_profile.profile_fragrment.ExperienceFragment">
+    tools:context=".ui.individual.edit_profile.IndiEditProfileActivity">
 
     <RelativeLayout
         android:id="@+id/layout_for_currentRole"

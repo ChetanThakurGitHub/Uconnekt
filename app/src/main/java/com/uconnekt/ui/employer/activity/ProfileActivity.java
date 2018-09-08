@@ -43,12 +43,11 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "";
+    private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",profileUrl = "";
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,profile;
     private int favourite_count = 0,recommend_count = 0;
     private TextView tv_for_bio,tv_for_review_count,tv_for_favourite_count,tv_for_recomend,
             tv_for_aofs,tv_for_address,tv_for_company,tv_for_fullName;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         iv_for_favourite.setOnClickListener(this);
         iv_for_recommend.setOnClickListener(this);
-        
     }
 
     private void initView(){
@@ -108,16 +106,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (status.equals("success")) {
-                        JSONArray array = jsonObject.getJSONArray("profile");
-                        JSONObject object = array.getJSONObject(0);
-                        // String bio = object.getString("bio");
+                        JSONObject object = jsonObject.getJSONObject("profile");
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
-                        // String company_logo = object.getString("company_logo");
                         profileImage = object.getString("profileImage");
                         fullName = object.getString("fullName");
                         jobTitleName = object.getString("jobTitleName");
                         specializationName = object.getString("specializationName");
                         address = object.getString("address");
+                        profileUrl = object.getString("profileUrl");
                         tv_for_bio.setText(bio.isEmpty()?"NA":bio);
                         String view_count = jsonObject.getString("view_count");
                         tv_for_review_count.setText(view_count.isEmpty()?"0":view_count);
@@ -143,7 +139,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onNetError() {
                 startActivity(new Intent(ProfileActivity.this, NetworkActivity.class));
-
             }
 
             @Override
@@ -357,7 +352,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         card_for_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                screenShot(layout_for_share,"Testing");
+                screenShot(layout_for_share,"Check this out “ Job seeker ” profile.");
             }
         });
         dialog.show();
@@ -374,7 +369,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         TextView tv_for_recomended = dialog.findViewById(R.id.tv_for_recomend);
         TextView tv_for_bios = dialog.findViewById(R.id.tv_for_bio);
 
-        Picasso.with(this).load(profileImage).into(iv_profile_image);
+        if (!profileImage.isEmpty())Picasso.with(this).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
         tv_for_company.setText(jobTitleName.isEmpty()?"NA":jobTitleName);
         tv_for_address.setText(address.isEmpty()?"NA":address);
@@ -427,7 +422,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
         sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
-        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+"https://play.google.com/store");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
 
     }

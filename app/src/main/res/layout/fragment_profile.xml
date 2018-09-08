@@ -121,7 +121,8 @@
                                 android:layout_marginTop="@dimen/_2sdp"
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:textSize="@dimen/_10sdp"
-                                android:text="@string/views"
+                                android:text="@string/reviews"
+                                android:background="?attr/selectableItemBackgroundBorderless"
                                 android:textColor="@color/lightgray"
                                 android:fontFamily="@font/montserrat_light" />
 
@@ -156,6 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_gravity="center"
                         android:gravity="center">
 
@@ -204,6 +206,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:gravity="center">
 
                         <TextView

@@ -14,6 +14,7 @@
     <color name="darkTransparent">#80000000</color>
     <color name="green">#0d7d1d</color>
     <color name="red">#e21b1b</color>
+    <color name="gray">#F2F2F2</color>
 
     <color name="calender">#265258</color>
     <color name="chat">#ECECEC</color>

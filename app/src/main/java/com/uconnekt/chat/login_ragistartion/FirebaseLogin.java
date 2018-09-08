@@ -76,7 +76,7 @@ public class FirebaseLogin {
                                 if (userDetails.userType.equals("business")) {
                                     if (userDetails.isProfile.equals("1")) {
                                         Intent intent = new Intent(loginActivity, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         loginActivity.startActivity(intent);
                                     } else {
                                         Intent intent = new Intent(loginActivity, EmpProfileActivity.class);

@@ -75,6 +75,7 @@
                 android:layout_alignParentRight="true"
                 app:cardBackgroundColor="@color/white"
                 android:layout_margin="@dimen/_7sdp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_centerVertical="true"
                 app:cardElevation="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_13sdp">

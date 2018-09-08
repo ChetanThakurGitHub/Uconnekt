@@ -62,7 +62,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
     private RelativeLayout layout_for_address;
     private Double latitude,longitude;
     private LinearLayout mainlayout;
-    private Object deleteTime;
+    private Object deleteTime,oppDeleteTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +74,15 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         if(extras != null)userId = extras.getString("USERID");
         if(extras != null)chatNode = extras.getString("NODE");
         getDeleteTime();
+        getOppDeleteTime();
     }
 
     private void addVelues(){
         for (int i = 0 ; i <= 2 ; i++) {
             JobTitle jobTitle = new JobTitle();
             if (i ==0 )jobTitle.jobTitleName = "";
-            if (i ==1 )jobTitle.jobTitleName = "Employer";
-            if (i ==2 )jobTitle.jobTitleName = "Recruiter";
+            if (i ==1 )jobTitle.jobTitleName = "Recruiter";
+            if (i ==2 )jobTitle.jobTitleName = "Employer";
             arrayList.add(jobTitle);
         }
         CustomSpAdapter customSpAdapter = new CustomSpAdapter(this, arrayList, R.layout.custom_sp_select);
@@ -212,6 +213,7 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DATE);
+
         if (i1 != -1) {
             day = i1;
             month = i2 - 1;
@@ -281,8 +283,8 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
                     String status = jsonObject.getString("status");
                     String message = jsonObject.getString("message");
                     if (status.equalsIgnoreCase("success")) {
-                        JSONObject object = jsonObject.getJSONObject("data");
-                        String interviewId = object.getString("interviewId");
+                        JSONObject object1 = jsonObject.getJSONObject("data");
+                        String interviewId = object1.getString("interviewId");
                         sendDataOnFirebase(address,date,time,interviewId,fullName);
                     }else {
                         Toast.makeText(RequestActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -318,13 +320,31 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void getDeleteTime(){
-        FirebaseDatabase.getInstance().getReference().child("history").child(userId).child(Uconnekt.session.getUserInfo().userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("history").child(Uconnekt.session.getUserInfo().userId).child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     History history = dataSnapshot.getValue(History.class);
                     if (history.deleteTime != null){
                         deleteTime = history.deleteTime;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getOppDeleteTime(){
+        FirebaseDatabase.getInstance().getReference().child("history").child(userId).child(Uconnekt.session.getUserInfo().userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    History history = dataSnapshot.getValue(History.class);
+                    if (history.deleteTime != null){
+                        oppDeleteTime = history.deleteTime;
                     }
                 }
             }
@@ -367,11 +387,14 @@ public class RequestActivity extends BaseActivity implements View.OnClickListene
         history2.message = "Interview request";
         history2.timeStamp = chatModel.timeStamp;
         history2.userId = chatModel.userId;
-        history2.deleteTime = deleteTime;
+        history2.deleteTime = oppDeleteTime;
         history2.readUnread = "1";
         FirebaseDatabase.getInstance().getReference().child("history").child(userId).child(chatModel.userId).setValue(history2);
 
         finish();
     }
+
+
+
 
 }

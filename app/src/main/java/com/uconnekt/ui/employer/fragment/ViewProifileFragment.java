@@ -99,8 +99,7 @@ public class ViewProifileFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (status.equals("success")) {
-                        JSONArray array = jsonObject.getJSONArray("profile");
-                        JSONObject object = array.getJSONObject(0);
+                        JSONObject object = jsonObject.getJSONObject("profile");
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         String address = object.getString("address");
                         String jobTitleName = object.getString("jobTitleName");

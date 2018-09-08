@@ -82,8 +82,7 @@ public class IndiViewProfileFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status");
                     if (status.equals("success")) {
-                        JSONArray array = jsonObject.getJSONArray("profile");
-                        JSONObject object = array.getJSONObject(0);
+                        JSONObject object = jsonObject.getJSONObject("profile");
                         String bio = object.getString("bio");
                         String profileImage = object.getString("profileImage");
                         String fullName = object.getString("fullName");

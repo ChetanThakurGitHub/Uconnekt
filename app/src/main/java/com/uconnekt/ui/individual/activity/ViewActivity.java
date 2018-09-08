@@ -36,11 +36,16 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<ViewList> reviewLists = new ArrayList<>();
     private ViewAdapter fullListAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private String userId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) userId = extras.getString("USERID");else userId = Uconnekt.session.getUserInfo().userId;
+
         initView();
         getReviewsList();
 
@@ -95,7 +100,7 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getReviewsList(){
-        new VolleyGetPost(this, AllAPIs.VIEW_LIST+Uconnekt.session.getUserInfo().userId+"&limit="+10+"&offset="+offset, false, "ReviewsList", true) {
+        new VolleyGetPost(this, AllAPIs.VIEW_LIST+userId+"&limit="+10+"&offset="+offset, false, "ReviewsList", true) {
             @Override
             public void onVolleyResponse(String response) {
 

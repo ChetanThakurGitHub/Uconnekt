@@ -14,14 +14,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.model.ViewList;
-import com.uconnekt.singleton.MyCustomMessage;
+import com.uconnekt.ui.employer.activity.ProfileActivity;
 import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.util.Utils;
 
 import java.util.ArrayList;
-
 
 public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
 
@@ -68,8 +68,12 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.ViewHolder> {
             tv_for_aofs = itemView.findViewById(R.id.tv_for_aofs);
             tv_for_date = itemView.findViewById(R.id.tv_for_date);
             card_for_chat = itemView.findViewById(R.id.card_for_chat);
-            card_for_chat.setOnClickListener(this);
-            itemView.findViewById(R.id.cardview).setOnClickListener(this);
+            if (Uconnekt.session.getUserInfo().userType.equals("individual")) {
+                card_for_chat.setOnClickListener(this);
+                itemView.findViewById(R.id.cardview).setOnClickListener(this);
+            }else {
+                card_for_chat.setVisibility(View.GONE);
+            }
         }
 
 

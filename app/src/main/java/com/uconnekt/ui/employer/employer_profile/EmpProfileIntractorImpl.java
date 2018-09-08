@@ -10,21 +10,20 @@ public class EmpProfileIntractorImpl implements EmpProfileIntractor {
     @Override
     public void profile(String jobTitle, String specialty, String address, Bitmap bitmap, OnProfileEndListener listener) {
 
-        if (jobTitle.equalsIgnoreCase("")){
+        if (jobTitle == null || jobTitle.equalsIgnoreCase("")){
             listener.onJobTitleError();
             return;
         }
 
-        if (specialty.equalsIgnoreCase("")){
+        if (specialty == null || specialty.equalsIgnoreCase("")){
             listener.onSpecialtyError();
             return;
         }
 
-        if (address.equalsIgnoreCase("")){
+        if (address == null || address.equalsIgnoreCase("")){
             listener.onAddressError();
             return;
         }
-
 
         if (bitmap == null){
             listener.onCompanyLogoError();

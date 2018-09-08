@@ -88,7 +88,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     private CardView card_for_pRole1,card_for_pRole2,card_for_pRole3;
     private CusDialogProg cusDialogProg;
     private String cCompanyName = "",startDate = "",finshdate = "",address = "";
-
     private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3;
 
     @Override
@@ -337,10 +336,10 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         checkMange = 2;
                         datePicker(-1, -1, -1);
                     }else {
-                        MyCustomMessage.getInstance(activity).snackbar(mainlayout,"You can't select finish date because you are still there");
+                        MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.finish_date_v));
                     }
                 }else {
-                    MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select start date first");
+                    MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_start_date));
                 }
                 break;
             case R.id.layout_for_stillThere:
@@ -374,7 +373,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                     checkMange = 4;
                     datePicker(-1, -1, -1);
                 }else {
-                    MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select start date first");
+                    MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_start_date));
                 }
                 break;
             case R.id.layout_for_currentRole:
@@ -500,15 +499,15 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
         if (data != 2) {
             if (companyTitle.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company title");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pc_title));
             } else if (companyName.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company name");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pc_name));
             } else if (startDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role start date");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.select_sdate));
             } else if (finishDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role finish date");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.select_fdate));
             } else if (startDateP.equalsIgnoreCase(finishDateP)) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "start date and finish date can't be same");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.date_not_same));
             }else {setData(companyName,companyTitle,startDateP,finishDateP,pdescription);}
         }else {setData(companyName,companyTitle,startDateP,finishDateP,pdescription);}
     }
@@ -647,14 +646,14 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         finshdate =  tv_for_finishD.getText().toString().trim();
 
         if (jobTitleId.equalsIgnoreCase("")){
-            MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select current job title");
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.ctitle));
         }else if (cCompanyName.equalsIgnoreCase("")){
-            MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please add current company name");
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.current_cname));
         }else if (startDate.equalsIgnoreCase("")){
-            MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select current role start date");
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.c_start_date));
         }else if (!checkBox){
             if (finshdate.equalsIgnoreCase("")){
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select current role finish date");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.c_finish_date));
             }else {otherValidation();}
         }else {otherValidation();}
     }
@@ -675,22 +674,22 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         String finishDateP = tv_for_finishDP.getText().toString().trim();
 
         if (availability.equalsIgnoreCase("")){
-            MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select availability in weeks");
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.weeks_select));
         }else if (interestId.equalsIgnoreCase("")){
-            MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please select area of interest in next role");
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_aofi));
         }else if (address.equalsIgnoreCase("")){
-            MyCustomMessage.getInstance(activity).snackbar(mainlayout,"Please add address");
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.add_location));
         }else if (roleArrayList == null) {
             if (jobTitleId2.equals("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous job title");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pjobtitile));
             } else if (companyName.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please add previous company name");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pcompany_name));
             } else if (startDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role start date");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pstart_date));
             } else if (finishDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "Please select previous role finish date");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pfinish_date));
             } else if (startDateP.equalsIgnoreCase(finishDateP)) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, "start date and finish date can't be same");
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.date_not_same));
             } else {
                 addPreviousRole(1);
                 updateExperience();
@@ -757,19 +756,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         datepickerdialog.getWindow().setBackgroundDrawableResource(R.color.white);
         datepickerdialog.show();
 
-      /*  if (!tv_for_finishDP.getText().toString().trim().equals("")) {
-            String givenDateString = tv_for_finishDP.getText().toString().trim().replace("-", " ");
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MM yyyy", Locale.US);
-            try {
-                Date mDate = sdf.parse(givenDateString);
-                long timeInMilliseconds = mDate.getTime();
-                datepickerdialog.getDatePicker().setMaxDate(timeInMilliseconds);
-                datepickerdialog.getWindow().setBackgroundDrawableResource(R.color.white);
-                datepickerdialog.show();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
     private void getlist() {

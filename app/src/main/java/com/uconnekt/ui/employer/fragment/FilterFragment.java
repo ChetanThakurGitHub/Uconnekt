@@ -69,14 +69,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private Double latitude = 0.0,longitude = 0.0;
    private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3,spinnerDialog4;
 
-    public static  FilterFragment newInstance() {
-        return new FilterFragment();
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -180,19 +173,14 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city,state,country);
 
         if (mapFragment != null)mapFragment.layout_for_list.setVisibility(View.GONE);
-      //  if (mapFragment != null)mapFragment.offset = 0;
         if (mapFragment != null)mapFragment.searchLists.clear();
         if (mapFragment != null)mapFragment.map.clear();
         if (mapFragment != null)mapFragment.mClusterManager.clearItems();
-        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country);
+        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country,true);
 
         activity.onBackPressed();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     private void addressClick() {
         try {

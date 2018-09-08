@@ -9,7 +9,7 @@
     android:background="@color/white"
     android:id="@+id/mainlayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.individual.individual_profile.profile_fragrment.Basic_info.BasicInfoFragment"
+    tools:context=".ui.individual.edit_profile.IndiEditProfileActivity"
     android:animateLayoutChanges="true">
 
     <RelativeLayout

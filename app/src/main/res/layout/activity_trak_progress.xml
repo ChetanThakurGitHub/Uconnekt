@@ -33,20 +33,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/iv_for_profile"
-                android:text="Chetan thakur"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="@color/darkgray"
                 android:textSize="@dimen/_14sdp"
                 android:fontFamily="@font/montserrat_medium"/>
 
             <TextView
-                android:id="@+id/tv_for_aofs"
+                android:id="@+id/tv_for_company"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="sdfjdsfkdsf"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:textSize="@dimen/_10sdp"
                 android:textColor="@color/darkgray"
                 android:singleLine="true"
@@ -54,6 +50,18 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:layout_toRightOf="@+id/iv_for_profile"
                 android:layout_below="@+id/tv_for_fullName"/>
+
+            <TextView
+                android:id="@+id/tv_for_aofs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_10sdp"
+                android:textColor="@color/darkgray"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_toRightOf="@+id/iv_for_profile"
+                android:layout_below="@+id/tv_for_company"/>
 
         </RelativeLayout>
 
@@ -84,9 +92,9 @@
         <View
             android:id="@+id/view_for_line3"
             android:layout_width="1dp"
-            android:layout_height="@dimen/_80sdp"
+            android:layout_height="@dimen/_100sdp"
             android:layout_marginLeft="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_below="@+id/view_for_line2"
             android:background="@color/darkgray"/>
 
@@ -101,10 +109,11 @@
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:background="@color/white"
-                    app:srcCompat="@drawable/ic_chat_profile"/>
+                    android:layout_width="@dimen/_28sdp"
+                    android:layout_height="@dimen/_28sdp"
+                    android:tint="@color/yellow"
+                    android:background="@drawable/circle_track_bg"
+                    app:srcCompat="@drawable/ic_calendar"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,7 +139,6 @@
                         android:id="@+id/tv_for_date1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/na"
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_10sdp"
@@ -175,7 +183,7 @@
                 <LinearLayout
                     android:id="@+id/layout_for_request"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:background="@drawable/inactive_img"
@@ -185,25 +193,22 @@
                         android:id="@+id/tv_for_data"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="You declined this interview request."
+                        android:text="Interview with recruiter"
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/darkgray"
                         android:textSize="@dimen/_12sdp"
-                        android:singleLine="true"
+                        android:maxLines="2"
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_regular" />
-
 
                     <TextView
                         android:id="@+id/tv_for_date2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/na"
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_light" />
@@ -242,7 +247,7 @@
                 <LinearLayout
                     android:id="@+id/layout_for_data"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_50sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_20sdp"
                     android:background="@drawable/inactive_img"
@@ -257,20 +262,17 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/darkgray"
                         android:textSize="@dimen/_12sdp"
-                        android:singleLine="true"
+                        android:maxLines="2"
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_regular" />
-
 
                     <TextView
                         android:id="@+id/tv_for_date3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/na"
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_light" />
@@ -316,8 +318,6 @@
                     android:background="@drawable/inactive_img"
                     android:orientation="vertical">
 
-
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -330,12 +330,10 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/montserrat_regular" />
 
-
                     <TextView
                         android:id="@+id/tv_for_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/pending"
                         android:layout_marginLeft="@dimen/_20sdp"
                         android:textColor="@color/lightgray"
                         android:textSize="@dimen/_10sdp"
@@ -345,7 +343,6 @@
                         android:fontFamily="@font/montserrat_light" />
 
                 </LinearLayout>
-
 
             </LinearLayout>
 

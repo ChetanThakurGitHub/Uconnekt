@@ -16,8 +16,6 @@ import com.uconnekt.R;
 import com.uconnekt.model.BusiSearchList;
 import com.uconnekt.ui.employer.fragment.ProfileFragment;
 import com.uconnekt.ui.employer.home.HomeActivity;
-import com.uconnekt.ui.individual.fragment.IndiProfileFragment;
-import com.uconnekt.ui.individual.home.JobHomeActivity;
 
 import java.util.ArrayList;
 

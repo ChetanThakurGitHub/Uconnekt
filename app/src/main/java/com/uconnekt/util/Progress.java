@@ -1,5 +1,6 @@
 package com.uconnekt.util;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -11,10 +12,11 @@ import com.uconnekt.R;
 
 public class Progress {
 
+    @SuppressLint("StaticFieldLeak")
     private static Progress progress;
     private View progressBarView;
 
-    public Progress(Activity activity) {
+    private Progress(Activity activity) {
         progressBarView = LayoutInflater.from(activity).inflate(R.layout.progress_bar_layout, null);
         activity.addContentView(progressBarView, new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT));
     }

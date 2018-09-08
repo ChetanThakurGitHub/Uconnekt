@@ -1,6 +1,7 @@
 package com.uconnekt.resume_picker.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -45,8 +46,9 @@ public class FolderGridAdapter extends SelectableAdapter<FolderGridAdapter.Photo
     setColumnNumber(context,3);
   }
 
+  @NonNull
   @Override
-  public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View itemView = LayoutInflater.from(context).inflate(R.layout.item_folder_layout, parent, false);
 
     return new PhotoViewHolder(itemView);
@@ -61,7 +63,7 @@ public class FolderGridAdapter extends SelectableAdapter<FolderGridAdapter.Photo
   }
 
   @Override
-  public void onBindViewHolder(final PhotoViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull final PhotoViewHolder holder, int position) {
     if(getItemViewType(position) == ITEM_TYPE_PHOTO) {
 
       final PhotoDirectory photoDirectory = getItems().get(showCamera?position-1:position);
@@ -132,9 +134,9 @@ public class FolderGridAdapter extends SelectableAdapter<FolderGridAdapter.Photo
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
-      imageView = (ImageView) itemView.findViewById(R.id.iv_photo);
-      folderTitle = (TextView) itemView.findViewById(R.id.folder_title);
-      folderCount = (TextView) itemView.findViewById(R.id.folder_count);
+      imageView =  itemView.findViewById(R.id.iv_photo);
+      folderTitle =  itemView.findViewById(R.id.folder_title);
+      folderCount =  itemView.findViewById(R.id.folder_count);
       bottomOverlay = itemView.findViewById(R.id.bottomOverlay);
       selectBg = itemView.findViewById(R.id.transparent_bg);
     }

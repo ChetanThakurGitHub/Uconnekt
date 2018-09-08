@@ -63,10 +63,6 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
     private Double latitude = 0.0,longitude = 0.0;
     private SpinnerDialog spinnerDialog,spinnerDialog2;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -351,7 +347,7 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
         if (indiMapFragment != null)indiMapFragment.searchLists.clear();
         if (indiMapFragment != null)indiMapFragment.map.clear();
         if (indiMapFragment != null)indiMapFragment.mClusterManager.clearItems();
-        if (indiMapFragment != null)indiMapFragment.getList(specialtyId,ratingNo,company,address,latitude,longitude,city,state,country);
+        if (indiMapFragment != null)indiMapFragment.getList(specialtyId,ratingNo,company,address,latitude,longitude,city,state,country,true);
 
         activity.onBackPressed();
     }

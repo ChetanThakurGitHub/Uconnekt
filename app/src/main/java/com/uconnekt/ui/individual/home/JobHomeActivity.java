@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,6 +15,8 @@ import com.uconnekt.R;
 import com.uconnekt.chat.history.IndiChatFragment;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
+import com.uconnekt.ui.employer.activity.ProfileActivity;
+import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
 import com.uconnekt.ui.individual.fragment.FavouriteFragment;
 import com.uconnekt.ui.individual.fragment.IndiFilterFragment;
@@ -23,6 +26,10 @@ import com.uconnekt.ui.individual.fragment.IndiProfileFragment;
 import com.uconnekt.ui.individual.fragment.IndiSearchFragment;
 import com.uconnekt.ui.individual.fragment.IndiSettingFragment;
 import com.uconnekt.ui.individual.fragment.IndiViewProfileFragment;
+import com.uconnekt.util.Utils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 
@@ -63,12 +70,18 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
             String userType = extras.getString("type");
             String userId = extras.getString("userId");
             if (userId == null)userId = extras.getString("reference_id");
-            notificationManage(userType,userId);
+            if (userType != null)notificationManage(userType,userId);else profileView(userId);
         }
     }
 
+    private void profileView(String userId){
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("UserId", userId);
+        startActivity(intent);
+    }
+
     private void notificationManage(String userType, String userId){
-        if (userType.equals("interview_request.")|userType.equals("Interview_request_delete.")|userType.equals("chat")){
+        if (userType.equals("interview_request.")|userType.equals("Interview_request_delete.")|userType.equals("chat")|userType.equals("Interview_offered_action.")){
             tabs.getTabAt(2).select();
             setToolbarIcon(6);
             replaceFragment(IndiChatFragment.newInstance(userType,userId));
@@ -208,11 +221,6 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onTabSelected(TabLayout.Tab tab) {
         if (tabs.getSelectedTabPosition() != click) {
             switch (tabs.getSelectedTabPosition()) {
@@ -324,8 +332,6 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
         }
 
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

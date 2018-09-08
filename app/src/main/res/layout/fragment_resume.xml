@@ -10,7 +10,7 @@
     android:paddingBottom="@dimen/_10sdp"
     android:background="@color/white"
     android:id="@+id/mainlayout"
-    tools:context=".ui.individual.individual_profile.profile_fragrment.ResumeFragment">
+    tools:context=".ui.individual.edit_profile.IndiEditProfileActivity">
 
     <TextView
         android:layout_width="match_parent"

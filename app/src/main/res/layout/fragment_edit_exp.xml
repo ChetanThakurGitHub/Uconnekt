@@ -555,7 +555,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/card_for_pRole1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_margin="@dimen/_3sdp"
             android:elevation="@dimen/_5sdp"
             android:visibility="gone"
@@ -579,12 +579,27 @@
                     android:textColor="@color/darkgray"
                     android:textSize="@dimen/_12sdp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_toLeftOf="@+id/iv_for_cuentRole"
+                    android:ellipsize="end"
+                    android:layout_below="@+id/tv_for_role1"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Previous experience (1)"
+                    android:textColor="@color/darkgray"
+                    android:textSize="@dimen/_10sdp" />
+
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_for_cuentRole"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
                     app:srcCompat="@drawable/ic_down_arrow" />
 
             </RelativeLayout>
@@ -594,7 +609,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/card_for_pRole2"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_margin="@dimen/_3sdp"
             android:elevation="@dimen/_5sdp"
             android:visibility="gone"
@@ -616,9 +631,22 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Previous Role 2"
                     android:textColor="@color/darkgray"
                     android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_toLeftOf="@+id/iv_for_cuentle"
+                    android:ellipsize="end"
+                    android:layout_below="@+id/tv_for_role2"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Previous experience (2)"
+                    android:textColor="@color/darkgray"
+                    android:textSize="@dimen/_10sdp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_for_cuentle"
@@ -626,6 +654,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
                     app:srcCompat="@drawable/ic_down_arrow" />
 
             </RelativeLayout>
@@ -635,7 +664,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/card_for_pRole3"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_margin="@dimen/_3sdp"
             android:elevation="@dimen/_5sdp"
             android:visibility="gone"
@@ -657,9 +686,22 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Previous Role 3"
                     android:textColor="@color/darkgray"
                     android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_toLeftOf="@+id/iv_for_cuenle"
+                    android:ellipsize="end"
+                    android:layout_below="@+id/tv_for_role3"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Previous experience (3)"
+                    android:textColor="@color/darkgray"
+                    android:textSize="@dimen/_10sdp" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_for_cuenle"
@@ -667,6 +709,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
                     app:srcCompat="@drawable/ic_down_arrow" />
 
             </RelativeLayout>

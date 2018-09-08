@@ -19,7 +19,6 @@ import com.uconnekt.model.JobTitle;
 
 import java.util.ArrayList;
 
-
 public class SpinnerDialog{
     private ArrayList<JobTitle> items;
     private Activity context;

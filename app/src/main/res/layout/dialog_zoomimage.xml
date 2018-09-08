@@ -1,38 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/_430sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/Black"
     android:gravity="center">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-      <!--  <RelativeLayout
-            android:id="@+id/layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Image View"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/montserrat_regular" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/iv_for_cansel"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:padding="@dimen/_8sdp"
-                android:tint="@color/white"
-                app:srcCompat="@drawable/ic_left_arrow" />
-
-        </RelativeLayout>-->
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_for_cansel"
@@ -49,12 +21,9 @@
             android:layout_below="@+id/iv_for_cansel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_40sdp"
-            android:layout_marginBottom="@dimen/_75sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginBottom="@dimen/_60sdp"
             android:layout_alignParentBottom="true"
             android:scaleType="centerCrop" />
-
-
-    </RelativeLayout>
 
 </RelativeLayout>

@@ -9,14 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.model.ReviewList;
 import com.uconnekt.ui.individual.activity.ReviewActivity;
-
 
 import java.util.ArrayList;
 

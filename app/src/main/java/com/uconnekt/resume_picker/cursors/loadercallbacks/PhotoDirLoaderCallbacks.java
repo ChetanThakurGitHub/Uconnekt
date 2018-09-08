@@ -3,6 +3,7 @@ package com.uconnekt.resume_picker.cursors.loadercallbacks;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
@@ -33,11 +34,12 @@ public class PhotoDirLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cu
     this.resultCallback = resultCallback;
   }
 
+  @NonNull
   @Override public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     return new PhotoDirectoryLoader(context.get(), args);
   }
 
-  @Override public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+  @Override public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
 
     if (data == null) return;
     List<PhotoDirectory> directories = new ArrayList<>();
@@ -77,7 +79,7 @@ public class PhotoDirLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cu
     }
   }
 
-  @Override public void onLoaderReset(Loader<Cursor> loader) {
+  @Override public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
   }
 }

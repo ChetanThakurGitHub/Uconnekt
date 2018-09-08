@@ -5,7 +5,7 @@ public class LoginPresenterImpl implements LoginPresenter,LoginIntractor.OnLogin
     private LoginView loginView;
     private LoginIntractor loginIntractor;
 
-    public LoginPresenterImpl(LoginView loginView, LoginIntractor loginIntractor){
+    LoginPresenterImpl(LoginView loginView, LoginIntractor loginIntractor){
         this.loginView = loginView;
         this.loginIntractor = loginIntractor;
     }

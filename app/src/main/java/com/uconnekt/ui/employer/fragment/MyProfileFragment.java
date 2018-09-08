@@ -107,14 +107,11 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                     String favourite_count = object.getString("favourite_count");
                     String recommend_count = object.getString("recommend_count");
                     if (status.equals("success")){
-                        JSONArray array = object.getJSONArray("business_profile");
-                        JSONObject jsonObject = array.getJSONObject(0);
+                        JSONObject jsonObject = object.getJSONObject("business_profile");
                         String fullName = jsonObject.getString("fullName");
                         String businessName = jsonObject.getString("businessName");
                         String jobTitleName = jsonObject.getString("jobTitleName");
                         String address = jsonObject.getString("address");
-
-                       // String bio = jsonObject.getString("bio");
                         String bio = URLDecoder.decode(jsonObject.getString("bio"), "UTF-8");
                         String specializationName = jsonObject.getString("specializationName");
                         String rating = jsonObject.getString("rating");

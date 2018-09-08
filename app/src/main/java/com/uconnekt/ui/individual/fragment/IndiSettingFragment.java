@@ -3,6 +3,7 @@ package com.uconnekt.ui.individual.fragment;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.UserInfo;
+import com.uconnekt.ui.common_activity.AboutUsActivity;
+import com.uconnekt.ui.common_activity.DocViewActivity;
+import com.uconnekt.ui.common_activity.HelpAndSupportActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -47,6 +51,10 @@ public class IndiSettingFragment extends Fragment implements View.OnClickListene
     private void initView(View view) {
         view.findViewById(R.id.layout_for_logout).setOnClickListener(this);
         view.findViewById(R.id.card_for_changePass).setOnClickListener(this);
+        view.findViewById(R.id.card_for_tandc).setOnClickListener(this);
+        view.findViewById(R.id.card_for_aboutUs).setOnClickListener(this);
+        view.findViewById(R.id.card_for_help).setOnClickListener(this);
+        view.findViewById(R.id.card_for_share).setOnClickListener(this);
         iv_for_btn = view.findViewById(R.id.iv_for_btn);
         iv_for_btn.setOnClickListener(this);
     }
@@ -61,10 +69,7 @@ public class IndiSettingFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.layout_for_logout:
-                try{logout();
-                }catch (Exception e){
-                  e.printStackTrace();
-                }
+                logout();
                 break;
             case R.id.iv_for_btn:
                 noticaitonOnOff();
@@ -72,7 +77,32 @@ public class IndiSettingFragment extends Fragment implements View.OnClickListene
             case R.id.card_for_changePass:
                 changePasswordDailog();
                 break;
+            case R.id.card_for_tandc:
+                Intent intent = new Intent(activity, DocViewActivity.class);
+                activity.startActivity(intent);
+                break;
+            case R.id.card_for_aboutUs:
+                intent = new Intent(activity, AboutUsActivity.class);
+                activity.startActivity(intent);
+                break;
+            case R.id.card_for_help:
+                intent = new Intent(activity, HelpAndSupportActivity.class);
+                activity.startActivity(intent);
+                break;
+
+            case R.id.card_for_share:
+                share();
+                break;
         }
+    }
+
+
+    private void share(){
+        Intent sharIntent = new Intent(Intent.ACTION_SEND);
+        sharIntent.setType("text/plain");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Download Uconnekt App");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, "Download the app using https://play.google.com/store Hurry, it doesn’t get better than this! Download the Uconnekt App NOW!");
+        startActivity(Intent.createChooser(sharIntent, "Share:"));
     }
 
     private void logout(){

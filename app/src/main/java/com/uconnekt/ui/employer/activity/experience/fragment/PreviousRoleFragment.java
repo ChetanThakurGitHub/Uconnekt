@@ -98,7 +98,6 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                             PreviousRole previousRole = new PreviousRole();
                             JSONObject jsonObject2 = array.getJSONObject(i);
                             previousRole.previous_company_name = jsonObject2.getString("previous_company_name");
-                           // previousRole.previous_description = jsonObject2.getString("previous_description");
                             previousRole.previous_description = URLDecoder.decode(jsonObject2.getString("previous_description"), "UTF-8");
                             previousRole.previous_finish_date = jsonObject2.getString("previous_finish_date");
                             previousRole.previous_job_title = jsonObject2.getString("previous_job_title");

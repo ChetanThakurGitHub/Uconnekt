@@ -27,6 +27,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -62,6 +63,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -85,6 +87,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/card_for_tandc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="@dimen/_1sdp"
@@ -96,6 +99,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -119,6 +123,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/card_for_share"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="@dimen/_1sdp"
@@ -130,6 +135,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -152,6 +158,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/card_for_aboutUs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="@dimen/_1sdp"
@@ -163,6 +170,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -186,6 +194,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/card_for_help"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="@dimen/_1sdp"
@@ -197,6 +206,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -233,6 +243,7 @@
                     android:id="@+id/layout_for_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/_5sdp">
 
                     <TextView
@@ -251,7 +262,7 @@
                         android:padding="@dimen/_3sdp"
                         android:layout_alignParentRight="true" />
 
-                </RelativeLayout>-
+                </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 

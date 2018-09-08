@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_23sdp"
     android:id="@+id/layout_for_click"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:orientation="vertical">
 
     <TextView

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.util.Base64;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,6 +17,7 @@ import com.uconnekt.chat.history.ChatFragment;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.employer.activity.EditProfileActivity;
+import com.uconnekt.ui.employer.activity.ProfileActivity;
 import com.uconnekt.ui.employer.fragment.FilterFragment;
 import com.uconnekt.ui.employer.fragment.MapFragment;
 import com.uconnekt.ui.employer.fragment.MyProfileFragment;
@@ -22,7 +25,12 @@ import com.uconnekt.ui.employer.fragment.ProfileFragment;
 import com.uconnekt.ui.employer.fragment.SearchFragment;
 import com.uconnekt.ui.employer.fragment.SettingFragment;
 import com.uconnekt.ui.employer.fragment.ViewProifileFragment;
+import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.ui.individual.fragment.FavouriteFragment;
+import com.uconnekt.util.Utils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 
@@ -61,20 +69,29 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             String userType = extras.getString("type");
             String userId = extras.getString("userId");
             if (userId == null)userId = extras.getString("reference_id");
-            notificationManage(userType,userId);
+            if (userType != null)notificationManage(userType,userId);else profileView(userId);
         }
     }
 
-    private void notificationManage(String userType, String userId){
-        if (userType.equals("Interview_offered_action.")|userType.equals("chat")){
-            tabs.getTabAt(2).select();
-            setToolbarIcon(6);
-            replaceFragment(ChatFragment.newInstance(userType,userId));
-        }else {
-            tabs.getTabAt(3).select();
-            replaceFragment(MyProfileFragment.newInstance(userType));
-        }
+    private void profileView(String userId){
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("UserId", userId);
+        startActivity(intent);
+    }
 
+    private void notificationManage(String userType, String userId){
+        if (userType.equals("profile_view")){
+            addFragment(ProfileFragment.newInstance(userId));
+        }else {
+            if (userType.equals("Request_action.")|userType.equals("chat")){
+                tabs.getTabAt(2).select();
+                setToolbarIcon(6);
+                replaceFragment(ChatFragment.newInstance(userType,userId));
+            }else {
+                tabs.getTabAt(3).select();
+                replaceFragment(MyProfileFragment.newInstance(userType));
+            }
+        }
     }
 
     private void initView(){

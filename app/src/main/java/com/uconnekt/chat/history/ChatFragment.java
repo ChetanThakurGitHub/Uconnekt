@@ -20,10 +20,10 @@ import com.uconnekt.R;
 import com.uconnekt.adapter.listing.EmpHistoryAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
-import com.uconnekt.chat.model.Chatting;
 import com.uconnekt.chat.model.EmpChatHistory;
 import com.uconnekt.chat.model.FirebaseData;
 import com.uconnekt.chat.model.History;
+import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.ui.employer.home.HomeActivity;
 
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ public class ChatFragment extends Fragment {
     private HashMap<String, EmpChatHistory> hashMap = new HashMap<>();
     private LinearLayout layout_for_noData;
     private static final String ARG_PARAM1 = "param1",ARG_PARAM2 = "param2";
+    private CusDialogProg cusDialogProg;
 
     public static ChatFragment newInstance(String notificationId, String userId) {
         ChatFragment fragment = new ChatFragment();
@@ -57,7 +58,7 @@ public class ChatFragment extends Fragment {
         if (getArguments()!=null){
             String type =  getArguments().getString(ARG_PARAM1);
             String userID =  getArguments().getString(ARG_PARAM2);
-            if (type.equals("Interview_offered_action.")){
+            if (type.equals("Request_action.")){
                 Intent intent = new Intent(activity,ChatActivity.class);
                 intent.putExtra("USERID",userID);
                 activity.startActivity(intent);
@@ -78,12 +79,25 @@ public class ChatFragment extends Fragment {
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
         recycler_view.setAdapter(empHistoryAdapter);
 
+        cusDialogProg = new CusDialogProg(activity);
+        cusDialogProg.show();
+
+     /* LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recycler_view.setLayoutManager(linearLayoutManager);
+        linearLayoutManager.setStackFromEnd(false);
+        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                chatListCalling();
+            }
+        };
+        recycler_view.addOnScrollListener(scrollListener);*/
+
         try {
             chatListCalling();
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return view;
     }
 
@@ -94,6 +108,7 @@ public class ChatFragment extends Fragment {
                 if (dataSnapshot.getValue() != null) {
                     getMessageList();
                 } else {
+                    cusDialogProg.dismiss();
                     layout_for_noData.setVisibility(View.VISIBLE);
                     getMessageList();
                 }
@@ -107,6 +122,7 @@ public class ChatFragment extends Fragment {
 
     public void getMessageList(){
         hashMap.clear();
+       // .orderByKey().limitToFirst(20)
         FirebaseDatabase.getInstance().getReference().child("history").child(Uconnekt.session.getUserInfo().userId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -127,13 +143,9 @@ public class ChatFragment extends Fragment {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    for (int i = 0; i < empChatHistorie.size(); i++) {
-                        if (empChatHistorie.get(i).userId != null) {
-                            if (empChatHistorie.get(i).userId.equals(dataSnapshot.getKey())) {
-                                empChatHistorie.remove(i);
-                            }
-                        }
-                    }
+                    empChatHistorie.clear();
+                    hashMap.remove(dataSnapshot.getKey());
+                    empChatHistorie.addAll(hashMap.values());
                     shortList(empChatHistorie);
                 }
             }
@@ -156,26 +168,30 @@ public class ChatFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
                     FirebaseData messageOutput = dataSnapshot.getValue(FirebaseData.class);
+                    cusDialogProg.dismiss();
+                    if (messageOutput != null) {
+                        EmpChatHistory empChatHistory = new EmpChatHistory();
+                        empChatHistory.fullName = messageOutput.fullName;
+                        empChatHistory.jobTitleName = messageOutput.jobTitleName;
+                        empChatHistory.profileImage = messageOutput.profileImage;
+                        empChatHistory.userId = messageOutput.userId;
+                        empChatHistory.timeStamp = history.timeStamp;
+                        empChatHistory.message = history.message;
+                        empChatHistory.readUnread = history.readUnread;
+                        empChatHistory.deleteTime = history.deleteTime;
 
-                    EmpChatHistory empChatHistory = new EmpChatHistory();
-                    if (messageOutput.fullName!=null)empChatHistory.fullName = messageOutput.fullName;
-                    empChatHistory.jobTitleName = messageOutput.jobTitleName;
-                    empChatHistory.profileImage = messageOutput.profileImage;
-                    empChatHistory.userId = messageOutput.userId;
-                    empChatHistory.timeStamp = history.timeStamp;
-                    empChatHistory.message = history.message;
-                    empChatHistory.readUnread = history.readUnread;
-                    empChatHistory.deleteTime = history.deleteTime;
+                        Long deleteTime = (Long) empChatHistory.deleteTime;
+                        if (deleteTime != null) {
+                            if ((Long) empChatHistory.timeStamp > deleteTime)
+                                hashMap.put(dataSnapshot.getKey(), empChatHistory);
+                        } else hashMap.put(dataSnapshot.getKey(), empChatHistory);
 
-                    Long deleteTime = (Long)empChatHistory.deleteTime;
-                    if (deleteTime!=null) {
-                        if ((Long) empChatHistory.timeStamp > deleteTime) hashMap.put(dataSnapshot.getKey(),empChatHistory);
-                    }else hashMap.put(dataSnapshot.getKey(),empChatHistory);
-
-                    Collection<EmpChatHistory> demoValues = hashMap.values();
-                    empChatHistorie.clear();
-                    empChatHistorie.addAll(demoValues);
-                    shortList(empChatHistorie);
+                        Collection<EmpChatHistory> demoValues = hashMap.values();
+                        empChatHistorie.clear();
+                        empChatHistorie.addAll(demoValues);
+                        cusDialogProg.dismiss();
+                        shortList(empChatHistorie);
+                    }
                 }
             }
             @Override
@@ -207,5 +223,4 @@ public class ChatFragment extends Fragment {
         super.onAttach(context);
         activity = (HomeActivity) context;
     }
-
 }

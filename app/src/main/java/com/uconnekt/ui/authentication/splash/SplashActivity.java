@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
@@ -22,6 +24,10 @@ import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
 import com.uconnekt.ui.individual.home.JobHomeActivity;
 import com.uconnekt.util.Constant;
+import com.uconnekt.util.Utils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 public class SplashActivity extends AppCompatActivity implements SplashView {
     private Animation zoomOut;
@@ -40,12 +46,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         splashPresenter.validationCondition(this);
     }
 
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     protected void onPostResume() {
@@ -99,30 +99,74 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     @Override
     public void openMainActivity() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
-                Constant.CHAT = 0;
-               if (Uconnekt.session.getUserInfo().userType.equals("business")){
-                    //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
-                    if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
-                        startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(getIntent().getStringExtra("userType") != null) {
+                        profileView();
                     }else {
-                        startActivity(new Intent(SplashActivity.this,HomeActivity.class));
+                        //Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
+                        Constant.CHAT = 0;
+                        if (Uconnekt.session.getUserInfo().userType.equals("business")) {
+                            //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
+                            if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
+                                startActivity(new Intent(SplashActivity.this, EmpProfileActivity.class));
+                            } else {
+                                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                            }
+                        } else {
+                            //startActivity(new Intent(SplashActivity.this, IndiEditProfileActivity.class));
+                            if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
+                                Intent intent = new Intent(SplashActivity.this, IndiEditProfileActivity.class);
+                                intent.putExtra("FROM", "First");
+                                startActivity(intent);
+                            } else {
+                                startActivity(new Intent(SplashActivity.this, JobHomeActivity.class));
+                            }
+                        }
                     }
+                    SplashActivity.this.finish();
+                    overridePendingTransition(R.anim.anim_left_to_right, R.anim.anim_right_to_left);
+                }
+            }, Constant.SPLESH_TIME);
+        }
+
+
+
+    private void profileView(){
+        Map<String, String> map = Utils.getQueryString(getIntent().getData().toString());
+        if (map.containsKey("id")) {
+            String userType = map.get("userType");
+            Intent intent;
+            if (Uconnekt.session.getUserInfo().userType.equals("business")) {
+                 if (userType.equals("business")){
+                     Toast.makeText(SplashActivity.this, R.string.profile_check, Toast.LENGTH_SHORT).show();
+                 }else {
+                     intent = new Intent(this, HomeActivity.class);
+                     sendData(map,intent);
+                 }
+            }else {
+                if (!userType.equals("business")){
+                    Toast.makeText(SplashActivity.this, R.string.profile_check, Toast.LENGTH_SHORT).show();
                 }else {
-                  //startActivity(new Intent(SplashActivity.this, IndiEditProfileActivity.class));
-                    if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
-                        Intent intent = new Intent(SplashActivity.this,IndiEditProfileActivity.class);
-                        intent.putExtra("FROM", "First");
-                        startActivity(intent);
-                    }else {
-                        startActivity(new Intent(SplashActivity.this, JobHomeActivity.class));
-                    }
-                }SplashActivity.this.finish();
-                overridePendingTransition(R.anim.anim_left_to_right, R.anim.anim_right_to_left);
+                    intent = new Intent(this, JobHomeActivity.class);
+                    sendData(map,intent);
+                }
             }
-        }, Constant.SPLESH_TIME);
+
+        }
+    }
+
+    private void sendData(Map<String, String> map, Intent intent){
+        try {
+            byte[] data = Base64.decode(map.get("id"), Base64.DEFAULT);
+            String decodedId = new String(data, "UTF-8");
+            intent.putExtra("userId", decodedId);
+            startActivity(intent);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }
