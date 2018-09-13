@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    tools:context="com.uconnekt.ui.common_activity.HelpAndSupportActivity">
+
+    <include layout="@layout/actionbar_layout"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_support"
+                    android:scaleType="fitXY" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="#90D8D8D8">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send Feedback"
+                    android:layout_above="@+id/tvMission"
+                    android:textColor="@color/darkgray"
+                    android:padding="@dimen/_10sdp"
+                    android:textSize="@dimen/_14sdp"
+                    android:fontFamily="@font/montserrat_medium" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/edit_ico"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Need help?"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/yellow"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/darkgray"
+                        android:text="Feed free to "
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/tv_for_contactUs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/yellow"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:weightSum="4">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_facebook"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_linkedin_logo"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_twitter_logo"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_email_logo"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_14sdp"
+                    android:textColor="@color/darkgray"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/useful_questions_amp_answers"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager"/> >
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

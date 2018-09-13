@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.uconnekt.ui.common_activity.AboutUsActivity">
+
+    <include layout="@layout/actionbar_layout"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_marginTop="@dimen/_minus2sdp"
+            android:src="@drawable/img"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#90D8D8D8"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/our_mission"
+                android:layout_above="@+id/tvMission"
+                android:textColor="@color/Black"
+                android:textSize="@dimen/_14sdp"
+                android:fontFamily="@font/montserrat_medium" />
+
+            <TextView
+                android:id="@+id/tvMission"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/uconnekt_s_mission"
+                android:textColor="@color/Black"
+                android:textSize="@dimen/_12sdp"
+                android:fontFamily="@font/montserrat_regular" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14sdp"
+            android:text="@string/about_uconnekt"
+            android:textColor="@color/Black"
+            android:fontFamily="@font/montserrat_medium"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14sdp"
+            android:text="@string/hiring_made_simple"
+            android:textColor="@color/yellow"
+            android:fontFamily="@font/montserrat_medium"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/uconnekt_dis"
+            android:textColor="@color/lightgray"
+            android:fontFamily="@font/montserrat_regular"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                app:srcCompat="@drawable/ic_bregcash" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_toRightOf="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12sdp"
+                android:text="@string/hiring_find_talented_candidates_here"
+                android:textColor="@color/Black"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:fontFamily="@font/montserrat_regular"/>
+
+            <TextView
+                android:layout_toRightOf="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_below="@+id/text"
+                android:text="@string/hiring_business"
+                android:textColor="@color/lightgray"
+                android:fontFamily="@font/montserrat_regular"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image1"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                app:srcCompat="@drawable/ic_search_new" />
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_toRightOf="@+id/image1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12sdp"
+                android:text="@string/need_a_change"
+                android:textColor="@color/Black"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:fontFamily="@font/montserrat_regular"/>
+
+            <TextView
+                android:layout_toRightOf="@+id/image1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_below="@+id/text1"
+                android:text="@string/find_employe"
+                android:textColor="@color/lightgray"
+                android:fontFamily="@font/montserrat_regular"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvHref"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_10sdp"
+            android:fontFamily="@font/montserrat_light"
+            android:textColor="@color/lightgray" />
+
+        <TextView
+            android:id="@+id/tvHref2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_10sdp"
+            android:fontFamily="@font/montserrat_light"
+            android:textColor="@color/lightgray" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
+
