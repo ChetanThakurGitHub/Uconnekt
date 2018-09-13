@@ -74,7 +74,8 @@ import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private ArrayList<JobTitle> arrayList,specialityArrayList;
-    private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo,tv_for_jobTitle,tv_for_aofs;
+    private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,
+            tv_for_logo,tv_for_jobTitle,tv_for_aofs,tv_for_txtCount,et_for_description;
     private Double latitude, longitude;
     private BottomSheetDialog dialog;
     private ImageView iv_for_profile;
@@ -85,7 +86,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     private EditText et_for_bio;
     private Uri imageUri;
     private RelativeLayout layout_for_address;
-    private EditText et_for_businessName,et_for_fullname,et_for_email;
+    private EditText et_for_businessName,et_for_fullname,et_for_email,et_for_contact;
     private int image = -1;
 
     private SpinnerDialog spinnerDialog,spinnerDialog1;
@@ -129,6 +130,23 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         };
         et_for_bio.addTextChangedListener(textWatcher);
 
+        TextWatcher textWatcher1 = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int text = 500 - s.length();
+                tv_for_txtCount.setText(String.valueOf(text));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        et_for_description.addTextChangedListener(textWatcher1);
+
         iv_for_profile.setOnClickListener(this);
     }
 
@@ -141,12 +159,15 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         tv_for_fullName = findViewById(R.id.tv_for_fullName);
         mainlayout = findViewById(R.id.mainlayout);
         tv_for_txt = findViewById(R.id.tv_for_txt);
+        tv_for_txtCount = findViewById(R.id.tv_for_txtCount);
+        et_for_description = findViewById(R.id.et_for_description);
         et_for_bio = findViewById(R.id.et_for_bio);
         tv_for_businessName = findViewById(R.id.tv_for_businessName);
         layout_for_address = findViewById(R.id.layout_for_address);
         et_for_businessName = findViewById(R.id.et_for_businessName);
         et_for_fullname = findViewById(R.id.et_for_fullname);
         et_for_email = findViewById(R.id.et_for_email);
+        et_for_contact = findViewById(R.id.et_for_contact);
 
         findViewById(R.id.layout_for_address).setOnClickListener(this);
         findViewById(R.id.layout_for_addLogo).setOnClickListener(this);
@@ -221,6 +242,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         String address = tv_for_address.getText().toString().trim();
         String businessName  = et_for_businessName.getText().toString().trim();
         String fullname  = et_for_fullname.getText().toString().trim();
+        String phone  = et_for_contact.getText().toString().trim();
         if (businessName.isEmpty()){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.business_v));
         }else if (businessName.length()<3){
@@ -229,6 +251,10 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.fullname_v));
         }else if (fullname.length()<3){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.fullname_required));
+        }else if (phone.isEmpty()){
+            MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.phone_v));
+        } else if (phone.length() < 7 || phone.length() > 16){
+            MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.phone_required));
         }else if (jobTitleId.isEmpty()) {
             MyCustomMessage.getInstance(this).snackbar(mainlayout, getString(R.string.jobtitle_v));
         }else if (specialtyID.isEmpty()) {
@@ -236,7 +262,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         }else if (address.isEmpty()) {
             MyCustomMessage.getInstance(this).snackbar(mainlayout, getString(R.string.address_v));
         }else {
-            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  doProfileUpdate(address,et_for_bio.getText().toString().trim(),businessName,fullname);
+            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  doProfileUpdate(address,et_for_bio.getText().toString().trim(),businessName,fullname,phone);
             else MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.select_location_again));
         }
     }
@@ -447,7 +473,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         }.executeVolley();
     }
 
-    private void doProfileUpdate(final String address, final String bio, final String businessName, final String fullname) {
+    private void doProfileUpdate(final String address, final String bio, final String businessName, final String fullname, final String phone) {
+
+        final String description = et_for_description.getText().toString().trim();
 
         if (isNetworkAvailable()) {
             cusDialogProg.show();
@@ -469,16 +497,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                             if (userFullDetail.status.equals("1")) {
                                 FirebaseLogin firebaseLogin = new FirebaseLogin();
-                                firebaseLogin.firebaseLogin(userFullDetail,EditProfileActivity.this,false, cusDialogProg ,false,true);
+                                firebaseLogin.firebaseLogin(userFullDetail,EditProfileActivity.this,false, cusDialogProg ,false,true, false);
                                 Constant.NETWORK_CHECK = 1;
-                               // finish();
-                                /*new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                    }
-                                },2000);*/
-
                             } else {
                                 MyCustomMessage.getInstance(EditProfileActivity.this).snackbar(mainlayout, getString(R.string.inactive_user));
                             }
@@ -509,19 +529,22 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                     params.put("businessName", businessName);
                     params.put("area_of_specialization", specialtyID);
                     params.put("address", address);
-                    String  enCodedStatusCode = null;
+                    String  enCodedStatusCode = null,enCodedStatusCode1 = null;
                     try {
                         enCodedStatusCode = URLEncoder.encode(bio, "UTF-8");
+                        enCodedStatusCode1 = URLEncoder.encode(description, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                     params.put("bio", enCodedStatusCode==null?"":enCodedStatusCode);
+                    params.put("description", enCodedStatusCode1==null?"":enCodedStatusCode1);
                     params.put("city", city==null?"":city);
                     params.put("state", state==null?"":state);
                     params.put("country", country==null?"":country);
                     params.put("latitude", latitude+"");
                     params.put("longitude", longitude+"");
                     params.put("job_title", jobTitleId);
+                    params.put("phone", phone);
 
                     return params;
                 }
@@ -577,11 +600,14 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         String address = object.getString("address");
                        // company_logo = object.getString("company_logo");
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
+                        String description = URLDecoder.decode(object.getString("description"), "UTF-8");
                         //String bio = object.getString("bio");
                         city = object.getString("city");
                         state = object.getString("state");
                         country = object.getString("country");
                         String specializationId = object.getString("specializationId");
+                        String sdlf = object.getString("phone");
+                        et_for_contact.setText(object.getString("phone"));
                         String jobTitle = object.getString("jobTitleId");
                         String lat = object.getString("latitude");
                         String lng = object.getString("longitude");
@@ -593,6 +619,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                         if (!address.equals("null"))tv_for_address.setText(address);
                         if (!bio.equals("null"))et_for_bio.setText(bio);
+                        if (!description.equals("null"))et_for_description.setText(description);
 
                         if (!jobTitle.isEmpty()) {
                             jobTitleId = jobTitle;

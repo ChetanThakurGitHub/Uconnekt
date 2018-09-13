@@ -86,7 +86,6 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         view.findViewById(R.id.card_for_recommend).setOnClickListener(this);
         view.findViewById(R.id.tv_for_view).setOnClickListener(this);
         getMyprofileData();
-
         return view;
     }
 
@@ -145,6 +144,55 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         }.executeVolley();
     }
 
+    private void badgeCount(){
+        new VolleyGetPost(activity, AllAPIs.BADGE_COUNT, false, "BADGE_COUNT", false) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    JSONArray array = object.getJSONArray("data");
+
+                    JSONObject object0 = array.getJSONObject(0);
+                    TextView tvRecommendedBudge = view.findViewById(R.id.tvRecommendedBudge);
+                    String user_recommends = object0.getString("user_recommends");
+                    tvRecommendedBudge.setText(user_recommends);
+                    tvRecommendedBudge.setVisibility(!user_recommends.isEmpty()&&!user_recommends.equals("0")?View.VISIBLE:View.GONE);
+
+                    JSONObject object1 = array.getJSONObject(1);
+                    TextView tvFacouriteBudge = view.findViewById(R.id.tvFacouriteBudge);
+                    String user_favourites = object1.getString("user_favourites");
+                    tvFacouriteBudge.setText(user_favourites);
+                    tvFacouriteBudge.setVisibility(!user_favourites.isEmpty()&&!user_favourites.equals("0")?View.VISIBLE:View.GONE);
+
+                    JSONObject object2 = array.getJSONObject(2);
+                    TextView tvReviewBadge = view.findViewById(R.id.tvReviewBadge);
+                    String user_review = object2.getString("user_review");
+                    tvReviewBadge.setText(user_review);
+                    tvReviewBadge.setVisibility(!user_review.isEmpty()&&!user_review.equals("0")?View.VISIBLE:View.GONE);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
+
     private void setData(String fullName, String businessName, String jobTitleName, String address, View view, String rating, String bio, String specializationName, String company_logo, String profileImage, String favourite_count, String recommend_count) {
         TextView tv_for_fullName = view.findViewById(R.id.tv_for_fullName);tv_for_fullName.setText(fullName);
         TextView tv_for_businessName = view.findViewById(R.id.tv_for_businessName);tv_for_businessName.setText(businessName);
@@ -162,6 +210,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
+        badgeCount();
+        activity.badgeCount();
         if (Constant.NETWORK_CHECK == 1){
            getMyprofileData();
             Constant.NETWORK_CHECK = 0;
@@ -185,5 +235,8 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                 break;
         }
     }
+
+
+
 
 }

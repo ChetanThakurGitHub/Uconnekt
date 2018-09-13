@@ -12,5 +12,5 @@
     android:fontFamily="@font/montserrat_regular"
     android:textColor="@color/darkgray"
     android:textColorHint="@color/lightgray"
-    android:hint="@string/area_of_specialtys"
+    android:hint="@string/employment_type"
     android:padding="@dimen/_5sdp" />

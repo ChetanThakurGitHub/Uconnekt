@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.ui.common_activity.NetworkActivity;
-import com.uconnekt.ui.employer.activity.TrackInterviewActivity;
 import com.uconnekt.util.Utils;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -272,6 +271,8 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
             findViewById(R.id.view_for_line1).setBackgroundResource(R.color.yellow);
             TextView tv_for_data = findViewById(R.id.tv_for_data);
             tv_for_data.setText(R.string.accepted_recruiter);
+            TextView tv_for_type = findViewById(R.id.tv_for_type);
+            tv_for_type.setText(R.string.pending_employer);
             ImageView iv_for_second = findViewById(R.id.iv_for_second);
             iv_for_second.setImageResource(R.drawable.ic_tick_user_ico);
             findViewById(R.id.iv_for_second).setVisibility(View.VISIBLE);

@@ -1,9 +1,11 @@
 package com.uconnekt.ui.employer.fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -13,9 +15,11 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,12 +27,17 @@ import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
+import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.BasicInfoActivity;
 import com.uconnekt.ui.employer.activity.ResumeActivity;
@@ -40,7 +49,6 @@ import com.uconnekt.ui.individual.activity.ViewActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,8 +57,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.security.AllPermission;
 import java.util.Date;
 import java.util.Map;
+
+import static com.uconnekt.util.Constant.CALLING;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
@@ -58,9 +69,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static final String ARG_PARAM1 = "param1";
     private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",profileUrl = "";
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,profile;
+    private CardView card_for_chat;
     private int favourite_count = 0,recommend_count = 0,check = 0;
     private TextView tv_for_bio,tv_for_review_count,tv_for_favourite_count,tv_for_recomend,
             tv_for_aofs,tv_for_address,tv_for_company,tv_for_fullName;
+    private PopupMenu popup;
 
     public static ProfileFragment newInstance(String userID) {
         ProfileFragment fragment = new ProfileFragment();
@@ -91,6 +104,57 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
+    private void menuClick() {
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.chat:
+                        Intent intent = new Intent(activity,ChatActivity.class);
+                        intent.putExtra("USERID",userId);
+                        activity.startActivity(intent);
+                        break;
+                    case R.id.call:
+                      /*  PermissionAll permissionAll = new PermissionAll();
+                        if (permissionAll.checkCallingPermission(activity))callingIntent();*/
+                        MyCustomMessage.getInstance(activity).snackbar(card_for_chat,getString(R.string.under_development_mode));
+                        break;
+                    case R.id.email:
+                        //sharOnEmail("chetan@gmail.com");
+                        MyCustomMessage.getInstance(activity).snackbar(card_for_chat,getString(R.string.under_development_mode));
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CALLING: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        //success permission granted & call Location method
+                        Intent intent4 = new Intent(Intent.ACTION_CALL);
+                        intent4.setData(Uri.parse("tel:" + "01234567889"));
+                        startActivity(intent4);
+                    }
+                } else {
+                    Toast.makeText(activity, "Deny calling permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
+        }
+    }
+
+    private void callingIntent(){
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + "1234567890"));
+        startActivity(intent);
+    }
+
     private void initView(View view){
         profile = view.findViewById(R.id.profile);
         iv_profile_image = view.findViewById(R.id.iv_profile_image);
@@ -104,14 +168,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         tv_for_review_count = view.findViewById(R.id.tv_for_review_count);
         tv_for_favourite_count = view.findViewById(R.id.tv_for_favourite_count);
         tv_for_recomend = view.findViewById(R.id.tv_for_recomend);
+        card_for_chat = view.findViewById(R.id.card_for_chat);
         activity.findViewById(R.id.iv_for_share).setOnClickListener(this);
         view.findViewById(R.id.layout_for_basicInfo).setOnClickListener(this);
         view.findViewById(R.id.layout_for_Experience).setOnClickListener(this);
         view.findViewById(R.id.layout_for_Resume).setOnClickListener(this);
-        view.findViewById(R.id.card_for_chat).setOnClickListener(this);
+        card_for_chat.setOnClickListener(this);
         view.findViewById(R.id.tv_for_favourite).setOnClickListener(this);
         view.findViewById(R.id.tv_for_recomendTxt).setOnClickListener(this);
         view.findViewById(R.id.tv_for_views).setOnClickListener(this);
+        iv_profile_image.setOnClickListener(this);
 
     }
 
@@ -280,7 +346,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void view(){
-        new VolleyGetPost(activity, AllAPIs.VIEW, true, "Recommend", false) {
+        new VolleyGetPost(activity, AllAPIs.VIEW, true, "Recommend", true) {
             @SuppressLint("SetTextI18n")
             @Override
             public void onVolleyResponse(String response) {
@@ -339,9 +405,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 activity.startActivity(intent);
                 break;
             case R.id.card_for_chat:
-                intent = new Intent(activity,ChatActivity.class);
-                intent.putExtra("USERID",userId);
-                activity.startActivity(intent);
+                popup = new PopupMenu(activity, card_for_chat);
+                popup.getMenuInflater().inflate(R.menu.profile_main, popup.getMenu());
+                menuClick();
                 break;
             case R.id.tv_for_favourite:
                 intent = new Intent(activity,FavouriteActivity.class);
@@ -361,7 +427,36 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;
+            case R.id.iv_profile_image:
+                zoomImageDialog();
+                break;
         }
+    }
+
+
+    private void zoomImageDialog() {
+
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_zoomimage);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView iv_for_cansel = dialog.findViewById(R.id.iv_for_cansel);
+        iv_for_cansel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        PhotoView iv_for_image = dialog.findViewById(R.id.iv_for_image);
+
+        if (profileImage != null && !profileImage.equals("")) {
+            Picasso.with(activity).load(profileImage).placeholder(R.drawable.ic_background).into(iv_for_image);
+        } else {
+            Picasso.with(activity).load(R.drawable.ic_background).fit().into(iv_for_image);
+        }
+        dialog.show();
     }
 
     private void deletelDailog() {
@@ -425,9 +520,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Shared Profiles");
+            File f = new File(Environment.getExternalStorageDirectory(), "connektUs/Shared Profiles");
             if (!f.exists()) f.mkdirs();
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/Uconnekt/Shared Profiles/" + now + ".png";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/connektUs/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
             File imageFile = new File(mPath);
@@ -462,9 +557,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         sharIntent.setType("image/png");
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "connektUs");
         sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
+    }
 
+
+    private void sharOnEmail(String email) {
+        Intent gmail = new Intent(Intent.ACTION_VIEW);
+        gmail.setClassName("com.google.android.gm","com.google.android.gm.ComposeActivityGmail");
+        gmail.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
+        gmail.setData(Uri.parse(email));
+        gmail.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
+        gmail.setType("plain/text");
+        gmail.putExtra(Intent.EXTRA_TEXT, "Hii android !");
+        startActivity(gmail);
     }
 }

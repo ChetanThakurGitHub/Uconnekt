@@ -10,7 +10,7 @@ import com.uconnekt.util.Constant;
 
 public class PermissionAll {
 
-    /*public boolean checkCallingPermission(Activity context) {
+    public boolean checkCallingPermission(Activity context) {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE)
                 != PackageManager.PERMISSION_GRANTED) {
             // No explanation needed, we can request the permission.
@@ -21,7 +21,7 @@ public class PermissionAll {
         } else {
             return true;
         }
-    }*/
+    }
 
     public boolean checkLocationPermission(Activity context) {
         if (ContextCompat.checkSelfPermission(context , Manifest.permission.ACCESS_FINE_LOCATION)

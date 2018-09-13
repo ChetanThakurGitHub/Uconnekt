@@ -471,6 +471,82 @@
             app:cardBackgroundColor="@color/white">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_2sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image6"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_salary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/image6"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_2sdp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image7"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:padding="@dimen/_3sdp"
+                    android:layout_centerVertical="true"
+                    app:srcCompat="@drawable/ic_down_arrow"
+                    android:layout_alignParentRight="true" />
+
+                <Spinner
+                    android:id="@+id/sp_for_empType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/image7"
+                    android:background="@color/transparent"
+                    android:dropDownVerticalOffset="@dimen/_30sdp"
+                    android:dropDownWidth="@dimen/_240sdp"
+                    android:gravity="center"
+                    android:spinnerMode="dropdown"/>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:elevation="@dimen/_5sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:cardBackgroundColor="@color/white">
+
+            <RelativeLayout
                 android:id="@+id/layout_for_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

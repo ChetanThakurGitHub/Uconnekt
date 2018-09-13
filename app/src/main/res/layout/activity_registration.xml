@@ -176,6 +176,40 @@
                                 android:textSize="@dimen/_12sdp" />
 
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@color/lightgray"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:gravity="center|left">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                app:srcCompat="@drawable/ic_call" />
+
+                            <EditText
+                                android:id="@+id/et_for_contact"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:background="@null"
+                                android:fontFamily="@font/montserrat_regular"
+                                android:hint="@string/contact_number"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:singleLine="true"
+                                android:textColor="@color/darkgray"
+                                android:textColorHint="@color/lightgray"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </LinearLayout>
+
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
@@ -225,54 +259,55 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp" />
 
+                <LinearLayout
+                    android:id="@+id/layout_for_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:text="@string/already_have_an_account"
+                        android:textColor="@color/darkgray"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/_2sdp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/login"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:textColor="@color/yellow" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:background="@color/yellow"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/layout_for_signup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/already_have_an_account"
-                android:textColor="@color/darkgray"
-                android:textSize="@dimen/_12sdp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="@dimen/_2sdp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login"
-                    android:textSize="@dimen/_12sdp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:textColor="@color/yellow" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:background="@color/yellow"/>
-            </LinearLayout>
-        </LinearLayout>
-
     </RelativeLayout>
 
-    <View
+    <!--<View
         android:id="@+id/view_for_mobile"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:visibility="gone" />
+        android:visibility="gone" />-->
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_for_back"

@@ -6,7 +6,7 @@ import com.uconnekt.util.Constant;
 public class RegistrationIntractorImpl implements RegistrationIntractor {
 
     @Override
-    public void registration(String businessName, String fullname, String email, String password, onRegitrationFinishedListener listener) {
+    public void registration(String businessName, String fullname, String email, String password, String phone, onRegitrationFinishedListener listener) {
 
         if (businessName.equalsIgnoreCase("")){
             listener.onBusinessNameError();
@@ -34,6 +34,16 @@ public class RegistrationIntractorImpl implements RegistrationIntractor {
 
         if (!email.toLowerCase().matches(Constant.emailPattern)){
             listener.onEmailErrorValidation();
+            return;
+        }
+
+        if (phone.equalsIgnoreCase("")) {
+            listener.onPhoneError();
+            return;
+        }
+
+        if (phone.length() < 7 || phone.length() > 16) {
+            listener.onPhoneErrorValidation();
             return;
         }
 

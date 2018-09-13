@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.history.ChatFragment;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
@@ -28,6 +29,11 @@ import com.uconnekt.ui.employer.fragment.ViewProifileFragment;
 import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.ui.individual.fragment.FavouriteFragment;
 import com.uconnekt.util.Utils;
+import com.uconnekt.volleymultipart.VolleyGetPost;
+import com.uconnekt.web_services.AllAPIs;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -71,6 +77,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             if (userId == null)userId = extras.getString("reference_id");
             if (userType != null)notificationManage(userType,userId);else profileView(userId);
         }
+
+        badgeCount();
     }
 
     private void profileView(String userId){
@@ -92,6 +100,43 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 replaceFragment(MyProfileFragment.newInstance(userType));
             }
         }
+    }
+
+    public void badgeCount(){
+        new VolleyGetPost(this, AllAPIs.BADGE_COUNT, false, "BADGE_COUNT", false) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String total = object.getString("total");
+                    TextView tvProfileBadge = findViewById(R.id.tvProfileBadge);
+                    if (!total.isEmpty()&&!total.equals("0")){
+                        tvProfileBadge.setVisibility(View.VISIBLE);
+                        tvProfileBadge.setText(total);
+                    }else {
+                        tvProfileBadge.setVisibility(View.GONE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
     }
 
     private void initView(){
@@ -340,6 +385,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (getCurrentFragment() instanceof MapFragment)getCurrentFragment().onRequestPermissionsResult(requestCode,permissions,grantResults);
+                if (getCurrentFragment() instanceof ProfileFragment)getCurrentFragment().onRequestPermissionsResult(requestCode,permissions,grantResults);
             }
             break;
         }

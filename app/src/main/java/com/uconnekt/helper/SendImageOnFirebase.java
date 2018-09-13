@@ -20,7 +20,7 @@ import static com.uconnekt.helper.ImagePicker.decodeBitmap;
 
 public class SendImageOnFirebase {
 
-    //public static final String TEMP_IMAGE_NAME = "tempImage.jpg";
+    public static final String TEMP_IMAGE_NAME = "tempImage.jpg";
     private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
     private static final int DEFAULT_MIN_HEIGHT_QUALITY = 400;
     private static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
@@ -53,16 +53,22 @@ public class SendImageOnFirebase {
         return false;
     }
 
-    public static File getTemporalFile(Context context) {
+  /*  public static File getTemporalFile(Context context) {
         Log.e("path", String.valueOf(context.getExternalCacheDir()));
 
-        File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Pictures");
+        File f = new File(Environment.getExternalStorageDirectory(), "connektUs/Pictures");
         if (!f.exists()) f.mkdirs();
-        String mPath = Environment.getExternalStorageDirectory().toString() + "/Uconnekt/Pictures/";
+        String mPath = Environment.getExternalStorageDirectory().toString() + "/connektUs/Pictures/";
 
         Log.e("path", mPath);
         return new File(mPath, UUID.randomUUID() + ".jpg");  //TEMP_IMAGE_NAME
+    }*/
+
+
+    public static File getTemporalFile(Context context) {
+        return new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
     }
+
 
     /**
      * Resize to avoid using too much memory loading big images (e.g.: 2560*1920)

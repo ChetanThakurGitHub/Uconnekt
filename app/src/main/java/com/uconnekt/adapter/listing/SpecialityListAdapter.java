@@ -1,6 +1,7 @@
 package com.uconnekt.adapter.listing;
 
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.SpecialityList;
 import com.uconnekt.ui.employer.fragment.MapFragment;
 import com.uconnekt.ui.employer.fragment.SearchFragment;
@@ -34,11 +36,16 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
         return new SpecialityListAdapter.ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull SpecialityListAdapter.ViewHolder holder, int position) {
         SpecialityList specialityList = specialityLists.get(position);
 
-        holder.tv_for_specializationName.setText(specialityList.specializationName);
+        if(Uconnekt.session.getUserInfo().userType.equals("business") && position != 0) {
+            holder.tv_for_specializationName.setText(specialityList.specializationName +" ( "+ specialityList.totalRegistered+" )");
+        }else {
+            holder.tv_for_specializationName.setText(specialityList.specializationName);
+        }
     }
 
     @Override
@@ -76,7 +83,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((SearchFragment)activity).layout_for_list.setVisibility(View.GONE);
                         ((SearchFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((SearchFragment)activity).searchLists.clear();
-                        ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "", "");
+                        ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "", "", "", "");
                         ((SearchFragment)activity).offset = 0;
                         ((SearchFragment)activity).mSwipeRefreshLayout.setRefreshing(true);
                     }else if (activity instanceof IndiMapFragment){
@@ -99,7 +106,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((MapFragment)activity).searchLists.clear();
                         ((MapFragment)activity).map.clear();
                         ((MapFragment)activity).mClusterManager.clearItems();
-                        ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "", "", "", true);
+                        ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "", "", "", true, "", "");
                         /*((MapFragment)activity).offset = 0;
                         ((MapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/
                     }

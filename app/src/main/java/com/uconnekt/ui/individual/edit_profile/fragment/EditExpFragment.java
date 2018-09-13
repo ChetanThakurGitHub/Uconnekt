@@ -27,6 +27,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -71,13 +72,13 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
     private IndiEditProfileActivity activity;
     private EditListener listener;
-    private WeekSpAdapter weekSpAdapter;
+    private WeekSpAdapter weekSpAdapter,salarySpAdapter,empTypeSpAdapter;
     private ArrayList<JobTitle> arrayList,arrayList2,arrayList3;
     private ArrayList<PreviousRole> roleArrayList = new ArrayList<>();
-    private ArrayList<Weeks> weekList;
-    private Spinner sp_for_weeklist;
+    private ArrayList<Weeks> weekList,salaryList,empTypeList;
+    private Spinner sp_for_weeklist,sp_for_salary,sp_for_empType;
     private LinearLayout mainlayout,layout_for_cRole,layout_for_nextR,layout_for_pRole,layout_for_preRole;
-    private String jobTitleId = "",interestId = "",availability = "",jobTitleId2 = "";
+    private String jobTitleId = "",interestId = "",availability = "",jobTitleId2 = "",salary = "",employmentType = "";
     private int setValue = -1,index = -1,checkMange = -1;
     private EditText et_for_companyName,et_for_cdescription,et_for_pdescription,et_for_compyName;
     private TextView tv_for_startD,tv_for_finishD,tv_for_txt,tv_for_address,tv_for_startDP,tv_for_finishDP,
@@ -100,12 +101,20 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         arrayList2 = new ArrayList<>();
         arrayList3 = new ArrayList<>();
         weekList = new ArrayList<>();
+        salaryList = new ArrayList<>();
+        empTypeList = new ArrayList<>();
         weekSpAdapter = new WeekSpAdapter(activity, weekList,R.layout.custom_sp_week);
+        salarySpAdapter = new WeekSpAdapter(activity, salaryList,R.layout.custom_sp);
+        empTypeSpAdapter = new WeekSpAdapter(activity, empTypeList,R.layout.custom_sp2);
         sp_for_weeklist.setAdapter(weekSpAdapter);
+        sp_for_salary.setAdapter(salarySpAdapter);
+        sp_for_empType.setAdapter(empTypeSpAdapter);
 
         getlist();
 
         sp_for_weeklist.setOnItemSelectedListener(this);
+        sp_for_salary.setOnItemSelectedListener(this);
+        sp_for_empType.setOnItemSelectedListener(this);
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -163,7 +172,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         String current_company = object1.getString("current_company");
                         String current_start_date = object1.getString("current_start_date");
                         String current_finish_date = object1.getString("current_finish_date");
-                        //String current_description = object1.getString("current_description");
                         String current_description = URLDecoder.decode(object1.getString("current_description"), "UTF-8");
 
                         if (!jobTitleId.isEmpty()) {
@@ -219,12 +227,34 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         String next_availability = object3.getString("next_availability");
                         String next_speciality = object3.getString("next_speciality");
                         String next_location = object3.getString("next_location");
+                        String expectedSalary = object3.getString("expectedSalary");
+                        String employementType = object3.getString("employementType");
 
                         if (!next_availability.isEmpty()) {
                             availability = next_availability;
                             for (int i = 0; weekList.size() > i; i++) {
                                 if (weekList.get(i).week.equals(next_availability)) {
                                     sp_for_weeklist.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                       if (!expectedSalary.isEmpty()) {
+                            salary = expectedSalary;
+                            for (int i = 0; salaryList.size() > i; i++) {
+                                if (salaryList.get(i).week.equals(expectedSalary)) {
+                                    sp_for_salary.setSelection(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!employementType.isEmpty()) {
+                            employmentType = employementType;
+                            for (int i = 0; empTypeList.size() > i; i++) {
+                                if (empTypeList.get(i).week.equals(employementType)) {
+                                    sp_for_empType.setSelection(i);
                                     break;
                                 }
                             }
@@ -273,6 +303,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         }.executeVolley();
     }
 
+
+
     private void initView(View view) {
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
         view.findViewById(R.id.layout_for_startD).setOnClickListener(this);
@@ -288,6 +320,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         view.findViewById(R.id.layout_for_jobTittle).setOnClickListener(this);
         view.findViewById(R.id.layout_for_jobTittle2).setOnClickListener(this);
         view.findViewById(R.id.layout_for_aofs).setOnClickListener(this);
+        sp_for_salary = view.findViewById(R.id.sp_for_salary);
+        sp_for_empType = view.findViewById(R.id.sp_for_empType);
         tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);
         card_for_pRole2 = view.findViewById(R.id.card_for_pRole2);
         tv_for_role3 = view.findViewById(R.id.tv_for_role3);
@@ -624,7 +658,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
             if (arrayList3.get(i).jobTitleId.equals(roleArrayList.get(index).previous_job_title)){
                 tv_for_jobTitle2.setText(arrayList3.get(i).jobTitleName);
                 jobTitleId2 = arrayList3.get(i).jobTitleId;
-              //  jobTitleId2 = arrayList3.get(i).jobTitleId;
                 return;
             }
         }
@@ -675,6 +708,10 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
         if (availability.equalsIgnoreCase("")){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.weeks_select));
+        }else if (salary.isEmpty()){
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_salary));
+        }else if (employmentType.isEmpty()){
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_emp_type));
         }else if (interestId.equalsIgnoreCase("")){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_aofi));
         }else if (address.equalsIgnoreCase("")){
@@ -711,6 +748,14 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 Weeks weeks = weekList.get(position);
                 availability = weeks.week;
                 activity.Isuserfilldata= true;
+                break;
+            case R.id.sp_for_salary:
+                Weeks salarys = salaryList.get(position);
+                salary = salarys.week;
+                break;
+            case R.id.sp_for_empType:
+                Weeks empType = empTypeList.get(position);
+                employmentType = empType.week;
                 break;
         }
     }
@@ -803,7 +848,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                             }
                         });
 
-
                         final JSONArray speciality = result.getJSONArray("speciality_list");
                         for (int i = 0; i < speciality.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
@@ -842,6 +886,54 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         week4.week = week.getString("12+");
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
+
+                        JSONObject salaryRangeList = result.getJSONObject("salary_range_list");
+                        JSONObject emplyementType = result.getJSONObject("emplyement_type");
+
+                        salaryList.add(week0);
+                        Weeks week6 = new Weeks();
+                        week6.week = salaryRangeList.getString("any");
+                        salaryList.add(week6);
+                        Weeks week7 = new Weeks();
+                        week7.week = salaryRangeList.getString("0-20");
+                        salaryList.add(week7);
+                        Weeks week8 = new Weeks();
+                        week8.week = salaryRangeList.getString("20-40");
+                        salaryList.add(week8);
+                        Weeks week9 = new Weeks();
+                        week9.week = salaryRangeList.getString("40-60");
+                        salaryList.add(week9);
+                        Weeks week10 = new Weeks();
+                        week10.week = salaryRangeList.getString("60-80");
+                        salaryList.add(week10);
+                        Weeks week11 = new Weeks();
+                        week11.week = salaryRangeList.getString("80-100");
+                        salaryList.add(week11);
+                        Weeks week12 = new Weeks();
+                        week12.week = salaryRangeList.getString("100-120");
+                        salaryList.add(week12);
+                        Weeks week13 = new Weeks();
+                        week13.week = salaryRangeList.getString("120-150");
+                        salaryList.add(week13);
+                        Weeks week18 = new Weeks();
+                        week18.week = salaryRangeList.getString("150-160");
+                        salaryList.add(week18);
+                        salarySpAdapter.notifyDataSetChanged();
+
+                        empTypeList.add(week0);
+                        Weeks week14 = new Weeks();
+                        week14.week = emplyementType.getString("fulltime");
+                        empTypeList.add(week14);
+                        Weeks week15 = new Weeks();
+                        week15.week = emplyementType.getString("parttime");
+                        empTypeList.add(week15);
+                        Weeks week16 = new Weeks();
+                        week16.week = emplyementType.getString("casual");
+                        empTypeList.add(week16);
+                        Weeks week17 = new Weeks();
+                        week17.week = emplyementType.getString("contract");
+                        empTypeList.add(week17);
+                        empTypeSpAdapter.notifyDataSetChanged();
 
                         showPrefilledData();
                     }
@@ -886,8 +978,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         UserInfo userInfo = Uconnekt.session.getUserInfo();
                         userInfo.jobTitleName = jobTitle;
                         FirebaseLogin firebaseLogin = new FirebaseLogin();
-                        firebaseLogin.firebaseLogin(userInfo,activity,false, cusDialogProg,false,false);
-
+                        firebaseLogin.firebaseLogin(userInfo,activity,false, cusDialogProg,false,false, false);
+                        FirebaseDatabase.getInstance().getReference().child("users").child(Uconnekt.session.getUserInfo().userId).child("jobTitleName").setValue(userInfo.jobTitleName);
                         if(listener!=null) listener.onSwitchFragment(2);
                     } else {
                         MyCustomMessage.getInstance(activity).snackbar(mainlayout,message);
@@ -923,6 +1015,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 params.put("next_availability", availability);
                 params.put("next_speciality", interestId);
                 params.put("next_location", address);
+                params.put("employementType", employmentType);
+                params.put("expectedSalary", salary);
                 return params;
             }
 

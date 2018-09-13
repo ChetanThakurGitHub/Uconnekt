@@ -82,6 +82,7 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
         recycler_view = findViewById(R.id.recycler_view);
         layout_for_noData = findViewById(R.id.layout_for_noData);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        badgeCount();
     }
 
     @Override
@@ -149,4 +150,27 @@ public class ViewActivity extends AppCompatActivity implements View.OnClickListe
             }
         }.executeVolley();
     }
+
+    private void badgeCount(){
+        new VolleyGetPost(this, AllAPIs.UPDATE_NOTIFICATION, true, "UPDATE_NOTIFICATION", false) {
+            @Override
+            public void onVolleyResponse(String response) {}
+
+            @Override
+            public void onNetError() {}
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                params.put("notify_type","profile_view");
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
+
 }

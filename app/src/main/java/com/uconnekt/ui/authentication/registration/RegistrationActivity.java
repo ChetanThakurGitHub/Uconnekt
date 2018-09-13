@@ -55,7 +55,7 @@ import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_CAMERA;
 
 public class RegistrationActivity extends BaseActivity implements View.OnClickListener,RegistrationView{
 
-    private EditText et_for_fullname, et_for_email, et_for_password, et_for_businessName;
+    private EditText et_for_fullname, et_for_email, et_for_password, et_for_businessName,et_for_contact;
     private ImageView iv_profile_image;
     private Bitmap profileImageBitmap;
     private RelativeLayout mainlayout;
@@ -74,7 +74,6 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         registrationPresenter= new RegistrationPresenterImpl(this,new RegistrationIntractorImpl());
 
         cusDialogProg = new CusDialogProg(this);
-
         PermissionAll permissionAll = new PermissionAll();
         if (permissionAll.RequestMultiplePermission(RegistrationActivity.this))
 
@@ -90,6 +89,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         et_for_email = findViewById(R.id.et_for_email);
         et_for_password = findViewById(R.id.et_for_password);
         et_for_businessName = findViewById(R.id.et_for_businessName);
+        et_for_contact = findViewById(R.id.et_for_contact);
         iv_profile_image = findViewById(R.id.iv_profile_image);
         mainlayout = findViewById(R.id.mainlayout);
         findViewById(R.id.btn_for_signup).setOnClickListener(this);
@@ -109,10 +109,10 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
             case R.id.btn_for_signup:
                 if (!userType.equalsIgnoreCase("individual")){
                 registrationPresenter.validationCondition(et_for_businessName.getText().toString().trim(),et_for_fullname.getText().toString().trim(),
-                        et_for_email.getText().toString().trim(),et_for_password.getText().toString().trim());
+                        et_for_email.getText().toString().trim(),et_for_password.getText().toString().trim(),et_for_contact.getText().toString().trim());
                 }else {
                     registrationPresenter.validationCondition("hii",et_for_fullname.getText().toString().trim(),
-                            et_for_email.getText().toString().trim(),et_for_password.getText().toString().trim());
+                            et_for_email.getText().toString().trim(),et_for_password.getText().toString().trim(), et_for_contact.getText().toString().trim());
                 }
                 break;
             case R.id.layout_for_userImg:
@@ -123,32 +123,12 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                 onBackPressed();
                 break;
             case R.id.layout_for_camera:
-               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, Constant.CAMERA);
-                if (dialog!=null)dialog.dismiss();*/
-              /* try {
-                    Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    takePhotoIntent.putExtra("return-data", true);
-                   imageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName()
-                            + ".fileprovider", SendImageOnFirebase.getTemporalFile(this));
-                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                    startActivityForResult(takePhotoIntent, Constant.CAMERA);
-                    if (dialog!=null)dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
-
                 try {
-
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File file= new File(Environment.getExternalStorageDirectory().toString()+ File.separator + "image.jpg");
-
                     if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
                         imageUri= FileProvider.getUriForFile(RegistrationActivity.this, BuildConfig.APPLICATION_ID + ".fileprovider",file);
-                    }else {
-                        imageUri= Uri.fromFile(file);
-                    }
+                    }else {imageUri= Uri.fromFile(file);}
                     intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
                     //  intent.putExtra("android.intent.extras.CAMERA_FACING", 1); //for front camera
                     startActivityForResult(intent, Constant.CAMERA);
@@ -156,15 +136,6 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                     e.printStackTrace();
                 }
 
-                /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "image.jpg");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    mCurrentPhotoPath = FileProvider.getUriForFile(AddVehicleInfoActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
-                } else {
-                    mCurrentPhotoPath = Uri.fromFile(file);
-                }
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoPath);//USE file code in_ this case
-                startActivityForResult(intent, Constant.REQUEST_CAMERA);*/
                 break;
             case R.id.layout_for_gallery:
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -275,6 +246,16 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
+    public void setPhoneError() {
+        MyCustomMessage.getInstance(this).snackbar(mainlayout,getResources().getString(R.string.phone_v));
+    }
+
+    @Override
+    public void setPhoneErrorValidation() {
+        MyCustomMessage.getInstance(this).snackbar(mainlayout,getResources().getString(R.string.phone_required));
+    }
+
+    @Override
     public void setPasswordError() {
         MyCustomMessage.getInstance(this).snackbar(mainlayout,getResources().getString(R.string.password_v));
     }
@@ -350,7 +331,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                             userFullDetail.password = password;
 
                             FirebaseLogin firebaseLogin = new FirebaseLogin();
-                            firebaseLogin.firebaseLogin(userFullDetail,RegistrationActivity.this,false,cusDialogProg,true,false);
+                            firebaseLogin.firebaseLogin(userFullDetail,RegistrationActivity.this,false,cusDialogProg,true,false, false);
 
                         } else {
                             MyCustomMessage.getInstance(RegistrationActivity.this).snackbar(mainlayout,message);
@@ -379,6 +360,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                         params.put("userType", userType);
                         params.put("password", password);
                         params.put("email", email);
+                        params.put("phone", et_for_contact.getText().toString().trim());
                         if (userType.equals("individual")){
                             params.put("businessName", "");
                         }else {

@@ -78,7 +78,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
     private LinearLayout layout_for_values, mainlayout,layout_for_strengths;
     private Boolean opnClo = false,opnClo2 = false;
     private ImageView iv_for_up,iv_for_upDown;
-    private EditText et_for_bio,et_for_fullname;
+    private EditText et_for_bio,et_for_fullname,et_for_contact;
     private RelativeLayout layout_for_address;
     public TextView tv_for_address;
     private Double latitude;
@@ -87,7 +87,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
     private String value1 = "", value2 = "", value3 = "",strength1 ="",strength2 = "",strength3 = "",city = "",state = "",country = "";
     public int spValue1 = -1,spValue2 = -1,spValue3 = -1,spStrength1 = -1,spStrength2 = -1,spStrength3 = -1;
     private CusDialogProg cusDialogProg;
-
     private TextView tv_for_specialty,tv_for_txt,tv_for_value1,tv_for_value2,tv_for_value3,tv_for_strength1,tv_for_strength2,tv_for_strength3;
     private SpinnerDialog spinnerDialog;
     private SpinnerDialogFragment spinnerDialog2,spinnerDialog3,spinnerDialog4,spinnerDialog5,spinnerDialog6,spinnerDialog7;
@@ -106,7 +105,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         valuesList3 = new ArrayList<>();
 
         getlist();
-
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -148,6 +146,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
         mainlayout = view.findViewById(R.id.mainlayout);
         et_for_fullname = view.findViewById(R.id.et_for_fullname);
+        et_for_contact = view.findViewById(R.id.et_for_contact);
         EditText et_for_email = view.findViewById(R.id.et_for_email);
         iv_for_up = view.findViewById(R.id.iv_for_up);
         tv_for_txt = view.findViewById(R.id.tv_for_txt);
@@ -269,8 +268,13 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
 
     private void editValidation(){
         String fullname = et_for_fullname.getText().toString().trim();
+        String phone = et_for_contact.getText().toString().trim();
         if (fullname.isEmpty()){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.fullname_v));
+        }else if (phone.isEmpty()){
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.phone_v));
+        } else if (phone.length() < 7 || phone.length() > 16){
+            MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.phone_required));
         }else if (specialtyId.isEmpty()){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.specialty_v));
         }else if (value.isEmpty()){
@@ -280,7 +284,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         }else if (tv_for_address.getText().toString().trim().isEmpty()){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.address_v));
         }else {
-            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  editUpdateBasicInfoOnServer(fullname);
+            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  editUpdateBasicInfoOnServer(fullname,phone);
             else MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_location_again));
         }
     }
@@ -357,12 +361,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
 
                         });
 
-                  /*      JobTitle jobTitle1 = new JobTitle();
-                        jobTitle1.jobTitleId = "";
-                        jobTitle1.jobTitleName = "";
-                        strengthsList.add(jobTitle1);
-                        strengthsList2.add(jobTitle1);
-                        strengthsList3.add(jobTitle1);*/
 
                         JSONArray strenght = result.getJSONArray("strenght_list");
                         for (int i = 0; i < strenght.length(); i++) {
@@ -417,16 +415,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                                 }
                             }
                         });
-                        /*strength1SpAdapter.notifyDataSetChanged();
-                        strength2SpAdapter.notifyDataSetChanged();
-                        strength3SpAdapter.notifyDataSetChanged();*/
-
-                        /*JobTitle jobTitle2 = new JobTitle();
-                        jobTitle2.jobTitleId = "";
-                        jobTitle2.jobTitleName = "";
-                        valuesList.add(jobTitle2);
-                        valuesList2.add(jobTitle2);
-                        valuesList3.add(jobTitle2);*/
 
                         JSONArray values = result.getJSONArray("value_list");
                         for (int i = 0; i < values.length(); i++) {
@@ -482,10 +470,6 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                                 }
                             }
                         });
-
-                        /*value1SpAdapter.notifyDataSetChanged();
-                        value2SpAdapter.notifyDataSetChanged();
-                        value3SpAdapter.notifyDataSetChanged();*/
 
                         showPrefilledData();
                     }
@@ -571,7 +555,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         }.executeVolley();
     }
 
-    private void editUpdateBasicInfoOnServer(final String fullname) {
+    private void editUpdateBasicInfoOnServer(final String fullname, final String phone) {
 
         if (isNetworkAvailable()) {
             cusDialogProg.show();
@@ -596,7 +580,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                                 if (!activity.check.equals("Edit")){activity.clickable();
                                     if(listener!=null) listener.onSwitchFragment(1);}
                                 FirebaseLogin firebaseLogin = new FirebaseLogin();
-                                firebaseLogin.firebaseLogin(userFullDetail,activity,false, cusDialogProg ,false,true);
+                                firebaseLogin.firebaseLogin(userFullDetail,activity,false, cusDialogProg ,false,true, false);
                                 Constant.NETWORK_CHECK = 1;
 
                             } else {
@@ -650,6 +634,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                         params.put("country", country==null?"":country);
                         params.put("value", value);
                         params.put("strength", strengthID);
+                        params.put("phone", phone);
                     }else {
                         MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.wrong));
                     }
@@ -694,6 +679,7 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
                         String specializationId = object.getString("specializationId");
                         String values = object.getString("value");
                         String strength = object.getString("strength");
+                        et_for_contact.setText(object.getString("phone"));
                         String lat = object.getString("latitude");
                         String lng = object.getString("longitude");
 

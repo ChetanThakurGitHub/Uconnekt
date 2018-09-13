@@ -179,7 +179,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             if (userFullDetail.status.equals("1")) {
 
                                 FirebaseLogin firebaseLogin = new FirebaseLogin();
-                                firebaseLogin.firebaseLogin(userFullDetail,LoginActivity.this,isChecked, cusDialogProg,true,false);
+                                firebaseLogin.firebaseLogin(userFullDetail,LoginActivity.this,isChecked, cusDialogProg,true,false, false);
 
                             } else {
                                 MyCustomMessage.getInstance(LoginActivity.this).snackbar(mainlayout, "Your account has been inactivated by admin, please contact to activate");

@@ -58,18 +58,18 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private ArrayList<JobTitle> valuesList = new ArrayList<>();
     private ArrayList<JobTitle> jobTitleList = new ArrayList<>();
     private ArrayList<Weeks> weekList = new ArrayList<>();
-    private Spinner sp_for_availability;
-    private WeekSpAdapter weekSpAdapter;
+    private ArrayList<Weeks> salaryList = new ArrayList<>();
+    private ArrayList<Weeks> empTypeList = new ArrayList<>();
+    private Spinner sp_for_availability,sp_for_salary,sp_for_empType;
+    private WeekSpAdapter weekSpAdapter,salarySpAdapter,empTypeSpAdapter;
     private TextView tv_for_address,tv_for_jobTitle,tv_for_aofs,tv_for_value,tv_for_strength;
     private LinearLayout mainlayout;
     private RelativeLayout layout_for_address;
-    private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",city = "",state = "" ,country;
+    private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",salary = "",employmentType = "",city = "",state = "" ,country;
     private SearchFragment searchFragment;
     private MapFragment mapFragment;
     private Double latitude = 0.0,longitude = 0.0;
-   private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3,spinnerDialog4;
-
-
+    private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3,spinnerDialog4;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,10 +78,16 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         initView(view);
 
         weekSpAdapter = new WeekSpAdapter(activity, weekList,R.layout.week_sp);
+        salarySpAdapter = new WeekSpAdapter(activity, salaryList,R.layout.custom_sp_filete);
+        empTypeSpAdapter = new WeekSpAdapter(activity, empTypeList,R.layout.custom_sp_speciality);
         sp_for_availability.setAdapter(weekSpAdapter);
+        sp_for_salary.setAdapter(salarySpAdapter);
+        sp_for_empType.setAdapter(empTypeSpAdapter);
 
         getlist();
         sp_for_availability.setOnItemSelectedListener(this);
+        sp_for_salary.setOnItemSelectedListener(this);
+        sp_for_empType.setOnItemSelectedListener(this);
 
         return view;
     }
@@ -106,6 +112,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         tv_for_strength = view.findViewById(R.id.tv_for_strength);
         tv_for_value = view.findViewById(R.id.tv_for_value);
         sp_for_availability = view.findViewById(R.id.sp_for_availability);
+        sp_for_salary = view.findViewById(R.id.sp_for_salary);
+        sp_for_empType = view.findViewById(R.id.sp_for_empType);
         tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);
         tv_for_address = view.findViewById(R.id.tv_for_address);
         mainlayout = view.findViewById(R.id.mainlayout);
@@ -149,7 +157,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void refresh(){
-        specialtyId = "";strengthId = "";valueId = "";jobTitleId = "";availabilityId = "";
+        specialtyId = "";strengthId = "";valueId = "";jobTitleId = "";availabilityId = "";salary = "";employmentType = "";
 
         if (searchFragment != null)searchFragment.tv_for_speName.setText("");
         if (mapFragment != null)mapFragment.tv_for_speName.setText("");
@@ -170,13 +178,13 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         if (searchFragment != null)searchFragment.offset = 0;
         if (searchFragment != null)searchFragment.searchLists.clear();
         if (searchFragment != null)searchFragment.mSwipeRefreshLayout.setRefreshing(true);
-        if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city,state,country);
+        if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city,state,country,salary,employmentType);
 
         if (mapFragment != null)mapFragment.layout_for_list.setVisibility(View.GONE);
         if (mapFragment != null)mapFragment.searchLists.clear();
         if (mapFragment != null)mapFragment.map.clear();
         if (mapFragment != null)mapFragment.mClusterManager.clearItems();
-        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country,true);
+        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country,true,salary,employmentType);
 
         activity.onBackPressed();
     }
@@ -278,12 +286,6 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject result = jsonObject.getJSONObject("result");
 
-                        /*JobTitle jobTitle = new JobTitle();
-                        jobTitle.jobTitleId = "";
-                        jobTitle.jobTitleName = "";
-                        strengthsList.add(jobTitle);
-                        valuesList.add(jobTitle);*/
-
                         JSONArray results = result.getJSONArray("opposite_speciality_list");
                         for (int i = 0; i < results.length(); i++) {
                             JobTitle jobTitles = new JobTitle();
@@ -374,6 +376,54 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
 
+                        JSONObject salaryRangeList = result.getJSONObject("salary_range_list");
+                        JSONObject emplyementType = result.getJSONObject("emplyement_type");
+
+                        salaryList.add(week0);
+                        Weeks week6 = new Weeks();
+                        week6.week = salaryRangeList.getString("any");
+                        salaryList.add(week6);
+                        Weeks week7 = new Weeks();
+                        week7.week = salaryRangeList.getString("0-20");
+                        salaryList.add(week7);
+                        Weeks week8 = new Weeks();
+                        week8.week = salaryRangeList.getString("20-40");
+                        salaryList.add(week8);
+                        Weeks week9 = new Weeks();
+                        week9.week = salaryRangeList.getString("40-60");
+                        salaryList.add(week9);
+                        Weeks week10 = new Weeks();
+                        week10.week = salaryRangeList.getString("60-80");
+                        salaryList.add(week10);
+                        Weeks week11 = new Weeks();
+                        week11.week = salaryRangeList.getString("80-100");
+                        salaryList.add(week11);
+                        Weeks week12 = new Weeks();
+                        week12.week = salaryRangeList.getString("100-120");
+                        salaryList.add(week12);
+                        Weeks week13 = new Weeks();
+                        week13.week = salaryRangeList.getString("120-150");
+                        salaryList.add(week13);
+                        Weeks week18 = new Weeks();
+                        week18.week = salaryRangeList.getString("150-160");
+                        salaryList.add(week18);
+                        salarySpAdapter.notifyDataSetChanged();
+
+                        empTypeList.add(week0);
+                        Weeks week14 = new Weeks();
+                        week14.week = emplyementType.getString("fulltime");
+                        empTypeList.add(week14);
+                        Weeks week15 = new Weeks();
+                        week15.week = emplyementType.getString("parttime");
+                        empTypeList.add(week15);
+                        Weeks week16 = new Weeks();
+                        week16.week = emplyementType.getString("casual");
+                        empTypeList.add(week16);
+                        Weeks week17 = new Weeks();
+                        week17.week = emplyementType.getString("contract");
+                        empTypeList.add(week17);
+                        empTypeSpAdapter.notifyDataSetChanged();
+
                         setOldData();
 
                     }
@@ -427,6 +477,26 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 for (int i = 0; weekList.size() > i; i++) {
                     if (weekList.get(i).week.equals(availabilityId)) {
                         sp_for_availability.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            salary = searchFragment.salary;
+            if (!salary.isEmpty()) {
+                for (int i = 0; salaryList.size() > i; i++) {
+                    if (salaryList.get(i).week.equals(salary)) {
+                        sp_for_salary.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            employmentType = searchFragment.employmentType;
+            if (!salary.isEmpty()) {
+                for (int i = 0; empTypeList.size() > i; i++) {
+                    if (empTypeList.get(i).week.equals(employmentType)) {
+                        sp_for_empType.setSelection(i);
                         break;
                     }
                 }
@@ -488,6 +558,26 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 }
             }
 
+            salary = mapFragment.salary;
+            if (!salary.isEmpty()) {
+                for (int i = 0; salaryList.size() > i; i++) {
+                    if (salaryList.get(i).week.equals(salary)) {
+                        sp_for_salary.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+            employmentType = mapFragment.employmentType;
+            if (!salary.isEmpty()) {
+                for (int i = 0; empTypeList.size() > i; i++) {
+                    if (empTypeList.get(i).week.equals(employmentType)) {
+                        sp_for_empType.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
                 strengthId = mapFragment.strengthId;
                 if (!strengthId.isEmpty()) {
                     for (int i = 0; strengthsList.size() > i; i++) {
@@ -521,6 +611,14 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             case R.id.sp_for_availability:
                 Weeks weeks = weekList.get(position);
                 availabilityId = weeks.week;
+                break;
+            case R.id.sp_for_salary:
+                Weeks salarys = salaryList.get(position);
+                salary = salarys.week;
+                break;
+            case R.id.sp_for_empType:
+                Weeks empType = empTypeList.get(position);
+                employmentType = empType.week;
                 break;
         }
     }

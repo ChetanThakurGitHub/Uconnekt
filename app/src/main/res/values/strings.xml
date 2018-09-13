@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Uconnekt</string>
+    <string name="app_name">connektUs</string>
 
     <!--Resume Custom View-->
     <string name="permission_filepicker_rationale">Storage permission is needed to access files.</string>
@@ -22,6 +22,7 @@
 
     <!--Validation String-->
     <string name="email_v">Please enter your email address</string>
+    <string name="phone_v">Please enter your contact number</string>
     <string name="emailf_v">Please enter your registered email address</string>
     <string name="password_v">Please enter your password</string>
     <string name="fullname_v">Please enter your name</string>
@@ -30,6 +31,7 @@
     <string name="business_required">Business Name must contain 3 characters</string>
     <string name="valid_email">Please enter valid email address</string>
     <string name="password_required">Password should be minimum 6 characters and maximum 16 characters long.</string>
+    <string name="phone_required">Contact number should be minimum 7 characters and maximum 16 characters long.</string>
     <string name="user_v">Please select user type</string>
     <string name="for_exit">Please click BACK again to exit.</string>
 
@@ -60,7 +62,7 @@
     <string name="send">Send</string>
     <string name="wrong">Something is wrong</string>
     <string name="map_key">AIzaSyDdh4JRFXLkZh9tp9QRrYnj32oY96QRQos</string>
-    <string name="user_dis">Manage your future at your fingertips. Uconnekt with employers to discover \n the right business for you.</string>
+    <string name="user_dis">Manage your future at your fingertips. ConnektUs with employers to discover \n the right business for you.</string>
 
     <!--Image Cropper-->
     <string name="pick_image_intent_text">Choose an image</string>
@@ -284,6 +286,8 @@
     <string name="c_finish_date">Please select current role finish date</string>
     <string name="weeks_select">Please select availability in weeks</string>
     <string name="select_aofi">Please select area of interest in next role</string>
+    <string name="select_salary">Please select salary in next role</string>
+    <string name="select_emp_type">Please select employment type in next role</string>
     <string name="add_location">Please add address</string>
     <string name="pjobtitile">Please add previous job title</string>
     <string name="pcompany_name">Please add previous company name</string>
@@ -300,20 +304,26 @@
     <string name="decliend_recruiter">Declined interview request with the recruiter</string>
 
     <!--about us-->
-    <string name="uconneckt_href">Uconnekt @ 2017–2018 <a href='http://www.uconnekt.com.au/'> Uconnekt.</a> All Rights Reserved.</string>
-    <string name="other_href">Visit our website: <a href='http://www.uconnekt.com.au/'> www.uconnekt.com.au</a> for more about our app.</string>
+    <string name="uconneckt_href">connektUs @ 2017–2018 <a href='https://www.connektus.com.au/'> connektUs.</a> All Rights Reserved.</string>
+    <string name="other_href">Visit our website: <a href='https://www.connektus.com.au/'> www.connektus.com.au</a> for more about our app.</string>
     <string name="our_mission">Our Mission</string>
-    <string name="uconnekt_s_mission">Uconnekt\'s mission is to inspire people to discover happiness in the workplace by giving everyone more control of their future.</string>
-    <string name="about_uconnekt">About Uconnekt</string>
+    <string name="uconnekt_s_mission">connektUs mission is to inspire people to discover happiness in the workplace by giving everyone more control of their future.</string>
+    <string name="about_uconnekt">About connektUs</string>
     <string name="hiring_made_simple">Hiring. Made. Simple.</string>
-    <string name="uconnekt_dis">Uconnekt is a mobile application, driven to provide hiring solutions. Our mobile platform has been designed for simplicity. We make hiring simple by allowing Job Seekers and Employers to conveniently connekt to help you discover your future. With our in-depth and specific search capabilities, you can search detailed profiles with relevant information to help you make the right decision for you or your business.</string>
+    <string name="uconnekt_dis">connektUs is a mobile application, driven to provide hiring solutions. Our mobile platform has been designed for simplicity. We make hiring simple by allowing Job Seekers and Employers to conveniently connekt to help you discover your future. With our in-depth and specific search capabilities, you can search detailed profiles with relevant information to help you make the right decision for you or your business.</string>
     <string name="hiring_find_talented_candidates_here">Hiring? Find talented candidates here.</string>
     <string name="hiring_business">Find potential candidates that meet your needs. Search for specific details to find the best fit candidate for you or your business.</string>
     <string name="need_a_change">Need a change? Connekt with people that can help.</string>
     <string name="find_employe">Find employers and recruiters that can help you discover your next job. Search for people that suit your needs.</string>
 
-
-
+    <!--Other-->
+    <string name="active_status">Active Status</string>
+    <string name="contact_number">Contact number</string>
+    <string name="business_description">Business description</string>
+    <string name="salary">Salary</string>
+    <string name="employment_type">Employment type</string>
+    <string name="select_salarys">Select salary</string>
+    <string name="select_employment_type">Select employment type</string>
 
 
 </resources>

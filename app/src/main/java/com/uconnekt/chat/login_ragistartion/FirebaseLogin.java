@@ -30,12 +30,12 @@ public class FirebaseLogin {
         myRef.setValue(firebaseData);
     }
 
-    public void firebaseLogin(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg , final Boolean pUpdate,final boolean isFinish) {
+    public void firebaseLogin(final UserInfo userDetails, final Activity loginActivity, final Boolean isChecked, final CusDialogProg cusDialogProg, final Boolean pUpdate, final boolean isFinish, final boolean move) {
 
         auth = FirebaseAuth.getInstance();
 
         String id = userDetails.userId;
-        final String email = id + "@uconneckt.com";
+        final String email = id + "@uconnekt.com";
         final String password = "123456";
 
         //added
@@ -76,7 +76,7 @@ public class FirebaseLogin {
                                 if (userDetails.userType.equals("business")) {
                                     if (userDetails.isProfile.equals("1")) {
                                         Intent intent = new Intent(loginActivity, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         loginActivity.startActivity(intent);
                                     } else {
                                         Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
@@ -97,6 +97,7 @@ public class FirebaseLogin {
                                 }
                             }else {
                                 if (isFinish)loginActivity.finish();
+                                if (move)loginActivity.startActivity(new Intent(loginActivity,HomeActivity.class));
                             }
                         }
                     }
@@ -107,7 +108,7 @@ public class FirebaseLogin {
         auth = FirebaseAuth.getInstance();
 
         String id = userDetails.userId;
-        final String email = id + "@uconneckt.com";
+        final String email = id + "@uconnekt.com";
         final String password = "123456";
 
         final FirebaseData firebaseData = new FirebaseData();
@@ -128,7 +129,7 @@ public class FirebaseLogin {
 
                         if (!task.isSuccessful()) {
 
-                            firebaseLogin(userDetails, loginActivity, isChecked, cusDialogProg,pUpdate,isFinish);
+                            firebaseLogin(userDetails, loginActivity, isChecked, cusDialogProg,pUpdate,isFinish, false);
 
                         } else {
 

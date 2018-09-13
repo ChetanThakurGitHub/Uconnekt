@@ -101,6 +101,56 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         activity = (JobHomeActivity) context;
     }
 
+
+    private void badgeCount(){
+        new VolleyGetPost(activity, AllAPIs.BADGE_COUNT, false, "BADGE_COUNT", false) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    JSONArray array = object.getJSONArray("data");
+
+                    JSONObject object0 = array.getJSONObject(0);
+                    TextView tvViewBudge = view.findViewById(R.id.tvViewBudge);
+                    String profile_view = object0.getString("profile_view");
+                    tvViewBudge.setText(profile_view);
+                    tvViewBudge.setVisibility(!profile_view.isEmpty()&&!profile_view.equals("0")?View.VISIBLE:View.GONE);
+
+                    JSONObject object1 = array.getJSONObject(1);
+                    TextView tvRecommendedBudge = view.findViewById(R.id.tvRecommendedBudge);
+                    String user_recommends = object1.getString("user_recommends");
+                    tvRecommendedBudge.setText(user_recommends);
+                    tvRecommendedBudge.setVisibility(!user_recommends.isEmpty()&&!user_recommends.equals("0")?View.VISIBLE:View.GONE);
+
+                    JSONObject object2 = array.getJSONObject(2);
+                    TextView tvFacouriteBudge = view.findViewById(R.id.tvFacouriteBudge);
+                    String user_favourites = object2.getString("user_favourites");
+                    tvFacouriteBudge.setText(user_favourites);
+                    tvFacouriteBudge.setVisibility(!user_favourites.isEmpty()&&!user_favourites.equals("0")?View.VISIBLE:View.GONE);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
+
     public void getMyprofileData(){
         new VolleyGetPost(activity, AllAPIs.MY_PROFILE, false, "MyProfile", true) {
             @Override
@@ -180,6 +230,8 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
+        badgeCount();
+        activity.badgeCount();
         if (Constant.NETWORK_CHECK == 1){
             getMyprofileData();
             Constant.NETWORK_CHECK = 0;

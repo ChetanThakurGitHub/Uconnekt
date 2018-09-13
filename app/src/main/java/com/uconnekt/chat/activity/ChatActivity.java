@@ -503,9 +503,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
 
     private void picImage(Dialog dialog) {
         if (!SendImageOnFirebase.appManifestContainsPermission(this, Manifest.permission.CAMERA) || SendImageOnFirebase.hasCameraAccess(this)) {
-            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent takePhotoIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             takePhotoIntent.putExtra("return-data", true);
-            Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName()
+            Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName()
                     + ".fileprovider", SendImageOnFirebase.getTemporalFile(this));
             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(takePhotoIntent, Constant.CAMERA);
@@ -513,6 +513,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             dialog.dismiss();
         }
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -532,8 +533,8 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             int rotation = ImageRotator.getRotation(this, photoURI, isCamera);
             bm = ImageRotator.rotate(bm, rotation);
 
-            File file = new File(this.getExternalCacheDir(), UUID.randomUUID() + ".jpg");
-            imageUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName()
+            File file = new File(getExternalCacheDir(), UUID.randomUUID() + ".jpg");
+            imageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName()
                     + ".fileprovider", file);
 
             if (file != null) {
@@ -878,9 +879,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 int screenHeight = mainlayout.getRootView().getHeight();
                 int keypadHeight = screenHeight - r.bottom;
                 if (keypadHeight > screenHeight * 0.15) {
-                    FirebaseDatabase.getInstance().getReference().child("typing").child(myID).child("isTyping").setValue(1);
+                    FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(1);
                 } else {
-                    FirebaseDatabase.getInstance().getReference().child("typing").child(myID).child("isTyping").setValue(0);
+                    FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(0);
                 }
             }
         });
@@ -889,12 +890,12 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onStop() {
         super.onStop();
-        FirebaseDatabase.getInstance().getReference().child("typing").child(myID).child("isTyping").setValue(0);
+        FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(0);
         getDeleteTime();
     }
 
     private void getTypingData(){
-        FirebaseDatabase.getInstance().getReference().child("typing").child(uID).addChildEventListener(new ChildEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(uID).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot != null){

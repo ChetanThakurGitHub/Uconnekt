@@ -457,9 +457,9 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Shared Profiles");
+            File f = new File(Environment.getExternalStorageDirectory(), "connektUs/Shared Profiles");
             if (!f.exists()) f.mkdirs();
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/Uconnekt/Shared Profiles/" + now + ".png";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/connektUs/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
             File imageFile = new File(mPath);
@@ -495,7 +495,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         sharIntent.setType("image/png");
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "connektUs");
         sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
 

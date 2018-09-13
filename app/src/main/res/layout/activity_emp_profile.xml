@@ -273,7 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_200sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
                         android:background="@drawable/layout_bg">
 
                         <EditText
@@ -303,6 +303,76 @@
 
                             <TextView
                                 android:id="@+id/tv_for_txt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/lightgray"
+                                android:textSize="@dimen/_10sdp"
+                                android:text="@string/_200"
+                                android:padding="@dimen/_3sdp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/lightgray"
+                                android:textSize="@dimen/_10sdp"
+                                android:text="@string/max_200_character"
+                                android:padding="@dimen/_3sdp"/>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@color/lightgray"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/business_description"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:textColor="@color/darkgray"
+                        android:fontFamily="@font/montserrat_regular" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_200sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:background="@drawable/layout_bg">
+
+                        <EditText
+                            android:id="@+id/et_for_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="top|left"
+                            android:paddingBottom="@dimen/_20sdp"
+                            android:textSize="@dimen/_11sdp"
+                            android:imeOptions="actionDone"
+                            android:layout_above="@+id/text1"
+                            android:textColor="@color/darkgray"
+                            android:hint="@string/type_here"
+                            android:maxLength="500"
+                            android:padding="@dimen/_5sdp"
+                            android:textColorHint="@color/lightgray"
+                            android:fontFamily="@font/montserrat_regular"/>
+
+                        <LinearLayout
+                            android:id="@+id/text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true">
+
+                            <TextView
+                                android:id="@+id/tv_for_txtCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/lightgray"

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.uconnekt.R;
+import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.history.IndiChatFragment;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
@@ -27,6 +28,11 @@ import com.uconnekt.ui.individual.fragment.IndiSearchFragment;
 import com.uconnekt.ui.individual.fragment.IndiSettingFragment;
 import com.uconnekt.ui.individual.fragment.IndiViewProfileFragment;
 import com.uconnekt.util.Utils;
+import com.uconnekt.volleymultipart.VolleyGetPost;
+import com.uconnekt.web_services.AllAPIs;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -72,6 +78,8 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
             if (userId == null)userId = extras.getString("reference_id");
             if (userType != null)notificationManage(userType,userId);else profileView(userId);
         }
+
+        badgeCount();
     }
 
     private void profileView(String userId){
@@ -193,6 +201,43 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
                 iv_for_share.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    public void badgeCount(){
+        new VolleyGetPost(this, AllAPIs.BADGE_COUNT, false, "BADGE_COUNT", false) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String total = object.getString("total");
+                    TextView tvProfileBadge = findViewById(R.id.tvProfileBadge);
+                    if (!total.isEmpty()&&!total.equals("0")){
+                        tvProfileBadge.setVisibility(View.VISIBLE);
+                        tvProfileBadge.setText(total);
+                    }else {
+                        tvProfileBadge.setVisibility(View.GONE);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken", Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
     }
 
     @Override

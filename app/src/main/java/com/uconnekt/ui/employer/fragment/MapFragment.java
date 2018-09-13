@@ -78,7 +78,8 @@ public class MapFragment extends Fragment implements View.OnClickListener,
     private PermissionAll permissionAll;
     private FusedLocationProviderClient mFusedLocationClient;
     public ArrayList<BusiSearchList> searchLists = new ArrayList<>();
-    public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",strengthId = "" ,valueId = "",city = "",state ="",country = "";
+    public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",
+            strengthId = "" ,valueId = "",city = "",state ="",country = "",salary = "", employmentType = "";
     private Double latitude,longitude,clatitude,clongitude;
     public RelativeLayout layout_for_list;
     public Boolean goneVisi = false;
@@ -278,7 +279,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                     }
                 } else {
                     MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.parmission));
-                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false);
+                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, salary, employmentType);
                 }
             }
             break;
@@ -303,7 +304,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
                                 createMarkerCurrent(clatitude,clongitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, salary, employmentType);
                             }else if (Uconnekt.latitude!=0.0){
                                 latitude=Uconnekt.latitude;
                                 longitude=Uconnekt.longitude;
@@ -312,7 +313,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
                                 createMarkerCurrent(clatitude,clongitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, salary, employmentType);
                             }
                         }
                     });
@@ -342,6 +343,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                             JSONObject object = results.getJSONObject(i);
                             specialityList.specializationId = object.getString("jobTitleId");
                             specialityList.specializationName = object.getString("jobTitleName");
+                            specialityList.totalRegistered = object.getString("total_registered");
                             arrayList.add(specialityList);
                         }
                         arrayListBackup.addAll(arrayList);
@@ -371,9 +373,10 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys, final boolean check){
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys, final boolean check, String salarys, String employmentTypes){
         specialityID = specialityIDs;city = citys;state = states;country=countrys;
         jobTitleId = jobTitleIds;availabilityId = availabilityIds;locations = address;strengthId = strengthIds;valueId = valueIds;
+        salary =salarys; employmentType = employmentTypes;
 
        if (clatitude!=null&&clongitude!=null)createMarkerCurrent(clatitude,clongitude);
         card_for_viewPro.setVisibility(View.GONE);
@@ -448,6 +451,8 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 params.put("country",country==null?"":country);
                 params.put("value",valueId);
                 params.put("pagination","0");
+                params.put("employementType",employmentType);
+                params.put("expectedSalary",salary);
                 return params;
             }
 

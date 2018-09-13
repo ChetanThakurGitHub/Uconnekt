@@ -51,6 +51,39 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/_1sdp"
+                android:layout_margin="@dimen/_3sdp"
+                app:cardBackgroundColor="@color/white">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/_5sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/active_status"
+                        android:textSize="@dimen/_12sdp"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textColor="@color/darkgray"/>
+
+                    <ImageView
+                        android:id="@+id/iv_for_activeStatus"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/off_btn"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/card_for_changePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

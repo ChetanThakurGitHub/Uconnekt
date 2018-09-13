@@ -59,11 +59,13 @@ public class NextRoleFragment extends Fragment {
                         String next_availability = object.getString("next_availability");
                         String next_speciality_name = object.getString("next_speciality_name");
                         String next_location = object.getString("next_location");
+                        String expectedSalary = object.getString("expectedSalary");
+                        String employementType = object.getString("employementType");
 
                         view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
                         view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);
 
-                        setData(view,next_availability,next_speciality_name,next_location);
+                        setData(view,next_availability,next_speciality_name,next_location,expectedSalary,employementType);
                     }
 
                 } catch (JSONException e) {
@@ -89,10 +91,12 @@ public class NextRoleFragment extends Fragment {
         }.executeVolley();
     }
 
-    private void setData(View view, String next_availability, String next_speciality_name, String next_location) {
+    private void setData(View view, String next_availability, String next_speciality_name, String next_location, String expectedSalary, String employementType) {
         TextView tv_for_availability = view.findViewById(R.id.tv_for_availability);tv_for_availability.setText(next_availability);
         TextView tv_for_aofs = view.findViewById(R.id.tv_for_aofs);tv_for_aofs.setText(next_speciality_name);
         TextView tv_for_location = view.findViewById(R.id.tv_for_location);tv_for_location.setText(next_location);
+        TextView tv_for_salary = view.findViewById(R.id.tv_for_salary);tv_for_salary.setText(expectedSalary);
+        TextView tv_for_empType = view.findViewById(R.id.tv_for_empType);tv_for_empType.setText(employementType);
     }
 
 }

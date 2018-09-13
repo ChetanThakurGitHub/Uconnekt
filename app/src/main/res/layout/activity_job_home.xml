@@ -19,6 +19,30 @@
         android:layout_above="@+id/card"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <TextView
+        android:id="@+id/tvChatBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_155sdp"
+        android:elevation="@dimen/_5sdp"
+        android:layout_below="@+id/framlayout"
+        android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:background="@drawable/circle_batch_bg"/>
+
+    <TextView
+        android:id="@+id/tvProfileBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_214sdp"
+        android:elevation="@dimen/_5sdp"
+        android:visibility="gone"
+        android:layout_below="@+id/framlayout"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/white"
+        android:background="@drawable/circle_batch_bg"/>
+
     <android.support.v7.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"

@@ -380,13 +380,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tv_for_bios.setText(tv_for_bio.getText().toString());
     }
 
+
     /*.................................screenShot()...................................*/
     private void screenShot(LinearLayout scr_shot_view, String text) {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".png";
+            File f = new File(Environment.getExternalStorageDirectory(), "connektUs/Shared Profiles");
+            if (!f.exists()) f.mkdirs();
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/connektUs/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
             File imageFile = new File(mPath);
@@ -421,7 +424,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         sharIntent.setType("image/png");
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Uconnekt");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "connektUs");
         sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
 

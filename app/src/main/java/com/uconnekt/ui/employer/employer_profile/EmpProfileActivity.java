@@ -74,7 +74,7 @@ import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 public class EmpProfileActivity extends BaseActivity implements View.OnClickListener,EmpProfileView {
 
     private ArrayList<JobTitle> arrayList,specialityArrayList;
-    private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_logo;
+    private TextView tv_for_address,tv_for_businessName,tv_for_fullName,tv_for_txt,tv_for_txtCount,tv_for_logo;
     public TextView tvTags,tv_for_jobTitle,tv_for_aofs;
     private Double latitude, longitude;
     private BottomSheetDialog dialog;
@@ -84,7 +84,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     private RelativeLayout mainlayout;
     private String jobTitleId,specialtyID,city = "",state= "",country = "";
     public String area_of_specialization = "";
-    private EditText et_for_bio;
+    private EditText et_for_bio,et_for_description;
     private Boolean doubleBackToExitPressedOnce = false;
     private EmpProfilePresenter empProfilePresenter;
     private Uri imageUri;
@@ -127,6 +127,23 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         };
         et_for_bio.addTextChangedListener(textWatcher);
 
+        TextWatcher textWatcher1 = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int text = 500 - s.length();
+                tv_for_txtCount.setText(String.valueOf(text));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        et_for_description.addTextChangedListener(textWatcher1);
+
     }
 
     private void initView(){
@@ -138,6 +155,8 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         tv_for_fullName = findViewById(R.id.tv_for_fullName);
         mainlayout = findViewById(R.id.mainlayout);
         tv_for_txt = findViewById(R.id.tv_for_txt);
+        et_for_description = findViewById(R.id.et_for_description);
+        tv_for_txtCount = findViewById(R.id.tv_for_txtCount);
         et_for_bio = findViewById(R.id.et_for_bio);
         tv_for_businessName = findViewById(R.id.tv_for_businessName);
         layout_for_address = findViewById(R.id.layout_for_address);
@@ -393,7 +412,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         }.executeVolley();
     }
 
-    private void doProfileUpdate(final String address, final String bio) {
+    private void doProfileUpdate(final String address, final String bio, final String description) {
 
         if (isNetworkAvailable()) {
 
@@ -418,15 +437,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
                             userInfo.company_logo = company_logo;
 
                             FirebaseLogin firebaseLogin = new FirebaseLogin();
-                            firebaseLogin.firebaseLogin(userInfo,EmpProfileActivity.this,false, cusDialogProg,false,false);
-
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(EmpProfileActivity.this,HomeActivity.class));
-                                }
-                            },2000);
-
+                            firebaseLogin.firebaseLogin(userInfo,EmpProfileActivity.this,false, cusDialogProg,false,true,true);
 
                         } else {
                             MyCustomMessage.getInstance(EmpProfileActivity.this).snackbar(mainlayout,message);
@@ -453,13 +464,15 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
 
                         params.put("area_of_specialization", specialtyID);
                         params.put("address", address);
-                    String  enCodedStatusCode = null;
+                    String  enCodedStatusCode = null,enCodedStatusCode1 = null;
                     try {
                         enCodedStatusCode = URLEncoder.encode(bio, "UTF-8");
+                        enCodedStatusCode1 = URLEncoder.encode(description, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                         params.put("bio", enCodedStatusCode==null?"":enCodedStatusCode);
+                        params.put("description", enCodedStatusCode1==null?"":enCodedStatusCode1);
                         params.put("city", city==null?"":city);
                         params.put("state", state==null?"":state);
                         params.put("country", country==null?"":country);
@@ -543,9 +556,10 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     @Override
     public void navigateToHome() {
         String bio = et_for_bio.getText().toString().trim();
+        String description = et_for_description.getText().toString().trim();
         String address = tv_for_address.getText().toString().trim();
 
-        if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty()) doProfileUpdate(address,bio);
+        if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty()) doProfileUpdate(address,bio,description);
         else MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.select_location_again));
 
     }

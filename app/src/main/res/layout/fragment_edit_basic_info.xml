@@ -88,6 +88,44 @@
 
     </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/lightgray"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp">
+
+            <EditText
+                android:id="@+id/et_for_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/iv_for_phone"
+                android:background="@null"
+                android:hint="@string/contact_number"
+                android:imeOptions="actionDone"
+                android:textColorHint="@color/lightgray"
+                android:textSize="@dimen/_12sdp"
+                android:inputType="number"
+                android:textColor="@color/darkgray"
+                android:fontFamily="@font/montserrat_regular" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_for_phone"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:padding="@dimen/_2sdp"
+                app:srcCompat="@drawable/ic_call"
+                android:tint="@color/darkgray"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

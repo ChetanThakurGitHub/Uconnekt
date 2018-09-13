@@ -11,8 +11,8 @@ public class RegistrationPresenterImpl implements RegistrationPresenter ,Registr
     }
 
     @Override
-    public void validationCondition(String business, String fullname, String email, String password) {
-        registrationIntractor.registration(business,fullname,email,password,this);
+    public void validationCondition(String business, String fullname, String email, String password, String phone) {
+        registrationIntractor.registration(business,fullname,email,password,phone,this);
     }
 
     @Override
@@ -63,6 +63,21 @@ public class RegistrationPresenterImpl implements RegistrationPresenter ,Registr
             registrationView.setEmailErrorValidation();
         }
     }
+
+    @Override
+    public void onPhoneError() {
+        if (registrationView != null){
+            registrationView.setPhoneError();
+        }
+    }
+
+    @Override
+    public void onPhoneErrorValidation() {
+        if (registrationView != null){
+            registrationView.setPhoneErrorValidation();
+        }
+    }
+
 
     @Override
     public void onPasswordError() {

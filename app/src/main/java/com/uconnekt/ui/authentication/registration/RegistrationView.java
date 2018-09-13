@@ -12,6 +12,8 @@ public interface RegistrationView {
     void setFullNameRequiredError();
     void setEmailError();
     void setEmailErrorValidation();
+    void setPhoneError();
+    void setPhoneErrorValidation();
     void setPasswordError();
     void setPasswordRequiredError();
     void setNevigetToHome();

@@ -7,6 +7,7 @@ public class Constant {
     public static final int BackPressed_Exit = 2000;
     public static final int CAMERA = 7;
     public static final int GALLERY = 3;
+    public static final int CALLING = 15;
     public static final int SPLESH_TIME = 3000;
     public static final int RequestPermissionCode = 1;
     public static final int RESULT_OK = -1;

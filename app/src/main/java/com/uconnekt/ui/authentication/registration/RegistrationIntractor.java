@@ -12,11 +12,13 @@ public interface RegistrationIntractor {
         void onFullNameRequired();
         void onEmailError();
         void onEmailErrorValidation();
+        void onPhoneError();
+        void onPhoneErrorValidation();
         void onPasswordError();
         void onPasswordRequired();
         void onSuccess();
         void onNavigator();
     }
 
-    void registration(String businessName, String fullname, String email, String password, onRegitrationFinishedListener listener);
+    void registration(String businessName, String fullname, String email, String password, String phone, onRegitrationFinishedListener listener);
 }

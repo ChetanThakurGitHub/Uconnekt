@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.model.UserInfo;
+import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.AboutUsActivity;
 import com.uconnekt.ui.common_activity.DocViewActivity;
 import com.uconnekt.ui.common_activity.HelpAndSupportActivity;
@@ -59,6 +60,7 @@ private ImageView iv_for_btn;
         view.findViewById(R.id.card_for_aboutUs).setOnClickListener(this);
         view.findViewById(R.id.card_for_help).setOnClickListener(this);
         view.findViewById(R.id.card_for_share).setOnClickListener(this);
+        view.findViewById(R.id.iv_for_activeStatus).setOnClickListener(this);
         iv_for_btn = view.findViewById(R.id.iv_for_btn);
         iv_for_btn.setOnClickListener(this);
     }
@@ -101,14 +103,17 @@ private ImageView iv_for_btn;
             case R.id.card_for_share:
                 share();
                 break;
+            case R.id.iv_for_activeStatus:
+                MyCustomMessage.getInstance(activity).snackbar(iv_for_btn,getString(R.string.under_development_mode));
+                break;
         }
     }
 
     private void share(){
         Intent sharIntent = new Intent(Intent.ACTION_SEND);
         sharIntent.setType("text/plain");
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Download Uconnekt App");
-        sharIntent.putExtra(Intent.EXTRA_TEXT, "Download the app using https://play.google.com/store Hurry, it doesn’t get better than this! Download the Uconnekt App NOW!");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Download connektUs App");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, "Download the app using https://play.google.com/store Hurry, it doesn’t get better than this! Download the connektUs App NOW!");
         startActivity(Intent.createChooser(sharIntent, "Share:"));
     }
 

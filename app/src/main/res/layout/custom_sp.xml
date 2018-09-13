@@ -12,5 +12,5 @@
     android:fontFamily="@font/montserrat_regular"
     android:textColor="@color/darkgray"
     android:textColorHint="@color/lightgray"
-    android:hint="@string/job_title"
+    android:hint="@string/salary"
     android:padding="@dimen/_5sdp" />

@@ -184,6 +184,7 @@ public class TrackInterviewActivity extends AppCompatActivity implements View.On
             tv_for_status.setText(R.string.pending_recruiter);
             tv_for_delete.setVisibility(View.VISIBLE);
             tv_for_delete.setOnClickListener(this);
+            findViewById(R.id.tv_for_date3).setVisibility(View.GONE);
             tv_for_delete.setBackgroundResource(R.drawable.button_bg_not_offered);
             findViewById(R.id.layout_for_delete).setBackgroundResource(R.drawable.active_img);
         }else {
@@ -192,6 +193,7 @@ public class TrackInterviewActivity extends AppCompatActivity implements View.On
             findViewById(R.id.iv_for_process).setVisibility(View.VISIBLE);
             findViewById(R.id.tv_for_date4).setVisibility(View.GONE);
             findViewById(R.id.tv_for_delete).setVisibility(View.GONE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
             findViewById(R.id.view_for_line2).setBackgroundResource(R.color.yellow);
             ImageView iv_for_process = findViewById(R.id.iv_for_process);
             findViewById(R.id.iv_for_dactive).setVisibility(View.VISIBLE);
@@ -239,6 +241,7 @@ public class TrackInterviewActivity extends AppCompatActivity implements View.On
             findViewById(R.id.view_for_line3).setBackgroundResource(R.color.yellow);
             ImageView iv_for_process = findViewById(R.id.iv_for_process);
             findViewById(R.id.iv_for_dactive).setVisibility(View.VISIBLE);
+            findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
             tv_for_delete.setVisibility(View.GONE);
             findViewById(R.id.tv_for_delete2).setVisibility(View.GONE);
             iv_for_process.setImageResource(R.drawable.ic_add_user);
@@ -311,6 +314,7 @@ public class TrackInterviewActivity extends AppCompatActivity implements View.On
         tv_for_type.setText(R.string.accepted_employer);
 
         findViewById(R.id.ivLastImage).setVisibility(View.VISIBLE);
+        findViewById(R.id.tv_for_date3).setVisibility(View.VISIBLE);
         findViewById(R.id.iv_for_confirm).setVisibility(View.GONE);
         findViewById(R.id.view_for_line3).setBackgroundResource(R.color.yellow);
         findViewById(R.id.layout_for_status).setBackgroundResource(R.drawable.active_img);

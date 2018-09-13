@@ -3,9 +3,10 @@ package com.uconnekt.web_services;
 public class AllAPIs {
 
  /*Base URL*/
- private static final String URL_WITHOUT_LOGIN = "http://www.uconnekt.com.au/service/";
- //private static final String URL_WITHOUT_LOGIN = "http://www.dev.uconnekt.com.au/service/";
- private static final String URL_WITH_LOGIN = URL_WITHOUT_LOGIN +"users/";
+
+ private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
+ //private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
+ private static final String URL_WITH_LOGIN = URL_WITHOUT_LOGIN + "users/";
 
  /*Authontication*/
  public static final String REGISTRATION = URL_WITHOUT_LOGIN +"registration";
@@ -39,8 +40,8 @@ public class AllAPIs {
  public static final String TRACK_PROCESS = URL_WITHOUT_LOGIN +"requests/processData";
 
  public static final String TANDC = URL_WITHOUT_LOGIN +"options/getTNC";
- public static final String ABOUT_US = URL_WITHOUT_LOGIN +"options/getAboutUs";
- public static final String HELP = URL_WITHOUT_LOGIN +"options/getContactUs";
+ public static final String BADGE_COUNT = URL_WITH_LOGIN +"badge_count_unread_views";
+ public static final String UPDATE_NOTIFICATION = URL_WITH_LOGIN +"update_notification";
 
  /*Individual Side*/
  public static final String BASIC_INFO = URL_WITH_LOGIN +"updateBasicInfo";
