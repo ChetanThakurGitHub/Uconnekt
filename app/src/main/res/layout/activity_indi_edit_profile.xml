@@ -137,6 +137,7 @@
                 android:background="@drawable/button_bg"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="@string/next"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_below="@+id/cardview"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_minus50sdp"

@@ -136,6 +136,7 @@
                         android:layout_height="match_parent"
                         app:cardBackgroundColor="@color/white"
                         android:layout_marginTop="@dimen/_2sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:layout_marginLeft="@dimen/_2sdp"
                         app:cardCornerRadius="@dimen/_5sdp"
                         app:cardElevation="@dimen/_5sdp">
@@ -211,6 +212,7 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginRight="@dimen/_10sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_5sdp"
                         app:cardElevation="@dimen/_5sdp">
@@ -285,6 +287,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_2sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:layout_marginRight="@dimen/_2sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_5sdp"
@@ -411,6 +414,7 @@
                         android:layout_height="@dimen/_50sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_25sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:layout_margin="@dimen/_5sdp"
                         app:cardElevation="@dimen/_5sdp">
 
@@ -418,7 +422,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="@dimen/_10sdp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
                             app:srcCompat="@drawable/ic_information"/>
 
                     </android.support.v7.widget.CardView>
@@ -446,6 +449,7 @@
                         android:layout_height="@dimen/_50sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_25sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:layout_margin="@dimen/_5sdp"
                         app:cardElevation="@dimen/_5sdp">
 
@@ -453,7 +457,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="@dimen/_12sdp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
                             app:srcCompat="@drawable/ic_briefcase"/>
 
                     </android.support.v7.widget.CardView>
@@ -481,6 +484,7 @@
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_25sdp"
                         android:layout_margin="@dimen/_5sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         app:cardElevation="@dimen/_5sdp">
 
                         <android.support.v7.widget.AppCompatImageView
@@ -495,7 +499,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="@dimen/_12sdp"
-                            android:background="?attr/selectableItemBackgroundBorderless"
                             app:srcCompat="@drawable/ic_resume_icon"/>
 
                     </android.support.v7.widget.CardView>

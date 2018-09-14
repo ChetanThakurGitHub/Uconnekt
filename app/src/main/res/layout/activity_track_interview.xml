@@ -414,6 +414,7 @@
                             android:text="@string/offered"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10sdp"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:background="@drawable/button_bg_test"
                             android:fontFamily="@font/montserrat_regular" />
 
@@ -424,6 +425,7 @@
                             android:text="@string/not_offered"
                             android:textSize="@dimen/_10sdp"
                             android:textColor="@color/white"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:background="@drawable/button_bg_test"
                             android:layout_marginLeft="@dimen/_10sdp"
                             android:fontFamily="@font/montserrat_regular" />

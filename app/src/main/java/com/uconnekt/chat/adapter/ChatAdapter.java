@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -280,14 +283,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.tv_for_senderTxt.setVisibility(View.VISIBLE);
 
                     //extra code for testing
-                 /*   Spannable name = new SpannableString(chatting.message);
+                    Spannable name = new SpannableString(chatting.message);
                     name.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.darkgray)), 0, name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     holder.tv_for_senderTxt.setText(name);
                     Spannable like = new SpannableString(time());
                     like.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.yellow)), 0, like.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    holder.tv_for_senderTxt.append("\n"+like);*/
+                    holder.tv_for_senderTxt.append("\n"+like);
 
-                    holder.tv_for_senderTxt.setText(chatting.message);
+                    //holder.tv_for_senderTxt.setText(chatting.message);
                 }
                 holder.tv_for_senderTime.setText(time());
 

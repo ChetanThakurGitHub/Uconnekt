@@ -191,6 +191,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/darkgray"
                                 android:hint="@string/hints"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:textSize="@dimen/_11sdp"
                                 android:fontFamily="@font/montserrat_regular"/>
 
@@ -225,6 +226,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/rate"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:textColor="@color/darkgray"
                                 android:textSize="@dimen/_11sdp"
                                 android:fontFamily="@font/montserrat_regular"/>
@@ -262,6 +264,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/darkgray"
                                 android:textSize="@dimen/_11sdp"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:hint="@string/_0_recommend"
                                 android:fontFamily="@font/montserrat_regular"/>
 

@@ -403,6 +403,7 @@
                 android:background="@drawable/button_bg"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="@string/next"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_below="@+id/cardview"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_centerHorizontal="true"

@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/white"
         android:layout_margin="@dimen/_5sdp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         app:cardElevation="@dimen/_3sdp"
         app:cardCornerRadius="@dimen/_5sdp">
 
@@ -68,6 +69,7 @@
                 android:id="@+id/card_for_chat"
                 android:layout_width="@dimen/_26sdp"
                 android:layout_height="@dimen/_26sdp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_alignParentRight="true"
                 app:cardBackgroundColor="@color/white"
                 android:layout_margin="@dimen/_7sdp"

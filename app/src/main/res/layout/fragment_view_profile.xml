@@ -128,6 +128,7 @@
                                 android:layout_width="@dimen/_35sdp"
                                 android:layout_height="@dimen/_35sdp"
                                 app:cardElevation="@dimen/_1sdp"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 app:cardBackgroundColor="@color/white"
                                 app:cardCornerRadius="@dimen/_17sdp">
 
@@ -156,6 +157,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/views"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:textColor="@color/lightgray"
                                 android:textSize="@dimen/_11sdp"
                                 android:fontFamily="@font/montserrat_regular"/>
@@ -181,6 +183,7 @@
                                     android:layout_width="@dimen/_30sdp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:padding="@dimen/_5sdp"
+                                    android:foreground="?attr/selectableItemBackgroundBorderless"
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/_3sdp"
                                     app:srcCompat="@drawable/ic_like_blank"/>
@@ -200,6 +203,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/favourite"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:textColor="@color/lightgray"
                                 android:textSize="@dimen/_11sdp"
                                 android:fontFamily="@font/montserrat_regular"/>
@@ -225,6 +229,7 @@
                                     android:layout_width="@dimen/_30sdp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:padding="@dimen/_5sdp"
+                                    android:foreground="?attr/selectableItemBackgroundBorderless"
                                     android:layout_gravity="center"
                                     app:srcCompat="@drawable/ic_like"/>
 
@@ -243,6 +248,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/recom"
+                                android:foreground="?attr/selectableItemBackgroundBorderless"
                                 android:textColor="@color/lightgray"
                                 android:textSize="@dimen/_11sdp"
                                 android:fontFamily="@font/montserrat_regular"/>
@@ -313,6 +319,7 @@
                     <android.support.v7.widget.CardView
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_50sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_25sdp"
                         android:layout_margin="@dimen/_5sdp"
@@ -349,6 +356,7 @@
                         android:layout_height="@dimen/_50sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_25sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:layout_margin="@dimen/_5sdp"
                         app:cardElevation="@dimen/_5sdp">
 
@@ -382,6 +390,7 @@
                         android:layout_height="@dimen/_50sdp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="@dimen/_25sdp"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
                         android:layout_margin="@dimen/_5sdp"
                         app:cardElevation="@dimen/_5sdp">
 
@@ -419,6 +428,7 @@
                 android:layout_height="@dimen/_40sdp"
                 app:cardCornerRadius="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_120sdp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardBackgroundColor="@color/white"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/_20sdp"

@@ -51,6 +51,7 @@
                             android:layout_width="@dimen/_30sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:padding="@dimen/_5sdp"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             app:srcCompat="@drawable/ic_share_yellow"/>
 
                         <android.support.v7.widget.AppCompatImageView
@@ -58,6 +59,7 @@
                             android:layout_width="@dimen/_30sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:padding="@dimen/_5sdp"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:layout_alignParentRight="true"
                             app:srcCompat="@drawable/ic_chat_profile"/>
 
@@ -178,6 +180,7 @@
                                     android:layout_width="@dimen/_30sdp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:padding="@dimen/_5sdp"
+                                    android:foreground="?attr/selectableItemBackgroundBorderless"
                                     android:layout_gravity="center"
                                     android:layout_marginTop="@dimen/_3sdp"
                                     app:srcCompat="@drawable/ic_like_blank"/>
@@ -214,6 +217,7 @@
                                     android:layout_width="@dimen/_30sdp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:padding="@dimen/_5sdp"
+                                    android:foreground="?attr/selectableItemBackgroundBorderless"
                                     android:layout_gravity="center"
                                     app:srcCompat="@drawable/ic_star"/>
 
@@ -248,6 +252,7 @@
                                     android:layout_width="@dimen/_30sdp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:padding="@dimen/_5sdp"
+                                    android:foreground="?attr/selectableItemBackgroundBorderless"
                                     android:layout_gravity="center"
                                     app:srcCompat="@drawable/ic_like"/>
 

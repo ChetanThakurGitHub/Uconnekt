@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="@dimen/_2sdp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         app:cardCornerRadius="@dimen/_5sdp"
         android:layout_margin="@dimen/_5sdp"
         app:cardBackgroundColor="@color/white">

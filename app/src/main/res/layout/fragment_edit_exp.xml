@@ -17,6 +17,7 @@
         android:id="@+id/layout_for_currentRole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_margin="@dimen/_5sdp">
 
         <TextView
@@ -339,6 +340,7 @@
         android:id="@+id/layout_for_nextRole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_margin="@dimen/_5sdp">
 
         <TextView
@@ -587,6 +589,7 @@
         android:id="@+id/layout_for_previousRole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_margin="@dimen/_5sdp">
 
         <TextView

@@ -99,6 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:orientation="horizontal">
 
 
@@ -165,6 +166,7 @@
                     android:id="@+id/card_for_favourite"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_60sdp"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:layout_margin="@dimen/_10sdp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_5sdp"
@@ -174,7 +176,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_gravity="center"
                         android:gravity="center">
 
@@ -231,6 +232,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/_10sdp"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="@dimen/_5sdp"
                     app:cardElevation="@dimen/_5sdp">
@@ -240,7 +242,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:gravity="center">
 
                         <TextView

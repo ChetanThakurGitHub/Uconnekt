@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_70sdp"
     android:layout_marginTop="@dimen/_5sdp"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:layout_marginRight="@dimen/_10sdp"
     android:layout_marginBottom="@dimen/_5sdp"
     android:id="@+id/mainlayout"
@@ -23,7 +24,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:orientation="vertical"
         android:layout_gravity="center">
 

@@ -324,6 +324,7 @@
     <string name="employment_type">Employment type</string>
     <string name="select_salarys">Select salary</string>
     <string name="select_employment_type">Select employment type</string>
+    <string name="send_request">Send Request</string>
 
 
 </resources>

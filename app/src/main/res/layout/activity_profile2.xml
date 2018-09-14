@@ -421,6 +421,7 @@
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 app:cardCornerRadius="@dimen/_20sdp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_marginTop="@dimen/_120sdp"
                 app:cardBackgroundColor="@color/white"
                 android:layout_alignParentRight="true"

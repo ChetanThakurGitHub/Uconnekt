@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_32sdp"
         android:elevation="@dimen/_10sdp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_margin="@dimen/_5sdp"
         app:cardBackgroundColor="@color/white">
 
@@ -175,6 +176,7 @@
             android:id="@+id/layout_for_company"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:layout_marginBottom="@dimen/_5sdp">
 
             <android.support.v7.widget.AppCompatImageView
@@ -186,18 +188,6 @@
                 android:layout_marginTop="@dimen/_4sdp"
                 app:srcCompat="@drawable/ic_down_arrow"
                 android:layout_alignParentRight="true" />
-
-            <!--<Spinner
-                android:id="@+id/sp_for_company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_toLeftOf="@+id/image2"
-                android:background="@color/transparent"
-                android:dropDownVerticalOffset="@dimen/_30sdp"
-                android:dropDownWidth="@dimen/_270sdp"
-                android:gravity="center"
-                android:spinnerMode="dropdown"/>-->
 
             <TextView
                 android:id="@+id/tv_for_company"
@@ -234,6 +224,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_32sdp"
         android:elevation="@dimen/_10sdp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:layout_margin="@dimen/_5sdp"
         app:cardBackgroundColor="@color/white">
 
@@ -277,6 +268,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/_12sdp"
         android:text="@string/search"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:textColor="@color/white"
         android:layout_marginTop="@dimen/_50sdp"
         android:layout_marginLeft="@dimen/_20sdp"

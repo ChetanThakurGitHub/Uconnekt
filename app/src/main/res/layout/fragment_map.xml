@@ -81,6 +81,7 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:padding="@dimen/_3sdp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_centerVertical="true"
                 app:srcCompat="@drawable/ic_down_arrow"
                 android:layout_alignParentRight="true" />

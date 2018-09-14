@@ -6,6 +6,7 @@
     android:id="@+id/swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_70sdp"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     android:layout_marginTop="@dimen/_5sdp"
     android:layout_marginRight="@dimen/_10sdp"
     android:layout_marginBottom="@dimen/_5sdp"
@@ -78,7 +79,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_gravity="center">
 
                 <RelativeLayout
