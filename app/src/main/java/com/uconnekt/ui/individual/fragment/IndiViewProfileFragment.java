@@ -66,7 +66,8 @@ public class IndiViewProfileFragment extends Fragment {
     }
 
     private void setData(String profileImage, String fullName, String jobTitleName, String specializationName, String address) {
-        Picasso.with(activity).load(profileImage).into(profile);
+        String backImage = profileImage.replace("/thumb","");
+        Picasso.with(activity).load(backImage).into(profile);
         Picasso.with(activity).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
         tv_for_company.setText(jobTitleName.isEmpty()?"NA":jobTitleName);

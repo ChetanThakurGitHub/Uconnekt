@@ -27,6 +27,16 @@ public class RegistrationIntractorImpl implements RegistrationIntractor {
             return;
         }
 
+        if (phone.equalsIgnoreCase("")) {
+            listener.onPhoneError();
+            return;
+        }
+
+        if (phone.length() < 7 || phone.length() > 16) {
+            listener.onPhoneErrorValidation();
+            return;
+        }
+
         if (email.equalsIgnoreCase("")) {
             listener.onEmailError();
             return;
@@ -37,15 +47,6 @@ public class RegistrationIntractorImpl implements RegistrationIntractor {
             return;
         }
 
-        if (phone.equalsIgnoreCase("")) {
-            listener.onPhoneError();
-            return;
-        }
-
-        if (phone.length() < 7 || phone.length() > 16) {
-            listener.onPhoneErrorValidation();
-            return;
-        }
 
         if (password.equalsIgnoreCase("")) {
             listener.onPasswordError();

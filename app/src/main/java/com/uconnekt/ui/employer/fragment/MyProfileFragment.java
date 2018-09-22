@@ -54,6 +54,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         if (getArguments()!=null){
             String userID =  getArguments().getString(ARG_PARAM1);
+            assert userID != null;
             switch (userID) {
                 case "user_review": {
                     Intent intent = new Intent(activity, ReviewActivity.class);
@@ -112,12 +113,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                         String jobTitleName = jsonObject.getString("jobTitleName");
                         String address = jsonObject.getString("address");
                         String bio = URLDecoder.decode(jsonObject.getString("bio"), "UTF-8");
+                        String description = URLDecoder.decode(jsonObject.getString("description"), "UTF-8");
                         String specializationName = jsonObject.getString("specializationName");
                         String rating = jsonObject.getString("rating");
                         String company_logo = jsonObject.getString("company_logo");
                         String profileImage = jsonObject.getString("profileImage");
 
-                        setData(fullName,businessName,jobTitleName,address,view,rating,bio,specializationName,company_logo,profileImage,favourite_count,recommend_count);
+                        setData(fullName,businessName,jobTitleName,address,view,rating,bio,specializationName,company_logo,profileImage,favourite_count,recommend_count,description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -144,7 +146,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         }.executeVolley();
     }
 
-    private void badgeCount(){
+    public void badgeCount(){
         new VolleyGetPost(activity, AllAPIs.BADGE_COUNT, false, "BADGE_COUNT", false) {
             @Override
             public void onVolleyResponse(String response) {
@@ -193,12 +195,13 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         }.executeVolley();
     }
 
-    private void setData(String fullName, String businessName, String jobTitleName, String address, View view, String rating, String bio, String specializationName, String company_logo, String profileImage, String favourite_count, String recommend_count) {
+    private void setData(String fullName, String businessName, String jobTitleName, String address, View view, String rating, String bio, String specializationName, String company_logo, String profileImage, String favourite_count, String recommend_count, String description) {
         TextView tv_for_fullName = view.findViewById(R.id.tv_for_fullName);tv_for_fullName.setText(fullName);
         TextView tv_for_businessName = view.findViewById(R.id.tv_for_businessName);tv_for_businessName.setText(businessName);
         TextView tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);tv_for_jobTitle.setText(jobTitleName);
         TextView tv_for_address = view.findViewById(R.id.tv_for_address);tv_for_address.setText(address);
         TextView tv_for_bio = view.findViewById(R.id.tv_for_bio);tv_for_bio.setText(bio.isEmpty()?"NA":bio);
+        TextView tv_for_description = view.findViewById(R.id.tv_for_description);tv_for_description.setText(description.isEmpty()?"NA":description);
         TextView tv_for_aofs = view.findViewById(R.id.tv_for_aofs);tv_for_aofs.setText(specializationName);
         TextView tv_for_favourite = view.findViewById(R.id.tv_for_favourite);tv_for_favourite.setText(favourite_count.isEmpty()?"0":favourite_count);
         TextView tv_for_recomend = view.findViewById(R.id.tv_for_recomend);tv_for_recomend.setText(recommend_count.isEmpty()?"0":recommend_count);
@@ -235,8 +238,5 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
                 break;
         }
     }
-
-
-
 
 }

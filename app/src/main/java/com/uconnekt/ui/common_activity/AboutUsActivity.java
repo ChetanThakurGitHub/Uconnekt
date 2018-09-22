@@ -33,7 +33,7 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         tvHref.setClickable(true);
         tvHref.setMovementMethod(LinkMovementMethod.getInstance());
         //tvHref.setText(Html.fromHtml(getString(R.string.other_href)));
-        tvHref.setText(Html.fromHtml("connektUs @ 2017–2018 <a href='https://www.connektus.com.au/'> connektUs.</a> All Rights Reserved."));
+        tvHref.setText(Html.fromHtml("ConnektUs @ 2017–2018 <a href='https://www.connektus.com.au/'> ConnektUs.</a> All Rights Reserved."));
 
         TextView tvHref2 = findViewById(R.id.tvHref2);
         tvHref2.setClickable(true);

@@ -10,10 +10,10 @@ public interface RegistrationIntractor {
         void onBusinessNameRequired();
         void onFullNameError();
         void onFullNameRequired();
-        void onEmailError();
-        void onEmailErrorValidation();
         void onPhoneError();
         void onPhoneErrorValidation();
+        void onEmailError();
+        void onEmailErrorValidation();
         void onPasswordError();
         void onPasswordRequired();
         void onSuccess();

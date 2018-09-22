@@ -411,10 +411,10 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
 
                         empTypeList.add(week0);
                         Weeks week14 = new Weeks();
-                        week14.week = emplyementType.getString("fulltime");
+                        week14.week = emplyementType.getString("full_time");
                         empTypeList.add(week14);
                         Weeks week15 = new Weeks();
-                        week15.week = emplyementType.getString("parttime");
+                        week15.week = emplyementType.getString("part_time");
                         empTypeList.add(week15);
                         Weeks week16 = new Weeks();
                         week16.week = emplyementType.getString("casual");

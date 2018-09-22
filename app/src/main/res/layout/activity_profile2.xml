@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     tools:context="com.uconnekt.ui.employer.activity.ProfileActivity">
 
     <include layout="@layout/actionbar_layout" />
@@ -429,13 +430,81 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/_20sdp">
 
-                <android.support.v7.widget.AppCompatImageView
+             <android.support.v7.widget.AppCompatImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/_8sdp"
-                    app:srcCompat="@drawable/ic_chat_profile" />
+                    android:tint="@color/yellow"
+                    app:srcCompat="@drawable/ic_menu" />
 
             </android.support.v7.widget.CardView>
+
+
+           <!-- <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/float_menu"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:layout_marginTop="@dimen/_110sdp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/_20sdp"
+                app:fab_showAnimation="@anim/fab_scale_down"
+                app:fab_hideAnimation="@anim/fab_scale_up"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                fab:menu_icon="@drawable/ic_add"
+                fab:menu_fab_size="normal"
+                fab:menu_colorNormal="@color/white"
+                fab:menu_colorPressed="@color/white"
+                fab:menu_labels_ellipsize="end"
+                fab:menu_labels_singleLine="true"
+                fab:menu_openDirection="down"
+                fab:menu_labels_colorNormal="@color/yellow"
+                fab:menu_labels_showShadow="false"
+                fab:menu_backgroundColor="@color/transparent"
+                android:elevation="@dimen/_2sdp">
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/user"
+
+                    fab:fab_colorNormal="@color/Black"
+                    fab:fab_colorPressed="@color/green"
+                    fab:fab_colorRipple="@color/green"
+                    fab:fab_size="mini"
+                    fab:fab_label="Email" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_chat"
+                    android:padding="@dimen/_5sdp"
+
+                    fab:fab_colorNormal="@color/Black"
+                    fab:fab_colorPressed="@color/green"
+                    fab:fab_colorRipple="@color/green"
+                    fab:fab_size="mini"
+                    fab:fab_label="Call" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_chat"
+
+                    fab:fab_colorNormal="@color/Black"
+                    fab:fab_colorPressed="@color/green"
+                    fab:fab_colorRipple="@color/green"
+                    fab:fab_size="mini"
+                    fab:fab_label="Chat" />
+
+            </com.github.clans.fab.FloatingActionMenu>-->
 
         </RelativeLayout>
 

@@ -3,6 +3,7 @@
     <color name="colorPrimary">#FAD299</color>
     <color name="colorPrimaryDark">#FCAC35</color>
     <color name="colorAccent">#FCAC35</color>
+    <color name="colorDark">#ff9800</color>
 
     <color name="yellow">#FCAC35</color>
     <color name="lightyellow">#FAD299</color>
@@ -14,6 +15,7 @@
     <color name="darkTransparent">#80000000</color>
     <color name="green">#0d7d1d</color>
     <color name="red">#e21b1b</color>
+    <color name="redlight">#99e21b1b</color>
     <color name="gray">#F2F2F2</color>
 
     <color name="calender">#265258</color>

@@ -35,13 +35,18 @@ public class TrakProgressActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trak_progress);
-        Bundle bundle = getIntent().getExtras();
-        time(bundle.getString("startChat"));
-        initView();
-        userId = bundle.getString("requestBy");
-        getUserInfo(userId);
-        trackProcess();
+        try {
+            setContentView(R.layout.activity_trak_progress);
+            Bundle bundle = getIntent().getExtras();
+            time(bundle.getString("startChat"));
+            initView();
+            userId = bundle.getString("requestBy");
+            getUserInfo(userId);
+            trackProcess();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void initView() {

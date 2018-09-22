@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
+import com.uconnekt.ui.authentication.email_authentication.EmailVerificationActivity;
 import com.uconnekt.ui.authentication.user_selection.UserSelectionActivity;
 import com.uconnekt.ui.employer.employer_profile.EmpProfileActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
@@ -103,28 +104,31 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-
-                    if(getIntent().getStringExtra("userType") != null) {
+                    if(getIntent().getData() != null) {
                         profileView();
                     }else {
                         //Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
                         Constant.CHAT = 0;
-                        if (Uconnekt.session.getUserInfo().userType.equals("business")) {
-                            //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
-                            if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
-                                startActivity(new Intent(SplashActivity.this, EmpProfileActivity.class));
+                        if (Uconnekt.session.getUserInfo().isVerified.equals("1")) {
+                            if (Uconnekt.session.getUserInfo().userType.equals("business")) {
+                                //startActivity(new Intent(SplashActivity.this,EmpProfileActivity.class));
+                                if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
+                                    startActivity(new Intent(SplashActivity.this, EmpProfileActivity.class));
+                                } else {
+                                    startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                                }
                             } else {
-                                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                                //startActivity(new Intent(SplashActivity.this, IndiEditProfileActivity.class));
+                                if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
+                                    Intent intent = new Intent(SplashActivity.this, IndiEditProfileActivity.class);
+                                    intent.putExtra("FROM", "First");
+                                    startActivity(intent);
+                                } else {
+                                    startActivity(new Intent(SplashActivity.this, JobHomeActivity.class));
+                                }
                             }
-                        } else {
-                            //startActivity(new Intent(SplashActivity.this, IndiEditProfileActivity.class));
-                            if (Uconnekt.session.getUserInfo().isProfile.equals("0")) {
-                                Intent intent = new Intent(SplashActivity.this, IndiEditProfileActivity.class);
-                                intent.putExtra("FROM", "First");
-                                startActivity(intent);
-                            } else {
-                                startActivity(new Intent(SplashActivity.this, JobHomeActivity.class));
-                            }
+                        }else {
+                            startActivity(new Intent(SplashActivity.this, EmailVerificationActivity.class));
                         }
                     }
                     SplashActivity.this.finish();
@@ -137,7 +141,18 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     private void profileView(){
         Map<String, String> map = Utils.getQueryString(getIntent().getData().toString());
-        if (map.containsKey("id")) {
+    if (map.containsKey("token")){
+        String email = map.get("email");
+        String token = map.get("token");
+            if (Uconnekt.session.getUserInfo().userId.equals(map.get("id"))){
+                Intent intent = new Intent(SplashActivity.this, EmailVerificationActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("token", token);
+                startActivity(intent);
+            }else {
+                Toast.makeText(this, "Worng user", Toast.LENGTH_SHORT).show();
+            }
+    }else if (map.containsKey("id")) {
             String userType = map.get("userType");
             Intent intent;
             if (Uconnekt.session.getUserInfo().userType.equals("business")) {
@@ -155,7 +170,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
                     sendData(map,intent);
                 }
             }
-
         }
     }
 

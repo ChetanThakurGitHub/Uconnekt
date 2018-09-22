@@ -59,9 +59,10 @@
                             android:layout_width="@dimen/_30sdp"
                             android:layout_height="@dimen/_30sdp"
                             android:padding="@dimen/_5sdp"
+                            android:tint="@color/yellow"
                             android:foreground="?attr/selectableItemBackgroundBorderless"
                             android:layout_alignParentRight="true"
-                            app:srcCompat="@drawable/ic_chat_profile"/>
+                            app:srcCompat="@drawable/ic_menu"/>
 
                     </RelativeLayout>
 

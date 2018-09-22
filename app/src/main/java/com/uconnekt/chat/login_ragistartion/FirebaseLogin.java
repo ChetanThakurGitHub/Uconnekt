@@ -15,6 +15,7 @@ import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.model.FirebaseData;
 import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.model.UserInfo;
+import com.uconnekt.ui.authentication.email_authentication.EmailVerificationActivity;
 import com.uconnekt.ui.employer.employer_profile.EmpProfileActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
 import com.uconnekt.ui.individual.edit_profile.IndiEditProfileActivity;
@@ -73,28 +74,7 @@ public class FirebaseLogin {
                             }
 
                             if (pUpdate) {
-                                if (userDetails.userType.equals("business")) {
-                                    if (userDetails.isProfile.equals("1")) {
-                                        Intent intent = new Intent(loginActivity, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    } else {
-                                        Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    }
-                                } else {
-                                    if (userDetails.isProfile.equals("1")) {
-                                        Intent intent = new Intent(loginActivity, JobHomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    } else {
-                                        Intent intent = new Intent(loginActivity,IndiEditProfileActivity.class);
-                                        intent.putExtra("FROM", "First");
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    }
-                                }
+                                allIntent(userDetails,loginActivity);
                             }else {
                                 if (isFinish)loginActivity.finish();
                                 if (move)loginActivity.startActivity(new Intent(loginActivity,HomeActivity.class));
@@ -143,33 +123,43 @@ public class FirebaseLogin {
                                 Uconnekt.session.logoutMyPre();
                             }
                             if (pUpdate) {
-                                if (userDetails.userType.equals("business")) {
-                                    if (userDetails.isProfile.equals("1")) {
-                                        Intent intent = new Intent(loginActivity, HomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    } else {
-                                        Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    }
-                                } else {
-                                    if (userDetails.isProfile.equals("1")) {
-                                        Intent intent = new Intent(loginActivity, JobHomeActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    } else {
-                                        Intent intent = new Intent(loginActivity,IndiEditProfileActivity.class);
-                                        intent.putExtra("FROM", "First");
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        loginActivity.startActivity(intent);
-                                    }
-                                }
+                                allIntent(userDetails,loginActivity);
                             }else {
                                 if (isFinish)loginActivity.finish();
                             }
                         }
                     }
                 });
+    }
+
+    private void allIntent(UserInfo userDetails, Activity loginActivity){
+        if (userDetails.isVerified.equals("1")){
+            if (userDetails.userType.equals("business")) {
+                if (userDetails.isProfile.equals("1")) {
+                    Intent intent = new Intent(loginActivity, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    loginActivity.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(loginActivity, EmpProfileActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    loginActivity.startActivity(intent);
+                }
+            } else {
+                if (userDetails.isProfile.equals("1")) {
+                    Intent intent = new Intent(loginActivity, JobHomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    loginActivity.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(loginActivity, IndiEditProfileActivity.class);
+                    intent.putExtra("FROM", "First");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    loginActivity.startActivity(intent);
+                }
+            }
+        }else {
+            Intent intent = new Intent(loginActivity, EmailVerificationActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            loginActivity.startActivity(intent);
+        }
     }
 }

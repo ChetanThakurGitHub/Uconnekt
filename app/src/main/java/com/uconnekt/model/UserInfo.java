@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class UserInfo implements Serializable {
 
     public String userId = "";
+    public String isVerified = "";
     public String fullName = "";
     public String businessName = "";
     public String email = "";

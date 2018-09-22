@@ -30,6 +30,7 @@
                     android:scaleType="fitXY" />
 
                 <LinearLayout
+                    android:id="@+id/layoutSendFeed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -38,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Send Feedback"
+                    android:text="@string/send_feedback"
                     android:layout_above="@+id/tvMission"
                     android:textColor="@color/darkgray"
                     android:padding="@dimen/_10sdp"
@@ -64,7 +65,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Need help?"
+                    android:text="@string/need_help"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/yellow"
                     android:textSize="@dimen/_14sdp"
@@ -80,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/darkgray"
-                        android:text="Feed free to "
+                        android:text="@string/feed_free_to"
                         android:fontFamily="@font/montserrat_regular"
                         android:textSize="@dimen/_12sdp" />
 

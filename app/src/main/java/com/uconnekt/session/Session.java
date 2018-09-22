@@ -19,6 +19,7 @@ public class Session {
 
     private final String USER_ID = "userId";
     private final String FULLNAME = "fullName";
+    private final String IS_VERIFIED = "isVerified";
     private final String BUSINESS_NAME = "businessName";
     private final String EMAIL = "email";
     private final String USER_TYPE = "userType";
@@ -70,6 +71,7 @@ public class Session {
     public void createSession(UserInfo userInfo) {
         editor.putString(USER_ID, userInfo.userId);
         editor.putString(FULLNAME, userInfo.fullName);
+        editor.putString(IS_VERIFIED, userInfo.isVerified);
         editor.putString(BUSINESS_NAME, userInfo.businessName);
         editor.putString(EMAIL, userInfo.email);
         editor.putString(USER_TYPE, userInfo.userType);
@@ -101,6 +103,7 @@ public class Session {
         UserInfo userInfo = new UserInfo();
         userInfo.userId=(mypref.getString(USER_ID, ""));
         userInfo.fullName=(mypref.getString(FULLNAME, ""));
+        userInfo.isVerified=(mypref.getString(IS_VERIFIED, ""));
         userInfo.businessName=(mypref.getString(BUSINESS_NAME, ""));
         userInfo.email=(mypref.getString(EMAIL, ""));
         userInfo.userType=(mypref.getString(USER_TYPE, ""));

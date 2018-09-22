@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -95,17 +96,82 @@ public class IndiSettingFragment extends Fragment implements View.OnClickListene
                 share();
                 break;
             case R.id.iv_for_activeStatus:
-                MyCustomMessage.getInstance(activity).snackbar(iv_for_btn,getString(R.string.under_development_mode));
+                deactivateAccountDialog();
+                //MyCustomMessage.getInstance(activity).snackbar(iv_for_btn,getString(R.string.under_development_mode));
                 break;
         }
     }
 
 
+    private void deactivateAccountDialog() {
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dailog_delete_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        WindowManager.LayoutParams lWindowParams = new WindowManager.LayoutParams();
+        lWindowParams.copyFrom(dialog.getWindow().getAttributes());
+        lWindowParams.width = WindowManager.LayoutParams.FILL_PARENT;
+        lWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lWindowParams);
+
+        TextView tv_for_txt = dialog.findViewById(R.id.tv_for_txt);
+        TextView title = dialog.findViewById(R.id.title);
+        title.setText(R.string.active_status);
+        tv_for_txt.setText("Are you sure you want to deactivate your account?");
+
+        dialog.findViewById(R.id.btn_for_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.btn_for_yes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deactivateAccount();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void deactivateAccount(){
+        new VolleyGetPost(activity, AllAPIs.INACTIVE_USER, false, "INACTIVE_USER", true) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String status = object.getString("status");
+                    if (status.equals("success")){
+                        logout();
+                        Uconnekt.session.logoutMyPre();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onNetError() {}
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
+                return params;
+            }
+        }.executeVolley();
+    }
+
     private void share(){
         Intent sharIntent = new Intent(Intent.ACTION_SEND);
         sharIntent.setType("text/plain");
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Download connektUs App");
-        sharIntent.putExtra(Intent.EXTRA_TEXT, "Download the app using https://play.google.com/store Hurry, it doesn’t get better than this! Download the connektUs App NOW!");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "Download ConnektUs App");
+        sharIntent.putExtra(Intent.EXTRA_TEXT, "Download the app using https://play.google.com/store Hurry, it doesn’t get better than this! Download the ConnektUs App NOW!");
         startActivity(Intent.createChooser(sharIntent, "Share:"));
     }
 

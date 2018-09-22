@@ -4,8 +4,8 @@ public class AllAPIs {
 
  /*Base URL*/
 
- private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
- //private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
+ //private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
+ private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
  private static final String URL_WITH_LOGIN = URL_WITHOUT_LOGIN + "users/";
 
  /*Authontication*/
@@ -29,6 +29,7 @@ public class AllAPIs {
  public static final String SHOW_PREFILLED_DATA = URL_WITH_LOGIN +"getUserProfile";
  public static final String PROFILE = URL_WITH_LOGIN +"getPublicProfile?";
  public static final String LOGOUT = URL_WITH_LOGIN +"logout";
+ public static final String INACTIVE_USER = URL_WITH_LOGIN +"profile_inactive_user";
  public static final String NOTIFICATION = URL_WITH_LOGIN +"sendNotification";
  public static final String CHANGE_PASSWOWD = URL_WITH_LOGIN +"changePassword";
  public static final String RECOMMEND = URL_WITH_LOGIN +"addRecommends";
@@ -38,10 +39,11 @@ public class AllAPIs {
  public static final String FAVOURITES_LIST_BY_ME = URL_WITH_LOGIN +"getMyFavourites?user_id=";
  public static final String RECOMMENDS_LIST_BY_ME = URL_WITH_LOGIN +"getMyRecommands?user_id=";
  public static final String TRACK_PROCESS = URL_WITHOUT_LOGIN +"requests/processData";
-
  public static final String TANDC = URL_WITHOUT_LOGIN +"options/getTNC";
  public static final String BADGE_COUNT = URL_WITH_LOGIN +"badge_count_unread_views";
  public static final String UPDATE_NOTIFICATION = URL_WITH_LOGIN +"update_notification";
+ public static final String VERIFIED_EMAIL = URL_WITH_LOGIN +"verifiedEmail";
+ public static final String ADD_FEEDBACK = URL_WITH_LOGIN +"addFeedback";
 
  /*Individual Side*/
  public static final String BASIC_INFO = URL_WITH_LOGIN +"updateBasicInfo";

@@ -1,35 +1,43 @@
 package com.uconnekt.ui.employer.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
+import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.experience.ExpActivity;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,13 +49,16 @@ import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener{
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",profileUrl = "";
-    private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,profile;
-    private int favourite_count = 0,recommend_count = 0;
-    private TextView tv_for_bio,tv_for_review_count,tv_for_favourite_count,tv_for_recomend,
-            tv_for_aofs,tv_for_address,tv_for_company,tv_for_fullName;
+    private String userId = "", profileImage = "", fullName = "", jobTitleName = "", specializationName = "", address = "", profileUrl = "",email = "",phone = "";
+    private ImageView iv_for_favourite, iv_for_recommend, iv_profile_image, profile;
+    private int favourite_count = 0, recommend_count = 0;
+    private TextView tv_for_bio, tv_for_review_count, tv_for_favourite_count, tv_for_recomend,
+            tv_for_aofs, tv_for_address, tv_for_company, tv_for_fullName;
+    private PopupMenu popup;
+    private CardView card_for_chat;
+    private FloatingActionMenu float_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_profile2);
 
         Bundle bundle = getIntent().getExtras();
-        userId = bundle.getString("UserId");
+        assert bundle != null;userId = bundle.getString("UserId");
 
         initView();
         view();
@@ -64,7 +75,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         iv_for_recommend.setOnClickListener(this);
     }
 
-    private void initView(){
+    private void initView() {
         profile = findViewById(R.id.profile);
         iv_profile_image = findViewById(R.id.iv_profile_image);
         tv_for_fullName = findViewById(R.id.tv_for_fullName);
@@ -77,25 +88,85 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tv_for_review_count = findViewById(R.id.tv_for_review_count);
         tv_for_favourite_count = findViewById(R.id.tv_for_favourite_count);
         tv_for_recomend = findViewById(R.id.tv_for_recomend);
+        card_for_chat = findViewById(R.id.card_for_chat);
+        /*float_menu = findViewById(R.id.float_menu);
+        float_menu.setOnClickListener(this);
+        findViewById(R.id.fab_chat).setOnClickListener(this);
+        findViewById(R.id.fab_call).setOnClickListener(this);
+        findViewById(R.id.fab_chat).setOnClickListener(this);*/
+
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
         tv_for_tittle.setText(R.string.profile);
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
-        iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
+        iv_for_backIco.setVisibility(View.VISIBLE);
+        iv_for_backIco.setOnClickListener(this);
         ImageView iv_for_share = findViewById(R.id.iv_for_share);
-        iv_for_share.setVisibility(View.VISIBLE);iv_for_share.setOnClickListener(this);
+        iv_for_share.setVisibility(View.VISIBLE);
+        iv_for_share.setOnClickListener(this);
         findViewById(R.id.layout_for_basicInfo).setOnClickListener(this);
         findViewById(R.id.layout_for_Experience).setOnClickListener(this);
         findViewById(R.id.layout_for_Resume).setOnClickListener(this);
-        findViewById(R.id.card_for_chat).setOnClickListener(this);
+        card_for_chat.setOnClickListener(this);
     }
 
     private void setData(String profileImage, String fullName, String jobTitleName, String specializationName, String address) {
-        Picasso.with(this).load(profileImage).into(profile);
+        String backImage = profileImage.replace("/thumb","");
+        Picasso.with(this).load(backImage).into(profile);
         Picasso.with(this).load(profileImage).into(iv_profile_image);
-        tv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
-        tv_for_company.setText(jobTitleName.isEmpty()?"NA":jobTitleName);
-        tv_for_address.setText(address.isEmpty()?"NA":address);
-        tv_for_aofs.setText(specializationName.isEmpty()?"NA":specializationName);
+        tv_for_fullName.setText(fullName.isEmpty() ? "NA" : fullName);
+        tv_for_company.setText(jobTitleName.isEmpty() ? "NA" : jobTitleName);
+        tv_for_address.setText(address.isEmpty() ? "NA" : address);
+        tv_for_aofs.setText(specializationName.isEmpty() ? "NA" : specializationName);
+    }
+
+
+    private void menuClick() {
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.chat:
+                        Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+                        intent.putExtra("USERID", userId);
+                        startActivity(intent);
+                        break;
+                    case R.id.call:
+                        PermissionAll permissionAll = new PermissionAll();
+                        if (permissionAll.checkCallingPermission(ProfileActivity.this))
+                            callingIntent();
+                        break;
+                    case R.id.email:
+                        sharOnEmail(email);
+                        break;
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+
+    private void callingIntent() {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phone));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        startActivity(intent);
+    }
+
+    private void sharOnEmail(String email) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto: " + email));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hii android !");
+        startActivity(Intent.createChooser(emailIntent, "Send feedback"));
     }
 
     private void apiCalling(){
@@ -110,6 +181,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         profileImage = object.getString("profileImage");
                         fullName = object.getString("fullName");
+                        phone = object.getString("phone");
+                        email = object.getString("email");
                         jobTitleName = object.getString("jobTitleName");
                         specializationName = object.getString("specializationName");
                         address = object.getString("address");
@@ -305,9 +378,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.card_for_chat:
-                intent = new Intent(this,ChatActivity.class);
+               /* intent = new Intent(this,ChatActivity.class);
                 intent.putExtra("USERID",userId);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                popup = new PopupMenu(this, card_for_chat);
+                popup.getMenuInflater().inflate(R.menu.profile_main, popup.getMenu());
+                menuClick();
                 break;
             case R.id.iv_for_share:
                 deletelDailog();
@@ -315,7 +392,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.iv_for_backIco:
                 finish();
                 break;
-
+           /* case R.id.fab_call:
+                PermissionAll permissionAll = new PermissionAll();
+                if (permissionAll.checkCallingPermission(ProfileActivity.this))
+                    callingIntent();
+                break;
+            case R.id.fab_chat:
+                intent = new Intent(ProfileActivity.this, ChatActivity.class);
+                intent.putExtra("USERID", userId);
+                startActivity(intent);
+                break;
+            case R.id.fab_email:
+                sharOnEmail(email);
+                break;
+            case R.id.float_menu:
+                float_menu.close(true);
+                MyCustomMessage.getInstance(this).snackbar(float_menu,getString(R.string.under_development_mode));
+                break;*/
         }
     }
 
@@ -387,9 +480,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            File f = new File(Environment.getExternalStorageDirectory(), "connektUs/Shared Profiles");
+            File f = new File(Environment.getExternalStorageDirectory(), "ConnektUs/Shared Profiles");
             if (!f.exists()) f.mkdirs();
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/connektUs/Shared Profiles/" + now + ".png";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/ConnektUs/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
             File imageFile = new File(mPath);
@@ -424,7 +517,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         sharIntent.setType("image/png");
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "connektUs");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "ConnektUs");
         sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
 

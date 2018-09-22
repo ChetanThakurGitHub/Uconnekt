@@ -737,6 +737,8 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
     }
 
     private void setdata(String valu, String strength){
+        cusDialogProg.dismiss();
+
         strengthID = ""; value = "";
 
         String value11 = "",value22 = "",value33 = "";

@@ -146,14 +146,14 @@ public class DocFullViewActivity extends AppCompatActivity implements View.OnCli
                 int lenghtOfFile = conection.getContentLength();
 
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                File f = new File(Environment.getExternalStorageDirectory(), "Uconnekt/Resumes");
+                File f = new File(Environment.getExternalStorageDirectory(), "ConnektUs/Resumes");
                 if (!f.exists()) {
                     f.mkdirs();
                 }
 
                 // Output stream
                 OutputStream output = new FileOutputStream(Environment.getExternalStorageDirectory().toString()
-                        + "/Uconnekt/Resumes/"+FileName);
+                        + "/ConnektUs/Resumes/"+FileName);
 
                 byte data[] = new byte[1024];
                 long total = 0;

@@ -71,6 +71,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         ClusterManager.OnClusterInfoWindowClickListener<MyItem>,
         ClusterManager.OnClusterItemClickListener<MyItem>,
         ClusterManager.OnClusterItemInfoWindowClickListener<MyItem> {
+
     private HomeActivity activity;
     private MapView mapview;
     public GoogleMap map;
@@ -93,7 +94,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
     private TextView tv_for_fullName,tv_for_address,tv_for_jobTitle,tv_for_nodata;
     private ImageView iv_profile_image;
     private int position = 0;
-
     public ClusterManager<MyItem> mClusterManager;
     private Random r = new Random();
 
@@ -129,7 +129,6 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 if (goneVisi)filter(s.toString());
             }
         });
-
         tv_for_speName.setFocusableInTouchMode(false);
 
         return view;

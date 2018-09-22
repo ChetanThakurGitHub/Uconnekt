@@ -84,6 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "1";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -91,6 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "2";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -98,6 +100,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "3";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -119,6 +122,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "13";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -129,6 +133,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "4";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -136,6 +141,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "5";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -143,6 +149,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         String body = remoteMessage.getData().get("body");
                         String title = remoteMessage.getData().get("title");
                         String intentType = "6";
+                        sendBroadCast();
                         sendNotificationAddReminder(body, title, intentType, profile_image, reference_id);
                         break;
                     }
@@ -177,6 +184,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 }
             }
         }
+    }
+
+    private void sendBroadCast(){
+        Intent intent =  new Intent("ProfileCountBroadcast");
+        sendBroadcast(intent);
     }
 
     private void sendNotificationAddReminder(String body, String title, String intentType, String profile_image, String reference_id) {
@@ -317,11 +329,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             mChannel.setShowBadge(true);
             mChannel.enableLights(true);
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(mChannel);
         }
         Notification notification = notificationBuilder.build();
         int notificatoinCount = +1;
         ShortcutBadger.applyNotification(getApplicationContext(), notification, notificatoinCount);
+        assert notificationManager != null;
         notificationManager.notify(num, notification);
     }
 

@@ -131,8 +131,7 @@
                                 android:id="@+id/tvReviewBadge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:elevation="@dimen/_5sdp"
-                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_2sdp"
                                 android:layout_marginTop="@dimen/_4sdp"
                                 android:layout_below="@+id/framlayout"
                                 android:textSize="@dimen/_12sdp"
@@ -217,6 +216,7 @@
                         android:layout_alignParentRight="true"
                         android:elevation="@dimen/_5sdp"
                         android:textSize="@dimen/_12sdp"
+                       android:layout_marginTop="@dimen/_2sdp"
                        android:visibility="gone"
                         android:textColor="@color/white"
                         android:background="@drawable/circle_batch_bg"/>
@@ -282,12 +282,12 @@
                 android:layout_alignParentRight="true"
                 android:elevation="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:visibility="gone"
                 android:textColor="@color/white"
                 android:background="@drawable/circle_batch_bg"/>
 
         </RelativeLayout>
-
 
     </LinearLayout>
 
@@ -342,6 +342,23 @@
                         android:textSize="@dimen/_12sdp"
                         android:textColor="@color/lightgray"
                         android:fontFamily="@font/montserrat_light" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_description"
+                            android:textSize="@dimen/_14sdp"
+                            android:textColor="@color/darkgray"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:fontFamily="@font/montserrat_regular"/>
+
+                        <TextView
+                            android:id="@+id/tv_for_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_11sdp"
+                            android:textColor="@color/lightgray"
+                            android:fontFamily="@font/montserrat_light" />
 
                 </LinearLayout>
 

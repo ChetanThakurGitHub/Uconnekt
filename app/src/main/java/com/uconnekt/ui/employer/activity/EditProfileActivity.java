@@ -198,7 +198,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 try {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File file= new File(Environment.getExternalStorageDirectory().toString()+ File.separator + "image.jpg");
-
                     if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
                         imageUri= FileProvider.getUriForFile(EditProfileActivity.this, BuildConfig.APPLICATION_ID + ".fileprovider",file);
                     }else {
@@ -318,7 +317,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         if (requestCode == Constant.GALLERY && resultCode == RESULT_OK && null != data) {
             Uri imageUri = data.getData();
             if (imageUri != null) {
-                CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160, 160).setMaxCropResultSize(4000, 4000).setAspectRatio(400, 400).start(this);
+                CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160, 120).setMaxCropResultSize(4000, 4000).setAspectRatio(400, 400).start(this);
             } else {
                 MyCustomMessage.getInstance(this).customToast(getString(R.string.something_wrong));
             }}else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {

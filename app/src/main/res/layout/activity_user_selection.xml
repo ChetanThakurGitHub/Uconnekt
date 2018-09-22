@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/mainlayout"
     android:background="@drawable/screen_bg"
     android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.uconnekt.ui.authentication.user_selection.UserSelectionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mainlayout">
 
     <Button
         android:id="@+id/btn_for_continue"
@@ -34,9 +40,9 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="@dimen/_180sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_height="@dimen/_80sdp"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
             app:srcCompat="@drawable/ic_logo_yellow"/>
 
         <android.support.v7.widget.AppCompatImageView
@@ -72,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="150sp"
                 android:elevation="@dimen/_10sdp"
-                android:layout_margin="@dimen/_20sdp"
+                android:layout_margin="@dimen/_10sdp"
                 app:cardBackgroundColor="@color/white"
                 android:layout_gravity="center_horizontal"
                 app:cardCornerRadius="@dimen/_10sdp">
@@ -160,4 +166,6 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>

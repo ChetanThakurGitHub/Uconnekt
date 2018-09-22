@@ -1,20 +1,28 @@
 package com.uconnekt.ui.employer.home;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.util.Base64;
-import android.util.TypedValue;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.history.ChatFragment;
+import com.uconnekt.chat.model.History;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.employer.activity.EditProfileActivity;
@@ -26,16 +34,14 @@ import com.uconnekt.ui.employer.fragment.ProfileFragment;
 import com.uconnekt.ui.employer.fragment.SearchFragment;
 import com.uconnekt.ui.employer.fragment.SettingFragment;
 import com.uconnekt.ui.employer.fragment.ViewProifileFragment;
-import com.uconnekt.ui.individual.activity.IndiProfileActivity;
 import com.uconnekt.ui.individual.fragment.FavouriteFragment;
-import com.uconnekt.util.Utils;
+import com.uconnekt.ui.individual.fragment.IndiMyProfileFragment;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
@@ -44,9 +50,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
 
     private boolean doubleBackToExitPressedOnce = false;
     private RelativeLayout mainlayout;
+    private TextView tvChatBadge;
     private TabLayout tabs;
     private TextView tv_for_tittle;
-    private int click = 0;
+    private int click = 0,chatCount = 0;
     private ImageView iv_for_backIco,iv_for_filter,iv_for_circular_arrow,iv_for_menu,iv_for_share,iv_for_edit,iv_for_view;
 
     @Override
@@ -146,11 +153,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         tv_for_tittle = findViewById(R.id.tv_for_tittle);
         iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_filter = findViewById(R.id.iv_for_filter);
+        tvChatBadge = findViewById(R.id.tvChatBadge);
         iv_for_circular_arrow = findViewById(R.id.iv_for_circular_arrow);
         iv_for_menu = findViewById(R.id.iv_for_menu);
         iv_for_share = findViewById(R.id.iv_for_share);
         iv_for_edit = findViewById(R.id.iv_for_edit);
         iv_for_view = findViewById(R.id.iv_for_view);
+        getMessageList();
     }
 
     private void setTab(TabLayout.Tab tab, int imageResource , boolean isSelected){
@@ -158,7 +167,24 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         ((TextView) tab.getCustomView().findViewById(android.R.id.text1)).setTextColor(getResources().getColor(isSelected?R.color.yellow:R.color.darkgray));
     }
 
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            badgeCount();
+            Fragment fragment = getCurrentFragment();
+            if (fragment!=null && fragment instanceof MyProfileFragment){
+                MyProfileFragment myProfileFragment = (MyProfileFragment) fragment;
+                myProfileFragment.badgeCount();
+            }
+        }
+    };
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter("ProfileCountBroadcast");
+        this.registerReceiver(broadcastReceiver, filter);
+    }
 
     public void setToolbarIcon(int visi){
         switch (visi) {
@@ -320,6 +346,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                     break;
                 case 2:
                     click = 2;
+                    tvChatBadge.setVisibility(View.GONE);
                     replaceFragment(new ChatFragment());
                     setTab(tab, R.drawable.ic_chat_yellow, true);
                     setToolbarIcon(6);
@@ -389,6 +416,44 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
             }
             break;
         }
+    }
+
+    private void getMessageList(){
+        tvChatBadge.setVisibility(View.GONE);
+        FirebaseDatabase.getInstance().getReference().child("history").child(Uconnekt.session.getUserInfo().userId).addChildEventListener(new ChildEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (dataSnapshot.getValue() != null) {
+                    History history = dataSnapshot.getValue(History.class);
+                    if (history.readUnread.equals("1")){
+                        chatCount = chatCount+1;
+                        tvChatBadge.setVisibility(View.VISIBLE);
+                        tvChatBadge.setText(""+chatCount);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

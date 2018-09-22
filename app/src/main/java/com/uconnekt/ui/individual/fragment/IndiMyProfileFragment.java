@@ -102,7 +102,7 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
     }
 
 
-    private void badgeCount(){
+    public void badgeCount(){
         new VolleyGetPost(activity, AllAPIs.BADGE_COUNT, false, "BADGE_COUNT", false) {
             @Override
             public void onVolleyResponse(String response) {
@@ -207,7 +207,8 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         TextView tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
         TextView tv_for_address = view.findViewById(R.id.tv_for_address);
 
-        Picasso.with(activity).load(profileImage).into(bg_profile);
+        String backImage = profileImage.replace("/thumb","");
+        Picasso.with(activity).load(backImage).into(bg_profile);
         Picasso.with(activity).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName);
         tv_for_company.setText(jobTitleName.isEmpty()?"NA":jobTitleName);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">connektUs</string>
+    <string name="app_name">ConnektUs</string>
 
     <!--Resume Custom View-->
     <string name="permission_filepicker_rationale">Storage permission is needed to access files.</string>
@@ -304,13 +304,13 @@
     <string name="decliend_recruiter">Declined interview request with the recruiter</string>
 
     <!--about us-->
-    <string name="uconneckt_href">connektUs @ 2017–2018 <a href='https://www.connektus.com.au/'> connektUs.</a> All Rights Reserved.</string>
+    <string name="uconneckt_href">ConnektUs @ 2017–2018 <a href='https://www.connektus.com.au/'> ConnektUs.</a> All Rights Reserved.</string>
     <string name="other_href">Visit our website: <a href='https://www.connektus.com.au/'> www.connektus.com.au</a> for more about our app.</string>
     <string name="our_mission">Our Mission</string>
-    <string name="uconnekt_s_mission">connektUs mission is to inspire people to discover happiness in the workplace by giving everyone more control of their future.</string>
-    <string name="about_uconnekt">About connektUs</string>
+    <string name="uconnekt_s_mission">ConnektUs mission is to inspire people to discover happiness in the workplace by giving everyone more control of their future.</string>
+    <string name="about_uconnekt">About ConnektUs</string>
     <string name="hiring_made_simple">Hiring. Made. Simple.</string>
-    <string name="uconnekt_dis">connektUs is a mobile application, driven to provide hiring solutions. Our mobile platform has been designed for simplicity. We make hiring simple by allowing Job Seekers and Employers to conveniently connekt to help you discover your future. With our in-depth and specific search capabilities, you can search detailed profiles with relevant information to help you make the right decision for you or your business.</string>
+    <string name="uconnekt_dis">ConnektUs is a mobile application, driven to provide hiring solutions. Our mobile platform has been designed for simplicity. We make hiring simple by allowing Job Seekers and Employers to conveniently connekt to help you discover your future. With our in-depth and specific search capabilities, you can search detailed profiles with relevant information to help you make the right decision for you or your business.</string>
     <string name="hiring_find_talented_candidates_here">Hiring? Find talented candidates here.</string>
     <string name="hiring_business">Find potential candidates that meet your needs. Search for specific details to find the best fit candidate for you or your business.</string>
     <string name="need_a_change">Need a change? Connekt with people that can help.</string>
@@ -319,12 +319,25 @@
     <!--Other-->
     <string name="active_status">Active Status</string>
     <string name="contact_number">Contact number</string>
-    <string name="business_description">Business description</string>
+    <string name="business_description">About your business</string>
+    <string name="business_descriptions">Business description</string>
     <string name="salary">Salary</string>
     <string name="employment_type">Employment type</string>
     <string name="select_salarys">Select salary</string>
     <string name="select_employment_type">Select employment type</string>
     <string name="send_request">Send Request</string>
+    <string name="verify">Verify</string>
+    <string name="verify_email">Verify your email address.</string>
+    <string name="verify_dis">Our records show that you recently created a ConnektUs account.ln order to continue registering your kit,you\'ll need to verify your email address.</string>
+    <string name="feedback">Feedback</string>
+    <string name="subject">Subject</string>
+    <string name="finding_the_app">How do you finding the app?</string>
+    <string name="add_subject">Please add subject</string>
+    <string name="add_feedback">Please add feedback</string>
+    <string name="contact_us"> Contact us</string>
+    <string name="feed_free_to">Feed free to</string>
+    <string name="need_help">Need help?</string>
+    <string name="send_feedback">Send Feedback</string>
 
 
 </resources>

@@ -37,7 +37,7 @@ import java.util.Map;
 public class ViewProifileFragment extends Fragment {
 
     private HomeActivity activity;
-    private TextView tv_for_bio,tv_for_favofite,tv_for_review,tv_for_recomend,tv_for_aofs,tv_for_noReview,tv_for_address,tv_for_specializationName;
+    private TextView tv_for_bio,tv_for_description,tv_for_favofite,tv_for_review,tv_for_recomend,tv_for_aofs,tv_for_noReview,tv_for_address,tv_for_specializationName;
     private RatingBar ratingBar;
     private ImageView iv_for_favourite,iv_for_recommend,iv_company_logo;
     private int favourite_count = 0,recommend_count = 0;
@@ -76,6 +76,7 @@ public class ViewProifileFragment extends Fragment {
         tv_for_address = view.findViewById(R.id.tv_for_address);
         tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
         tv_for_bio = view.findViewById(R.id.tv_for_bio);
+        tv_for_description = view.findViewById(R.id.tv_for_description);
         tv_for_favofite = view.findViewById(R.id.tv_for_favofite);
         tv_for_review = view.findViewById(R.id.tv_for_review);
         tv_for_recomend = view.findViewById(R.id.tv_for_recomend);
@@ -101,6 +102,7 @@ public class ViewProifileFragment extends Fragment {
                     if (status.equals("success")) {
                         JSONObject object = jsonObject.getJSONObject("profile");
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
+                        String description = URLDecoder.decode(object.getString("description"), "UTF-8");
                         String address = object.getString("address");
                         String jobTitleName = object.getString("jobTitleName");
                         String specializationName = object.getString("specializationName");
@@ -125,7 +127,7 @@ public class ViewProifileFragment extends Fragment {
                         reviewListAdapter.notifyDataSetChanged();
                         tv_for_noReview.setVisibility(list.size()==0?View.VISIBLE:View.GONE);
 
-                        setApiData(bio, rating, review_count,address,jobTitleName,specializationName,company_logo);
+                        setApiData(bio, rating, review_count,address,jobTitleName,specializationName,company_logo,description);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -155,8 +157,9 @@ public class ViewProifileFragment extends Fragment {
         }.executeVolley();
     }
 
-    private void setApiData(String bio, String rating, String review_count, String address, String jobTitleName, String specializationName, String company_logo) {
+    private void setApiData(String bio, String rating, String review_count, String address, String jobTitleName, String specializationName, String company_logo, String description) {
         tv_for_bio.setText(bio.isEmpty()?"NA":bio);
+        tv_for_description.setText(description.isEmpty()?"NA":description);
         tv_for_favofite.setText(favourite_count==0?"0 Favourite":favourite_count+ " Favourite");
         tv_for_review.setText(review_count.isEmpty()?"0 Reviews":review_count+ " Reviews");
         tv_for_recomend.setText(recommend_count==0?"0 Recommend":recommend_count+ " Recommend");

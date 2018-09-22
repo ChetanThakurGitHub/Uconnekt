@@ -26,15 +26,16 @@
 
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_logo_yellow"/>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_25sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -94,7 +95,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:background="@null"
-                                android:digits="1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
                                 android:fontFamily="@font/montserrat_regular"
                                 android:hint="@string/business_name"
                                 android:maxLength="50"
@@ -149,39 +149,8 @@
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:background="@color/lightgray"/>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:gravity="center|left">
 
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="@dimen/_20sdp"
-                                android:layout_height="@dimen/_20sdp"
-                                app:srcCompat="@drawable/ic_mail" />
 
-                            <EditText
-                                android:id="@+id/et_for_email"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_5sdp"
-                                android:background="@null"
-                                android:fontFamily="@font/montserrat_regular"
-                                android:hint="@string/email_address"
-                                android:imeOptions="actionNext"
-                                android:inputType="textEmailAddress"
-                                android:singleLine="true"
-                                android:textColor="@color/darkgray"
-                                android:textColorHint="@color/lightgray"
-                                android:textSize="@dimen/_12sdp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:background="@color/lightgray"/>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -215,6 +184,41 @@
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:background="@color/lightgray"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:gravity="center|left">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                app:srcCompat="@drawable/ic_mail" />
+
+                            <EditText
+                                android:id="@+id/et_for_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:background="@null"
+                                android:fontFamily="@font/montserrat_regular"
+                                android:hint="@string/email_address"
+                                android:imeOptions="actionNext"
+                                android:inputType="textEmailAddress"
+                                android:singleLine="true"
+                                android:textColor="@color/darkgray"
+                                android:textColorHint="@color/lightgray"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@color/lightgray"/>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

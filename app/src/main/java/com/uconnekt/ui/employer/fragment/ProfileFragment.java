@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -37,7 +39,6 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.helper.PermissionAll;
-import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.BasicInfoActivity;
 import com.uconnekt.ui.employer.activity.ResumeActivity;
@@ -57,7 +58,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.security.AllPermission;
 import java.util.Date;
 import java.util.Map;
 
@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private HomeActivity activity;
     private static final String ARG_PARAM1 = "param1";
-    private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",profileUrl = "";
+    private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",profileUrl = "",phone= "",email = "";
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,profile;
     private CardView card_for_chat;
     private int favourite_count = 0,recommend_count = 0,check = 0;
@@ -114,13 +114,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                         activity.startActivity(intent);
                         break;
                     case R.id.call:
-                      /*  PermissionAll permissionAll = new PermissionAll();
-                        if (permissionAll.checkCallingPermission(activity))callingIntent();*/
-                        MyCustomMessage.getInstance(activity).snackbar(card_for_chat,getString(R.string.under_development_mode));
+                        PermissionAll permissionAll = new PermissionAll();
+                        if (permissionAll.checkCallingPermission(activity))callingIntent();
                         break;
                     case R.id.email:
-                        //sharOnEmail("chetan@gmail.com");
-                        MyCustomMessage.getInstance(activity).snackbar(card_for_chat,getString(R.string.under_development_mode));
+                        sharOnEmail(email);
                         break;
                 }
                 return true;
@@ -134,7 +132,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         switch (requestCode) {
             case CALLING: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE)
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE)
                             == PackageManager.PERMISSION_GRANTED) {
                         //success permission granted & call Location method
                         Intent intent4 = new Intent(Intent.ACTION_CALL);
@@ -151,7 +149,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private void callingIntent(){
         Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:" + "1234567890"));
+        intent.setData(Uri.parse("tel:" + phone));
         startActivity(intent);
     }
 
@@ -182,7 +180,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void setData(String profileImage, String fullName, String jobTitleName, String specializationName, String address) {
-        Picasso.with(activity).load(profileImage).into(profile);
+        String backImage = profileImage.replace("/thumb","");
+        Picasso.with(activity).load(backImage).into(profile);
         Picasso.with(activity).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
         tv_for_company.setText(jobTitleName.isEmpty()?"NA":jobTitleName);
@@ -209,6 +208,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                         String bio = URLDecoder.decode(object.getString("bio"), "UTF-8");
                         profileImage = object.getString("profileImage");
                         fullName = object.getString("fullName");
+                        phone = object.getString("phone");
+                        email = object.getString("email");
                         jobTitleName = object.getString("jobTitleName");
                         specializationName = object.getString("specializationName");
                         address = object.getString("address");
@@ -382,6 +383,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        activity.hideKeyboard();
         switch (v.getId()){
             case R.id.iv_for_favourite:
                 favourite();
@@ -486,7 +488,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         card_for_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                screenShot(layout_for_share,"Check this out “ Job seeker ” profile.");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        screenShot(layout_for_share,"Check this out “ Job seeker ” profile.");
+                    }
+                }).start();
+
             }
         });
         dialog.show();
@@ -515,22 +523,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     /*.................................screenShot()...................................*/
-    private void screenShot(LinearLayout scr_shot_view, String text) {
+    private void screenShot(LinearLayout scr_shot_view, final String text) {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
         try {
-            File f = new File(Environment.getExternalStorageDirectory(), "connektUs/Shared Profiles");
+            File f = new File(Environment.getExternalStorageDirectory(), "ConnektUs/Shared Profiles");
             if (!f.exists()) f.mkdirs();
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/connektUs/Shared Profiles/" + now + ".png";
+            String mPath = Environment.getExternalStorageDirectory().toString() + "/ConnektUs/Shared Profiles/" + now + ".png";
             scr_shot_view.setDrawingCacheEnabled(true);
             scr_shot_view.buildDrawingCache(true);
-            File imageFile = new File(mPath);
+            final File imageFile = new File(mPath);
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             Bitmap bitmap = Bitmap.createBitmap(scr_shot_view.getDrawingCache());
             bitmap.compress(Bitmap.CompressFormat.PNG, 60, outputStream);
             scr_shot_view.destroyDrawingCache();
-            sharOnsocial(imageFile,text);
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    sharOnsocial(imageFile,text);
+                }
+            });
+
             //onShareClick(imageFile,text);
             //doShareLink(text,otherProfileInfo.UserDetail.profileUrl);
         } catch (FileNotFoundException e) {
@@ -557,20 +572,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         sharIntent.setType("image/png");
         //sharIntent.setType("text/plain");
         sharIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "connektUs");
+        sharIntent.putExtra(Intent.EXTRA_SUBJECT, "ConnektUs");
         sharIntent.putExtra(Intent.EXTRA_TEXT, text+"\n"+profileUrl);
         startActivity(Intent.createChooser(sharIntent, "Share:"));
     }
 
 
     private void sharOnEmail(String email) {
-        Intent gmail = new Intent(Intent.ACTION_VIEW);
-        gmail.setClassName("com.google.android.gm","com.google.android.gm.ComposeActivityGmail");
-        gmail.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
-        gmail.setData(Uri.parse(email));
-        gmail.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
-        gmail.setType("plain/text");
-        gmail.putExtra(Intent.EXTRA_TEXT, "Hii android !");
-        startActivity(gmail);
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto: " + email));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hii android !");
+        startActivity(Intent.createChooser(emailIntent, "Send feedback"));
     }
+
 }

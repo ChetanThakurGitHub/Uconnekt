@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/yellow"
+    android:background="@drawable/ic_splash_bg"
     android:fitsSystemWindows="true"
     tools:context=".ui.authentication.splash.SplashActivity">
 
@@ -19,7 +19,7 @@
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_200sdp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_white_logo"
+            app:srcCompat="@drawable/ic_logo_yellow"
             android:visibility="gone" />
     </FrameLayout>
 

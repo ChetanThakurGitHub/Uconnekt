@@ -1,5 +1,6 @@
 package com.uconnekt.ui.common_activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,7 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
         tv_for_tittle.setText(getString(R.string.help_and_support));
         RecyclerView recycler_view = findViewById(R.id.recycler_view);
+        findViewById(R.id.layoutSendFeed).setOnClickListener(this);
 
         //TextView tv_for_test = findViewById(R.id.tv_for_test);
         /*Spannable firstTxt = new SpannableString("Feed free to ");
@@ -66,7 +68,7 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
                 HelpandSupport helpandSupport = new HelpandSupport();
                 switch (i) {
                     case 0:
-                        helpandSupport.question = "What are the benefits of using connektUs?";
+                        helpandSupport.question = "What are the benefits of using ConnektUs?";
                         helpandSupport.answer = "We allow Job Seekers and Employers to connekt very effectively. There are many ways to reach out to an employer that suits your needs and specializes in your area of specialty. All of this is available at your fingertips and on the go.";
                         helpandSupportList.add(helpandSupport);
                         break;
@@ -112,7 +114,7 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
                 HelpandSupport helpandSupport = new HelpandSupport();
                 switch (i) {
                     case 0:
-                        helpandSupport.question = "What are the benefits of using connektUs?";
+                        helpandSupport.question = "What are the benefits of using ConnektUs?";
                         helpandSupport.answer = "We allow Job Seekers and Employers to connekt very effectively. There are many ways to reach out to an employer that suits your needs and specializes in your area of specialty. All of this is available at your fingertips.";
                         helpandSupportList.add(helpandSupport);
                         break;
@@ -132,7 +134,7 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
                         helpandSupportList.add(helpandSupport);
                         break;
                     case 4:
-                        helpandSupport.question = "Is connektUs free to use?";
+                        helpandSupport.question = "Is ConnektUs free to use?";
                         helpandSupport.answer = "ConnektUs is a free platform for all Job Seekers. We understand the importance of finding the right role for you and that shouldn’t come at a cost.";
                         helpandSupportList.add(helpandSupport);
                         break;
@@ -162,6 +164,9 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
         switch (v.getId()){
             case R.id.iv_for_backIco:
                 onBackPressed();
+                break;
+            case R.id.layoutSendFeed:
+                startActivity(new Intent(this,FeedbackActivity.class));
                 break;
         }
     }
