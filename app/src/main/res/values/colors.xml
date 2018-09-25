@@ -3,7 +3,8 @@
     <color name="colorPrimary">#FAD299</color>
     <color name="colorPrimaryDark">#FCAC35</color>
     <color name="colorAccent">#FCAC35</color>
-    <color name="colorDark">#ff9800</color>
+    <!--<color name="colorDark">#ff9800</color>-->
+    <color name="colorDark">#F57C00</color>
 
     <color name="yellow">#FCAC35</color>
     <color name="lightyellow">#FAD299</color>
@@ -17,6 +18,7 @@
     <color name="red">#e21b1b</color>
     <color name="redlight">#99e21b1b</color>
     <color name="gray">#F2F2F2</color>
+    <color name="logocolor">#b1b1b1</color>
 
     <color name="calender">#265258</color>
     <color name="chat">#ECECEC</color>

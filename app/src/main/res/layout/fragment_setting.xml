@@ -1,9 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:id="@+id/mainlayout"
     tools:context=".ui.employer.fragment.SettingFragment">
 
@@ -52,40 +51,6 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="@dimen/_1sdp"
-                android:layout_margin="@dimen/_3sdp"
-                app:cardBackgroundColor="@color/white">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="@dimen/_5sdp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/active_status"
-                        android:textSize="@dimen/_12sdp"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:textColor="@color/darkgray"/>
-
-                    <ImageView
-                        android:id="@+id/iv_for_activeStatus"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:foreground="?attr/selectableItemBackgroundBorderless"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/on_ico"/>
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
                 android:id="@+id/card_for_changePass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,42 +80,6 @@
                         android:layout_height="@dimen/_25sdp"
                         android:padding="@dimen/_2sdp"
                         app:srcCompat="@drawable/ic_unlocked"
-                        android:layout_alignParentRight="true" />
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_for_tandc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="@dimen/_1sdp"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginRight="@dimen/_3sdp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="@dimen/_5sdp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/term_and_conditions"
-                        android:textSize="@dimen/_12sdp"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:textColor="@color/darkgray"/>
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:padding="@dimen/_2sdp"
-                        app:srcCompat="@drawable/ic_file"
                         android:layout_alignParentRight="true" />
 
                 </RelativeLayout>
@@ -269,8 +198,8 @@
                 android:layout_height="wrap_content"
                 app:cardElevation="@dimen/_1sdp"
                 android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginBottom="@dimen/_3sdp"
                 android:layout_marginRight="@dimen/_3sdp"
+                android:layout_marginBottom="@dimen/_3sdp"
                 app:cardBackgroundColor="@color/white"
                 android:layout_marginTop="@dimen/_10sdp">
 
@@ -301,8 +230,75 @@
 
             </android.support.v7.widget.CardView>
 
+            <TextView
+                android:id="@+id/tvActiceStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deactivate_account"
+                android:textSize="@dimen/_12sdp"
+                android:paddingTop="@dimen/_10sdp"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/yellow"/>
+
         </LinearLayout>
 
     </ScrollView>
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_des"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/darkgray"/>
+
+        <TextView
+            android:id="@+id/tvTermsAndCondi"
+            android:layout_below="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/term_and_conditions"
+            android:textSize="@dimen/_12sdp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/yellow"/>
+
+        <TextView
+            android:id="@+id/tvAnd"
+            android:layout_below="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/and"
+            android:layout_marginLeft="@dimen/_3sdp"
+            android:layout_toRightOf="@+id/tvTermsAndCondi"
+            android:textSize="@dimen/_12sdp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/darkgray"/>
+
+        <TextView
+            android:id="@+id/tvPrivacyPolicy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_3sdp"
+            android:text="@string/and_privacy_policy"
+            android:layout_toRightOf="@+id/tvAnd"
+            android:layout_below="@+id/description"
+            android:textSize="@dimen/_12sdp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/yellow"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

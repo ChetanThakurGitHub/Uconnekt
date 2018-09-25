@@ -16,6 +16,7 @@ public class Constant {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 2;
     public static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 4;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 5;
+    public static final int REQUEST_CHECK_SETTINGS_GPS = 96;
     public static int NETWORK_CHECK = 0;
     public static int CHAT = 0;
     public static int API = 0;

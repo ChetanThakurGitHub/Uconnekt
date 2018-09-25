@@ -10,11 +10,15 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -62,7 +66,6 @@ import com.uconnekt.ui.employer.activity.RequestActivity;
 import com.uconnekt.ui.employer.activity.TrackInterviewActivity;
 import com.uconnekt.ui.individual.activity.TrakProgressActivity;
 import com.uconnekt.util.Constant;
-import com.uconnekt.util.Utils;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
 
@@ -95,13 +98,14 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     private DatabaseReference chatRef, databaseReference ;
     private Uri imageUri, photoURI;
     private RelativeLayout mainlayout,layoutTyping;
-    private boolean isCamera,ischeck = true;
+    private boolean isCamera,ischeck = true,isTyping= false;
     public FirebaseData firebaseData;
     public Object deleteTime,oppDeleteTime;
     private int totalCount = 0, tempCount = 0, listIndex = 0, increment = 0;
     private String lastIndexmessagekey= "";
     private SwipeRefreshLayout chat_swipe;
     private PopupMenu popup;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -364,9 +368,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                     listIndex = increment;
                 }
                 listmap.put(dataSnapshot.getKey(), messageOutput);
-            }/*else {
-                chatRef.child(messageOutput.noadKey).removeValue();//delete message
-            }*/
+            }
         }else {
             if (ischeck) {
                 lastIndexmessagekey = dataSnapshot.getKey();
@@ -429,7 +431,47 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         popup.getMenuInflater().inflate(R.menu.menu_main, popup.getMenu());
 
         layoutTyping = findViewById(R.id.layoutTyping);
+
+        EditText et_for_sendTxt = new EditText(this);
+        et_for_sendTxt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (s.length() != 0){
+                setIsTypingStatus();
+            }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        et_for_sendTxt.addTextChangedListener(textWatcher);
     }
+
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            isTyping = false;
+            FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(0);
+            // Log.e("Chat","set is typing to false");
+        }
+    };
+
+    private void setIsTypingStatus() {
+        System.out.println("printing......."+isTyping);
+        if (!isTyping){
+            // Log.e("Chat","set is typing to fcm");
+            FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(1);
+        }
+        isTyping = true;
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 3000);
+
+    }
+
 
     private void writeToDBProfiles(FullChatting chatModel) {
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -182,6 +183,9 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         view.findViewById(R.id.layout_for_strength2).setOnClickListener(this);
         view.findViewById(R.id.layout_for_strength3).setOnClickListener(this);
         tv_for_specialty = view.findViewById(R.id.tv_for_specialty);
+
+        EditText et_for_bio = new EditText(activity);
+        et_for_bio.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
     }
 
     @Override

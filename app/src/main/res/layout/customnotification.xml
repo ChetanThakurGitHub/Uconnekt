@@ -8,6 +8,7 @@
         android:layout_height="@dimen/_40sdp"
         android:layout_margin="@dimen/_5sdp"
         android:paddingTop="5dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/new_app_ico" />
 
     <LinearLayout

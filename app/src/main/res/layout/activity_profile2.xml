@@ -417,11 +417,12 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.CardView
+       <!--    <android.support.v7.widget.CardView
                 android:id="@+id/card_for_chat"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 app:cardCornerRadius="@dimen/_20sdp"
+               android:visibility="gone"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_marginTop="@dimen/_120sdp"
                 app:cardBackgroundColor="@color/white"
@@ -437,10 +438,9 @@
                     android:tint="@color/yellow"
                     app:srcCompat="@drawable/ic_menu" />
 
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>-->
 
-
-           <!-- <com.github.clans.fab.FloatingActionMenu
+            <com.github.clans.fab.FloatingActionMenu
                 android:id="@+id/float_menu"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
@@ -471,11 +471,11 @@
                     android:id="@+id/fab_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/user"
+                    android:src="@drawable/mail"
 
-                    fab:fab_colorNormal="@color/Black"
-                    fab:fab_colorPressed="@color/green"
-                    fab:fab_colorRipple="@color/green"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white"
+                    fab:fab_colorRipple="@color/white"
                     fab:fab_size="mini"
                     fab:fab_label="Email" />
 
@@ -483,12 +483,11 @@
                     android:id="@+id/fab_call"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_chat"
-                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/call"
 
-                    fab:fab_colorNormal="@color/Black"
-                    fab:fab_colorPressed="@color/green"
-                    fab:fab_colorRipple="@color/green"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white"
+                    fab:fab_colorRipple="@color/white"
                     fab:fab_size="mini"
                     fab:fab_label="Call" />
 
@@ -496,15 +495,15 @@
                     android:id="@+id/fab_chat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_chat"
+                    android:src="@drawable/chat"
 
-                    fab:fab_colorNormal="@color/Black"
-                    fab:fab_colorPressed="@color/green"
-                    fab:fab_colorRipple="@color/green"
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white"
+                    fab:fab_colorRipple="@color/white"
                     fab:fab_size="mini"
                     fab:fab_label="Chat" />
 
-            </com.github.clans.fab.FloatingActionMenu>-->
+            </com.github.clans.fab.FloatingActionMenu>
 
         </RelativeLayout>
 

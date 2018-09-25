@@ -445,6 +445,7 @@
                             android:gravity="top|left"
                             android:paddingBottom="@dimen/_20sdp"
                             android:textSize="@dimen/_11sdp"
+                            android:inputType="textCapSentences"
                             android:imeOptions="actionDone"
                             android:layout_above="@+id/text"
                             android:textColor="@color/darkgray"
@@ -484,6 +485,7 @@
                     </RelativeLayout>
 
                     <TextView
+                        android:id="@+id/tvBusDes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/business_description"
@@ -508,6 +510,7 @@
                             android:gravity="top|left"
                             android:paddingBottom="@dimen/_20sdp"
                             android:textSize="@dimen/_11sdp"
+                            android:inputType="textCapSentences"
                             android:imeOptions="actionDone"
                             android:layout_above="@+id/text1"
                             android:textColor="@color/darkgray"

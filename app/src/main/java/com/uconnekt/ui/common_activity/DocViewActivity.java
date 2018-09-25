@@ -2,6 +2,7 @@ package com.uconnekt.ui.common_activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -45,21 +46,24 @@ public class DocViewActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doc_view);
 
+        Bundle bundle = getIntent().getExtras();
+        Boolean check = bundle.getBoolean("title");
+
         webView = findViewById(R.id.webView);
         dialog = new ProgressDialog(DocViewActivity.this);
         dialog.setMessage("Loading please wait.....");
         dialog.setCancelable(false);
 
-        initView();
+        initView(check);
     }
 
 
-    private void initView() {
+    private void initView(Boolean check) {
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_backIco.setVisibility(View.VISIBLE);
         iv_for_backIco.setOnClickListener(this);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
-        tv_for_tittle.setText(getString(R.string.term_and_conditions));
+        tv_for_tittle.setText(getString(check?R.string.term_and_conditions:R.string.privacy_policy));
         tandc();
 
     }

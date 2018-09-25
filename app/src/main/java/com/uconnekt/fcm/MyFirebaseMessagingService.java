@@ -347,7 +347,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             connection.connect();
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            myBitmap = getRoundedCornerBitmap(myBitmap);
+           // myBitmap = getRoundedCornerBitmap(myBitmap);
             return myBitmap;
         } catch (IOException e) {
             e.printStackTrace();

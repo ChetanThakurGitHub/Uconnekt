@@ -92,6 +92,7 @@
                 android:background="@null"
                 android:fontFamily="@font/montserrat_regular"
                 android:hint="@string/type_here_msg"
+                android:inputType="textCapSentences"
                 android:maxHeight="@dimen/_150sdp"
                 android:padding="@dimen/_5sdp"
                 android:textColor="@color/darkgray"

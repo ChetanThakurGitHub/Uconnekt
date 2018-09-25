@@ -119,6 +119,7 @@ public class JobHomeActivity extends BaseActivity implements View.OnClickListene
         iv_for_view = findViewById(R.id.iv_for_view);
         iv_for_share = findViewById(R.id.iv_for_share);
         tvChatBadge = findViewById(R.id.tvChatBadge);
+        getMessageList();
     }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

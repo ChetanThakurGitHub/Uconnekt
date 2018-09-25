@@ -34,6 +34,7 @@ import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
@@ -71,14 +72,15 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
     private JobHomeActivity activity;
     private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "",profileUrl = "",email = "",phone = "";
     private static final String ARG_PARAM1 = "param1";
-    private TextView tv_for_bio,tv_for_description,tv_for_favofite,tv_for_review,tv_for_aofs,tv_for_address,tv_for_recomend,tv_for_noReview,tv_for_specializationName,iv_for_fullName,tv_for_businessName;
+    private TextView tv_for_bio,tv_for_description,tv_for_favofite,tv_for_review,tv_for_aofs,tv_for_address,tv_for_recomend,tv_for_noReview,tv_for_specializationName,iv_for_fullName,tv_for_businessName,tvBusDes;
     private RatingBar ratingBar;
-    private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo,iv_for_chat;
+    private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo;
     private int favourite_count = 0,recommend_count = 0,check = 0;;
     public ArrayList<ReviewList> list = new ArrayList<>();
     private ReviewListAdapter reviewListAdapter;
     private RecyclerView recycler_view;
-    private PopupMenu popup;
+    private FloatingActionMenu float_menu;
+
 
     public static IndiProfileFragment newInstance(String userId) {
         IndiProfileFragment fragment = new IndiProfileFragment();
@@ -139,8 +141,12 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         iv_for_recommend = view.findViewById(R.id.iv_for_recommend);
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_for_noReview = view.findViewById(R.id.tv_for_noReview);
-        iv_for_chat = view.findViewById(R.id.iv_for_chat);
-        iv_for_chat.setOnClickListener(this);
+        tvBusDes = view.findViewById(R.id.tvBusDes);
+
+        float_menu = view.findViewById(R.id.float_menu);
+        view.findViewById(R.id.fab_chat).setOnClickListener(this);
+        view.findViewById(R.id.fab_call).setOnClickListener(this);
+        view.findViewById(R.id.fab_email).setOnClickListener(this);
     }
 
     private void view(){
@@ -227,7 +233,7 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                         tv_for_noReview.setVisibility(list.size()==0?View.VISIBLE:View.GONE);
 
                         setData();
-                        setApiData(bio, rating, review_count,description);
+                        setApiData(bio, rating, review_count,description,businessName);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -240,7 +246,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
             @Override
             public void onNetError() {
                 startActivity(new Intent(activity, NetworkActivity.class));
-
             }
 
             @Override
@@ -261,11 +266,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         activity.hideKeyboard();
         switch (v.getId()){
-            case R.id.iv_for_chat:
-                popup = new PopupMenu(activity, iv_for_chat);
-                popup.getMenuInflater().inflate(R.menu.profile_main, popup.getMenu());
-                menuClick();
-                break;
             case R.id.iv_for_share:
                 deletelDailog();
                 break;
@@ -295,32 +295,23 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
                 intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;
+            case R.id.fab_call:
+                float_menu.close(false);
+                PermissionAll permissionAll = new PermissionAll();
+                if (permissionAll.checkCallingPermission(activity))
+                    callingIntent();
+                break;
+            case R.id.fab_chat:
+                float_menu.close(false);
+                intent = new Intent(activity, ChatActivity.class);
+                intent.putExtra("USERID", userId);
+                startActivity(intent);
+                break;
+            case R.id.fab_email:
+                float_menu.close(false);
+                sharOnEmail(email);
+                break;
         }
-    }
-
-
-    private void menuClick() {
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.chat:
-                        Intent intent = new Intent(activity, ChatActivity.class);
-                        intent.putExtra("USERID", userId);
-                        startActivity(intent);
-                        break;
-                    case R.id.call:
-                        PermissionAll permissionAll = new PermissionAll();
-                        if (permissionAll.checkCallingPermission(activity))
-                            callingIntent();
-                        break;
-                    case R.id.email:
-                        sharOnEmail(email);
-                        break;
-                }
-                return true;
-            }
-        });
-        popup.show();
     }
 
 
@@ -349,15 +340,15 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         gmail.putExtra(Intent.EXTRA_TEXT, "Hii android !");
         startActivity(gmail);*/
 
-
-
-    private void setApiData(String bio, String rating, String review_count, String description) {
+    @SuppressLint("SetTextI18n")
+    private void setApiData(String bio, String rating, String review_count, String description, String businessName) {
         tv_for_bio.setText(bio.isEmpty()?"NA":bio);
         tv_for_description.setText(description.isEmpty()?"NA":description);
         tv_for_favofite.setText(favourite_count==0?"0 Favourite":favourite_count+ " Favourite");
         tv_for_review.setText(review_count.isEmpty()?"0 Reviews":review_count+ " Reviews");
         tv_for_recomend.setText(recommend_count==0?"0 Recommend":recommend_count+ " Recommend");
         ratingBar.setRating(rating.isEmpty()?0:Float.parseFloat(rating));
+        tvBusDes.setText("About "+Uconnekt.session.getUserInfo().businessName);
     }
 
     @Override

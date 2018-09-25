@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -73,6 +74,11 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
         };
         etFeedback.addTextChangedListener(textWatcher);
 
+        EditText etSubject = new EditText(this);
+        etSubject.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        EditText etFeedback = new EditText(this);
+        etFeedback.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
     }
 
     @Override

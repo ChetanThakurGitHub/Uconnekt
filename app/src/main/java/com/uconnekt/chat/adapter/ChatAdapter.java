@@ -282,15 +282,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.iv_for_sender.setVisibility(View.GONE);
                     holder.tv_for_senderTxt.setVisibility(View.VISIBLE);
 
-                    /*//extra code for testing
+                    //extra code for testing
                     Spannable name = new SpannableString(chatting.message);
                     name.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.darkgray)), 0, name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     holder.tv_for_senderTxt.setText(name);
                     Spannable like = new SpannableString(time());
                     like.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.yellow)), 0, like.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    holder.tv_for_senderTxt.append("\n"+like);*/
+                    holder.tv_for_senderTxt.append("\n"+like);
 
-                    holder.tv_for_senderTxt.setText(chatting.message);
+                   // holder.tv_for_senderTxt.setText(chatting.message);
                 }
                 holder.tv_for_senderTime.setText(time());
 

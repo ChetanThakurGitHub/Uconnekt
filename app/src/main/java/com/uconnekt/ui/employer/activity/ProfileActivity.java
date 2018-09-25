@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -24,7 +26,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
@@ -49,6 +53,8 @@ import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Map;
 
+import static com.uconnekt.util.Constant.CALLING;
+
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String userId = "", profileImage = "", fullName = "", jobTitleName = "", specializationName = "", address = "", profileUrl = "",email = "",phone = "";
@@ -56,8 +62,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private int favourite_count = 0, recommend_count = 0;
     private TextView tv_for_bio, tv_for_review_count, tv_for_favourite_count, tv_for_recomend,
             tv_for_aofs, tv_for_address, tv_for_company, tv_for_fullName;
-    private PopupMenu popup;
-    private CardView card_for_chat;
+   // private PopupMenu popup;
+    //private CardView card_for_chat;
     private FloatingActionMenu float_menu;
 
     @Override
@@ -88,12 +94,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tv_for_review_count = findViewById(R.id.tv_for_review_count);
         tv_for_favourite_count = findViewById(R.id.tv_for_favourite_count);
         tv_for_recomend = findViewById(R.id.tv_for_recomend);
-        card_for_chat = findViewById(R.id.card_for_chat);
-        /*float_menu = findViewById(R.id.float_menu);
-        float_menu.setOnClickListener(this);
+        //card_for_chat = findViewById(R.id.card_for_chat);
+        float_menu = findViewById(R.id.float_menu);
         findViewById(R.id.fab_chat).setOnClickListener(this);
         findViewById(R.id.fab_call).setOnClickListener(this);
-        findViewById(R.id.fab_chat).setOnClickListener(this);*/
+        findViewById(R.id.fab_email).setOnClickListener(this);
 
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
         tv_for_tittle.setText(R.string.profile);
@@ -106,11 +111,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.layout_for_basicInfo).setOnClickListener(this);
         findViewById(R.id.layout_for_Experience).setOnClickListener(this);
         findViewById(R.id.layout_for_Resume).setOnClickListener(this);
-        card_for_chat.setOnClickListener(this);
+        iv_profile_image.setOnClickListener(this);
+        //card_for_chat.setOnClickListener(this);
     }
 
     private void setData(String profileImage, String fullName, String jobTitleName, String specializationName, String address) {
-        String backImage = profileImage.replace("/thumb","");
+        String backImage = profileImage.replace("/medium","");
         Picasso.with(this).load(backImage).into(profile);
         Picasso.with(this).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName.isEmpty() ? "NA" : fullName);
@@ -120,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private void menuClick() {
+  /*  private void menuClick() {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -142,7 +148,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         popup.show();
-    }
+    }*/
 
 
     private void callingIntent() {
@@ -354,6 +360,27 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CALLING: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        //success permission granted & call Location method
+                        Intent intent4 = new Intent(Intent.ACTION_CALL);
+                        intent4.setData(Uri.parse("tel:" + phone));
+                        startActivity(intent4);
+                    }
+                } else {
+                    Toast.makeText(this, "Deny calling permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
+        }
+    }
+
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_for_favourite:
@@ -377,40 +404,69 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra("USERID",userId);
                 startActivity(intent);
                 break;
-            case R.id.card_for_chat:
-               /* intent = new Intent(this,ChatActivity.class);
+        /*    case R.id.card_for_chat:
+               *//* intent = new Intent(this,ChatActivity.class);
                 intent.putExtra("USERID",userId);
-                startActivity(intent);*/
+                startActivity(intent);*//*
 
                 popup = new PopupMenu(this, card_for_chat);
                 popup.getMenuInflater().inflate(R.menu.profile_main, popup.getMenu());
                 menuClick();
-                break;
+                break;*/
             case R.id.iv_for_share:
                 deletelDailog();
                 break;
             case R.id.iv_for_backIco:
                 finish();
                 break;
-           /* case R.id.fab_call:
+            case R.id.fab_call:
+                float_menu.close(false);
                 PermissionAll permissionAll = new PermissionAll();
                 if (permissionAll.checkCallingPermission(ProfileActivity.this))
                     callingIntent();
                 break;
             case R.id.fab_chat:
+                float_menu.close(false);
                 intent = new Intent(ProfileActivity.this, ChatActivity.class);
                 intent.putExtra("USERID", userId);
                 startActivity(intent);
                 break;
             case R.id.fab_email:
+                float_menu.close(false);
                 sharOnEmail(email);
                 break;
-            case R.id.float_menu:
-                float_menu.close(true);
-                MyCustomMessage.getInstance(this).snackbar(float_menu,getString(R.string.under_development_mode));
-                break;*/
+            case R.id.iv_profile_image:
+                zoomImageDialog();
+                break;
         }
     }
+
+
+    private void zoomImageDialog() {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_zoomimage);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        ImageView iv_for_cansel = dialog.findViewById(R.id.iv_for_cansel);
+        iv_for_cansel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        PhotoView iv_for_image = dialog.findViewById(R.id.iv_for_image);
+
+        if (profileImage != null && !profileImage.equals("")) {
+            Picasso.with(this).load(profileImage).placeholder(R.drawable.ic_background).into(iv_for_image);
+        } else {
+            Picasso.with(this).load(R.drawable.ic_background).fit().into(iv_for_image);
+        }
+        dialog.show();
+    }
+
 
     @Override
     public void onBackPressed() {

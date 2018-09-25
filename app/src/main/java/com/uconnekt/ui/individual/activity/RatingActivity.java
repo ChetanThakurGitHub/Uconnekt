@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -86,6 +87,9 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
         ratingBar = findViewById(R.id.ratingBar);
         iv_for_checkBox = findViewById(R.id.iv_for_checkBox);
         mainlayout = findViewById(R.id.mainlayout);
+
+        EditText et_for_comment = new EditText(this);
+        et_for_comment.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
     }
 
     @Override

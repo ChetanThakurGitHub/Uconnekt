@@ -163,12 +163,16 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         if (mapFragment != null)mapFragment.tv_for_speName.setText("");
 
         sp_for_availability.setAdapter(weekSpAdapter);
+        sp_for_salary.setAdapter(salarySpAdapter);
+        sp_for_empType.setAdapter(empTypeSpAdapter);
         tv_for_jobTitle.setText("");
         tv_for_aofs.setText("");
         tv_for_value.setText("");
         tv_for_strength.setText("");
 
         weekSpAdapter.notifyDataSetChanged();
+        salarySpAdapter.notifyDataSetChanged();
+        empTypeSpAdapter.notifyDataSetChanged();
         tv_for_address.setText("");
     }
 
@@ -308,7 +312,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                             JobTitle jobTitles = new JobTitle();
                             JSONObject object = results2.getJSONObject(i);
                             jobTitles.jobTitleId = object.getString("jobTitleId");
-                            jobTitles.jobTitleName = object.getString("jobTitleName");
+                            String total = object.getString("total_registered");
+                            jobTitles.jobTitleName = object.getString("jobTitleName")+" ("+total+")";
                             jobTitleList.add(jobTitles);
                         }
                         spinnerDialog = new SpinnerDialog(activity, jobTitleList, getString(R.string.select_job_tittle));

@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
+import com.github.clans.fab.FloatingActionMenu;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
@@ -41,6 +42,7 @@ import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.BasicInfoActivity;
+import com.uconnekt.ui.employer.activity.ProfileActivity;
 import com.uconnekt.ui.employer.activity.ResumeActivity;
 import com.uconnekt.ui.employer.activity.experience.ExpActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
@@ -69,11 +71,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static final String ARG_PARAM1 = "param1";
     private String userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",profileUrl = "",phone= "",email = "";
     private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,profile;
-    private CardView card_for_chat;
     private int favourite_count = 0,recommend_count = 0,check = 0;
     private TextView tv_for_bio,tv_for_review_count,tv_for_favourite_count,tv_for_recomend,
             tv_for_aofs,tv_for_address,tv_for_company,tv_for_fullName;
-    private PopupMenu popup;
+    private FloatingActionMenu float_menu;
 
     public static ProfileFragment newInstance(String userID) {
         ProfileFragment fragment = new ProfileFragment();
@@ -104,29 +105,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         return view;
     }
 
-    private void menuClick() {
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.chat:
-                        Intent intent = new Intent(activity,ChatActivity.class);
-                        intent.putExtra("USERID",userId);
-                        activity.startActivity(intent);
-                        break;
-                    case R.id.call:
-                        PermissionAll permissionAll = new PermissionAll();
-                        if (permissionAll.checkCallingPermission(activity))callingIntent();
-                        break;
-                    case R.id.email:
-                        sharOnEmail(email);
-                        break;
-                }
-                return true;
-            }
-        });
-        popup.show();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -136,7 +114,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                             == PackageManager.PERMISSION_GRANTED) {
                         //success permission granted & call Location method
                         Intent intent4 = new Intent(Intent.ACTION_CALL);
-                        intent4.setData(Uri.parse("tel:" + "01234567889"));
+                        intent4.setData(Uri.parse("tel:" + phone));
                         startActivity(intent4);
                     }
                 } else {
@@ -166,21 +144,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         tv_for_review_count = view.findViewById(R.id.tv_for_review_count);
         tv_for_favourite_count = view.findViewById(R.id.tv_for_favourite_count);
         tv_for_recomend = view.findViewById(R.id.tv_for_recomend);
-        card_for_chat = view.findViewById(R.id.card_for_chat);
         activity.findViewById(R.id.iv_for_share).setOnClickListener(this);
         view.findViewById(R.id.layout_for_basicInfo).setOnClickListener(this);
         view.findViewById(R.id.layout_for_Experience).setOnClickListener(this);
         view.findViewById(R.id.layout_for_Resume).setOnClickListener(this);
-        card_for_chat.setOnClickListener(this);
         view.findViewById(R.id.tv_for_favourite).setOnClickListener(this);
         view.findViewById(R.id.tv_for_recomendTxt).setOnClickListener(this);
         view.findViewById(R.id.tv_for_views).setOnClickListener(this);
         iv_profile_image.setOnClickListener(this);
 
+        float_menu = view.findViewById(R.id.float_menu);
+        view.findViewById(R.id.fab_chat).setOnClickListener(this);
+        view.findViewById(R.id.fab_call).setOnClickListener(this);
+        view.findViewById(R.id.fab_email).setOnClickListener(this);
     }
 
     private void setData(String profileImage, String fullName, String jobTitleName, String specializationName, String address) {
-        String backImage = profileImage.replace("/thumb","");
+        String backImage = profileImage.replace("/medium","");
         Picasso.with(activity).load(backImage).into(profile);
         Picasso.with(activity).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName.isEmpty()?"NA":fullName);
@@ -406,11 +386,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 intent.putExtra("USERID",userId);
                 activity.startActivity(intent);
                 break;
-            case R.id.card_for_chat:
-                popup = new PopupMenu(activity, card_for_chat);
-                popup.getMenuInflater().inflate(R.menu.profile_main, popup.getMenu());
-                menuClick();
-                break;
             case R.id.tv_for_favourite:
                 intent = new Intent(activity,FavouriteActivity.class);
                 intent.putExtra("USERID",userId);
@@ -431,6 +406,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.iv_profile_image:
                 zoomImageDialog();
+                break;
+            case R.id.fab_call:
+                float_menu.close(false);
+                PermissionAll permissionAll = new PermissionAll();
+                if (permissionAll.checkCallingPermission(activity))
+                    callingIntent();
+                break;
+            case R.id.fab_chat:
+                float_menu.close(false);
+                intent = new Intent(activity, ChatActivity.class);
+                intent.putExtra("USERID", userId);
+                startActivity(intent);
+                break;
+            case R.id.fab_email:
+                float_menu.close(false);
+                sharOnEmail(email);
                 break;
         }
     }

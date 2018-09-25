@@ -57,6 +57,7 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         super.onCreate(savedInstanceState);
         if (getArguments()!=null){
             String userID =  getArguments().getString(ARG_PARAM1);
+            assert userID != null;
             switch (userID) {
                 case "profile_view":
                     activity.startActivity(new Intent(activity, ViewActivity.class));
@@ -207,7 +208,7 @@ public class IndiMyProfileFragment extends Fragment implements View.OnClickListe
         TextView tv_for_aofs = view.findViewById(R.id.tv_for_aofs);
         TextView tv_for_address = view.findViewById(R.id.tv_for_address);
 
-        String backImage = profileImage.replace("/thumb","");
+        String backImage = profileImage.replace("/medium","");
         Picasso.with(activity).load(backImage).into(bg_profile);
         Picasso.with(activity).load(profileImage).into(iv_profile_image);
         tv_for_fullName.setText(fullName);

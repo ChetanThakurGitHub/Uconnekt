@@ -1,5 +1,6 @@
 package com.uconnekt.ui.employer.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class ViewProifileFragment extends Fragment {
         this.activity = (HomeActivity) context;
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView(View view) {
         ImageView iv_profile_image = view.findViewById(R.id.iv_profile_image);
         iv_company_logo = view.findViewById(R.id.iv_company_logo);
@@ -85,7 +87,8 @@ public class ViewProifileFragment extends Fragment {
         iv_for_recommend = view.findViewById(R.id.iv_for_recommend);
         recycler_view = view.findViewById(R.id.recycler_view);
         tv_for_noReview = view.findViewById(R.id.tv_for_noReview);
-
+        TextView tvBusDes = view.findViewById(R.id.tvBusDes);
+        tvBusDes.setText("About "+Uconnekt.session.getUserInfo().businessName);
 
         if (!Uconnekt.session.getUserInfo().profileImage.isEmpty())Picasso.with(activity).load(Uconnekt.session.getUserInfo().profileImage).into(iv_profile_image);
         iv_for_fullName.setText(Uconnekt.session.getUserInfo().fullName);

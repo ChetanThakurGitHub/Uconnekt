@@ -3,7 +3,10 @@ package com.uconnekt.ui.common_activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +43,7 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         tvHref2.setMovementMethod(LinkMovementMethod.getInstance());
         //tvHref2.setText(Html.fromHtml(getString(R.string.uconneckt_href)));
         tvHref2.setText(Html.fromHtml("Visit our website: <a href='https://www.connektus.com.au/'> www.connektus.com.au</a> for more about our app."));
+
     }
 
     @Override

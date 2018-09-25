@@ -42,7 +42,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
         SpecialityList specialityList = specialityLists.get(position);
 
         if(Uconnekt.session.getUserInfo().userType.equals("business") && position != 0) {
-            holder.tv_for_specializationName.setText(specialityList.specializationName +" ( "+ specialityList.totalRegistered+" )");
+            holder.tv_for_specializationName.setText(specialityList.specializationName +" ("+ specialityList.totalRegistered+")");
         }else {
             holder.tv_for_specializationName.setText(specialityList.specializationName);
         }

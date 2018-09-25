@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainlayout"
     android:background="@color/white"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     tools:context="com.uconnekt.ui.employer.fragment.ProfileFragment">
 
     <ScrollView
@@ -423,28 +424,70 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_for_chat"
-                android:layout_width="@dimen/_40sdp"
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/float_menu"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                app:cardCornerRadius="@dimen/_20sdp"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginTop="@dimen/_120sdp"
-                app:cardBackgroundColor="@color/white"
+                android:layout_marginTop="@dimen/_110sdp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/_20sdp"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="@dimen/_20sdp">
+                android:layout_marginEnd="@dimen/_20sdp"
+                app:fab_showAnimation="@anim/fab_scale_down"
+                app:fab_hideAnimation="@anim/fab_scale_up"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                fab:menu_icon="@drawable/ic_add"
+                fab:menu_fab_size="normal"
+                fab:menu_colorNormal="@color/white"
+                fab:menu_colorPressed="@color/white"
+                fab:menu_labels_ellipsize="end"
+                fab:menu_labels_singleLine="true"
+                fab:menu_openDirection="down"
+                fab:menu_labels_colorNormal="@color/yellow"
+                fab:menu_labels_showShadow="false"
+                fab:menu_backgroundColor="@color/transparent"
+                android:elevation="@dimen/_2sdp">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="@dimen/_8sdp"
-                    android:tint="@color/yellow"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    app:srcCompat="@drawable/ic_menu" />
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/mail"
 
-            </android.support.v7.widget.CardView>
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white"
+                    fab:fab_colorRipple="@color/white"
+                    fab:fab_size="mini"
+                    fab:fab_label="Email" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/call"
+
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white"
+                    fab:fab_colorRipple="@color/white"
+                    fab:fab_size="mini"
+                    fab:fab_label="Call" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/chat"
+
+                    fab:fab_colorNormal="@color/white"
+                    fab:fab_colorPressed="@color/white"
+                    fab:fab_colorRipple="@color/white"
+                    fab:fab_size="mini"
+                    fab:fab_label="Chat" />
+
+            </com.github.clans.fab.FloatingActionMenu>
 
         </RelativeLayout>
 

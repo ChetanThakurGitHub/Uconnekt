@@ -1,5 +1,6 @@
 package com.uconnekt.ui.employer.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -195,6 +196,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         }.executeVolley();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setData(String fullName, String businessName, String jobTitleName, String address, View view, String rating, String bio, String specializationName, String company_logo, String profileImage, String favourite_count, String recommend_count, String description) {
         TextView tv_for_fullName = view.findViewById(R.id.tv_for_fullName);tv_for_fullName.setText(fullName);
         TextView tv_for_businessName = view.findViewById(R.id.tv_for_businessName);tv_for_businessName.setText(businessName);
@@ -208,6 +210,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener 
         RatingBar ratingBar = view.findViewById(R.id.ratingBar);ratingBar.setRating(rating.isEmpty()?0:Float.parseFloat(rating));
         ImageView iv_company_logo = view.findViewById(R.id.iv_company_logo);Picasso.with(activity).load(company_logo).into(iv_company_logo);
         ImageView iv_profile_image = view.findViewById(R.id.iv_profile_image);Picasso.with(activity).load(profileImage).into(iv_profile_image);
+        TextView tvBusDes = view.findViewById(R.id.tvBusDes);tvBusDes.setText("About "+businessName);
     }
 
     @Override

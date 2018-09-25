@@ -68,6 +68,7 @@
                         android:textSize="@dimen/_12sdp"
                         android:textColor="@color/darkgray"
                         android:hint="@string/comment"
+                        android:inputType="textCapSentences"
                         android:gravity="top|start"
                         android:layout_above="@+id/tv_for_txt"
                         android:maxLength="200"

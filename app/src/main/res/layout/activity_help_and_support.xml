@@ -82,6 +82,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/darkgray"
                         android:text="@string/feed_free_to"
+                        android:layout_marginRight="@dimen/_2sdp"
                         android:fontFamily="@font/montserrat_regular"
                         android:textSize="@dimen/_12sdp" />
 

@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -143,9 +144,9 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
             }
         };
         et_for_description.addTextChangedListener(textWatcher1);
-
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView(){
         tv_for_jobTitle = findViewById(R.id.tv_for_jobTitle);
         tv_for_aofs = findViewById(R.id.tv_for_aofs);
@@ -167,6 +168,15 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         findViewById(R.id.btn_for_next).setOnClickListener(this);
         findViewById(R.id.layout_for_aofs).setOnClickListener(this);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);tv_for_tittle.setText(R.string.profile);
+
+        EditText et_for_bio = new EditText(this);
+        et_for_bio.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        EditText et_for_description = new EditText(this);
+        et_for_description.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        TextView tvBusDes = findViewById(R.id.tvBusDes);
+        tvBusDes.setText("About "+Uconnekt.session.getUserInfo().businessName);
     }
 
     @Override

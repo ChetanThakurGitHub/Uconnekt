@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.uconnekt.R;
@@ -33,7 +34,7 @@ import java.util.Map;
 public class SplashActivity extends AppCompatActivity implements SplashView {
     private Animation zoomOut;
     private FrameLayout uppFrame;
-    private ImageView inImage;
+    private LinearLayout inImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -26,7 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.uconnekt.R;
@@ -54,17 +58,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import static com.uconnekt.util.Constant.CALLING;
+
 public class IndiProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String rating = "",userId = "",profileImage = "",fullName = "",jobTitleName = "",specializationName = "",address = "",company_logo = "",businessName = "",profileUrl = "",email = "",phone="";
     private TextView tv_for_bio,tv_for_favofite,tv_for_review,tv_for_aofs,tv_for_address,tv_for_recomend,tv_for_noReview,tv_for_specializationName,iv_for_fullName,tv_for_businessName;
     private RatingBar ratingBar;
-    private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo,iv_for_chat;
+    private ImageView iv_for_favourite,iv_for_recommend,iv_profile_image,iv_company_logo;
     private int favourite_count = 0,recommend_count = 0;
     public ArrayList<ReviewList> list = new ArrayList<>();
     private ReviewListAdapter reviewListAdapter;
     private RecyclerView recycler_view;
-    private PopupMenu popup;
+    private FloatingActionMenu float_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,7 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_profile);
 
         Bundle bundle = getIntent().getExtras();
+        assert bundle != null;
         userId = bundle.getString("UserId");
 
         initView();
@@ -88,8 +95,6 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
 
 
     private void initView() {
-        iv_for_chat = findViewById(R.id.iv_for_chat);
-        iv_for_chat.setOnClickListener(this);
         findViewById(R.id.layout_for_rate).setOnClickListener(this);
         findViewById(R.id.iv_for_share).setOnClickListener(this);
         findViewById(R.id.iv_for_backIco).setOnClickListener(this);
@@ -112,6 +117,11 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
         tv_for_noReview = findViewById(R.id.tv_for_noReview);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
         tv_for_tittle.setText(R.string.profile);
+
+        float_menu = findViewById(R.id.float_menu);
+        findViewById(R.id.fab_chat).setOnClickListener(this);
+        findViewById(R.id.fab_call).setOnClickListener(this);
+        findViewById(R.id.fab_email).setOnClickListener(this);
     }
 
     private void setData(){
@@ -204,14 +214,6 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.iv_for_chat:
-                /*Intent intent = new Intent(this,ChatActivity.class);
-                intent.putExtra("USERID",userId);
-                startActivity(intent);*/
-                popup = new PopupMenu(this, iv_for_chat);
-                popup.getMenuInflater().inflate(R.menu.profile_main, popup.getMenu());
-                menuClick();
-                break;
             case R.id.iv_for_share:
                 deletelDailog();
                 break;
@@ -234,45 +236,29 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.iv_for_backIco:
                 onBackPressed();
                 break;
+            case R.id.fab_call:
+                float_menu.close(false);
+                PermissionAll permissionAll = new PermissionAll();
+                if (permissionAll.checkCallingPermission(this))
+                    callingIntent();
+                break;
+            case R.id.fab_chat:
+                float_menu.close(false);
+                intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("USERID", userId);
+                startActivity(intent);
+                break;
+            case R.id.fab_email:
+                float_menu.close(false);
+                sharOnEmail(email);
+                break;
         }
     }
-
-    private void menuClick() {
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.chat:
-                        Intent intent = new Intent(IndiProfileActivity.this, ChatActivity.class);
-                        intent.putExtra("USERID", userId);
-                        startActivity(intent);
-                        break;
-                    case R.id.call:
-                        PermissionAll permissionAll = new PermissionAll();
-                        if (permissionAll.checkCallingPermission(IndiProfileActivity.this))
-                            callingIntent();
-                        break;
-                    case R.id.email:
-                        sharOnEmail(email);
-                        break;
-                }
-                return true;
-            }
-        });
-        popup.show();
-    }
-
 
     private void callingIntent() {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:" + phone));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         startActivity(intent);
@@ -304,6 +290,27 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
         }
         super.onResume();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CALLING: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        //success permission granted & call Location method
+                        Intent intent4 = new Intent(Intent.ACTION_CALL);
+                        intent4.setData(Uri.parse("tel:" + phone));
+                        startActivity(intent4);
+                    }
+                } else {
+                    Toast.makeText(this, "Deny calling permission", Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
+        }
+    }
+
 
     private void favourite(){
         new VolleyGetPost(this, AllAPIs.FACOURITES, true, "Favourites", true) {

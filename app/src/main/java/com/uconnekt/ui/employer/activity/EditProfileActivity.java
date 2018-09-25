@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -150,6 +151,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         iv_for_profile.setOnClickListener(this);
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView(){
         tv_for_jobTitle = findViewById(R.id.tv_for_jobTitle);
         tv_for_aofs = findViewById(R.id.tv_for_aofs);
@@ -178,6 +180,15 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         ImageView iv_for_backIco = findViewById(R.id.iv_for_backIco);
         iv_for_backIco.setVisibility(View.VISIBLE);iv_for_backIco.setOnClickListener(this);
+
+        EditText et_for_bio = new EditText(this);
+        et_for_bio.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        EditText et_for_description = new EditText(this);
+        et_for_description.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        TextView tvBusDes = findViewById(R.id.tvBusDes);
+        tvBusDes.setText("About "+Uconnekt.session.getUserInfo().businessName);
     }
 
     @Override
@@ -317,7 +328,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         if (requestCode == Constant.GALLERY && resultCode == RESULT_OK && null != data) {
             Uri imageUri = data.getData();
             if (imageUri != null) {
-                CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160, 120).setMaxCropResultSize(4000, 4000).setAspectRatio(400, 400).start(this);
+                CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.RECTANGLE).setMinCropResultSize(160, 160).setMaxCropResultSize(4000, 4000).setAspectRatio(400, 400).start(this);
             } else {
                 MyCustomMessage.getInstance(this).customToast(getString(R.string.something_wrong));
             }}else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {

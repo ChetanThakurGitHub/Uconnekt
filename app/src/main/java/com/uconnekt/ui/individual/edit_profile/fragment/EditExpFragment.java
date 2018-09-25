@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -353,6 +354,12 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         sp_for_weeklist = view.findViewById(R.id.sp_for_weeklist);
         mainlayout = view.findViewById(R.id.mainlayout);
         et_for_companyName = view.findViewById(R.id.et_for_companyName);
+
+        EditText et_for_cdescription = new EditText(activity);
+        et_for_cdescription.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        EditText et_for_pdescription = new EditText(activity);
+        et_for_pdescription.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
     }
 
     @Override
