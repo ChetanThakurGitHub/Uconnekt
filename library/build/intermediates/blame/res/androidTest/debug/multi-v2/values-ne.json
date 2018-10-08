@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/media/mindiii/rrrrrr/Chetan Thakur/Uconnekt/library/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-ne/values-ne.xml",
+            "outputFile": "/media/mindiii/rrrrrr/Chetan Thakur/ConnektUs/library/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-ne/values-ne.xml",
             "map": [
                 {
                     "source": "/home/mindiii/.gradle/caches/transforms-1/files-1.1/play-services-base-11.0.4.aar/ab61e3bd2f79e4af5506cf3161aec004/res/values-ne/values.xml",

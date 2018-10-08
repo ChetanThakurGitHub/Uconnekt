@@ -100,7 +100,7 @@ public class ResumeActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            dialog.dismiss();
+           if (dialog != null)dialog.dismiss();
             super.onPageFinished(view, url);
         }
 

@@ -3,15 +3,12 @@ package com.uconnekt.ui.employer.fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +16,6 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +24,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,9 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
@@ -68,7 +54,6 @@ import com.uconnekt.model.SpecialityList;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.home.HomeActivity;
-import com.uconnekt.util.Constant;
 import com.uconnekt.util.Utils;
 import com.uconnekt.volleymultipart.VolleyGetPost;
 import com.uconnekt.web_services.AllAPIs;
@@ -78,7 +63,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -98,7 +82,8 @@ public class MapFragment extends Fragment implements View.OnClickListener,
     private FusedLocationProviderClient mFusedLocationClient;
     public ArrayList<BusiSearchList> searchLists = new ArrayList<>();
     public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",
-            strengthId = "" ,valueId = "",city = "",state ="",country = "",salary = "", employmentType = "";
+            strengthId = "" ,valueId = "",city = "",state ="",country = "", employmentType = "",
+            minExperience = "", maxExperience = "", minSalarys = "", maxSalarys = "";
     private Double latitude,longitude,clatitude,clongitude;
     public RelativeLayout layout_for_list;
     public Boolean goneVisi = false;
@@ -305,7 +290,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                     }
                 } else {
                     MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.parmission));
-                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, salary, employmentType);
+                    getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, employmentType, minExperience , maxExperience , minSalarys , maxSalarys);
                 }
             }
             break;
@@ -330,7 +315,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
                                 createMarkerCurrent(clatitude,clongitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, salary, employmentType);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false,  employmentType, minExperience , maxExperience , minSalarys , maxSalarys);
                             }else if (Uconnekt.latitude!=0.0){
                                 latitude=Uconnekt.latitude;
                                 longitude=Uconnekt.longitude;
@@ -339,7 +324,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                                 clatitude = Uconnekt.latitude;
                                 clongitude = Uconnekt.longitude;
                                 createMarkerCurrent(clatitude,clongitude);
-                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, salary, employmentType);
+                                getList(specialityID, jobTitleId, availabilityId, locations, strengthId, valueId, 0.0, 0.0, city, state, country, false, employmentType, minExperience , maxExperience , minSalarys , maxSalarys);
                             }
                         }
                     });
@@ -368,8 +353,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                             SpecialityList specialityList = new SpecialityList();
                             JSONObject object = results.getJSONObject(i);
                             specialityList.specializationId = object.getString("jobTitleId");
-                            specialityList.specializationName = object.getString("jobTitleName");
-                            specialityList.totalRegistered = object.getString("total_registered");
+                            specialityList.specializationName = object.getString("jobTitleName") + " ("+object.getString("total_registered")+")";
                             arrayList.add(specialityList);
                         }
                         arrayListBackup.addAll(arrayList);
@@ -399,10 +383,11 @@ public class MapFragment extends Fragment implements View.OnClickListener,
         }.executeVolley();
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys, final boolean check, String salarys, String employmentTypes){
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, final Double latitude, final Double longitude, String citys, String states, String countrys, final boolean check, String employmentTypes, final String minExp, String maxExp, String minSalary, String maxSalary){
         specialityID = specialityIDs;city = citys;state = states;country=countrys;
         jobTitleId = jobTitleIds;availabilityId = availabilityIds;locations = address;strengthId = strengthIds;valueId = valueIds;
-        salary =salarys; employmentType = employmentTypes;
+        employmentType = employmentTypes;
+        minExperience = minExp; maxExperience = maxExp; minSalarys = minSalary; maxSalarys = maxSalary;
 
        if (clatitude!=null&&clongitude!=null)createMarkerCurrent(clatitude,clongitude);
         card_for_viewPro.setVisibility(View.GONE);
@@ -478,7 +463,20 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 params.put("value",valueId);
                 params.put("pagination","0");
                 params.put("employementType",employmentType);
-                params.put("expectedSalary",salary);
+                params.put("experienceFrom",minExperience);
+                params.put("experienceTo",maxExperience);
+                String first = "";
+                if (!minSalarys.isEmpty()){
+                    first = minSalarys.replace("$","");
+                    first = first.replace(",","");
+                }
+                params.put("expectedSalaryFrom",first);
+                String second = "";
+                if (!maxSalarys.isEmpty()){
+                    second = maxSalarys.replace("$","");
+                second = second.replace(",","");
+                }
+                params.put("expectedSalaryTo",second);
                 return params;
             }
 

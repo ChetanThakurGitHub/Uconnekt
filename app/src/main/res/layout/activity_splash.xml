@@ -33,8 +33,8 @@
             android:visibility="gone">
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
             app:srcCompat="@drawable/logo"
             android:layout_gravity="center_horizontal" />
 
@@ -43,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/logocolor"
-                android:textSize="@dimen/_40sdp"
+                android:textSize="@dimen/_25sdp"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/app_name"/>
 
         </LinearLayout>

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/media/mindiii/rrrrrr/Chetan Thakur/Uconnekt/library/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/media/mindiii/rrrrrr/Chetan Thakur/Uconnekt/library/src/debug/jniLibs"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/media/mindiii/rrrrrr/Chetan Thakur/ConnektUs/library/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/media/mindiii/rrrrrr/Chetan Thakur/ConnektUs/library/src/debug/jniLibs"/></dataSet></merger>

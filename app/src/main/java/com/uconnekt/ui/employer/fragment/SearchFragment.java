@@ -57,7 +57,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public Boolean goneVisi = false;
     private TextView tv_for_nodata;
     public ImageView iv_for_arrow;
-    public String specialityID = "",jobTitleId = "",availabilityId = "",salary = "", employmentType = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="";
+    public String specialityID = "",jobTitleId = "",availabilityId = "", employmentType = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="",minExperience = "", maxExperience = "", minSalarys = "", maxSalarys = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,19 +79,19 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 searchLists.clear();
                 mSwipeRefreshLayout.setRefreshing(true);
                 offset = 0;
-                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, salary, employmentType);
+                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, employmentType,minExperience , maxExperience , minSalarys , maxSalarys);
             }
         });
 
         recycler_view.setAdapter(empSearchAdapter);
         recycler_list.setAdapter(listAdapter);
 
-        getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, salary, employmentType);
+        getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, employmentType,minExperience , maxExperience , minSalarys , maxSalarys);
 
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, salary, employmentType);
+                getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, employmentType,minExperience , maxExperience , minSalarys , maxSalarys);
             }
         };
         recycler_view.addOnScrollListener(scrollListener);
@@ -153,13 +153,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         activity = (HomeActivity) context;
     }
 
-    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, String citys, String states, String countrys, String salarys, String employmentTypes){
+    public void getList(String specialityIDs, String jobTitleIds, String availabilityIds, String address, String strengthIds, String valueIds, String citys, String states, String countrys, String employmentTypes, String minExp, String maxExp, String minSalary, String maxSalary){
         specialityID = specialityIDs;city = citys; country = countrys; state = states;
         jobTitleId = jobTitleIds;
-        availabilityId = availabilityIds;salary = salarys;employmentType = employmentTypes;
+        availabilityId = availabilityIds;employmentType = employmentTypes;
         location = address;
         strengthId = strengthIds;
         valueId = valueIds;
+        minExperience = minExp; maxExperience = maxExp; minSalarys = minSalary; maxSalarys = maxSalary;
 
         new VolleyGetPost(activity, AllAPIs.BUSI_SEARCH_LIST,true,"List",true ) {
             @Override
@@ -217,7 +218,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 params.put("pagination","1");
                 params.put("offset",offset+"");
                 params.put("employementType",employmentType);
-                params.put("expectedSalary",salary);
+
+                params.put("experienceFrom",minExperience);
+                params.put("experienceTo",maxExperience);
+                String first = "";
+                if (!minSalarys.isEmpty()){
+                    first = minSalarys.replace("$","");
+                    first = first.replace(",","");
+                }
+                params.put("expectedSalaryFrom",first);
+                String second = "";
+                if (!maxSalarys.isEmpty()){
+                    second = maxSalarys.replace("$","");
+                    second = second.replace(",","");
+                }
+                params.put("expectedSalaryTo",second);
                 return params;
             }
 
@@ -252,8 +267,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                             SpecialityList specialityList = new SpecialityList();
                             JSONObject object = results.getJSONObject(i);
                             specialityList.specializationId = object.getString("jobTitleId");
-                            specialityList.specializationName = object.getString("jobTitleName");
-                            specialityList.totalRegistered = object.getString("total_registered");
+                            specialityList.specializationName = object.getString("jobTitleName") + " ("+object.getString("total_registered")+")";
                             arrayList.add(specialityList);
                         }
                         arrayListBackup.addAll(arrayList);
@@ -288,7 +302,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         super.onResume();
         if (Constant.NETWORK_CHECK == 1){
             getDropDownlist();
-            getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, salary, employmentType);
+            getList(specialityID, jobTitleId, availabilityId, location, strengthId, valueId, city, state, country, employmentType, minExperience , maxExperience , minSalarys , maxSalarys);
         }
         Constant.NETWORK_CHECK =0;
         layout_for_list.setVisibility(View.GONE);

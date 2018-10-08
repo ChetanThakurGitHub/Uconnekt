@@ -105,7 +105,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(getIntent().getData() != null) {
+                    if(getIntent().getData() != null && !Uconnekt.session.getUserInfo().isVerified.equals("1")) {
                         profileView();
                     }else {
                         //Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
@@ -129,7 +129,9 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
                                 }
                             }
                         }else {
-                            startActivity(new Intent(SplashActivity.this, EmailVerificationActivity.class));
+                            Intent intent = new Intent(SplashActivity.this, EmailVerificationActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
                     }
                     SplashActivity.this.finish();
@@ -138,18 +140,21 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             }, Constant.SPLESH_TIME);
         }
 
-
-
     private void profileView(){
         Map<String, String> map = Utils.getQueryString(getIntent().getData().toString());
     if (map.containsKey("token")){
         String email = map.get("email");
         String token = map.get("token");
             if (Uconnekt.session.getUserInfo().userId.equals(map.get("id"))){
-                Intent intent = new Intent(SplashActivity.this, EmailVerificationActivity.class);
-                intent.putExtra("email", email);
-                intent.putExtra("token", token);
-                startActivity(intent);
+                if(!Uconnekt.session.getUserInfo().isVerified.equals("1")) {
+                    Intent intent = new Intent(SplashActivity.this, EmailVerificationActivity.class);
+                    intent.putExtra("email", email);
+                    intent.putExtra("token", token);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(this, "Email address is already verified", Toast.LENGTH_SHORT).show();
+                }
             }else {
                 Toast.makeText(this, "Worng user", Toast.LENGTH_SHORT).show();
             }
@@ -184,4 +189,5 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             e.printStackTrace();
         }
     }
+
 }

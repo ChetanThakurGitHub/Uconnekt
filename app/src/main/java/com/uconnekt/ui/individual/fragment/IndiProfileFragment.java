@@ -331,14 +331,6 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Hii android !");
         startActivity(Intent.createChooser(emailIntent, "Send feedback"));
     }
-       /* Intent gmail = new Intent(Intent.ACTION_VIEW);
-        gmail.setClassName("com.google.android.gm","com.google.android.gm.ComposeActivityGmail");
-        gmail.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
-        gmail.setData(Uri.parse(email));
-        gmail.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
-        gmail.setType("plain/text");
-        gmail.putExtra(Intent.EXTRA_TEXT, "Hii android !");
-        startActivity(gmail);*/
 
     @SuppressLint("SetTextI18n")
     private void setApiData(String bio, String rating, String review_count, String description, String businessName) {
@@ -348,11 +340,12 @@ public class IndiProfileFragment extends Fragment implements View.OnClickListene
         tv_for_review.setText(review_count.isEmpty()?"0 Reviews":review_count+ " Reviews");
         tv_for_recomend.setText(recommend_count==0?"0 Recommend":recommend_count+ " Recommend");
         ratingBar.setRating(rating.isEmpty()?0:Float.parseFloat(rating));
-        tvBusDes.setText("About "+Uconnekt.session.getUserInfo().businessName);
+        tvBusDes.setText("About "+businessName);
     }
 
     @Override
     public void onResume() {
+        activity.hideKeyboard();
         if (Constant.NETWORK_CHECK == 1){
             apiCalling();
         }else if (Constant.API == 1){

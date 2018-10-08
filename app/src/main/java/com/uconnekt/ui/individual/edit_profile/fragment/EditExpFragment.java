@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -67,6 +70,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+
 import static com.uconnekt.util.Constant.RESULT_OK;
 
 public class EditExpFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener,DatePickerDialog.OnDateSetListener  {
@@ -80,7 +84,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     private Spinner sp_for_weeklist,sp_for_salary,sp_for_empType;
     private LinearLayout mainlayout,layout_for_cRole,layout_for_nextR,layout_for_pRole,layout_for_preRole;
     private String jobTitleId = "",interestId = "",availability = "",jobTitleId2 = "",salary = "",employmentType = "";
-    private int setValue = -1,index = -1,checkMange = -1;
+    private int setValue = -1,index = -1,checkMange = -1,tempUpdateIndex = -1;
     private EditText et_for_companyName,et_for_cdescription,et_for_pdescription,et_for_compyName;
     private TextView tv_for_startD,tv_for_finishD,tv_for_txt,tv_for_address,tv_for_startDP,tv_for_finishDP,
             tv_for_txt2,tv_for_role1,tv_for_role2,tv_for_role3,tv_for_jobTitle,tv_for_jobTitle2,tv_for_aofs;
@@ -91,6 +95,9 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     private CusDialogProg cusDialogProg;
     private String cCompanyName = "",startDate = "",finshdate = "",address = "";
     private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3;
+
+    private SeekBar sliderExperience;
+    private TextView tvYear;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -196,29 +203,29 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                             }
                         }
 
-                        JSONObject object2 = object.getJSONObject("previous_role");
-                        JSONArray array = object2.getJSONArray("previous_experience");
+                        JSONArray array = object.getJSONArray("previous_role");
                         for (int i = 0; i < array.length();i++){
                             PreviousRole previousRole = new PreviousRole();
                             JSONObject jsonObject1 = array.getJSONObject(i);
-                            previousRole.previous_company_name = jsonObject1.getString("previous_company_name");
-                            previousRole.previous_description = jsonObject1.getString("previous_description");
-                            previousRole.previous_finish_date = jsonObject1.getString("previous_finish_date");
-                            previousRole.previous_job_title = jsonObject1.getString("previous_job_title");
-                            previousRole.previous_start_date = jsonObject1.getString("previous_start_date");
+                            previousRole.previous_role_id = jsonObject1.getString("previousRoleId");
+                            previousRole.previous_job_title = jsonObject1.getString("previous_job_title_id");
+                            previousRole.previous_company_name = jsonObject1.getString("previousCompanyName");
+                            previousRole.previous_description = jsonObject1.getString("previousDescription");
+                            previousRole.experience = jsonObject1.getString("experience");
                             roleArrayList.add(previousRole);
+
                             switch (i){
                                 case 0:
                                     card_for_pRole1.setVisibility(View.VISIBLE);
-                                    tv_for_role1.setText(jsonObject1.getString("previous_company_name"));
+                                    tv_for_role1.setText(jsonObject1.getString("previousCompanyName"));
                                     break;
                                 case 1:
                                     card_for_pRole2.setVisibility(View.VISIBLE);
-                                    tv_for_role2.setText(jsonObject1.getString("previous_company_name"));
+                                    tv_for_role2.setText(jsonObject1.getString("previousCompanyName"));
                                     break;
                                 case 2:
                                     card_for_pRole3.setVisibility(View.VISIBLE);
-                                    tv_for_role3.setText(jsonObject1.getString("previous_company_name"));
+                                    tv_for_role3.setText(jsonObject1.getString("previousCompanyName"));
                                     layout_for_preRole.setVisibility(View.GONE);
                                     break;
                             }
@@ -241,10 +248,10 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                             }
                         }
 
-                       if (!expectedSalary.isEmpty()) {
+                        if (!expectedSalary.isEmpty()) {
                             salary = expectedSalary;
                             for (int i = 0; salaryList.size() > i; i++) {
-                                if (salaryList.get(i).week.equals(expectedSalary)) {
+                                if (salaryList.get(i).id.equals(expectedSalary)) {
                                     sp_for_salary.setSelection(i);
                                     break;
                                 }
@@ -304,16 +311,12 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         }.executeVolley();
     }
 
-
-
     private void initView(View view) {
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
         view.findViewById(R.id.layout_for_startD).setOnClickListener(this);
         view.findViewById(R.id.layout_for_finishD).setOnClickListener(this);
         view.findViewById(R.id.layout_for_stillThere).setOnClickListener(this);
         view.findViewById(R.id.layout_for_address).setOnClickListener(this);
-        view.findViewById(R.id.layout_for_startDP).setOnClickListener(this);
-        view.findViewById(R.id.layout_for_finishDP).setOnClickListener(this);
         view.findViewById(R.id.layout_for_currentRole).setOnClickListener(this);
         view.findViewById(R.id.layout_for_nextRole).setOnClickListener(this);
         view.findViewById(R.id.layout_for_previousRole).setOnClickListener(this);
@@ -360,6 +363,34 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
         EditText et_for_pdescription = new EditText(activity);
         et_for_pdescription.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        sliderExperience = view.findViewById(R.id.sliderExperience);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            sliderExperience.setMin(0);
+            sliderExperience.setMax(5);
+        }
+        sliderExperience.setProgress(0);
+
+        tvYear = view.findViewById(R.id.tvYear);
+
+        sliderExperience.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                tvYear.setText(String.valueOf(progress));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     @Override
@@ -464,6 +495,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
+                tempUpdateIndex = 0;
                 index = 0;
                 setVisibilty();
                 break;
@@ -475,6 +507,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                     e.printStackTrace();
                 }
                 index = 1;
+                tempUpdateIndex = 1;
                 setVisibilty();
                 break;
             case R.id.card_for_pRole3:
@@ -485,6 +518,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                     e.printStackTrace();
                 }
                 index = 2;
+                tempUpdateIndex = 2;
                 setVisibilty();
                 break;
             case R.id.layout_for_jobTittle:
@@ -534,8 +568,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
     private void addPreviousRole(int data){
         String companyName = et_for_compyName.getText().toString().trim();
         String companyTitle = jobTitleId2.trim();
-        String startDateP = tv_for_startDP.getText().toString().trim();
-        String finishDateP = tv_for_finishDP.getText().toString().trim();
+        String experience = tvYear.getText().toString().trim();
         String pdescription = et_for_pdescription.getText().toString().trim();
 
         if (data != 2) {
@@ -543,24 +576,30 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pc_title));
             } else if (companyName.equalsIgnoreCase("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pc_name));
-            } else if (startDateP.equalsIgnoreCase("")) {
+            } else if (experience.isEmpty() && !experience.equals("0")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.select_sdate));
-            } else if (finishDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.select_fdate));
-            } else if (startDateP.equalsIgnoreCase(finishDateP)) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.date_not_same));
-            }else {setData(companyName,companyTitle,startDateP,finishDateP,pdescription);}
-        }else {setData(companyName,companyTitle,startDateP,finishDateP,pdescription);}
+            } else {setData(companyName,companyTitle,pdescription,experience,data);}
+        }else {setData(companyName,companyTitle,pdescription,experience, data);}
     }
 
-    private void setData(String companyName, String companyTitle, String startDateP, String finishDateP, String pdescription){
+    private void setData(String companyName, String companyTitle, String pdescription, String experience, int data){
 
         PreviousRole previousRole = new PreviousRole();
         previousRole.previous_job_title = companyTitle;
         previousRole.previous_company_name = companyName;
-        previousRole.previous_start_date = startDateP;
-        previousRole.previous_finish_date = finishDateP;
-        String  enCodedStatusCode = null;
+        previousRole.experience = experience;
+
+        if (activity.check.equals("Edit")){
+            if (roleArrayList.isEmpty()){
+                previousRole.previous_role_id = "";
+            }else{
+                previousRole.previous_role_id = (tempUpdateIndex==-1)?"":roleArrayList.get(tempUpdateIndex).previous_role_id;
+                tempUpdateIndex = -1;
+            }
+        }else {
+            previousRole.previous_role_id = "";
+        }
+        String enCodedStatusCode = null;
         try {
             enCodedStatusCode = URLEncoder.encode(pdescription, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -614,9 +653,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         tv_for_jobTitle2.setText("");
         et_for_compyName.setText("");
         jobTitleId2 = "";
-        tv_for_startDP.setText("");
-        tv_for_finishDP.setText("");
         et_for_pdescription.setText("");
+        sliderExperience.setProgress(0);
     }
 
     private void gonVisi(int i){
@@ -656,8 +694,10 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         }
 
         et_for_compyName.setText(roleArrayList.get(index).previous_company_name);
-        tv_for_startDP.setText(roleArrayList.get(index).previous_start_date);
-        tv_for_finishDP.setText(roleArrayList.get(index).previous_finish_date);
+        tvYear.setText(roleArrayList.get(index).experience);
+        int possition = Integer.parseInt(roleArrayList.get(index).experience);
+        sliderExperience.setProgress(possition);
+
         String previous_description = URLDecoder.decode(roleArrayList.get(index).previous_description, "UTF-8");
         et_for_pdescription.setText(previous_description);
 
@@ -710,8 +750,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
         address = tv_for_address.getText().toString().trim();
         String companyName = et_for_compyName.getText().toString().trim();
-        String startDateP = tv_for_startDP.getText().toString().trim();
-        String finishDateP = tv_for_finishDP.getText().toString().trim();
+        String experience = tvYear.getText().toString().trim();
 
         if (availability.equalsIgnoreCase("")){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.weeks_select));
@@ -728,12 +767,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pjobtitile));
             } else if (companyName.equalsIgnoreCase("")) {
                 MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pcompany_name));
-            } else if (startDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pstart_date));
-            } else if (finishDateP.equalsIgnoreCase("")) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.pfinish_date));
-            } else if (startDateP.equalsIgnoreCase(finishDateP)) {
-                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.date_not_same));
+            } else if (experience.isEmpty() && !experience.equals("0")) {
+                MyCustomMessage.getInstance(activity).snackbar(mainlayout, getString(R.string.select_sdate));
             } else {
                 addPreviousRole(1);
                 updateExperience();
@@ -758,7 +793,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                 break;
             case R.id.sp_for_salary:
                 Weeks salarys = salaryList.get(position);
-                salary = salarys.week;
+                salary = salarys.id;
                 break;
             case R.id.sp_for_empType:
                 Weeks empType = empTypeList.get(position);
@@ -787,7 +822,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
             String givenDateString;
             if (checkMange == 2) {
                 givenDateString = tv_for_startD.getText().toString().trim().replace("-", " ");
-                tv_for_startDP.setText("");
                 checkMange = -1;
             } else {
                 givenDateString = tv_for_startDP.getText().toString().trim().replace("-", " ");
@@ -894,38 +928,57 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
 
-                        JSONObject salaryRangeList = result.getJSONObject("salary_range_list");
+                       // JSONObject salaryRangeList = result.getJSONObject("salary_range_list");
                         JSONObject emplyementType = result.getJSONObject("emplyement_type");
 
-                        salaryList.add(week0);
+                        JSONArray jsonArray = result.getJSONArray("salary_range_list");
+
+                        for (int i =0 ; i< jsonArray.length();i++) {
+                            JSONObject object = jsonArray.getJSONObject(i);
+                            Weeks week6 = new Weeks();
+                           if (i==0)week6.week = object.getString(week6.id = "any");
+                           if (i==1)week6.week = object.getString(week6.id ="0-20000");
+                           if (i==2)week6.week = object.getString(week6.id ="20000-40000");
+                           if (i==3)week6.week = object.getString(week6.id ="40000-60000");
+                           if (i==4)week6.week = object.getString(week6.id ="60000-80000");
+                           if (i==5)week6.week = object.getString(week6.id ="80000-100000");
+                           if (i==6)week6.week = object.getString(week6.id ="100000-120000");
+                           if (i==7)week6.week = object.getString(week6.id ="120000-150000");
+                           if (i==8)week6.week = object.getString(week6.id ="150000-160000");
+                            salaryList.add(week6);
+                        }
+                        salarySpAdapter.notifyDataSetChanged();
+
+
+                      /*  salaryList.add(week0);
                         Weeks week6 = new Weeks();
-                        week6.week = salaryRangeList.getString("any");
+                        week6.week = salaryRangeList.getString(week6.id = "any");
                         salaryList.add(week6);
                         Weeks week7 = new Weeks();
-                        week7.week = salaryRangeList.getString("0-20");
+                        week7.week = salaryRangeList.getString(week7.id ="0-20000");
                         salaryList.add(week7);
                         Weeks week8 = new Weeks();
-                        week8.week = salaryRangeList.getString("20-40");
+                        week8.week = salaryRangeList.getString(week8.id ="20000-40000");
                         salaryList.add(week8);
                         Weeks week9 = new Weeks();
-                        week9.week = salaryRangeList.getString("40-60");
+                        week9.week = salaryRangeList.getString(week9.id ="40000-60000");
                         salaryList.add(week9);
                         Weeks week10 = new Weeks();
-                        week10.week = salaryRangeList.getString("60-80");
+                        week10.week = salaryRangeList.getString(week10.id ="60000-80000");
                         salaryList.add(week10);
                         Weeks week11 = new Weeks();
-                        week11.week = salaryRangeList.getString("80-100");
+                        week11.week = salaryRangeList.getString(week11.id ="80000-100000");
                         salaryList.add(week11);
                         Weeks week12 = new Weeks();
-                        week12.week = salaryRangeList.getString("100-120");
+                        week12.week = salaryRangeList.getString(week12.id ="100000-120000");
                         salaryList.add(week12);
                         Weeks week13 = new Weeks();
-                        week13.week = salaryRangeList.getString("120-150");
+                        week13.week = salaryRangeList.getString(week13.id ="120000-150000");
                         salaryList.add(week13);
                         Weeks week18 = new Weeks();
-                        week18.week = salaryRangeList.getString("150-160");
+                        week18.week = salaryRangeList.getString(week18.id ="150000-160000");
                         salaryList.add(week18);
-                        salarySpAdapter.notifyDataSetChanged();
+                        salarySpAdapter.notifyDataSetChanged();*/
 
                         empTypeList.add(week0);
                         Weeks week14 = new Weeks();
@@ -970,7 +1023,8 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
 
     public void updateExperience() {
         Gson gson = new GsonBuilder().create();
-        final JsonArray array = gson.toJsonTree(roleArrayList).getAsJsonArray();
+        final String array = gson.toJson(roleArrayList);
+        Log.e("Json",array);
 
         new VolleyGetPost(activity, AllAPIs.EXPERIENCE, true, "Experience",true) {
             @Override

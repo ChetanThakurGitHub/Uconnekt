@@ -42,8 +42,10 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<Chatting> chattings;
@@ -99,9 +101,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
         Chatting chat = chattings.get(position);
         if (chat.message != null && !chat.message.equals("")) {
-            Picasso.with(mContext).load(chat.message).placeholder(R.drawable.ic_background).into(iv_for_image);
-        } else {
-            Picasso.with(mContext).load(R.drawable.ic_background).fit().into(iv_for_image);
+            Picasso.with(mContext).load(chat.message).into(iv_for_image);
         }
         dialog.show();
     }
@@ -221,7 +221,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
             @SuppressLint("SimpleDateFormat")
             DateFormat f = new SimpleDateFormat("dd MMM, yyyy'T'HH:mm:ss.mmm'Z'");
-            System.out.println(f.format(timeStamp));
+            //f.setTimeZone(TimeZone.getTimeZone("GMT+10"));
+
+            Calendar cal = Calendar.getInstance();
+            TimeZone tz = cal.getTimeZone();
+            f.setTimeZone(tz);
+
+            //System.out.println(f.format(timeStamp));
 
             String CurrentString = f.format(timeStamp);
             String date = CurrentString.substring(0,12);
@@ -282,15 +288,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.iv_for_sender.setVisibility(View.GONE);
                     holder.tv_for_senderTxt.setVisibility(View.VISIBLE);
 
-                    //extra code for testing
+                   /* //extra code for testing
                     Spannable name = new SpannableString(chatting.message);
                     name.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.darkgray)), 0, name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     holder.tv_for_senderTxt.setText(name);
                     Spannable like = new SpannableString(time());
                     like.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.yellow)), 0, like.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    holder.tv_for_senderTxt.append("\n"+like);
+                    holder.tv_for_senderTxt.append("\n"+like);*/
 
-                   // holder.tv_for_senderTxt.setText(chatting.message);
+                    holder.tv_for_senderTxt.setText(chatting.message);
                 }
                 holder.tv_for_senderTime.setText(time());
 

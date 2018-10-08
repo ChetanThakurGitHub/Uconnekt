@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
@@ -39,10 +40,14 @@ public class EmpHistoryAdapter extends RecyclerView.Adapter<EmpHistoryAdapter.Vi
     private Context context;
     private ChatFragment chatFragment;
 
+    // This object helps you save/restore the open/close state of each view
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+
     public EmpHistoryAdapter(ArrayList<EmpChatHistory> empChatHistories, Context context, ChatFragment chatFragment){
         this.empChatHistories = empChatHistories;
         this.context = context;
         this.chatFragment = chatFragment;
+        viewBinderHelper.setOpenOnlyOne(true);
     }
 
     @NonNull
@@ -70,6 +75,7 @@ public class EmpHistoryAdapter extends RecyclerView.Adapter<EmpHistoryAdapter.Vi
         holder.tv_for_jobTitle.setText(empChatHistory.jobTitleName.equals("")?"NA":empChatHistory.jobTitleName);
         holder.tv_for_message.setText(empChatHistory.message);
 
+        viewBinderHelper.bind(holder.swipe_layout, empChatHistories.get(position).userId);
     }
 
     @Override

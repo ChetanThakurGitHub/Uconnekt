@@ -1,5 +1,6 @@
 package com.uconnekt.ui.common_activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -61,6 +62,7 @@ public class DeactiateAccountActivity extends AppCompatActivity implements View.
         finish();
     }
 
+    @SuppressLint("SetTextI18n")
     private void deactivateAccountDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

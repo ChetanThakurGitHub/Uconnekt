@@ -30,7 +30,6 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:fontFamily="@font/montserrat_regular"/>
 
-
         <android.support.v7.widget.AppCompatRatingBar
             android:id="@+id/ratingBar"
             style="@style/Widget.AppCompat.RatingBar.Indicator"
@@ -75,7 +74,7 @@
                     android:textColor="@color/darkgray"
                     android:gravity="top|start"
                     android:layout_above="@+id/tv_for_txt"
-                    android:maxLength="200"
+                    android:maxLength="100"
                     android:imeOptions="actionDone"
                     android:padding="@dimen/_5sdp"
                     android:textColorHint="@color/lightgray"
@@ -119,7 +118,7 @@
                     android:gravity="top|start"
                     android:layout_above="@+id/tv_for_txt"
                     android:maxLength="200"
-                    android:inputType="textCapSentences"
+                    android:inputType="textCapSentences|textMultiLine|textAutoCorrect"
                     android:imeOptions="actionDone"
                     android:padding="@dimen/_5sdp"
                     android:textColorHint="@color/lightgray"

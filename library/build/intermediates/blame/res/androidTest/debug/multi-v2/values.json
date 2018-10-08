@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/media/mindiii/rrrrrr/Chetan Thakur/Uconnekt/library/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+            "outputFile": "/media/mindiii/rrrrrr/Chetan Thakur/ConnektUs/library/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
             "map": [
                 {
-                    "source": "/media/mindiii/rrrrrr/Chetan Thakur/Uconnekt/library/build/intermediates/bundles/debug/res/values/values.xml",
+                    "source": "/media/mindiii/rrrrrr/Chetan Thakur/ConnektUs/library/build/intermediates/bundles/debug/res/values/values.xml",
                     "from": {
                         "startLines": "2,3,7,10",
                         "startColumns": "4,4,4,4",

@@ -19,6 +19,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
@@ -40,10 +41,14 @@ public class IndiHistoryAdapter extends RecyclerView.Adapter<IndiHistoryAdapter.
     private Context context;
     private IndiChatFragment indiChatFragment;
 
+    // This object helps you save/restore the open/close state of each view
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
+
     public IndiHistoryAdapter(ArrayList<IndiChatHistory> indiChatHistories, Context context, IndiChatFragment indiChatFragment){
         this.indiChatHistories = indiChatHistories;
         this.context = context;
         this.indiChatFragment = indiChatFragment;
+        viewBinderHelper.setOpenOnlyOne(true);
     }
 
     @NonNull
@@ -57,6 +62,7 @@ public class IndiHistoryAdapter extends RecyclerView.Adapter<IndiHistoryAdapter.
     public void onBindViewHolder(@NonNull IndiHistoryAdapter.ViewHolder holder, int position) {
         IndiChatHistory indiChatHistory = indiChatHistories.get(position);
         setData(indiChatHistory,holder);
+        viewBinderHelper.bind(holder.swipe_layout, indiChatHistories.get(position).userId);
     }
 
     @Override

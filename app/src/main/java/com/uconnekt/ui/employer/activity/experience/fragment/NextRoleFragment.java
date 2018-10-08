@@ -59,8 +59,38 @@ public class NextRoleFragment extends Fragment {
                         String next_availability = object.getString("next_availability");
                         String next_speciality_name = object.getString("next_speciality_name");
                         String next_location = object.getString("next_location");
-                        String expectedSalary = object.getString("expectedSalary");
+                        String expectedSalary = object.getString("expectedSalaryShow");
                         String employementType = object.getString("employementType");
+
+                        switch (expectedSalary) {
+                            case "$any-$":
+                                expectedSalary = "Any";
+                                break;
+                            case "$0-$20000":
+                                expectedSalary = "$0-$20,000";
+                                break;
+                            case "$20000-$40000":
+                                expectedSalary = "$20,000-$40,000";
+                                break;
+                            case "$40000-$60000":
+                                expectedSalary = "$40,000-$60,000";
+                                break;
+                            case "$60000-$80000":
+                                expectedSalary = "$60,000-$80,000";
+                                break;
+                            case "$80000-$100000":
+                                expectedSalary = "$80,000-$100,000";
+                                break;
+                            case "$100000-$120000":
+                                expectedSalary = "$100,000-$120,000";
+                                break;
+                            case "$120000-$150000":
+                                expectedSalary = "$120,000-$150,000";
+                                break;
+                            case "$150000-$160000":
+                                expectedSalary = "$150,000+";
+                                break;
+                        }
 
                         view.findViewById(R.id.layout_for_noData).setVisibility(View.GONE);
                         view.findViewById(R.id.layout_for_data).setVisibility(View.VISIBLE);

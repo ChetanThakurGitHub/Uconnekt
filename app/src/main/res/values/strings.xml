@@ -326,22 +326,31 @@
     <string name="send_request">Send Request</string>
     <string name="verify">Verify</string>
     <string name="verify_email">Verify your email address.</string>
-    <string name="verify_dis">Our records show that you recently created a ConnektUs account.ln order to continue registering your kit , you\'ll need to verify your email address.</string>
+    <string name="verify_dis">You\'re almost done! The final step for registering an account with ConnektUs is to verify your email address. Please check your emails.</string>
     <string name="feedback">Feedback</string>
     <string name="subject">Subject</string>
-    <string name="finding_the_app">How do you finding the app?</string>
+    <string name="finding_the_app">Tell us how you feel about the app.</string>
     <string name="add_subject">Please add subject</string>
+    <string name="add_subject_r">Subject should not be less than 50 character\'s</string>
     <string name="add_feedback">Please add feedback</string>
     <string name="contact_us"> Contact us</string>
     <string name="feed_free_to">Feed free to </string>
     <string name="need_help">Need help?</string>
     <string name="send_feedback">Send Feedback</string>
-    <string name="deactivate_account">Deactivate account</string>
+    <string name="deactivate_account">Deactivate Account</string>
     <string name="deactivating_qus">Deactivating your ConnektUs account?</string>
     <string name="deactive_dis">If you want a break from ConnektUs, you can deactivate your account. Your account will be reactivated as soon as you log in again.</string>
     <string name="setting_des"><![CDATA[Copyright © 2017–2018. ConnektUs]]></string>
     <string name="and_privacy_policy">privacy policy</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="and">and</string>
+    <string name="submitting">Thank you submitting your feedback. One of our friendly staff will contact you.</string>
+    <string name="resend">Resend</string>
+    <string name="work_experience">Work experience : </string>
+    <string name="previous_experience_2">Previous experience (2)</string>
+    <string name="previous_experience_1">Previous experience (1)</string>
+    <string name="previous_experience_3">Previous experience (3)</string>
+    <string name="years">Years</string>
+    <string name="year">Year</string>
 
 </resources>

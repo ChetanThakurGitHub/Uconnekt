@@ -194,7 +194,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotificationAddReminder(String body, String title, String intentType, String profile_image, String reference_id) {
         Intent intent = null;
 
-        if (Uconnekt.session.isLoggedIn()) {
+        if (Uconnekt.session.isLoggedIn()&&Uconnekt.session.getUserInfo().isVerified.equals("1")) {
             switch (intentType) {
                 case "1":
                     intent = new Intent(this, HomeActivity.class);

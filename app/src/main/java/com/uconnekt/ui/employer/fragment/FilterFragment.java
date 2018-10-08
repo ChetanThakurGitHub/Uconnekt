@@ -1,6 +1,7 @@
 package com.uconnekt.ui.employer.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,8 +45,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
+
+import io.apptik.widget.MultiSlider;
 
 import static com.uconnekt.util.Constant.MY_PERMISSIONS_REQUEST_LOCATION;
 import static com.uconnekt.util.Constant.RESULT_OK;
@@ -58,49 +62,115 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private ArrayList<JobTitle> valuesList = new ArrayList<>();
     private ArrayList<JobTitle> jobTitleList = new ArrayList<>();
     private ArrayList<Weeks> weekList = new ArrayList<>();
-    private ArrayList<Weeks> salaryList = new ArrayList<>();
     private ArrayList<Weeks> empTypeList = new ArrayList<>();
-    private Spinner sp_for_availability,sp_for_salary,sp_for_empType;
-    private WeekSpAdapter weekSpAdapter,salarySpAdapter,empTypeSpAdapter;
+    private Spinner sp_for_availability,sp_for_empType;
+    private WeekSpAdapter weekSpAdapter,empTypeSpAdapter;
     private TextView tv_for_address,tv_for_jobTitle,tv_for_aofs,tv_for_value,tv_for_strength;
     private LinearLayout mainlayout;
     private RelativeLayout layout_for_address;
-    private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",salary = "",employmentType = "",city = "",state = "" ,country;
+    private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",employmentType = "",city = "",state = "" ,country;
     private SearchFragment searchFragment;
     private MapFragment mapFragment;
     private Double latitude = 0.0,longitude = 0.0;
     private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3,spinnerDialog4;
 
+    private MultiSlider sliderExperience,sliderSalary;
+    private TextView tvMinExp,tvMaxExp,tvMinSalary,tvMaxSalary;
+    private DecimalFormat formatter;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_filter, container, false);
         initView(view);
 
         weekSpAdapter = new WeekSpAdapter(activity, weekList,R.layout.week_sp);
-        salarySpAdapter = new WeekSpAdapter(activity, salaryList,R.layout.custom_sp_filete);
         empTypeSpAdapter = new WeekSpAdapter(activity, empTypeList,R.layout.custom_sp_speciality);
         sp_for_availability.setAdapter(weekSpAdapter);
-        sp_for_salary.setAdapter(salarySpAdapter);
         sp_for_empType.setAdapter(empTypeSpAdapter);
+        formatter = new DecimalFormat("####,###");
 
         getlist();
         sp_for_availability.setOnItemSelectedListener(this);
-        sp_for_salary.setOnItemSelectedListener(this);
         sp_for_empType.setOnItemSelectedListener(this);
 
+
+        sliderExperience.setOnThumbValueChangeListener(new MultiSlider.SimpleChangeListener() {
+            @Override
+            public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
+                if (thumbIndex == 0) {
+                    int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
+                    tvMinExp.setText(String.valueOf(test));
+                } else {
+                    int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
+                    tvMaxExp.setText(String.valueOf(test));
+                }
+            }
+        });
+
+        sliderSalary.setOnThumbValueChangeListener(new MultiSlider.SimpleChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
+                if (thumbIndex == 0) {
+                    //int test = value==10?20000:value==20?40000:value==30?60000:value==40?80000:value==50?100000:value==60?120000:value==70?140000:value==80?160000:value==90?180000:value==100?200000:0;
+                    tvMinSalary.setText("$"+String.valueOf(formatter.format(showsalary(value))));
+                } else {
+                    //int test = value==10?20000:value==20?40000:value==30?60000:value==40?80000:value==50?100000:value==60?120000:value==70?140000:value==80?160000:value==90?180000:value==100?200000:0;
+                    tvMaxSalary.setText("$"+String.valueOf(formatter.format(showsalary(value))));
+                }
+            }
+        });
+
         return view;
+    }
+
+    private int showsalary(int value){
+        int test = 0;
+        switch (value) {
+            case 10:
+                test = 20000;
+                break;
+            case 20:
+                test = 40000;
+                break;
+            case 30:
+                test = 60000;
+                break;
+            case 40:
+                test = 80000;
+                break;
+            case 50:
+                test = 100000;
+                break;
+            case 60:
+                test = 120000;
+                break;
+            case 70:
+                test = 140000;
+                break;
+            case 80:
+                test = 160000;
+                break;
+            case 90:
+                test = 180000;
+                break;
+            case 100:
+                test = 200000;
+                break;
+        }
+        return test;
     }
 
     public  void setFragment(SearchFragment searchFragment){
         this.searchFragment=searchFragment;
     }
 
-
     public  void setOtherFragment(MapFragment mapFragment){
         this.mapFragment=mapFragment;
     }
 
+    @SuppressLint("SetTextI18n")
     private void initView(View view) {
         view.findViewById(R.id.mainlayout).setOnClickListener(this);
         view.findViewById(R.id.btn_for_search).setOnClickListener(this);
@@ -112,7 +182,6 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         tv_for_strength = view.findViewById(R.id.tv_for_strength);
         tv_for_value = view.findViewById(R.id.tv_for_value);
         sp_for_availability = view.findViewById(R.id.sp_for_availability);
-        sp_for_salary = view.findViewById(R.id.sp_for_salary);
         sp_for_empType = view.findViewById(R.id.sp_for_empType);
         tv_for_jobTitle = view.findViewById(R.id.tv_for_jobTitle);
         tv_for_address = view.findViewById(R.id.tv_for_address);
@@ -120,6 +189,18 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         layout_for_address = view.findViewById(R.id.layout_for_address);
         layout_for_address.setOnClickListener(this);
         activity.findViewById(R.id.iv_for_circular_arrow).setOnClickListener(this);
+
+        sliderExperience = view.findViewById(R.id.sliderExperience);
+        sliderSalary = view.findViewById(R.id.sliderSalary);
+        tvMinExp = view.findViewById(R.id.tvMinExp);
+        tvMaxExp = view.findViewById(R.id.tvMaxExp);
+        tvMinSalary = view.findViewById(R.id.tvMinSalary);
+        tvMaxSalary = view.findViewById(R.id.tvMaxSalary);
+        tvMinExp.setText("0");
+        tvMaxExp.setText("5");
+        tvMinSalary.setText("$0");
+        tvMaxSalary.setText("$200,000");
+
     }
 
     @Override
@@ -157,42 +238,52 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void refresh(){
-        specialtyId = "";strengthId = "";valueId = "";jobTitleId = "";availabilityId = "";salary = "";employmentType = "";
+        specialtyId = "";strengthId = "";valueId = "";jobTitleId = "";availabilityId = "";employmentType = "";
 
         if (searchFragment != null)searchFragment.tv_for_speName.setText("");
         if (mapFragment != null)mapFragment.tv_for_speName.setText("");
 
         sp_for_availability.setAdapter(weekSpAdapter);
-        sp_for_salary.setAdapter(salarySpAdapter);
         sp_for_empType.setAdapter(empTypeSpAdapter);
         tv_for_jobTitle.setText("");
         tv_for_aofs.setText("");
         tv_for_value.setText("");
         tv_for_strength.setText("");
+        tvMinExp.setText("0");
+        tvMaxExp.setText("5");
+        tvMinSalary.setText("$0");
+        tvMaxSalary.setText("$200,000");
 
         weekSpAdapter.notifyDataSetChanged();
-        salarySpAdapter.notifyDataSetChanged();
         empTypeSpAdapter.notifyDataSetChanged();
         tv_for_address.setText("");
+
+        sliderExperience.getThumb(0).setValue(0);
+        sliderExperience.getThumb(1).setValue(100);
+        sliderSalary.getThumb(0).setValue(0);
+        sliderSalary.getThumb(1).setValue(100);
     }
 
-    private  void btnClick(){
+    private void btnClick(){
         String address = tv_for_address.getText().toString().trim();
+        String minExp = tvMinExp.getText().toString().trim();
+        String maxExp = tvMaxExp.getText().toString().trim();
+        String minSalary = tvMinSalary.getText().toString().trim();
+        String maxSalary = tvMaxSalary.getText().toString().trim();
         if (searchFragment != null)searchFragment.layout_for_list.setVisibility(View.GONE);
         if (searchFragment != null)searchFragment.offset = 0;
         if (searchFragment != null)searchFragment.searchLists.clear();
         if (searchFragment != null)searchFragment.mSwipeRefreshLayout.setRefreshing(true);
-        if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city,state,country,salary,employmentType);
+        if (searchFragment != null)searchFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,city,state,country,employmentType,minExp,maxExp,minSalary,maxSalary);
 
         if (mapFragment != null)mapFragment.layout_for_list.setVisibility(View.GONE);
         if (mapFragment != null)mapFragment.searchLists.clear();
         if (mapFragment != null)mapFragment.map.clear();
         if (mapFragment != null)mapFragment.mClusterManager.clearItems();
-        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country,true,salary,employmentType);
+        if (mapFragment != null)mapFragment.getList(specialtyId,jobTitleId,availabilityId,address,strengthId,valueId,latitude,longitude,city,state,country,true,employmentType,minExp,maxExp,minSalary,maxSalary);
 
         activity.onBackPressed();
     }
-
 
     private void addressClick() {
         try {
@@ -277,9 +368,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void getlist() {
-
         new VolleyGetPost(activity, AllAPIs.EMPLOYER_PROFILE, false, "list",true) {
-
             @Override
             public void onVolleyResponse(String response) {
                 try {
@@ -381,38 +470,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
 
-                        JSONObject salaryRangeList = result.getJSONObject("salary_range_list");
                         JSONObject emplyementType = result.getJSONObject("emplyement_type");
-
-                        salaryList.add(week0);
-                        Weeks week6 = new Weeks();
-                        week6.week = salaryRangeList.getString("any");
-                        salaryList.add(week6);
-                        Weeks week7 = new Weeks();
-                        week7.week = salaryRangeList.getString("0-20");
-                        salaryList.add(week7);
-                        Weeks week8 = new Weeks();
-                        week8.week = salaryRangeList.getString("20-40");
-                        salaryList.add(week8);
-                        Weeks week9 = new Weeks();
-                        week9.week = salaryRangeList.getString("40-60");
-                        salaryList.add(week9);
-                        Weeks week10 = new Weeks();
-                        week10.week = salaryRangeList.getString("60-80");
-                        salaryList.add(week10);
-                        Weeks week11 = new Weeks();
-                        week11.week = salaryRangeList.getString("80-100");
-                        salaryList.add(week11);
-                        Weeks week12 = new Weeks();
-                        week12.week = salaryRangeList.getString("100-120");
-                        salaryList.add(week12);
-                        Weeks week13 = new Weeks();
-                        week13.week = salaryRangeList.getString("120-150");
-                        salaryList.add(week13);
-                        Weeks week18 = new Weeks();
-                        week18.week = salaryRangeList.getString("150-160");
-                        salaryList.add(week18);
-                        salarySpAdapter.notifyDataSetChanged();
 
                         empTypeList.add(week0);
                         Weeks week14 = new Weeks();
@@ -487,18 +545,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 }
             }
 
-            salary = searchFragment.salary;
-            if (!salary.isEmpty()) {
-                for (int i = 0; salaryList.size() > i; i++) {
-                    if (salaryList.get(i).week.equals(salary)) {
-                        sp_for_salary.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
             employmentType = searchFragment.employmentType;
-            if (!salary.isEmpty()) {
+            if (!employmentType.isEmpty()) {
                 for (int i = 0; empTypeList.size() > i; i++) {
                     if (empTypeList.get(i).week.equals(employmentType)) {
                         sp_for_empType.setSelection(i);
@@ -532,28 +580,46 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             state = searchFragment.state;
             country = searchFragment.country;
 
+            tvMinExp.setText("0");
+            tvMaxExp.setText("5");
+            tvMinSalary.setText("$0");
+            tvMaxSalary.setText("$200,000");
+
+            String minExp = searchFragment.minExperience.isEmpty()||searchFragment.minExperience.equals("0")?"0": searchFragment.minExperience;
+            minExp = minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
+            sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
+            String maxExp = searchFragment.maxExperience.isEmpty()||searchFragment.maxExperience.equals("5")?"100": searchFragment.maxExperience;
+            maxExp = maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
+            sliderExperience.getThumb(1).setValue(Integer.parseInt(maxExp));
+            String minSalary = searchFragment.minSalarys.isEmpty()?"0": searchFragment.minSalarys;
+            // minSalary = minSalary.equals("$20,000")?"10":minSalary.equals("$40,000")?"20":minSalary.equals("$80,000")?"30":minSalary.equals("$100,000")?"40":minSalary.equals("$120,000")?"50":minSalary.equals("$140,000")?"60":minSalary.equals("$160,000")?"70":minSalary.equals("$180,000")?"80":minSalary.equals("$200,000")?"100":"0";
+            sliderSalary.getThumb(0).setValue(Integer.parseInt(getsalary(minSalary)));
+            String maxSalary = searchFragment.maxSalarys.isEmpty()?"100": searchFragment.maxSalarys;
+            //maxSalary = maxSalary.equals("$20,000")?"10":maxSalary.equals("$40,000")?"20":maxSalary.equals("$80,000")?"30":maxSalary.equals("$100,000")?"40":maxSalary.equals("$120,000")?"50":maxSalary.equals("$140,000")?"60":maxSalary.equals("$160,000")?"70":maxSalary.equals("$180,000")?"80":maxSalary.equals("$200,000")?"100":"100";
+            sliderSalary.getThumb(1).setValue(Integer.parseInt(maxSalary.equals("100")?"100":getsalary(maxSalary)));
+
         }else if(mapFragment != null){
 
-                jobTitleId = mapFragment.jobTitleId;
-                if (!jobTitleId.isEmpty()) {
-                    for (int i = 0; jobTitleList.size() > i; i++) {
-                        if (jobTitleList.get(i).jobTitleId.equals(jobTitleId)) {
-                            tv_for_jobTitle.setText(jobTitleList.get(i).jobTitleName);
-                            break;
-                        }
+            jobTitleId = mapFragment.jobTitleId;
+            if (!jobTitleId.isEmpty()) {
+                for (int i = 0; jobTitleList.size() > i; i++) {
+                    if (jobTitleList.get(i).jobTitleId.equals(jobTitleId)) {
+                        tv_for_jobTitle.setText(jobTitleList.get(i).jobTitleName);
+                        break;
                     }
                 }
-                specialtyId = mapFragment.specialityID;
-                if (!specialtyId.isEmpty()) {
-                    for (int i = 0; arrayList.size() > i; i++) {
-                        if (arrayList.get(i).jobTitleId.equals(specialtyId)) {
-                            tv_for_aofs.setText(arrayList.get(i).jobTitleName);
-                            break;
-                        }
+            }
+            specialtyId = mapFragment.specialityID;
+            if (!specialtyId.isEmpty()) {
+                for (int i = 0; arrayList.size() > i; i++) {
+                    if (arrayList.get(i).jobTitleId.equals(specialtyId)) {
+                        tv_for_aofs.setText(arrayList.get(i).jobTitleName);
+                        break;
                     }
                 }
+            }
 
-                availabilityId = mapFragment.availabilityId;
+            availabilityId = mapFragment.availabilityId;
             if (!availabilityId.isEmpty()) {
                 for (int i = 0; weekList.size() > i; i++) {
                     if (weekList.get(i).week.equals(availabilityId)) {
@@ -563,18 +629,8 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 }
             }
 
-            salary = mapFragment.salary;
-            if (!salary.isEmpty()) {
-                for (int i = 0; salaryList.size() > i; i++) {
-                    if (salaryList.get(i).week.equals(salary)) {
-                        sp_for_salary.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
             employmentType = mapFragment.employmentType;
-            if (!salary.isEmpty()) {
+            if (!employmentType.isEmpty()) {
                 for (int i = 0; empTypeList.size() > i; i++) {
                     if (empTypeList.get(i).week.equals(employmentType)) {
                         sp_for_empType.setSelection(i);
@@ -583,31 +639,81 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 }
             }
 
-                strengthId = mapFragment.strengthId;
-                if (!strengthId.isEmpty()) {
-                    for (int i = 0; strengthsList.size() > i; i++) {
-                        if (strengthsList.get(i).jobTitleId.equals(strengthId)) {
-                            tv_for_strength.setText(strengthsList.get(i).jobTitleName);
-                            break;
-                        }
+            strengthId = mapFragment.strengthId;
+            if (!strengthId.isEmpty()) {
+                for (int i = 0; strengthsList.size() > i; i++) {
+                    if (strengthsList.get(i).jobTitleId.equals(strengthId)) {
+                        tv_for_strength.setText(strengthsList.get(i).jobTitleName);
+                        break;
                     }
                 }
+            }
 
-                valueId = mapFragment.valueId;
-                if (!valueId.isEmpty()) {
-                    for (int i = 0; valuesList.size() > i; i++) {
-                        if (valuesList.get(i).jobTitleId.equals(valueId)) {
-                            tv_for_value.setText(valuesList.get(i).jobTitleName);
-                            break;
-                        }
+            valueId = mapFragment.valueId;
+            if (!valueId.isEmpty()) {
+                for (int i = 0; valuesList.size() > i; i++) {
+                    if (valuesList.get(i).jobTitleId.equals(valueId)) {
+                        tv_for_value.setText(valuesList.get(i).jobTitleName);
+                        break;
                     }
                 }
+            }
 
-                tv_for_address.setText(mapFragment.locations);
-                city = mapFragment.city;
-                state = mapFragment.state;
-                country = mapFragment.country;
+            tv_for_address.setText(mapFragment.locations);
+            city = mapFragment.city;
+            state = mapFragment.state;
+            country = mapFragment.country;
+            String minExp = mapFragment.minExperience.isEmpty()?"0": mapFragment.minExperience;
+            minExp = minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
+            sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
+            String maxExp = mapFragment.maxExperience.isEmpty()?"100": mapFragment.maxExperience;
+            maxExp = maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
+            sliderExperience.getThumb(1).setValue(Integer.parseInt(maxExp));
+            String minSalary = mapFragment.minSalarys.isEmpty()?"0": mapFragment.minSalarys;
+           // minSalary = minSalary.equals("$20,000")?"10":minSalary.equals("$40,000")?"20":minSalary.equals("$80,000")?"30":minSalary.equals("$100,000")?"40":minSalary.equals("$120,000")?"50":minSalary.equals("$140,000")?"60":minSalary.equals("$160,000")?"70":minSalary.equals("$180,000")?"80":minSalary.equals("$200,000")?"100":"0";
+            sliderSalary.getThumb(0).setValue(Integer.parseInt(getsalary(minSalary)));
+            String maxSalary = mapFragment.maxSalarys.isEmpty()?"100": mapFragment.maxSalarys;
+            //maxSalary = maxSalary.equals("$20,000")?"10":maxSalary.equals("$40,000")?"20":maxSalary.equals("$80,000")?"30":maxSalary.equals("$100,000")?"40":maxSalary.equals("$120,000")?"50":maxSalary.equals("$140,000")?"60":maxSalary.equals("$160,000")?"70":maxSalary.equals("$180,000")?"80":maxSalary.equals("$200,000")?"100":"100";
+            sliderSalary.getThumb(1).setValue(Integer.parseInt(maxSalary.equals("100")?"100":getsalary(maxSalary)));
         }
+    }
+
+
+    private String getsalary(String value){
+        String test = "0";
+        switch (value) {
+            case "$20,000":
+                test = "10";
+                break;
+            case "$40,000":
+                test = "20";
+                break;
+            case "$60,000":
+                test = "30";
+                break;
+            case "$80,000":
+                test = "40";
+                break;
+            case "$100,000":
+                test = "50";
+                break;
+            case "$120,000":
+                test = "60";
+                break;
+            case "$140,000":
+                test = "70";
+                break;
+            case "$160,000":
+                test = "80";
+                break;
+            case "$180,000":
+                test = "90";
+                break;
+            case "$200,000":
+                test = "100";
+                break;
+        }
+        return test;
     }
 
     @Override
@@ -616,10 +722,6 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             case R.id.sp_for_availability:
                 Weeks weeks = weekList.get(position);
                 availabilityId = weeks.week;
-                break;
-            case R.id.sp_for_salary:
-                Weeks salarys = salaryList.get(position);
-                salary = salarys.week;
                 break;
             case R.id.sp_for_empType:
                 Weeks empType = empTypeList.get(position);

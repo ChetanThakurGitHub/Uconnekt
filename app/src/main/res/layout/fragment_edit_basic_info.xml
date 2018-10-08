@@ -590,14 +590,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
+            android:gravity="top|left"
+            android:inputType="textCapSentences|textMultiLine|textAutoCorrect"
             android:textSize="@dimen/_11sdp"
+            android:paddingBottom="@dimen/_20sdp"
+            android:imeOptions="actionDone"
             android:textColor="@color/darkgray"
             android:hint="@string/type_here"
-            android:gravity="top|left"
-            android:inputType="textCapSentences"
-            android:layout_above="@+id/text"
             android:maxLength="500"
-            android:imeOptions="actionDone"
             android:padding="@dimen/_5sdp"
             android:textColorHint="@color/lightgray"
             android:fontFamily="@font/montserrat_regular"/>
@@ -630,5 +630,6 @@
         </LinearLayout>
 
     </RelativeLayout>
+
 
 </LinearLayout>

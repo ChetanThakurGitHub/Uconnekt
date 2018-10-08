@@ -41,8 +41,8 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
     public void onBindViewHolder(@NonNull SpecialityListAdapter.ViewHolder holder, int position) {
         SpecialityList specialityList = specialityLists.get(position);
 
-        if(Uconnekt.session.getUserInfo().userType.equals("business") && position != 0) {
-            holder.tv_for_specializationName.setText(specialityList.specializationName +" ("+ specialityList.totalRegistered+")");
+        if(Uconnekt.session.getUserInfo().userType.equals("business")) {
+            holder.tv_for_specializationName.setText(specialityList.specializationName);
         }else {
             holder.tv_for_specializationName.setText(specialityList.specializationName);
         }
@@ -83,7 +83,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((SearchFragment)activity).layout_for_list.setVisibility(View.GONE);
                         ((SearchFragment)activity).iv_for_arrow.setImageResource(R.drawable.ic_down_arrow);
                         ((SearchFragment)activity).searchLists.clear();
-                        ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "", "", "", "");
+                        ((SearchFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", "", "", "",  "", "", "", "", "");
                         ((SearchFragment)activity).offset = 0;
                         ((SearchFragment)activity).mSwipeRefreshLayout.setRefreshing(true);
                     }else if (activity instanceof IndiMapFragment){
@@ -106,7 +106,7 @@ public class SpecialityListAdapter extends RecyclerView.Adapter<SpecialityListAd
                         ((MapFragment)activity).searchLists.clear();
                         ((MapFragment)activity).map.clear();
                         ((MapFragment)activity).mClusterManager.clearItems();
-                        ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "", "", "", true, "", "");
+                        ((MapFragment)activity).getList("", specialityLists.get(getAdapterPosition()).specializationId, "", "", "", "", 0.0, 0.0, "" + "", "", "", true,  "", "", "", "", "");
                         /*((MapFragment)activity).offset = 0;
                         ((MapFragment)activity).mSwipeRefreshLayout.setRefreshing(true);*/
                     }

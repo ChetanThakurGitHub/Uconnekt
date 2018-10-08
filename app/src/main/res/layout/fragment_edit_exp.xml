@@ -668,7 +668,7 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Previous experience (1)"
+                    android:text="@string/previous_experience_1"
                     android:textColor="@color/darkgray"
                     android:textSize="@dimen/_10sdp" />
 
@@ -723,7 +723,7 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Previous experience (2)"
+                    android:text="@string/previous_experience_2"
                     android:textColor="@color/darkgray"
                     android:textSize="@dimen/_10sdp" />
 
@@ -778,7 +778,7 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:scrollHorizontally="true"
                     android:singleLine="true"
-                    android:text="Previous experience (3)"
+                    android:text="@string/previous_experience_3"
                     android:textColor="@color/darkgray"
                     android:textSize="@dimen/_10sdp" />
 
@@ -902,94 +902,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_3sdp">
 
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_margin="@dimen/_3sdp"
-                    android:layout_weight="1"
-                    android:elevation="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/white">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/work_experience"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/darkgray"
+                    android:textSize="@dimen/_12sdp" />
 
-                    <RelativeLayout
-                        android:id="@+id/layout_for_startDP"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:padding="@dimen/_3sdp">
+                <TextView
+                    android:id="@+id/tvYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/darkgray"
+                    android:text="0"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textSize="@dimen/_12sdp" />
 
-                        <TextView
-                            android:id="@+id/tv_for_startDP"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:layout_toLeftOf="@+id/clock2"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:hint="@string/start_date"
-                            android:scrollHorizontally="true"
-                            android:singleLine="true"
-                            android:textColor="@color/darkgray"
-                            android:textColorHint="@color/lightgray"
-                            android:textSize="@dimen/_12sdp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/darkgray"
+                    android:text="@string/years"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:textSize="@dimen/_12sdp"/>
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/clock2"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_alignParentRight="true"
-                            android:padding="@dimen/_2sdp"
-                            app:srcCompat="@drawable/ic_clock" />
-
-                    </RelativeLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_35sdp"
-                    android:layout_margin="@dimen/_3sdp"
-                    android:layout_weight="1"
-                    android:elevation="@dimen/_5sdp"
-                    app:cardBackgroundColor="@color/white">
-
-                    <RelativeLayout
-                        android:id="@+id/layout_for_finishDP"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:padding="@dimen/_3sdp">
-
-                        <TextView
-                            android:id="@+id/tv_for_finishDP"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:layout_toLeftOf="@+id/clock3"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:hint="@string/finish_date"
-                            android:scrollHorizontally="true"
-                            android:singleLine="true"
-                            android:textColor="@color/darkgray"
-                            android:textColorHint="@color/lightgray"
-                            android:textSize="@dimen/_12sdp" />
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/clock3"
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:layout_alignParentRight="true"
-                            android:padding="@dimen/_2sdp"
-                            app:srcCompat="@drawable/ic_clock" />
-
-                    </RelativeLayout>
-
-                </android.support.v7.widget.CardView>
             </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/sliderExperience"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:min="1"
+                android:layout_marginLeft="@dimen/_minus5sdp"
+                android:layout_marginRight="@dimen/_minus5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp" />
 
             <TextView
                 android:layout_width="wrap_content"

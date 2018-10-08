@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
@@ -106,6 +107,8 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.add_ratting));
         }else if (subject.isEmpty()){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.add_subject));
+        }else if (subject.length()>50){
+            MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.add_subject_r));
         }else if (feedback.isEmpty()){
             MyCustomMessage.getInstance(this).snackbar(mainlayout,getString(R.string.add_feedback));
         }else {
@@ -123,6 +126,7 @@ public class FeedbackActivity extends AppCompatActivity implements View.OnClickL
                     String status = jsonObject.getString("status");
                     String message = jsonObject.getString("message");
                     if (status.equals("success")){
+                        Toast.makeText(FeedbackActivity.this, R.string.submitting, Toast.LENGTH_SHORT).show();
                         finish();
                     }else {
                         MyCustomMessage.getInstance(FeedbackActivity.this).snackbar(mainlayout,message);

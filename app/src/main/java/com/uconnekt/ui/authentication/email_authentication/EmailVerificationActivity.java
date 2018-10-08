@@ -27,24 +27,31 @@ import java.util.Map;
 
 public class EmailVerificationActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private String token = "" ,email = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_verification);
-
         initView();
-
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            String token = extras.getString("token");
-            String email = extras.getString("email");
-            verifyAPI(token,email);
+            token = extras.getString("token");
+            email = extras.getString("email");
         }
+
     }
 
     private void initView() {
         findViewById(R.id.layout_for_login).setOnClickListener(this);
         findViewById(R.id.iv_for_back).setOnClickListener(this);
+        findViewById(R.id.btnResend).setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        verifyAPI();
     }
 
     @Override
@@ -54,21 +61,18 @@ public class EmailVerificationActivity extends AppCompatActivity implements View
         finish();
     }
 
-    private void verifyAPI(final String token, final String email){
+    private void verifyAPI(){
         new VolleyGetPost(this, AllAPIs.VERIFIED_EMAIL, true, "VERIFIED_EMAIL", true) {
             @Override
             public void onVolleyResponse(String response) {
                 try {
                     JSONObject object = new JSONObject(response);
                     String status = object.getString("status");
-                    String message = object.getString("message");
                     if (status.equals("success")){
                         UserInfo userInfo = Uconnekt.session.getUserInfo();
                         userInfo.isVerified = "1";
                         Uconnekt.session.createSession(userInfo);
                         intentActivity();
-                    }else {
-                        Toast.makeText(EmailVerificationActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -84,11 +88,49 @@ public class EmailVerificationActivity extends AppCompatActivity implements View
             public Map<String, String> setParams(Map<String, String> params) {
                 params.put("token",token);
                 params.put("email",email);
+                params.put("browser","1");
+                params.put("id",Uconnekt.session.getUserInfo().userId);
                 return params;
             }
 
             @Override
             public Map<String, String> setHeaders(Map<String, String> params) {
+                return params;
+            }
+        }.executeVolley();
+    }
+
+    private void resendEmail(){
+        new VolleyGetPost(this, AllAPIs.RESEND, false, "RESEND", true) {
+            @Override
+            public void onVolleyResponse(String response) {
+                try {
+                    JSONObject object = new JSONObject(response);
+                    String status = object.getString("status");
+                    String message = object.getString("message");
+                    if (status.equals("success")){
+                        Toast.makeText(EmailVerificationActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(EmailVerificationActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNetError() {
+
+            }
+
+            @Override
+            public Map<String, String> setParams(Map<String, String> params) {
+                return params;
+            }
+
+            @Override
+            public Map<String, String> setHeaders(Map<String, String> params) {
+                params.put("authToken",Uconnekt.session.getUserInfo().authToken);
                 return params;
             }
         }.executeVolley();
@@ -127,6 +169,9 @@ public class EmailVerificationActivity extends AppCompatActivity implements View
                 break;
             case R.id.layout_for_login:
                 onBackPressed();
+                break;
+            case R.id.btnResend:
+                resendEmail();
                 break;
         }
     }

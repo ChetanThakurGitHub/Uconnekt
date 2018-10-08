@@ -49,7 +49,7 @@
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="@dimen/_120sdp"
             android:layout_height="@dimen/_120sdp"
-            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_30sdp"
             app:srcCompat="@drawable/ic_email_verification"
             android:layout_gravity="center"
             android:background="@drawable/circle_for_email" />
@@ -74,6 +74,19 @@
             android:fontFamily="@font/montserrat_regular"
             android:textSize="@dimen/_12sdp"
             android:text="@string/verify_dis"/>
+
+
+        <Button
+            android:id="@+id/btnResend"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:textSize="@dimen/_14sdp"
+            android:text="@string/resend"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat_medium"
+            android:background="@drawable/button_bg"/>
 
     </LinearLayout>
 

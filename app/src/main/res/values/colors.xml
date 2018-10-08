@@ -3,8 +3,8 @@
     <color name="colorPrimary">#FAD299</color>
     <color name="colorPrimaryDark">#FCAC35</color>
     <color name="colorAccent">#FCAC35</color>
-    <!--<color name="colorDark">#ff9800</color>-->
-    <color name="colorDark">#F57C00</color>
+    <!--<color name="colorDark">#c28b07</color>-->
+    <color name="colorDark">#c66900</color>
 
     <color name="yellow">#FCAC35</color>
     <color name="lightyellow">#FAD299</color>
@@ -34,4 +34,5 @@
     <color name="black30p">#4D000000</color>
     <color name="black20p">#33000000</color>
     <color name="black03p">#03000000</color>
+
 </resources>

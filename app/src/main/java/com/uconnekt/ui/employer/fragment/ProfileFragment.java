@@ -125,6 +125,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.hideKeyboard();
+    }
+
     private void callingIntent(){
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:" + phone));
@@ -445,9 +451,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         PhotoView iv_for_image = dialog.findViewById(R.id.iv_for_image);
 
         if (profileImage != null && !profileImage.equals("")) {
-            Picasso.with(activity).load(profileImage).placeholder(R.drawable.ic_background).into(iv_for_image);
-        } else {
-            Picasso.with(activity).load(R.drawable.ic_background).fit().into(iv_for_image);
+            Picasso.with(activity).load(profileImage).into(iv_for_image);
         }
         dialog.show();
     }

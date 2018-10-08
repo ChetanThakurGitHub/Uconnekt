@@ -4,8 +4,8 @@ public class AllAPIs {
 
  /*Base URL*/
 
- //private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
- private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
+ private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
+ //private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
  private static final String URL_WITH_LOGIN = URL_WITHOUT_LOGIN + "users/";
 
  /*Authontication*/
@@ -44,6 +44,7 @@ public class AllAPIs {
  public static final String UPDATE_NOTIFICATION = URL_WITH_LOGIN +"update_notification";
  public static final String VERIFIED_EMAIL = URL_WITH_LOGIN +"verifiedEmail";
  public static final String ADD_FEEDBACK = URL_WITH_LOGIN +"addFeedback";
+ public static final String RESEND = URL_WITH_LOGIN +"resendEmailVerifyLink";
 
  /*Individual Side*/
  public static final String BASIC_INFO = URL_WITH_LOGIN +"updateBasicInfo";

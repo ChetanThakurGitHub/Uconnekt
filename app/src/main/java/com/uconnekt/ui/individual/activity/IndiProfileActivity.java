@@ -3,6 +3,7 @@ package com.uconnekt.ui.individual.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +41,7 @@ import com.uconnekt.application.Uconnekt;
 import com.uconnekt.chat.activity.ChatActivity;
 import com.uconnekt.helper.PermissionAll;
 import com.uconnekt.model.ReviewList;
+import com.uconnekt.ui.base.BaseActivity;
 import com.uconnekt.ui.common_activity.NetworkActivity;
 import com.uconnekt.ui.employer.activity.ProfileActivity;
 import com.uconnekt.util.Constant;
@@ -282,6 +285,7 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onResume() {
+        hideKeyboard();
         if (Constant.NETWORK_CHECK == 1){
             apiCalling();
         }else if (Constant.API == 1){
@@ -289,6 +293,15 @@ public class IndiProfileActivity extends AppCompatActivity implements View.OnCli
             apiCalling();
         }
         super.onResume();
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override

@@ -111,6 +111,7 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
         specialityArrayList = new ArrayList<>();
         cusDialogProg = new CusDialogProg(this);
         getlist();
+
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -397,7 +397,6 @@
                         android:id="@+id/tvBusDes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/business_descriptions"
                         android:textSize="@dimen/_14sdp"
                         android:textColor="@color/darkgray"
                         android:layout_marginTop="@dimen/_10sdp"

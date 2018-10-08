@@ -160,6 +160,19 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         isTyping();
         getTypingData();
 
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 0){
+                    setIsTypingStatus();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        et_for_sendTxt.addTextChangedListener(textWatcher);
     }
 
     private void getDeleteTime(){
@@ -435,19 +448,7 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
         EditText et_for_sendTxt = new EditText(this);
         et_for_sendTxt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (s.length() != 0){
-                setIsTypingStatus();
-            }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        };
-        et_for_sendTxt.addTextChangedListener(textWatcher);
+
     }
 
 
@@ -461,7 +462,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
     };
 
     private void setIsTypingStatus() {
-        System.out.println("printing......."+isTyping);
         if (!isTyping){
             // Log.e("Chat","set is typing to fcm");
             FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(1);
@@ -904,7 +904,6 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 totalCount = (int) dataSnapshot.getChildrenCount() + 10;
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -921,7 +920,9 @@ public class ChatActivity extends BaseActivity implements View.OnClickListener {
                 int screenHeight = mainlayout.getRootView().getHeight();
                 int keypadHeight = screenHeight - r.bottom;
                 if (keypadHeight > screenHeight * 0.15) {
-                    FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(1);
+                    FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(0);
+                    recycler_view.scrollToPosition(chattings.size() - 1);
+                    chatAdapter.notifyDataSetChanged();
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("typing").child(chatNode).child(myID).child("isTyping").setValue(0);
                 }

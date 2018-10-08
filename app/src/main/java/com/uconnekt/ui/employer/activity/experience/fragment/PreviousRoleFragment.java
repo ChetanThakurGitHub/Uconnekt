@@ -28,11 +28,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 
 public class PreviousRoleFragment extends Fragment implements View.OnClickListener {
@@ -92,16 +88,14 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                     roleArrayList.clear();
                     if (status.equalsIgnoreCase("success")) {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("experience");
-                        JSONObject jsonObject3 = jsonObject1.getJSONObject("previous_role");
-                        JSONArray array = jsonObject3.getJSONArray("previous_experience");
+                        JSONArray array = jsonObject1.getJSONArray("previous_role");
                         for (int i = 0; i < array.length(); i++) {
                             PreviousRole previousRole = new PreviousRole();
                             JSONObject jsonObject2 = array.getJSONObject(i);
-                            previousRole.previous_company_name = jsonObject2.getString("previous_company_name");
-                            previousRole.previous_description = URLDecoder.decode(jsonObject2.getString("previous_description"), "UTF-8");
-                            previousRole.previous_finish_date = jsonObject2.getString("previous_finish_date");
-                            previousRole.previous_job_title = jsonObject2.getString("previous_job_title");
-                            previousRole.previous_start_date = jsonObject2.getString("previous_start_date");
+                            previousRole.previous_company_name = jsonObject2.getString("previousCompanyName");
+                            previousRole.previous_description = URLDecoder.decode(jsonObject2.getString("previousDescription"), "UTF-8");
+                            previousRole.previous_job_title = jsonObject2.getString("previous_job_title_id");
+                            previousRole.experience = jsonObject2.getString("experience") + " Years";
                             roleArrayList.add(previousRole);
                         }
                         getlist();
@@ -205,17 +199,12 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_txt1.setText(previousRole.previous_company_name.substring(0,1).toUpperCase() + previousRole.previous_company_name.substring(1));
                 TextView tv_for_jobTitle1 = view.findViewById(R.id.tv_for_jobTitle1);
                 tv_for_jobTitle1.setText(previousRole.previous_job_title);
-                TextView layout_for_startDP1 = view.findViewById(R.id.layout_for_startDP1);
-                layout_for_startDP1.setText(previousRole.previous_start_date);
-                TextView tv_for_finishDP1 = view.findViewById(R.id.tv_for_finishDP1);
-                tv_for_finishDP1.setText(previousRole.previous_finish_date);
                 TextView tv_for_description1 = view.findViewById(R.id.tv_for_description1);
                 tv_for_description1.setText(previousRole.previous_description);
-
-                if (!previousRole.previous_start_date.isEmpty()&&!previousRole.previous_finish_date.isEmpty()) {
-                    getDateDifferenceInDDMMYYYY(previousRole.previous_start_date, previousRole.previous_finish_date,0);
-                }
-
+                TextView tv_for_totalExp1 = view.findViewById(R.id.tv_for_totalExp1);
+                tv_for_totalExp1.setText(previousRole.experience);
+                TextView tv_for_total1 = view.findViewById(R.id.tv_for_total1);
+                tv_for_total1.setText(previousRole.experience);
                 break;
             case 1:
                 PreviousRole previousRole1 = roleArrayList.get(1);
@@ -226,16 +215,12 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_txt2.setText(previousRole1.previous_company_name.substring(0,1).toUpperCase() + previousRole1.previous_company_name.substring(1));
                 TextView tv_for_jobTitle2 = view.findViewById(R.id.tv_for_jobTitle2);
                 tv_for_jobTitle2.setText(previousRole1.previous_job_title);
-                TextView layout_for_startDP2 = view.findViewById(R.id.layout_for_startDP2);
-                layout_for_startDP2.setText(previousRole1.previous_start_date);
-                TextView tv_for_finishDP2 = view.findViewById(R.id.tv_for_finishDP2);
-                tv_for_finishDP2.setText(previousRole1.previous_finish_date);
+                TextView tv_for_totalExp2 = view.findViewById(R.id.tv_for_totalExp2);
+                tv_for_totalExp2.setText(previousRole1.experience);
                 TextView tv_for_description2 = view.findViewById(R.id.tv_for_description2);
                 tv_for_description2.setText(previousRole1.previous_description);
-
-                if (!previousRole1.previous_start_date.isEmpty()&&!previousRole1.previous_finish_date.isEmpty()) {
-                    getDateDifferenceInDDMMYYYY(previousRole1.previous_start_date, previousRole1.previous_finish_date, 1);
-                }
+                TextView tv_for_total2 = view.findViewById(R.id.tv_for_total2);
+                tv_for_total2.setText(previousRole1.experience);
                 break;
             case 2:
                 PreviousRole previousRole2 = roleArrayList.get(2);
@@ -246,16 +231,12 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_txt3.setText(previousRole2.previous_company_name.substring(0,1).toUpperCase() + previousRole2.previous_company_name.substring(1));
                 TextView tv_for_jobTitle3 = view.findViewById(R.id.tv_for_jobTitle3);
                 tv_for_jobTitle3.setText(previousRole2.previous_job_title);
-                TextView layout_for_startDP3 = view.findViewById(R.id.layout_for_startDP3);
-                layout_for_startDP3.setText(previousRole2.previous_start_date);
-                TextView tv_for_finishDP3 = view.findViewById(R.id.tv_for_finishDP3);
-                tv_for_finishDP3.setText(previousRole2.previous_finish_date);
+                TextView tv_for_totalExp3 = view.findViewById(R.id.tv_for_totalExp3);
+                tv_for_totalExp3.setText(previousRole2.experience);
                 TextView tv_for_description3 = view.findViewById(R.id.tv_for_description3);
                 tv_for_description3.setText(previousRole2.previous_description);
-
-                if (!previousRole2.previous_start_date.isEmpty()&&!previousRole2.previous_finish_date.isEmpty()) {
-                    getDateDifferenceInDDMMYYYY(previousRole2.previous_start_date, previousRole2.previous_finish_date, 2);
-                }
+                TextView tv_for_total3 = view.findViewById(R.id.tv_for_total3);
+                tv_for_total3.setText(previousRole2.experience);
                 break;
         }
 
@@ -301,7 +282,7 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
     }
 
 
-    private void setDate(long elapsedYear, long elapsedMonth, int i, long elapsedDays, String startDate, String endDate){
+   /* private void setDate(long elapsedYear, long elapsedMonth, int i, long elapsedDays, String startDate, String endDate){
         String result ;
         if (elapsedYear != 0 | elapsedMonth != 0){
             result = elapsedYear+" Years, ";
@@ -315,8 +296,6 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
         }
     }
 
-
-    //*****************calculation********************
 
     public void getDateDifferenceInDDMMYYYY(String departDateTime, String returnDateTime, int i) {
 
@@ -390,5 +369,5 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
                 tv_for_total3.setText(startDate+" - "+endDate+" ( "+result+" )");
                 break;
         }
-    }
+    }*/
 }

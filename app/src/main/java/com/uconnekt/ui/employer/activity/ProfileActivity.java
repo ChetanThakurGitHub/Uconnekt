@@ -3,6 +3,7 @@ package com.uconnekt.ui.employer.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -149,6 +151,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
         popup.show();
     }*/
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideKeyboard();
+    }
+
+    public void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 
 
     private void callingIntent() {
@@ -460,9 +477,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         PhotoView iv_for_image = dialog.findViewById(R.id.iv_for_image);
 
         if (profileImage != null && !profileImage.equals("")) {
-            Picasso.with(this).load(profileImage).placeholder(R.drawable.ic_background).into(iv_for_image);
-        } else {
-            Picasso.with(this).load(R.drawable.ic_background).fit().into(iv_for_image);
+            Picasso.with(this).load(profileImage).into(iv_for_image);
         }
         dialog.show();
     }
