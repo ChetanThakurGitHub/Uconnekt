@@ -265,7 +265,9 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         }else if (tv_for_address.getText().toString().trim().isEmpty()){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.address_v));
         }else {
-            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty()) updateBasicInfoOnServer();
+            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty()) {
+                updateBasicInfoOnServer();
+            }
             else MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_location_again));
         }
     }
@@ -288,7 +290,9 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
         }else if (tv_for_address.getText().toString().trim().isEmpty()){
             MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.address_v));
         }else {
-            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty())  editUpdateBasicInfoOnServer(fullname,phone);
+            if (!city.isEmpty()|!state.isEmpty()|!country.isEmpty()) {
+                editUpdateBasicInfoOnServer(fullname,phone);
+            }
             else MyCustomMessage.getInstance(activity).snackbar(mainlayout,getString(R.string.select_location_again));
         }
     }
@@ -898,8 +902,11 @@ public class EditBasicInfoFragment extends Fragment implements View.OnClickListe
             public void onSuccess(Address address) {
                 city = ""; state = ""; country = "";
                 city = address.getCity();
+                city = city==null?"":city;
                 state = address.getState();
+                state = state==null?"":state;
                 country = address.getCountry();
+                country = country==null?"":country;
             }
         }).execute();
     } // latlog to address find

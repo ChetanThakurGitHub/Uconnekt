@@ -27,6 +27,7 @@ import com.uconnekt.R;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.model.Address;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.singleton.MyCustomMessage;
 import com.uconnekt.sp.OnSpinerItemClick;
@@ -269,18 +270,19 @@ public class IndiFilterFragment extends Fragment implements View.OnClickListener
     } // onActivityResult
 
     private void latlong(Double latitude, Double longitude) throws IOException {
-
         LatLng latLng = new LatLng(latitude,longitude);
-
         new GioAddressTask(activity, latLng, new GioAddressTask.LocationListner() {
             @Override
-            public void onSuccess(com.uconnekt.model.Address address) {
+            public void onSuccess(Address address) {
+                city = ""; state = ""; country = "";
                 city = address.getCity();
+                city = city==null?"":city;
                 state = address.getState();
+                state = state==null?"":state;
                 country = address.getCountry();
+                country = country==null?"":country;
             }
         }).execute();
-
     } // latlog to address find
 
     @Override

@@ -105,7 +105,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(getIntent().getData() != null && !Uconnekt.session.getUserInfo().isVerified.equals("1")) {
+                    if(getIntent().getData() != null ) {
                         profileView();
                     }else {
                         //Log.e("authToken",Uconnekt.session.getUserInfo().authToken);
@@ -142,7 +142,8 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     private void profileView(){
         Map<String, String> map = Utils.getQueryString(getIntent().getData().toString());
-    if (map.containsKey("token")){
+
+    if (map.containsKey("token") && !Uconnekt.session.getUserInfo().isVerified.equals("1")){
         String email = map.get("email");
         String token = map.get("token");
             if (Uconnekt.session.getUserInfo().userId.equals(map.get("id"))){
@@ -166,6 +167,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
                      Toast.makeText(SplashActivity.this, R.string.profile_check, Toast.LENGTH_SHORT).show();
                  }else {
                      intent = new Intent(this, HomeActivity.class);
+                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                      sendData(map,intent);
                  }
             }else {
@@ -173,6 +175,7 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
                     Toast.makeText(SplashActivity.this, R.string.profile_check, Toast.LENGTH_SHORT).show();
                 }else {
                     intent = new Intent(this, JobHomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     sendData(map,intent);
                 }
             }
@@ -188,6 +191,10 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendIntent(){
+
     }
 
 }

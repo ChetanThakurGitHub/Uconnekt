@@ -335,7 +335,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/darkgray"
-                    android:text="@string/year"
+                    android:text="@string/years"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:textSize="@dimen/_12sdp" />
 

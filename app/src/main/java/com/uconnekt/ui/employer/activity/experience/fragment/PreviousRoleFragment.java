@@ -10,6 +10,8 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,6 +42,8 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
     private CardView card1, card2, card3;
     private ArrayList<PreviousRole> roleArrayList = new ArrayList<>();
     private View view;
+    private Animation animationUp;
+    private Animation animationDown;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +67,9 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
         card2 = view.findViewById(R.id.card2);
         card3 = view.findViewById(R.id.card3);
         layout_for_noData = view.findViewById(R.id.layout_for_noData);
+
+        animationUp = AnimationUtils.loadAnimation(activity, R.anim.slide_up);
+        animationDown = AnimationUtils.loadAnimation(activity, R.anim.slide_down);
     }
 
     @Override
@@ -248,10 +255,12 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
             case R.id.layout_for_company1:
                 if (!opnClo1) {
                     layout_for_show1.setVisibility(View.VISIBLE);
+                    layout_for_show1.startAnimation(animationDown);
                     iv_for_arrow1.setImageResource(R.drawable.ic_up_arrow);
                     opnClo1 = true;
                 } else {
                     opnClo1 = false;
+                    layout_for_show1.startAnimation(animationUp);
                     layout_for_show1.setVisibility(View.GONE);
                     iv_for_arrow1.setImageResource(R.drawable.ic_down_arrow);
                 }
@@ -259,22 +268,26 @@ public class PreviousRoleFragment extends Fragment implements View.OnClickListen
             case R.id.layout_for_company2:
                 if (!opnClo2) {
                     layout_for_show2.setVisibility(View.VISIBLE);
+                    layout_for_show2.startAnimation(animationDown);
                     iv_for_arrow2.setImageResource(R.drawable.ic_up_arrow);
                     opnClo2 = true;
                 } else {
                     opnClo2 = false;
                     layout_for_show2.setVisibility(View.GONE);
+                    layout_for_show2.startAnimation(animationUp);
                     iv_for_arrow2.setImageResource(R.drawable.ic_down_arrow);
                 }
                 break;
             case R.id.layout_for_company3:
                 if (!opnClo3) {
                     layout_for_show3.setVisibility(View.VISIBLE);
+                    layout_for_show3.startAnimation(animationDown);
                     iv_for_arrow3.setImageResource(R.drawable.ic_up_arrow);
                     opnClo3 = true;
                 } else {
                     opnClo3 = false;
                     layout_for_show3.setVisibility(View.GONE);
+                    layout_for_show3.startAnimation(animationUp);
                     iv_for_arrow3.setImageResource(R.drawable.ic_down_arrow);
                 }
                 break;

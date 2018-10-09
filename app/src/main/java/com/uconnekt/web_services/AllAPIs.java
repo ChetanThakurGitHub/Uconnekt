@@ -4,8 +4,8 @@ public class AllAPIs {
 
  /*Base URL*/
 
- private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
- //private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
+ //private static final String URL_WITHOUT_LOGIN = "https://www.connektus.com.au/service/";
+ private static final String URL_WITHOUT_LOGIN = "http://www.dev.connektus.com.au/service/";
  private static final String URL_WITH_LOGIN = URL_WITHOUT_LOGIN + "users/";
 
  /*Authontication*/

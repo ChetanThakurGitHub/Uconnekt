@@ -43,6 +43,7 @@ import com.uconnekt.cropper.CropImageView;
 import com.uconnekt.custom_view.CusDialogProg;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.model.Address;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.UserInfo;
 import com.uconnekt.singleton.MyCustomMessage;
@@ -318,18 +319,19 @@ public class EmpProfileActivity extends BaseActivity implements View.OnClickList
     } // onActivityResult
 
     private void latlong(Double latitude, Double longitude) throws IOException {
-
         LatLng latLng = new LatLng(latitude,longitude);
-
         new GioAddressTask(this, latLng, new GioAddressTask.LocationListner() {
             @Override
-            public void onSuccess(com.uconnekt.model.Address address) {
+            public void onSuccess(Address address) {
+                city = ""; state = ""; country = "";
                 city = address.getCity();
+                city = city==null?"":city;
                 state = address.getState();
+                state = state==null?"":state;
                 country = address.getCountry();
+                country = country==null?"":country;
             }
         }).execute();
-
     } // latlog to address find
 
 

@@ -33,14 +33,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!--live-->
-                <data android:host="www.connektus.com.au"
+                <!--<data android:host="www.connektus.com.au"
                     android:pathPrefix="/home/mobile_browser_email"
-                    android:scheme="https" />
+                    android:scheme="https" />-->
 
                <!-- dev-->
-                <!--<data android:host="dev.connektus.com.au"
+                <data android:host="dev.connektus.com.au"
                     android:pathPrefix="/home/mobile_browser_email"
-                    android:scheme="http" />-->
+                    android:scheme="http" />
 
             </intent-filter>
             <intent-filter>

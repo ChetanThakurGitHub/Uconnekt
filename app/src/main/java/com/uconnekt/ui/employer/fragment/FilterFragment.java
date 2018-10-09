@@ -29,6 +29,7 @@ import com.uconnekt.adapter.WeekSpAdapter;
 import com.uconnekt.application.Uconnekt;
 import com.uconnekt.helper.GioAddressTask;
 import com.uconnekt.helper.PermissionAll;
+import com.uconnekt.model.Address;
 import com.uconnekt.model.JobTitle;
 import com.uconnekt.model.Weeks;
 import com.uconnekt.singleton.MyCustomMessage;
@@ -328,18 +329,19 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     } // onActivityResult
 
     private void latlong(Double latitude, Double longitude) throws IOException {
-
         LatLng latLng = new LatLng(latitude,longitude);
-
         new GioAddressTask(activity, latLng, new GioAddressTask.LocationListner() {
             @Override
-            public void onSuccess(com.uconnekt.model.Address address) {
+            public void onSuccess(Address address) {
+                city = ""; state = ""; country = "";
                 city = address.getCity();
+                city = city==null?"":city;
                 state = address.getState();
+                state = state==null?"":state;
                 country = address.getCountry();
+                country = country==null?"":country;
             }
         }).execute();
-
     } // latlog to address find
 
     @Override
@@ -488,9 +490,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                         empTypeSpAdapter.notifyDataSetChanged();
 
                         setOldData();
-
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -588,14 +588,12 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             String minExp = searchFragment.minExperience.isEmpty()||searchFragment.minExperience.equals("0")?"0": searchFragment.minExperience;
             minExp = minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
             sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
-            String maxExp = searchFragment.maxExperience.isEmpty()||searchFragment.maxExperience.equals("5")?"100": searchFragment.maxExperience;
-            maxExp = maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
-            sliderExperience.getThumb(1).setValue(Integer.parseInt(maxExp));
+           // String maxExp = searchFragment.maxExperience.isEmpty()||searchFragment.maxExperience.equals("5")?"100": searchFragment.maxExperience;
+           // maxExp = minExp.equals("0")?"0":maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
+            sliderExperience.getThumb(1).setValue(Integer.parseInt(setExp(searchFragment.maxExperience)));
             String minSalary = searchFragment.minSalarys.isEmpty()?"0": searchFragment.minSalarys;
-            // minSalary = minSalary.equals("$20,000")?"10":minSalary.equals("$40,000")?"20":minSalary.equals("$80,000")?"30":minSalary.equals("$100,000")?"40":minSalary.equals("$120,000")?"50":minSalary.equals("$140,000")?"60":minSalary.equals("$160,000")?"70":minSalary.equals("$180,000")?"80":minSalary.equals("$200,000")?"100":"0";
             sliderSalary.getThumb(0).setValue(Integer.parseInt(getsalary(minSalary)));
             String maxSalary = searchFragment.maxSalarys.isEmpty()?"100": searchFragment.maxSalarys;
-            //maxSalary = maxSalary.equals("$20,000")?"10":maxSalary.equals("$40,000")?"20":maxSalary.equals("$80,000")?"30":maxSalary.equals("$100,000")?"40":maxSalary.equals("$120,000")?"50":maxSalary.equals("$140,000")?"60":maxSalary.equals("$160,000")?"70":maxSalary.equals("$180,000")?"80":maxSalary.equals("$200,000")?"100":"100";
             sliderSalary.getThumb(1).setValue(Integer.parseInt(maxSalary.equals("100")?"100":getsalary(maxSalary)));
 
         }else if(mapFragment != null){
@@ -664,24 +662,51 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             state = mapFragment.state;
             country = mapFragment.country;
             String minExp = mapFragment.minExperience.isEmpty()?"0": mapFragment.minExperience;
-            minExp = minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
+            minExp =minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
             sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
-            String maxExp = mapFragment.maxExperience.isEmpty()?"100": mapFragment.maxExperience;
-            maxExp = maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
-            sliderExperience.getThumb(1).setValue(Integer.parseInt(maxExp));
+            sliderExperience.getThumb(1).setValue(Integer.parseInt(setExp(mapFragment.maxExperience)));
             String minSalary = mapFragment.minSalarys.isEmpty()?"0": mapFragment.minSalarys;
-           // minSalary = minSalary.equals("$20,000")?"10":minSalary.equals("$40,000")?"20":minSalary.equals("$80,000")?"30":minSalary.equals("$100,000")?"40":minSalary.equals("$120,000")?"50":minSalary.equals("$140,000")?"60":minSalary.equals("$160,000")?"70":minSalary.equals("$180,000")?"80":minSalary.equals("$200,000")?"100":"0";
             sliderSalary.getThumb(0).setValue(Integer.parseInt(getsalary(minSalary)));
             String maxSalary = mapFragment.maxSalarys.isEmpty()?"100": mapFragment.maxSalarys;
-            //maxSalary = maxSalary.equals("$20,000")?"10":maxSalary.equals("$40,000")?"20":maxSalary.equals("$80,000")?"30":maxSalary.equals("$100,000")?"40":maxSalary.equals("$120,000")?"50":maxSalary.equals("$140,000")?"60":maxSalary.equals("$160,000")?"70":maxSalary.equals("$180,000")?"80":maxSalary.equals("$200,000")?"100":"100";
             sliderSalary.getThumb(1).setValue(Integer.parseInt(maxSalary.equals("100")?"100":getsalary(maxSalary)));
         }
     }
 
 
+    private String setExp(String value){
+        String test = "0";
+        switch (value) {
+            case "0":
+                test = "0";
+                break;
+            case "1":
+                test = "20";
+                break;
+            case "2":
+                test = "40";
+                break;
+            case "3":
+                test = "60";
+                break;
+            case "4":
+                test = "80";
+                break;
+            case "5":
+                test = "100";
+                break;
+            case "":
+                test = "100";
+                break;
+        }
+        return test;
+    }
+
     private String getsalary(String value){
         String test = "0";
         switch (value) {
+            case "$0":
+                test = "0";
+                break;
             case "$20,000":
                 test = "10";
                 break;
