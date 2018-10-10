@@ -34,7 +34,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.uconnekt.R;
 import com.uconnekt.adapter.WeekSpAdapter;
 import com.uconnekt.application.Uconnekt;
@@ -69,7 +68,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
 
 import static com.uconnekt.util.Constant.RESULT_OK;
 
@@ -367,7 +365,7 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
         sliderExperience = view.findViewById(R.id.sliderExperience);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             sliderExperience.setMin(0);
-            sliderExperience.setMax(5);
+            sliderExperience.setMax(10);
         }
         sliderExperience.setProgress(0);
 
@@ -928,8 +926,6 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                         weekList.add(week4);
                         weekSpAdapter.notifyDataSetChanged();
 
-                       // JSONObject salaryRangeList = result.getJSONObject("salary_range_list");
-                        JSONObject emplyementType = result.getJSONObject("emplyement_type");
 
                         JSONArray jsonArray = result.getJSONArray("salary_range_list");
 
@@ -944,42 +940,14 @@ public class EditExpFragment extends Fragment implements View.OnClickListener, A
                            if (i==5)week6.week = object.getString(week6.id ="80000-100000");
                            if (i==6)week6.week = object.getString(week6.id ="100000-120000");
                            if (i==7)week6.week = object.getString(week6.id ="120000-150000");
-                           if (i==8)week6.week = object.getString(week6.id ="150000-160000");
+                           if (i==8)week6.week = object.getString(week6.id ="150000-200000");
+                           if (i==9)week6.week = object.getString(week6.id ="200000-99999999");
                             salaryList.add(week6);
                         }
                         salarySpAdapter.notifyDataSetChanged();
 
 
-                      /*  salaryList.add(week0);
-                        Weeks week6 = new Weeks();
-                        week6.week = salaryRangeList.getString(week6.id = "any");
-                        salaryList.add(week6);
-                        Weeks week7 = new Weeks();
-                        week7.week = salaryRangeList.getString(week7.id ="0-20000");
-                        salaryList.add(week7);
-                        Weeks week8 = new Weeks();
-                        week8.week = salaryRangeList.getString(week8.id ="20000-40000");
-                        salaryList.add(week8);
-                        Weeks week9 = new Weeks();
-                        week9.week = salaryRangeList.getString(week9.id ="40000-60000");
-                        salaryList.add(week9);
-                        Weeks week10 = new Weeks();
-                        week10.week = salaryRangeList.getString(week10.id ="60000-80000");
-                        salaryList.add(week10);
-                        Weeks week11 = new Weeks();
-                        week11.week = salaryRangeList.getString(week11.id ="80000-100000");
-                        salaryList.add(week11);
-                        Weeks week12 = new Weeks();
-                        week12.week = salaryRangeList.getString(week12.id ="100000-120000");
-                        salaryList.add(week12);
-                        Weeks week13 = new Weeks();
-                        week13.week = salaryRangeList.getString(week13.id ="120000-150000");
-                        salaryList.add(week13);
-                        Weeks week18 = new Weeks();
-                        week18.week = salaryRangeList.getString(week18.id ="150000-160000");
-                        salaryList.add(week18);
-                        salarySpAdapter.notifyDataSetChanged();*/
-
+                        JSONObject emplyementType = result.getJSONObject("emplyement_type");
                         empTypeList.add(week0);
                         Weeks week14 = new Weeks();
                         week14.week = emplyementType.getString("full_time");

@@ -64,12 +64,12 @@ public class DocViewActivity extends AppCompatActivity implements View.OnClickLi
         iv_for_backIco.setOnClickListener(this);
         TextView tv_for_tittle = findViewById(R.id.tv_for_tittle);
         tv_for_tittle.setText(getString(check?R.string.term_and_conditions:R.string.privacy_policy));
-        tandc();
+        tandc(check);
 
     }
 
-    private void tandc(){
-        new VolleyGetPost(this, AllAPIs.TANDC, false, "TANDC", false) {
+    private void tandc(Boolean check){
+        new VolleyGetPost(this,check?AllAPIs.TANDC:AllAPIs.PRICACY, false, "TANDC-PRICACY", false) {
             @Override
             public void onVolleyResponse(String response) {
                 try {

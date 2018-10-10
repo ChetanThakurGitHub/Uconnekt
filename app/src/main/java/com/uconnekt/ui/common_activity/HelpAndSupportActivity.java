@@ -1,14 +1,12 @@
 package com.uconnekt.ui.common_activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +35,10 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
         tv_for_tittle.setText(getString(R.string.help_and_support));
         RecyclerView recycler_view = findViewById(R.id.recycler_view);
         findViewById(R.id.layoutSendFeed).setOnClickListener(this);
+        findViewById(R.id.ivFacebook).setOnClickListener(this);
+        findViewById(R.id.ivLinkedIn).setOnClickListener(this);
+        findViewById(R.id.ivTwiter).setOnClickListener(this);
+        findViewById(R.id.ivMail).setOnClickListener(this);
 
         //TextView tv_for_test = findViewById(R.id.tv_for_test);
         /*Spannable firstTxt = new SpannableString("Feed free to ");
@@ -168,7 +170,30 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
             case R.id.layoutSendFeed:
                 startActivity(new Intent(this,FeedbackActivity.class));
                 break;
+            case R.id.ivFacebook:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/pages/category/Information-Technology-Company/ConnektUs-412365742629253/"));
+                startActivity(intent);
+                break;
+            case R.id.ivLinkedIn:
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/company/connektusjobs"));
+                startActivity(intent);
+                break;
+            case R.id.ivTwiter:
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/ConnektUsJobs"));
+                startActivity(intent);
+                break;
+            case R.id.ivMail:
+                sharOnEmail();
+                break;
         }
+    }
+
+    private void sharOnEmail() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto: " + "info@connektus.com.au"));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hii android !");
+        startActivity(Intent.createChooser(emailIntent, "Send feedback"));
     }
 
     @Override

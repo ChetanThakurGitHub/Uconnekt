@@ -40,6 +40,7 @@ public class AllAPIs {
  public static final String RECOMMENDS_LIST_BY_ME = URL_WITH_LOGIN +"getMyRecommands?user_id=";
  public static final String TRACK_PROCESS = URL_WITHOUT_LOGIN +"requests/processData";
  public static final String TANDC = URL_WITHOUT_LOGIN +"options/getTNC";
+ public static final String PRICACY = URL_WITHOUT_LOGIN +"options/getPrivacy";
  public static final String BADGE_COUNT = URL_WITH_LOGIN +"badge_count_unread_views";
  public static final String UPDATE_NOTIFICATION = URL_WITH_LOGIN +"update_notification";
  public static final String VERIFIED_EMAIL = URL_WITH_LOGIN +"verifiedEmail";

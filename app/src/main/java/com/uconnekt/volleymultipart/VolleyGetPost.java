@@ -84,6 +84,11 @@ public abstract class VolleyGetPost {
                     Map<String, String> params = new HashMap<>();
                     return setParams(params);
                 }
+
+                @Override
+                public Priority getPriority() {
+                    return Priority.HIGH;
+                }
             };
 
             VolleySingleton.getInstance(activity).addToRequestQueue(stringRequest, TAG);

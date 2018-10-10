@@ -100,11 +100,11 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             @Override
             public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
                 if (thumbIndex == 0) {
-                    int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
-                    tvMinExp.setText(String.valueOf(test));
+                   // int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
+                    tvMinExp.setText(String.valueOf(setExperience(value)));
                 } else {
-                    int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
-                    tvMaxExp.setText(String.valueOf(test));
+                   // int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
+                    tvMaxExp.setText(String.valueOf(setExperience(value)));
                 }
             }
         });
@@ -158,6 +158,43 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 break;
             case 100:
                 test = 200000;
+                break;
+        }
+        return test;
+    }
+
+    private int setExperience(int value){
+        int test = 0;
+        switch (value) {
+            case 10:
+                test = 1;
+                break;
+            case 20:
+                test = 2;
+                break;
+            case 30:
+                test = 3;
+                break;
+            case 40:
+                test = 4;
+                break;
+            case 50:
+                test = 5;
+                break;
+            case 60:
+                test = 6;
+                break;
+            case 70:
+                test = 7;
+                break;
+            case 80:
+                test = 8;
+                break;
+            case 90:
+                test = 9;
+                break;
+            case 100:
+                test = 10;
                 break;
         }
         return test;
@@ -238,6 +275,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void refresh(){
         specialtyId = "";strengthId = "";valueId = "";jobTitleId = "";availabilityId = "";employmentType = "";
 
@@ -586,7 +624,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             tvMaxSalary.setText("$200,000");
 
             String minExp = searchFragment.minExperience.isEmpty()||searchFragment.minExperience.equals("0")?"0": searchFragment.minExperience;
-            minExp = minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
+            minExp =minExp.equals("1")?"10":minExp.equals("2")?"20":minExp.equals("3")?"30":minExp.equals("4")?"40":minExp.equals("5")?"50":minExp.equals("6")?"60":minExp.equals("7")?"70":minExp.equals("8")?"80":minExp.equals("9")?"90":minExp.equals("100")?"100":"0";
             sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
            // String maxExp = searchFragment.maxExperience.isEmpty()||searchFragment.maxExperience.equals("5")?"100": searchFragment.maxExperience;
            // maxExp = minExp.equals("0")?"0":maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
@@ -662,7 +700,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             state = mapFragment.state;
             country = mapFragment.country;
             String minExp = mapFragment.minExperience.isEmpty()?"0": mapFragment.minExperience;
-            minExp =minExp.equals("1")?"20":minExp.equals("2")?"40":minExp.equals("3")?"60":minExp.equals("4")?"80":minExp.equals("5")?"100":"0";
+            minExp =minExp.equals("1")?"10":minExp.equals("2")?"20":minExp.equals("3")?"30":minExp.equals("4")?"40":minExp.equals("5")?"50":minExp.equals("6")?"60":minExp.equals("7")?"70":minExp.equals("8")?"80":minExp.equals("9")?"90":minExp.equals("100")?"100":"0";
             sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
             sliderExperience.getThumb(1).setValue(Integer.parseInt(setExp(mapFragment.maxExperience)));
             String minSalary = mapFragment.minSalarys.isEmpty()?"0": mapFragment.minSalarys;
@@ -680,18 +718,33 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
                 test = "0";
                 break;
             case "1":
-                test = "20";
+                test = "10";
                 break;
             case "2":
-                test = "40";
+                test = "20";
                 break;
             case "3":
-                test = "60";
+                test = "30";
                 break;
             case "4":
-                test = "80";
+                test = "40";
                 break;
             case "5":
+                test = "50";
+                break;
+            case "6":
+                test = "60";
+                break;
+            case "7":
+                test = "70";
+                break;
+            case "8":
+                test = "80";
+                break;
+            case "9":
+                test = "90";
+                break;
+            case "10":
                 test = "100";
                 break;
             case "":

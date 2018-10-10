@@ -938,7 +938,7 @@
                 android:id="@+id/sliderExperience"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="5"
+                android:max="10"
                 android:min="1"
                 android:layout_marginLeft="@dimen/_minus5sdp"
                 android:layout_marginRight="@dimen/_minus5sdp"

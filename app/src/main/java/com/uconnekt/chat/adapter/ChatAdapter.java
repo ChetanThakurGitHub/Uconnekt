@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -219,15 +220,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         try {
             long timeStamp = (long) chatting.timeStamp;
 
-            @SuppressLint("SimpleDateFormat")
-            DateFormat f = new SimpleDateFormat("dd MMM, yyyy'T'HH:mm:ss.mmm'Z'");
+            DateFormat f = new SimpleDateFormat("dd MMM, yyyy'T'HH:mm:ss.mmm'Z'", Locale.US);
             //f.setTimeZone(TimeZone.getTimeZone("GMT+10"));
 
             Calendar cal = Calendar.getInstance();
             TimeZone tz = cal.getTimeZone();
             f.setTimeZone(tz);
-
-            //System.out.println(f.format(timeStamp));
 
             String CurrentString = f.format(timeStamp);
             String date = CurrentString.substring(0,12);

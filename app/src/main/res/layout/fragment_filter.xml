@@ -282,6 +282,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     app:thumbNumber="2"
                     app:scaleStep="10"
+                    app:stepsThumbsApart="1"
                     app:range1="@drawable/multislider_track_mtrl_alpha" />
 
             </LinearLayout>
@@ -347,7 +348,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 app:thumbNumber="2"
-                app:scaleStep="20"
+                app:scaleStep="10"
+                app:stepsThumbsApart="1"
                 app:range1="@drawable/multislider_track_mtrl_alpha" />
 
             <TextView

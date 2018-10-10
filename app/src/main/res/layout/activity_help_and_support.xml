@@ -104,24 +104,28 @@
                     android:weightSum="4">
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivFacebook"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_facebook"/>
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivLinkedIn"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_linkedin_logo"/>
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivTwiter"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_twitter_logo"/>
 
                     <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivMail"
                         android:layout_width="@dimen/_40sdp"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_weight="1"
