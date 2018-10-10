@@ -57,7 +57,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public Boolean goneVisi = false;
     private TextView tv_for_nodata;
     public ImageView iv_for_arrow;
-    public String specialityID = "",jobTitleId = "",availabilityId = "", employmentType = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="",minExperience = "0", maxExperience = "10+", minSalarys = "$0", maxSalarys = "$200,000+";
+    public String specialityID = "",jobTitleId = "",availabilityId = "", employmentType = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="",minExperience = "", maxExperience = "", minSalarys = "", maxSalarys = "";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

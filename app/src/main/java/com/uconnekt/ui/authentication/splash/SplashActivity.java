@@ -193,8 +193,4 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         }
     }
 
-    private void sendIntent(){
-
-    }
-
 }

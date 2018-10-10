@@ -63,6 +63,7 @@ public class IndiSearchFragment extends Fragment implements View.OnClickListener
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_indi_search, container, false);
         initView(view);
+        Constant.NETWORK_CHECK = 0;
         indiSearchAdapter = new IndiSearchAdapter(searchLists,activity);
         listAdapter = new SpecialityListAdapter(arrayList,this);
         getDropDownlist();

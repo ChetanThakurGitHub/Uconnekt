@@ -87,8 +87,11 @@ public class NextRoleFragment extends Fragment {
                             case "$120000-$150000":
                                 expectedSalary = "$120,000-$150,000";
                                 break;
-                            case "$150000-$160000":
-                                expectedSalary = "$150,000+";
+                            case "$150000-$200000":
+                                expectedSalary = "$150,000-$200,000";
+                                break;
+                            case "$200000-$99999999":
+                                expectedSalary = "$200,000+";
                                 break;
                         }
 
@@ -128,5 +131,4 @@ public class NextRoleFragment extends Fragment {
         TextView tv_for_salary = view.findViewById(R.id.tv_for_salary);tv_for_salary.setText(expectedSalary);
         TextView tv_for_empType = view.findViewById(R.id.tv_for_empType);tv_for_empType.setText(employementType);
     }
-
 }

@@ -83,7 +83,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
     public ArrayList<BusiSearchList> searchLists = new ArrayList<>();
     public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",
             strengthId = "" ,valueId = "",city = "",state ="",country = "", employmentType = "",
-            minExperience = "0", maxExperience = "10+", minSalarys = "$0", maxSalarys = "$200,000+";
+            minExperience = "", maxExperience = "", minSalarys = "", maxSalarys = "";
     private Double latitude,longitude,clatitude,clongitude;
     public RelativeLayout layout_for_list;
     public Boolean goneVisi = false;
