@@ -83,7 +83,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
     public ArrayList<BusiSearchList> searchLists = new ArrayList<>();
     public String specialityID = "",jobTitleId = "",availabilityId = "",locations = "",
             strengthId = "" ,valueId = "",city = "",state ="",country = "", employmentType = "",
-            minExperience = "", maxExperience = "", minSalarys = "", maxSalarys = "";
+            minExperience = "0", maxExperience = "10+", minSalarys = "$0", maxSalarys = "$200,000+";
     private Double latitude,longitude,clatitude,clongitude;
     public RelativeLayout layout_for_list;
     public Boolean goneVisi = false;
@@ -464,7 +464,7 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 params.put("pagination","0");
                 params.put("employementType",employmentType);
                 params.put("experienceFrom",minExperience);
-                params.put("experienceTo",maxExperience);
+                params.put("experienceTo",maxExperience.equals("10+")?"40":maxExperience);
                 String first = "";
                 if (!minSalarys.isEmpty()){
                     first = minSalarys.replace("$","");
@@ -474,9 +474,9 @@ public class MapFragment extends Fragment implements View.OnClickListener,
                 String second = "";
                 if (!maxSalarys.isEmpty()){
                     second = maxSalarys.replace("$","");
-                second = second.replace(",","");
+                    second = second.replace(",","");
                 }
-                params.put("expectedSalaryTo",second);
+                params.put("expectedSalaryTo",second.equals("200000+")?"99999999":second);
                 return params;
             }
 

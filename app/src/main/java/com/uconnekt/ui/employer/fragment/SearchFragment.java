@@ -57,7 +57,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     public Boolean goneVisi = false;
     private TextView tv_for_nodata;
     public ImageView iv_for_arrow;
-    public String specialityID = "",jobTitleId = "",availabilityId = "", employmentType = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="",minExperience = "", maxExperience = "", minSalarys = "", maxSalarys = "";
+    public String specialityID = "",jobTitleId = "",availabilityId = "", employmentType = "",location = "",strengthId = "" ,valueId = "",city = "",state = "",country="",minExperience = "0", maxExperience = "10+", minSalarys = "$0", maxSalarys = "$200,000+";
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -218,9 +218,8 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                 params.put("pagination","1");
                 params.put("offset",offset+"");
                 params.put("employementType",employmentType);
-
                 params.put("experienceFrom",minExperience);
-                params.put("experienceTo",maxExperience);
+                params.put("experienceTo",maxExperience.equals("10+")?"40":maxExperience);
                 String first = "";
                 if (!minSalarys.isEmpty()){
                     first = minSalarys.replace("$","");
@@ -232,7 +231,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
                     second = maxSalarys.replace("$","");
                     second = second.replace(",","");
                 }
-                params.put("expectedSalaryTo",second);
+                params.put("expectedSalaryTo",second.equals("200000+")?"99999999":second);
                 return params;
             }
 

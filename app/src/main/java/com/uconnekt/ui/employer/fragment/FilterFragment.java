@@ -66,7 +66,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private ArrayList<Weeks> empTypeList = new ArrayList<>();
     private Spinner sp_for_availability,sp_for_empType;
     private WeekSpAdapter weekSpAdapter,empTypeSpAdapter;
-    private TextView tv_for_address,tv_for_jobTitle,tv_for_aofs,tv_for_value,tv_for_strength;
+    private TextView tv_for_address,tv_for_jobTitle,tv_for_aofs,tv_for_value,tv_for_strength,tvMinExp,tvMaxExp,tvMinSalary,tvMaxSalary;
     private LinearLayout mainlayout;
     private RelativeLayout layout_for_address;
     private String specialtyId = "",strengthId = "",valueId = "",jobTitleId = "",availabilityId = "",employmentType = "",city = "",state = "" ,country;
@@ -74,9 +74,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
     private MapFragment mapFragment;
     private Double latitude = 0.0,longitude = 0.0;
     private SpinnerDialog spinnerDialog,spinnerDialog2,spinnerDialog3,spinnerDialog4;
-
     private MultiSlider sliderExperience,sliderSalary;
-    private TextView tvMinExp,tvMaxExp,tvMinSalary,tvMaxSalary;
     private DecimalFormat formatter;
 
     @Override
@@ -97,14 +95,17 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
 
 
         sliderExperience.setOnThumbValueChangeListener(new MultiSlider.SimpleChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
                 if (thumbIndex == 0) {
-                   // int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
                     tvMinExp.setText(String.valueOf(setExperience(value)));
                 } else {
-                   // int test = value==20?1:value==40?2:value==60?3:value==80?4:value==100?5:0;
-                    tvMaxExp.setText(String.valueOf(setExperience(value)));
+                    if (String.valueOf(setExperience(value)).equals("10")){
+                        tvMaxExp.setText("10+");
+                    }else {
+                        tvMaxExp.setText(String.valueOf(setExperience(value)));
+                    }
                 }
             }
         });
@@ -114,11 +115,14 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             @Override
             public void onValueChanged(MultiSlider multiSlider, MultiSlider.Thumb thumb, int thumbIndex, int value) {
                 if (thumbIndex == 0) {
-                    //int test = value==10?20000:value==20?40000:value==30?60000:value==40?80000:value==50?100000:value==60?120000:value==70?140000:value==80?160000:value==90?180000:value==100?200000:0;
                     tvMinSalary.setText("$"+String.valueOf(formatter.format(showsalary(value))));
                 } else {
-                    //int test = value==10?20000:value==20?40000:value==30?60000:value==40?80000:value==50?100000:value==60?120000:value==70?140000:value==80?160000:value==90?180000:value==100?200000:0;
-                    tvMaxSalary.setText("$"+String.valueOf(formatter.format(showsalary(value))));
+                    if (("$"+String.valueOf(formatter.format(showsalary(value)))).equals("$200,000")){
+                        tvMaxSalary.setText("$200,000+");
+                    }else {
+                        tvMaxSalary.setText("$"+String.valueOf(formatter.format(showsalary(value))));
+                    }
+
                 }
             }
         });
@@ -235,9 +239,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         tvMinSalary = view.findViewById(R.id.tvMinSalary);
         tvMaxSalary = view.findViewById(R.id.tvMaxSalary);
         tvMinExp.setText("0");
-        tvMaxExp.setText("5");
+        tvMaxExp.setText("10+");
         tvMinSalary.setText("$0");
-        tvMaxSalary.setText("$200,000");
+        tvMaxSalary.setText("$200,000+");
 
     }
 
@@ -289,9 +293,9 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         tv_for_value.setText("");
         tv_for_strength.setText("");
         tvMinExp.setText("0");
-        tvMaxExp.setText("5");
+        tvMaxExp.setText("10+");
         tvMinSalary.setText("$0");
-        tvMaxSalary.setText("$200,000");
+        tvMaxSalary.setText("$200,000+");
 
         weekSpAdapter.notifyDataSetChanged();
         empTypeSpAdapter.notifyDataSetChanged();
@@ -552,6 +556,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
         }.executeVolley();
     }
 
+    @SuppressLint("SetTextI18n")
     private void setOldData(){
         if(searchFragment != null) {
             jobTitleId = searchFragment.jobTitleId;
@@ -619,15 +624,13 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             country = searchFragment.country;
 
             tvMinExp.setText("0");
-            tvMaxExp.setText("5");
+            tvMaxExp.setText("10+");
             tvMinSalary.setText("$0");
-            tvMaxSalary.setText("$200,000");
+            tvMaxSalary.setText("$200,000+");
 
             String minExp = searchFragment.minExperience.isEmpty()||searchFragment.minExperience.equals("0")?"0": searchFragment.minExperience;
-            minExp =minExp.equals("1")?"10":minExp.equals("2")?"20":minExp.equals("3")?"30":minExp.equals("4")?"40":minExp.equals("5")?"50":minExp.equals("6")?"60":minExp.equals("7")?"70":minExp.equals("8")?"80":minExp.equals("9")?"90":minExp.equals("100")?"100":"0";
+            minExp =minExp.equals("1")?"10":minExp.equals("2")?"20":minExp.equals("3")?"30":minExp.equals("4")?"40":minExp.equals("5")?"50":minExp.equals("6")?"60":minExp.equals("7")?"70":minExp.equals("8")?"80":minExp.equals("9")?"90":minExp.equals("10+")?"100":"0";
             sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
-           // String maxExp = searchFragment.maxExperience.isEmpty()||searchFragment.maxExperience.equals("5")?"100": searchFragment.maxExperience;
-           // maxExp = minExp.equals("0")?"0":maxExp.equals("1")?"20":maxExp.equals("2")?"40":maxExp.equals("3")?"60":maxExp.equals("4")?"80":maxExp.equals("5")?"100":"100";
             sliderExperience.getThumb(1).setValue(Integer.parseInt(setExp(searchFragment.maxExperience)));
             String minSalary = searchFragment.minSalarys.isEmpty()?"0": searchFragment.minSalarys;
             sliderSalary.getThumb(0).setValue(Integer.parseInt(getsalary(minSalary)));
@@ -700,7 +703,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             state = mapFragment.state;
             country = mapFragment.country;
             String minExp = mapFragment.minExperience.isEmpty()?"0": mapFragment.minExperience;
-            minExp =minExp.equals("1")?"10":minExp.equals("2")?"20":minExp.equals("3")?"30":minExp.equals("4")?"40":minExp.equals("5")?"50":minExp.equals("6")?"60":minExp.equals("7")?"70":minExp.equals("8")?"80":minExp.equals("9")?"90":minExp.equals("100")?"100":"0";
+            minExp =minExp.equals("1")?"10":minExp.equals("2")?"20":minExp.equals("3")?"30":minExp.equals("4")?"40":minExp.equals("5")?"50":minExp.equals("6")?"60":minExp.equals("7")?"70":minExp.equals("8")?"80":minExp.equals("9")?"90":minExp.equals("10+")?"100":"0";
             sliderExperience.getThumb(0).setValue(Integer.parseInt(minExp));
             sliderExperience.getThumb(1).setValue(Integer.parseInt(setExp(mapFragment.maxExperience)));
             String minSalary = mapFragment.minSalarys.isEmpty()?"0": mapFragment.minSalarys;
@@ -709,7 +712,6 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             sliderSalary.getThumb(1).setValue(Integer.parseInt(maxSalary.equals("100")?"100":getsalary(maxSalary)));
         }
     }
-
 
     private String setExp(String value){
         String test = "0";
@@ -744,7 +746,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             case "9":
                 test = "90";
                 break;
-            case "10":
+            case "10+":
                 test = "100";
                 break;
             case "":
@@ -787,7 +789,7 @@ public class FilterFragment extends Fragment implements View.OnClickListener, Ad
             case "$180,000":
                 test = "90";
                 break;
-            case "$200,000":
+            case "$200,000+":
                 test = "100";
                 break;
         }

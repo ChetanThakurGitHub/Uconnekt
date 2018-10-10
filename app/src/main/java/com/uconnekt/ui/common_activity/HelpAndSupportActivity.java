@@ -191,8 +191,6 @@ public class HelpAndSupportActivity extends AppCompatActivity implements View.On
     private void sharOnEmail() {
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setData(Uri.parse("mailto: " + "info@connektus.com.au"));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Enter something");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hii android !");
         startActivity(Intent.createChooser(emailIntent, "Send feedback"));
     }
 
